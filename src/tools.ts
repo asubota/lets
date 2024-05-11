@@ -1,6 +1,6 @@
 import { STORAGE_KEY } from './constants.ts'
 
-interface Product {
+export interface Product {
   CreatedAt: string
   Id: number
   UpdatedAt: null
@@ -11,7 +11,14 @@ interface Product {
   Ціна: string
 }
 
-export const findData = (search: string) => {
+export const filterBySearch = (item: Product, search: string): boolean => {
+  return (
+    item['Артикул'].toLowerCase().includes(search.toLowerCase()) ||
+    item['Назва'].toLowerCase().includes(search.toLowerCase())
+  )
+}
+
+export const findData = (search: string): Product[] => {
   if (!search || search.length < 3) {
     return []
   }

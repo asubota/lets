@@ -11,7 +11,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { findData } from './tools.ts'
+import { useSearch } from './use-data.ts'
 
 function getHighlightedText(text: string | null, highlight: string) {
   if (text === null) {
@@ -42,7 +42,7 @@ function getHighlightedText(text: string | null, highlight: string) {
 }
 
 export const List: FC<{ search: string }> = ({ search }) => {
-  const data = findData(search)
+  const data = useSearch(search)
 
   return (
     <>
@@ -63,7 +63,7 @@ export const List: FC<{ search: string }> = ({ search }) => {
           <TableBody>
             {data.map((row) => (
               <TableRow
-                key={row['Артикул']}
+                key={row['Артикул'] + row['Продавець']}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell>
