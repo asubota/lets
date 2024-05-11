@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { filterBySearch, Product } from './tools.ts'
 
 interface Column {
   id: string
@@ -22,7 +21,25 @@ interface Root {
   rows: Row[]
 }
 
+interface Product {
+  CreatedAt: string
+  Id: number
+  UpdatedAt: null
+  Артикул: string
+  Назва: string
+  Наявність: string
+  Продавець: string
+  Ціна: string
+}
+
 const sheetId = '1PTFHlmgxkWUfb2vAykW1taGO0H45__jg'
+
+export const filterBySearch = (item: Product, search: string): boolean => {
+  return (
+    item['Артикул'].toLowerCase().includes(search.toLowerCase()) ||
+    item['Назва'].toLowerCase().includes(search.toLowerCase())
+  )
+}
 
 const parseData = (text: string): Product[] => {
   const cleanText = text

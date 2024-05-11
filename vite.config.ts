@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
+import { VitePWA } from 'vite-plugin-pwa'
 
-const base = 'lets'
+const base = '/lets'
 
 export default defineConfig({
   base,
@@ -16,7 +17,32 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react(), basicSsl()],
+  plugins: [
+    react(),
+    basicSsl(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true,
+      },
+
+      manifest: {
+        name: 'Lets Bike',
+        short_name: 'Lets Bike',
+        description: '',
+        theme_color: '#ea2b06',
+        background_color: '#525252',
+        display: 'standalone',
+        icons: [
+          {
+            src: `${base}/192.png`,
+            sizes: '192x192',
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
+  ],
   server: {
     port: 8000,
   },

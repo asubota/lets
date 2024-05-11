@@ -1,6 +1,5 @@
 import { FC, useState } from 'react'
 import { Box, TextField } from '@mui/material'
-import { FetchData } from './fetch-data.tsx'
 import { List } from './list.tsx'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -15,8 +14,6 @@ export const Search: FC = () => {
 
   return (
     <Box>
-      <FetchData />
-
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
         <TextField
           component="form"
