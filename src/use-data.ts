@@ -21,7 +21,7 @@ interface Root {
   rows: Row[]
 }
 
-interface Product {
+export interface Product {
   CreatedAt: string
   Id: number
   UpdatedAt: null
