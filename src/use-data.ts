@@ -32,7 +32,7 @@ export interface Product {
   Ціна: string
 }
 
-const sheetId = '1PTFHlmgxkWUfb2vAykW1taGO0H45__jg'
+const sheetId = '1NJsdP-CUztIwlj1cnBkDj4pgqqaBuxPm'
 
 export const filterBySearch = (item: Product, search: string): boolean => {
   return (
