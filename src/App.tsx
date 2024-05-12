@@ -1,6 +1,6 @@
 import { theme } from './theme.ts'
 import { CssBaseline, ThemeProvider } from '@mui/material'
-import { Search } from './search.tsx'
+import { SearchSection } from './search.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
@@ -12,7 +12,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <CssBaseline />
-        <Search />
+        <SearchSection />
       </QueryClientProvider>
     </ThemeProvider>
   )

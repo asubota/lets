@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import {
   Box,
-  Divider,
   Paper,
   Table,
   TableBody,
@@ -46,9 +45,11 @@ export const List: FC<{ search: string }> = ({ search }) => {
 
   return (
     <>
-      <Box>Total: {data.length}</Box>
-
-      <Divider />
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Typography component="span" color="secondary" variant="body2">
+          Total: {data.length}
+        </Typography>
+      </Box>
 
       <TableContainer component={Paper}>
         <Table size="small">
