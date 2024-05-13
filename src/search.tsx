@@ -21,7 +21,10 @@ export const SearchSection: FC = () => {
     <Box>
       <Box sx={{ p: 1, display: 'flex', justifyContent: 'center' }}>
         <TextField
-          sx={{ minWidth: '300px' }}
+          sx={{
+            'minWidth': '300px',
+            '& .MuiInputBase-root': { overflow: 'hidden' },
+          }}
           component="form"
           label="Search"
           variant="outlined"
