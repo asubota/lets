@@ -22,7 +22,9 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         `,
       }}
     >
-      <Box sx={{ gridArea: 'name', textAlign: 'left' }}>
+      <Box
+        sx={{ gridArea: 'name', textAlign: 'left', wordBreak: 'break-word' }}
+      >
         {getHighlightedText(p['name'], search)}
       </Box>
 

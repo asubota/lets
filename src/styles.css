@@ -12,6 +12,6 @@
 }
 
 .bg {
-  background-image: linear-gradient(to left bottom, #F8F8F8, #C1C1C1, #F5F5F5, #CBCBCB, #C0C0C0);
+  background-image: linear-gradient(to left bottom, #F8F8F8, #e7e7e7, #F5F5F5, #CBCBCB, #C0C0C0);
   min-height: 100vh;
 }
