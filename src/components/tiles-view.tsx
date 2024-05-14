@@ -19,7 +19,7 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         gridTemplateAreas: ` 
           "name"
           "sku"
-          "pricevendor"
+          "meta"
         `,
       }}
     >
@@ -33,9 +33,10 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
 
       <Box
         sx={{
-          gridArea: 'pricevendor',
+          gridArea: 'meta',
           display: 'flex',
           justifyContent: 'flex-start',
+          alignItems: 'center',
           gap: '8px',
         }}
       >
@@ -61,9 +62,13 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         {p['stock'] === '-' ? (
           <Box
             sx={{
-              ml: 'auto',
-              border: '2px solid red',
-              fontSize: 0,
+              'ml': 'auto',
+              'fontSize': 0,
+              'border': '2px solid',
+              'borderColor': 'primary.main',
+              '& > svg': {
+                fontSize: '16px',
+              },
             }}
           >
             <CheckIcon color="primary" />
