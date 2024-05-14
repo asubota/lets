@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { Logo } from './logo.tsx'
 
 export const NoResults = () => {
   return (
@@ -10,6 +11,8 @@ export const NoResults = () => {
       <Typography variant="h4" gutterBottom textAlign="center" sx={{ mt: 4 }}>
         <Box sx={{ mt: 4 }}>всі механіки зайняті</Box>
       </Typography>
+
+      <Logo />
     </Box>
   )
 }

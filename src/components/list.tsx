@@ -28,7 +28,12 @@ export const List: FC<{ search: string }> = ({ search }) => {
           alignItems: 'center',
         }}
       >
-        <Typography component="div" color="secondary" variant="body2">
+        <Typography
+          component="div"
+          color="secondary"
+          variant="body2"
+          sx={{ fontWeight: 'bold' }}
+        >
           Total: {list.length}
         </Typography>
         <Switch value={value} onChange={(_, checked) => setValue(!checked)} />

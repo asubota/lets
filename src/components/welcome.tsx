@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { Logo } from './logo.tsx'
 
 export const Welcome = () => {
   return (
@@ -11,6 +12,8 @@ export const Welcome = () => {
         <Box sx={{ mt: 4, mb: 1 }}>Вам щось підказати?</Box>
         <Box>Проконсультувати?</Box>
       </Typography>
+
+      <Logo />
     </Box>
   )
 }
