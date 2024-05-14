@@ -39,7 +39,7 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
       >
         <Chip
           label={p['price']}
-          color="secondary"
+          color="success"
           size="small"
           variant="outlined"
         />
