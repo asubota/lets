@@ -25,19 +25,20 @@ export interface Product {
   CreatedAt: string
   Id: number
   UpdatedAt: null
-  Артикул: string
-  Назва: string
-  Наявність: string
-  Продавець: string
-  Ціна: string
+  sku: string
+  name: string
+  availability: string
+  vendor: string
+  price: string
+  stock: string
 }
 
 const sheetId = '1NJsdP-CUztIwlj1cnBkDj4pgqqaBuxPm'
 
 export const filterBySearch = (item: Product, search: string): boolean => {
   return (
-    item['Артикул'].toLowerCase().includes(search.toLowerCase()) ||
-    item['Назва'].toLowerCase().includes(search.toLowerCase())
+    item['sku'].toLowerCase().includes(search.toLowerCase()) ||
+    item['name'].toLowerCase().includes(search.toLowerCase())
   )
 }
 

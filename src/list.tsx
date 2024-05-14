@@ -62,12 +62,10 @@ const Block: FC<{ p: Product; search: string }> = ({ p, search }) => {
       }}
     >
       <Box sx={{ gridArea: 'name', textAlign: 'center' }}>
-        {getHighlightedText(p['Назва'], search)}
+        {getHighlightedText(p['name'], search)}
       </Box>
 
-      <Box sx={{ gridArea: 'sku' }}>
-        {getHighlightedText(p['Артикул'], search)}
-      </Box>
+      <Box sx={{ gridArea: 'sku' }}>{getHighlightedText(p['sku'], search)}</Box>
 
       <Box
         sx={{
@@ -77,21 +75,14 @@ const Block: FC<{ p: Product; search: string }> = ({ p, search }) => {
           gap: 1,
         }}
       >
-        <Typography
-          component="span"
-          variant="body2"
-          color="secondary"
-          textAlign="right"
-        >
-          {p['Ціна']}
+        <Typography component="span" variant="body2" color="secondary">
+          {p['price']}
         </Typography>
-        <Typography
-          component="span"
-          variant="body2"
-          color="secondary"
-          textAlign="right"
-        >
-          {p['Продавець']}
+        <Typography component="span" variant="body2" color="secondary">
+          {p['vendor']}
+        </Typography>
+        <Typography component="span" variant="body2" color="secondary">
+          {p['stock']}
         </Typography>
       </Box>
     </Box>
@@ -125,11 +116,7 @@ export const List: FC<{ search: string }> = ({ search }) => {
       {!value && (
         <Stack direction="column" spacing={1}>
           {data.map((row) => (
-            <Block
-              p={row}
-              search={search}
-              key={row['Артикул'] + row['Продавець']}
-            />
+            <Block p={row} search={search} key={row['sku'] + row['vendor']} />
           ))}
         </Stack>
       )}
@@ -143,22 +130,24 @@ export const List: FC<{ search: string }> = ({ search }) => {
                 <TableCell align="right">Ціна</TableCell>
                 <TableCell>Назва</TableCell>
                 <TableCell align="right">Продавець</TableCell>
+                <TableCell align="right">Кількість</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data.map((row) => (
                 <TableRow
-                  key={row['Артикул'] + row['Продавець']}
+                  key={row['sku'] + row['vendor']}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {getHighlightedText(row['Артикул'], search)}
+                    {getHighlightedText(row['sku'], search)}
                   </TableCell>
-                  <TableCell align="right">{row['Ціна']}</TableCell>
+                  <TableCell align="right">{row['price']}</TableCell>
                   <TableCell>
-                    {getHighlightedText(row['Назва'], search)}
+                    {getHighlightedText(row['name'], search)}
                   </TableCell>
-                  <TableCell align="right">{row['Продавець']}</TableCell>
+                  <TableCell align="right">{row['vendor']}</TableCell>
+                  <TableCell align="right">{row['stock']}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
