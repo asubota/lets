@@ -2,6 +2,7 @@ import { Box, Chip, Stack } from '@mui/material'
 import { FC } from 'react'
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
+import CheckIcon from '@mui/icons-material/Check'
 
 const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
   return (
@@ -13,11 +14,12 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         display: 'grid',
         rowGap: '12px',
         columnGap: '4px',
-        gridTemplateColumns: 'auto auto',
-        gridTemplateRows: 'auto auto',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto auto auto',
         gridTemplateAreas: ` 
-          "name name"
-          "sku pricevendor"
+          "name"
+          "sku"
+          "pricevendor"
         `,
       }}
     >
@@ -25,7 +27,7 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         {getHighlightedText(p['name'], search)}
       </Box>
 
-      <Box sx={{ gridArea: 'sku' }}>
+      <Box sx={{ gridArea: 'sku', textAlign: 'left' }}>
         <Chip label={getHighlightedText(p['sku'], search)} size="small" />
       </Box>
 
@@ -33,15 +35,16 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         sx={{
           gridArea: 'pricevendor',
           display: 'flex',
-          justifyContent: 'end',
-          gap: '12px',
+          justifyContent: 'flex-start',
+          gap: '8px',
         }}
       >
         <Chip
           label={p['price']}
-          color="success"
+          color="secondary"
           size="small"
           variant="outlined"
+          sx={{ borderWidth: '2px' }}
         />
         {p['vendor'] !== 'base' ? (
           <Chip
@@ -49,18 +52,31 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
             color="secondary"
             size="small"
             variant="outlined"
+            sx={{ borderWidth: '2px' }}
           />
         ) : (
           <Chip label={p['vendor']} color="primary" size="small" />
         )}
 
-        <Chip
-          label={p['stock']}
-          color="primary"
-          size="small"
-          variant="outlined"
-          sx={{ borderRadius: 0 }}
-        />
+        {p['stock'] === '-' ? (
+          <Box
+            sx={{
+              ml: 'auto',
+              border: '2px solid red',
+              fontSize: 0,
+            }}
+          >
+            <CheckIcon color="primary" />
+          </Box>
+        ) : (
+          <Chip
+            label={p['stock']}
+            color="primary"
+            size="small"
+            variant="outlined"
+            sx={{ borderRadius: 0, ml: 'auto', borderWidth: '2px' }}
+          />
+        )}
       </Box>
     </Box>
   )
