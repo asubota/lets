@@ -3,18 +3,20 @@ import { Box, Switch, Typography } from '@mui/material'
 import { TilesView } from './tiles-view.tsx'
 import { TableView } from './table-view.tsx'
 import { useSearch } from '../use-data.ts'
+import { Welcome } from './welcome.tsx'
+import { NoResults } from './no-results.tsx'
 
 export const List: FC<{ search: string }> = ({ search }) => {
   const [value, setValue] = useState(true)
   const list = useSearch(search)
   const View = value ? TilesView : TableView
 
-  if (list.length === 0) {
-    return (
-      <Typography variant="h4" gutterBottom textAlign="center" sx={{ mt: 4 }}>
-        ?
-      </Typography>
-    )
+  if (list.length === 0 && search.length === 0) {
+    return <Welcome />
+  }
+
+  if (list.length === 0 && search.length > 0) {
+    return <NoResults />
   }
 
   return (
