@@ -29,7 +29,7 @@ export const List: FC<{ search: string }> = ({ search }) => {
         <Typography component="div" color="secondary" variant="body2">
           Total: {list.length}
         </Typography>
-        <Switch value={value} onChange={(_, checked) => setValue(checked)} />
+        <Switch value={value} onChange={(_, checked) => setValue(!checked)} />
       </Box>
 
       <View list={list} search={search} />
