@@ -56,9 +56,10 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
 
         <Chip
           label={p['stock']}
-          color="secondary"
+          color="primary"
           size="small"
           variant="outlined"
+          sx={{ borderRadius: 0 }}
         />
       </Box>
     </Box>
