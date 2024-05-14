@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Product } from './types.ts'
 
 interface Column {
   id: string
@@ -21,21 +22,9 @@ interface Root {
   rows: Row[]
 }
 
-export interface Product {
-  CreatedAt: string
-  Id: number
-  UpdatedAt: null
-  sku: string
-  name: string
-  availability: string
-  vendor: string
-  price: string
-  stock: string
-}
-
 const sheetId = '1NJsdP-CUztIwlj1cnBkDj4pgqqaBuxPm'
 
-export const filterBySearch = (item: Product, search: string): boolean => {
+const filterBySearch = (item: Product, search: string): boolean => {
   return (
     item['sku'].toLowerCase().includes(search.toLowerCase()) ||
     item['name'].toLowerCase().includes(search.toLowerCase())
@@ -63,7 +52,7 @@ const parseData = (text: string): Product[] => {
   }) as unknown as Product[]
 }
 
-export const getData = async (): Promise<Product[]> => {
+const getData = async (): Promise<Product[]> => {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&tq&gid=0`
   const response = await fetch(url)
   const text = await response.text()
@@ -71,7 +60,7 @@ export const getData = async (): Promise<Product[]> => {
   return parseData(text)
 }
 
-export const useSearch = (search: string) => {
+export const useSearch = (search: string): Product[] => {
   const { data = [] } = useQuery<Product[]>({
     staleTime: 30 * 60 * 1000,
     queryKey: ['lets-bike-base'],
