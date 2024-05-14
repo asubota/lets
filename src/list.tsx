@@ -68,12 +68,7 @@ const Block: FC<{ p: Product; search: string }> = ({ p, search }) => {
       </Box>
 
       <Box sx={{ gridArea: 'sku' }}>
-        <Chip
-          label={getHighlightedText(p['sku'], search)}
-          color="secondary"
-          size="small"
-          variant="outlined"
-        />
+        <Chip label={getHighlightedText(p['sku'], search)} size="small" />
       </Box>
 
       <Box
@@ -84,36 +79,29 @@ const Block: FC<{ p: Product; search: string }> = ({ p, search }) => {
           gap: '12px',
         }}
       >
-        <Typography component="span" variant="body2" color="secondary">
+        <Chip
+          label={p['price']}
+          color="secondary"
+          size="small"
+          variant="outlined"
+        />
+        {p['vendor'] !== 'base' ? (
           <Chip
-            label={p['price']}
+            label={p['vendor']}
             color="secondary"
             size="small"
             variant="outlined"
           />
-        </Typography>
-        <Typography component="span" variant="body2" color="secondary">
-          {p['vendor'] !== 'base' && (
-            <Chip
-              label={p['vendor']}
-              color="secondary"
-              size="small"
-              variant="outlined"
-            />
-          )}
+        ) : (
+          <Chip label={p['vendor']} color="primary" size="small" />
+        )}
 
-          {p['vendor'] === 'base' && (
-            <Chip label={p['vendor']} color="primary" size="small" />
-          )}
-        </Typography>
-        <Typography component="span" variant="body2" color="secondary">
-          <Chip
-            label={p['stock']}
-            color="secondary"
-            size="small"
-            variant="outlined"
-          />
-        </Typography>
+        <Chip
+          label={p['stock']}
+          color="secondary"
+          size="small"
+          variant="outlined"
+        />
       </Box>
     </Box>
   )
