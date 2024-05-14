@@ -19,7 +19,7 @@ export const SearchSection: FC = () => {
 
   return (
     <Box>
-      <Box sx={{ p: 1, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ p: 1, pt: 2, display: 'flex', justifyContent: 'center' }}>
         <TextField
           sx={{
             'minWidth': '300px',

@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import {
   Box,
+  Chip,
   FormControlLabel,
   FormGroup,
   Paper,
@@ -52,7 +53,8 @@ const Block: FC<{ p: Product; search: string }> = ({ p, search }) => {
         borderRadius: 2,
         p: 1,
         display: 'grid',
-        gridGap: '4px',
+        rowGap: '12px',
+        columnGap: '4px',
         gridTemplateColumns: 'auto auto',
         gridTemplateRows: 'auto auto',
         gridTemplateAreas: ` 
@@ -61,28 +63,56 @@ const Block: FC<{ p: Product; search: string }> = ({ p, search }) => {
         `,
       }}
     >
-      <Box sx={{ gridArea: 'name', textAlign: 'center' }}>
+      <Box sx={{ gridArea: 'name', textAlign: 'left' }}>
         {getHighlightedText(p['name'], search)}
       </Box>
 
-      <Box sx={{ gridArea: 'sku' }}>{getHighlightedText(p['sku'], search)}</Box>
+      <Box sx={{ gridArea: 'sku' }}>
+        <Chip
+          label={getHighlightedText(p['sku'], search)}
+          color="secondary"
+          size="small"
+          variant="outlined"
+        />
+      </Box>
 
       <Box
         sx={{
           gridArea: 'pricevendor',
           display: 'flex',
           justifyContent: 'end',
-          gap: 1,
+          gap: '12px',
         }}
       >
         <Typography component="span" variant="body2" color="secondary">
-          {p['price']}
+          <Chip
+            label={p['price']}
+            color="secondary"
+            size="small"
+            variant="outlined"
+          />
         </Typography>
         <Typography component="span" variant="body2" color="secondary">
-          {p['vendor']}
+          {p['vendor'] !== 'base' && (
+            <Chip
+              label={p['vendor']}
+              color="secondary"
+              size="small"
+              variant="outlined"
+            />
+          )}
+
+          {p['vendor'] === 'base' && (
+            <Chip label={p['vendor']} color="primary" size="small" />
+          )}
         </Typography>
         <Typography component="span" variant="body2" color="secondary">
-          {p['stock']}
+          <Chip
+            label={p['stock']}
+            color="secondary"
+            size="small"
+            variant="outlined"
+          />
         </Typography>
       </Box>
     </Box>
@@ -146,7 +176,17 @@ export const List: FC<{ search: string }> = ({ search }) => {
                   <TableCell>
                     {getHighlightedText(row['name'], search)}
                   </TableCell>
-                  <TableCell align="right">{row['vendor']}</TableCell>
+                  <TableCell align="right">
+                    {row['vendor'] === 'base' ? (
+                      <Chip
+                        label={row['vendor']}
+                        color="primary"
+                        size="small"
+                      />
+                    ) : (
+                      row['vendor']
+                    )}
+                  </TableCell>
                   <TableCell align="right">{row['stock']}</TableCell>
                 </TableRow>
               ))}
