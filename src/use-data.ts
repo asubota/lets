@@ -48,7 +48,7 @@ const parseData = (text: string): Product[] => {
       if (columns[index] === 'pics' && cell) {
         const value = cell.v.toString()
         obj[columns[index]] = !value.includes('[')
-          ? value
+          ? [value]
           : JSON.parse(value.replace(/'/g, '"'))
       } else {
         obj[columns[index]] = cell ? cell.v : null

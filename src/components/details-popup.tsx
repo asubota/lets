@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { FC } from 'react'
 import { Product } from '../types.ts'
+import { ImageSlider } from './image-slider.tsx'
 
 export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
   details,
@@ -20,16 +21,9 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           </Typography>
         )}
 
-        {details.pics &&
-          details.pics.length > 0 &&
-          details.pics.map((image) => (
-            <img
-              key={image}
-              src={image}
-              alt=""
-              style={{ width: '100%', marginBottom: '10px' }}
-            />
-          ))}
+        {details.pics && details.pics.length > 0 && (
+          <ImageSlider pics={details.pics} />
+        )}
       </DialogContent>
     </Dialog>
   )
