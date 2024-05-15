@@ -6,5 +6,5 @@ export interface Product {
   price: string | number
   stock: string | null
   link: string | null
-  pics: string | null
+  pics: string[] | null
 }

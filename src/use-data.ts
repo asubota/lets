@@ -45,7 +45,14 @@ const parseData = (text: string): Product[] => {
     const obj: Record<string, unknown> = {}
 
     row.c.forEach((cell, index) => {
-      obj[columns[index]] = cell ? cell.v : null
+      if (columns[index] === 'pics' && cell) {
+        const value = cell.v.toString()
+        obj[columns[index]] = !value.includes('[')
+          ? value
+          : JSON.parse(value.replace(/'/g, '"'))
+      } else {
+        obj[columns[index]] = cell ? cell.v : null
+      }
     })
 
     return obj
