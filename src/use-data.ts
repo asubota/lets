@@ -8,10 +8,10 @@ interface Column {
   pattern?: string
 }
 
-interface Cell {
+type Cell = {
   v: string | number
   f?: string
-}
+} | null
 
 interface Row {
   c: Cell[]
@@ -45,7 +45,7 @@ const parseData = (text: string): Product[] => {
     const obj: Record<string, unknown> = {}
 
     row.c.forEach((cell, index) => {
-      obj[columns[index]] = cell.v
+      obj[columns[index]] = cell ? cell.v : null
     })
 
     return obj
@@ -71,5 +71,5 @@ export const useSearch = (search: string): Product[] => {
     return []
   }
 
-  return data?.filter((item) => filterBySearch(item, search))
+  return data.filter((item) => filterBySearch(item, search))
 }
