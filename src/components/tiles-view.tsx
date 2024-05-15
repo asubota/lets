@@ -1,4 +1,4 @@
-import { Box, Chip, Paper, Stack } from '@mui/material'
+import { Box, Card, Chip, Stack } from '@mui/material'
 import { FC } from 'react'
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
@@ -8,8 +8,8 @@ import LinkIcon from '@mui/icons-material/Link'
 
 const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
   return (
-    <Paper
-      elevation={3}
+    <Card
+      variant="outlined"
       sx={{
         p: 1,
         display: 'grid',
@@ -48,11 +48,14 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         }}
       >
         <Chip
-          label={p['price']}
+          label={`${p['price']} uah`}
           color="secondary"
           size="small"
           variant="outlined"
-          sx={{ borderWidth: '2px', borderColor: 'secondary.main' }}
+          sx={{
+            borderWidth: '2px',
+            borderColor: 'secondary.main',
+          }}
         />
         {p['vendor'] !== 'base' ? (
           <Chip
@@ -92,7 +95,7 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
           />
         )}
       </Box>
-    </Paper>
+    </Card>
   )
 }
 
@@ -101,7 +104,7 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
   search,
 }) => {
   return (
-    <Stack direction="column" spacing={2}>
+    <Stack direction="column" spacing={1}>
       {list.map((row) => (
         <Tile p={row} search={search} key={row['sku'] + row['vendor']} />
       ))}
