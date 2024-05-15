@@ -3,6 +3,8 @@ import { FC } from 'react'
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
 import CheckIcon from '@mui/icons-material/Check'
+import ImageIcon from '@mui/icons-material/Image'
+import LinkIcon from '@mui/icons-material/Link'
 
 const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
   return (
@@ -63,6 +65,8 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         ) : (
           <Chip label={p['vendor']} color="primary" size="small" />
         )}
+        {p.pics && <ImageIcon color="info" fontSize="small" />}
+        {p.link && <LinkIcon color="info" fontSize="small" />}
 
         {!p['stock'] ? (
           <Box
