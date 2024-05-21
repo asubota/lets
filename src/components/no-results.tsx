@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 
+import Bike from './broken-bike.svg?react'
+
 export const NoResults = () => {
   return (
     <Box>
@@ -12,6 +14,18 @@ export const NoResults = () => {
         <Box sx={{ mt: 4 }}>всі механіки зайняті</Box>
       </Typography>
 
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: '300px',
+          position: 'absolute',
+          bottom: '185px',
+          left: '50%',
+          transform: 'translate(-50%)',
+        }}
+      >
+        <Bike />
+      </Box>
       <Logo />
     </Box>
   )
