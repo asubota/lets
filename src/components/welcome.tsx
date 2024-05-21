@@ -15,7 +15,16 @@ export const Welcome = () => {
         <Box>Проконсультувати?</Box>
       </Typography>
 
-      <Box sx={{ p: 4, mt: '120px' }}>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: '300px',
+          position: 'absolute',
+          bottom: '185px',
+          left: '50%',
+          transform: 'translate(-50%)',
+        }}
+      >
         <Bike />
       </Box>
 
