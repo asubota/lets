@@ -22,10 +22,10 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
         <TableHead>
           <TableRow>
             <TableCell>Артикул</TableCell>
-            <TableCell align="right">Ціна</TableCell>
+            <TableCell align="right">Кількість</TableCell>
             <TableCell>Назва</TableCell>
             <TableCell align="right">Продавець</TableCell>
-            <TableCell align="right">Кількість</TableCell>
+            <TableCell align="right">Ціна</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,7 +37,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
               <TableCell sx={{ whiteSpace: 'nowrap' }}>
                 {getHighlightedText(row['sku'], search)}
               </TableCell>
-              <TableCell align="right">{row['price']}</TableCell>
+              <TableCell align="right">{row['stock']}</TableCell>
               <TableCell>{getHighlightedText(row['name'], search)}</TableCell>
               <TableCell align="right">
                 {row['vendor'] === 'base' ? (
@@ -46,7 +46,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
                   row['vendor']
                 )}
               </TableCell>
-              <TableCell align="right">{row['stock']}</TableCell>
+              <TableCell align="right">{row['price']}</TableCell>
             </TableRow>
           ))}
         </TableBody>
