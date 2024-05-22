@@ -18,7 +18,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   }
 
   return (
-    <Box sx={{ p: 1, pt: 2, display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ pt: 2, display: 'flex', justifyContent: 'center' }}>
       <TextField
         sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
         component="form"

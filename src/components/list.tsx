@@ -26,6 +26,8 @@ export const List: FC<{ search: string }> = ({ search }) => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          pt: 1,
+          pb: 1,
         }}
       >
         <Typography
