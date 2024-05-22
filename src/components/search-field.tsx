@@ -36,7 +36,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
                 size="small"
                 sx={{
                   'visibility': watch('input') ? 'visible' : 'hidden',
-                  '& svg': { width: '20px', height: '20px' },
+                  '& svg': { width: '26px', height: '26px' },
                 }}
               >
                 <Cancel />
