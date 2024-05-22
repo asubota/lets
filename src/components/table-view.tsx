@@ -21,32 +21,48 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Артикул</TableCell>
-            <TableCell align="right">Кількість</TableCell>
+            <TableCell sx={{ pl: 1 }}>Артикул</TableCell>
+            <TableCell sx={{ pl: 0, pr: 0 }} align="right">
+              Кількість
+            </TableCell>
             <TableCell>Назва</TableCell>
-            <TableCell align="right">Продавець</TableCell>
-            <TableCell align="right">Ціна</TableCell>
+            <TableCell sx={{ pr: 0 }} align="right">
+              Продавець
+            </TableCell>
+            <TableCell sx={{ pr: 1 }} align="right">
+              Ціна
+            </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+
+        <TableBody className="t-body">
           {list.map((row) => (
             <TableRow
               key={row['sku'] + row['vendor']}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
+              <TableCell sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1 }}>
                 {getHighlightedText(row['sku'], search)}
               </TableCell>
-              <TableCell align="right">{row['stock']}</TableCell>
-              <TableCell>{getHighlightedText(row['name'], search)}</TableCell>
-              <TableCell align="right">
+
+              <TableCell sx={{ pl: 0, pr: 0 }} align="right">
+                {row['stock']}
+              </TableCell>
+
+              <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                {getHighlightedText(row['name'], search)}
+              </TableCell>
+
+              <TableCell align="right" sx={{ pr: 0 }}>
                 {row['vendor'] === 'base' ? (
                   <Chip label={row['vendor']} color="primary" size="small" />
                 ) : (
                   row['vendor']
                 )}
               </TableCell>
-              <TableCell align="right">{row['price']}</TableCell>
+              <TableCell sx={{ pl: 0, pr: 1 }} align="right">
+                {row['price']}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
