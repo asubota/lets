@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
-
-import Bike from './bike.svg?react'
+import { Bike } from './bike.tsx'
 
 export const Welcome = () => {
   return (
@@ -15,19 +14,7 @@ export const Welcome = () => {
         <Box>Проконсультувати?</Box>
       </Typography>
 
-      <Box
-        sx={{
-          width: '100%',
-          maxWidth: '300px',
-          position: 'absolute',
-          bottom: '185px',
-          left: '50%',
-          transform: 'translate(-50%)',
-        }}
-      >
-        <Bike />
-      </Box>
-
+      <Bike type="safe" />
       <Logo />
     </Box>
   )
