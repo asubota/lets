@@ -1,7 +1,8 @@
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import { Cancel, Search } from '@mui/icons-material'
-import { FC } from 'react'
+import { FC, useState, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { SearchHistory } from './search-history.tsx'
 
 interface FormData {
   input: string
@@ -10,15 +11,29 @@ interface FormData {
 export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   onSubmit,
 }) => {
-  const { register, handleSubmit, watch, resetField } = useForm<FormData>()
+  const ref = useRef<HTMLDivElement | null>(null)
+  const { register, handleSubmit, setValue, watch, resetField } =
+    useForm<FormData>({ defaultValues: { input: '' } })
+  const [showHistory, setShowHistory] = useState(true)
+  const inputValue = watch('input')
 
   const handleFormReset = () => {
     resetField('input', { defaultValue: '' })
     void handleSubmit(onSubmit)()
   }
 
+  const handleFocus = () => setShowHistory(true)
+  const handleBlur = () => setTimeout(() => setShowHistory(false), 100)
+
   return (
-    <Box sx={{ pt: 2, display: 'flex', justifyContent: 'center' }}>
+    <Box
+      sx={{
+        pt: 2,
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+      }}
+    >
       <TextField
         sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
         component="form"
@@ -27,6 +42,9 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
         fullWidth
         size="small"
         {...register('input')}
+        inputRef={ref}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         InputProps={{
           endAdornment: (
@@ -54,6 +72,16 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
           ),
         }}
       />
+
+      {showHistory && !inputValue.length && (
+        <SearchHistory
+          anchorEl={ref.current}
+          setValue={(value: string) => {
+            setValue('input', value)
+            void handleSubmit(onSubmit)()
+          }}
+        />
+      )}
     </Box>
   )
 }
