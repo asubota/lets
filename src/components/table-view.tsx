@@ -41,7 +41,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
             )}
             {columns.includes('stock') && (
               <TableCell
-                sx={{ pl: 0, pr: 0, whiteSpace: 'nowrap' }}
+                sx={{ pl: 1, pr: 0, whiteSpace: 'nowrap' }}
                 align="right"
               >
                 К-ть
@@ -76,7 +76,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
               )}
 
               {columns.includes('stock') && (
-                <TableCell sx={{ pl: 0, pr: 0 }} align="right">
+                <TableCell sx={{ pl: 1, pr: 0 }} align="right">
                   {row['stock']}
                 </TableCell>
               )}
