@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import {
   Box,
   Chip,
@@ -9,17 +9,51 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   Typography,
 } from '@mui/material'
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
 import { useTableColumns } from '../store'
 
+type Order = 'asc' | 'desc' | undefined
+
+function descendingComparator(a: Product, b: Product) {
+  if (b.price < a.price) {
+    return -1
+  }
+  if (b.price > a.price) {
+    return 1
+  }
+  return 0
+}
+
+function getComparator(order: Order): (a: Product, b: Product) => number {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b)
+    : (a, b) => -descendingComparator(a, b)
+}
+
 export const TableView: FC<{ list: Product[]; search: string }> = ({
   list,
   search,
 }) => {
+  const [order, setOrder] = useState<Order>(undefined)
   const columns = useTableColumns()
+
+  const handleOrderChange = () => {
+    setOrder((o) => {
+      if (!o) {
+        return 'asc'
+      }
+
+      if (o === 'asc') {
+        return 'desc'
+      }
+
+      return undefined
+    })
+  }
 
   if (!columns.length) {
     return (
@@ -30,6 +64,8 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
       </Box>
     )
   }
+
+  const sortedList = order ? list.slice().sort(getComparator(order)) : list
 
   return (
     <TableContainer component={Paper}>
@@ -57,14 +93,25 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
             )}
             {columns.includes('price') && (
               <TableCell sx={{ pr: 1 }} align="right">
-                Ціна
+                <TableSortLabel
+                  active={!!order}
+                  direction={order}
+                  onClick={handleOrderChange}
+                  sx={{
+                    '&.Mui-active .MuiTableSortLabel-icon': {
+                      color: 'primary.main',
+                    },
+                  }}
+                >
+                  Ціна
+                </TableSortLabel>
               </TableCell>
             )}
           </TableRow>
         </TableHead>
 
         <TableBody className="t-body">
-          {list.map((row) => (
+          {sortedList.map((row) => (
             <TableRow
               key={row['sku'] + row['vendor']}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
