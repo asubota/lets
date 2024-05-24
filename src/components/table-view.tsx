@@ -22,8 +22,11 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
         <TableHead>
           <TableRow>
             <TableCell sx={{ pl: 1 }}>Артикул</TableCell>
-            <TableCell sx={{ pl: 0, pr: 0 }} align="right">
-              Кількість
+            <TableCell
+              sx={{ pl: 0, pr: 0, whiteSpace: 'nowrap' }}
+              align="right"
+            >
+              К-ть
             </TableCell>
             <TableCell>Назва</TableCell>
             <TableCell sx={{ pr: 0 }} align="right">
