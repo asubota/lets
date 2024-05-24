@@ -7,7 +7,7 @@ export const Shell: FC = () => {
 
   return (
     <Box sx={{ p: 1, pt: 0 }} className="bg">
-      <SearchField onSubmit={({ input }) => setSearch(input)} />
+      <SearchField onSubmit={({ input }) => setSearch(input.trim())} />
       <List search={search} />
     </Box>
   )
