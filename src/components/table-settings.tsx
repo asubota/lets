@@ -4,15 +4,15 @@ import {
   Box,
   Button,
   Dialog,
+  FormControlLabel,
+  FormGroup,
   IconButton,
   Slide,
+  Switch,
   Toolbar,
   Typography,
 } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
-
-import EngineeringIcon from '@mui/icons-material/Engineering'
-import HardwareIcon from '@mui/icons-material/Hardware'
 
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -54,28 +54,22 @@ export const TableSettings: FC<{ open: boolean; handleClose: () => void }> = ({
           </Button>
         </Toolbar>
       </AppBar>
-      <Box sx={{ p: 2, textAlign: 'center' }}>in progress</Box>
+
       <Box
         sx={{
           p: 3,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          height: '100%',
-          justifyContent: 'space-around',
+          alignItems: 'flex-start',
         }}
       >
-        <EngineeringIcon
-          className="sizing"
-          sx={{ fontSize: '140px' }}
-          color="primary"
-        />
-
-        <HardwareIcon
-          className="sizing"
-          sx={{ fontSize: '80px' }}
-          color="secondary"
-        />
+        <FormGroup>
+          <FormControlLabel control={<Switch />} label="Артикул" />
+          <FormControlLabel control={<Switch />} label="Кількість" />
+          <FormControlLabel control={<Switch />} label="Назва" />
+          <FormControlLabel control={<Switch />} label="Продавець" />
+          <FormControlLabel control={<Switch />} label="Ціна" />
+        </FormGroup>
       </Box>
     </Dialog>
   )
