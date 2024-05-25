@@ -14,10 +14,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 export const SearchHistory: FC<{
   setValue(value: string): void
   anchorEl: null | HTMLElement
-}> = ({ anchorEl, setValue }) => {
+  isOpen: boolean
+}> = ({ anchorEl, setValue, isOpen }) => {
   const items = useHistoryItems()
   const { remove } = useHistoryActions()
-  const isOpen = Boolean(anchorEl)
 
   const handleHistoryClick = (term: string) => {
     setValue(term)
@@ -32,20 +32,14 @@ export const SearchHistory: FC<{
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
           <Paper elevation={4} sx={{ mt: 1, ml: 1 }}>
-            <List sx={{ width: 'calc(100vw - 16px)' }}>
+            <List sx={{ width: 'calc(100vw - 16px)', pt: 0, pb: 0 }}>
               {items.map((term, index) => (
-                <ListItem
-                  divider
-                  key={index}
-                  onClick={() => handleHistoryClick(term)}
-                >
-                  <ListItemText primary={term} />
-                  <IconButton
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      remove(term)
-                    }}
-                  >
+                <ListItem divider key={index}>
+                  <ListItemText
+                    primary={term}
+                    onClick={() => handleHistoryClick(term)}
+                  />
+                  <IconButton onClick={() => remove(term)}>
                     <DeleteIcon />
                   </IconButton>
                 </ListItem>
