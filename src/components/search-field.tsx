@@ -23,7 +23,13 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   }
 
   const handleFocus = () => setShowHistory(true)
-  const handleBlur = () => setTimeout(() => setShowHistory(false), 100)
+  const handleBlur = () => {
+    setTimeout(() => {
+      if (inputValue) {
+        setShowHistory(false)
+      }
+    }, 100)
+  }
 
   return (
     <Box
@@ -53,7 +59,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
                 onClick={handleFormReset}
                 size="small"
                 sx={{
-                  'visibility': watch('input') ? 'visible' : 'hidden',
+                  'visibility': inputValue ? 'visible' : 'hidden',
                   '& svg': { width: '26px', height: '26px' },
                 }}
               >
@@ -73,15 +79,14 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
         }}
       />
 
-      {showHistory && !inputValue.length && (
-        <SearchHistory
-          anchorEl={ref.current}
-          setValue={(value: string) => {
-            setValue('input', value)
-            void handleSubmit(onSubmit)()
-          }}
-        />
-      )}
+      <SearchHistory
+        isOpen={showHistory && !inputValue.length}
+        anchorEl={ref.current}
+        setValue={(value: string) => {
+          setValue('input', value)
+          void handleSubmit(onSubmit)()
+        }}
+      />
     </Box>
   )
 }
