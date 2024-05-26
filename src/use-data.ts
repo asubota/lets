@@ -67,6 +67,16 @@ const getData = async (): Promise<Product[]> => {
   return parseData(text)
 }
 
+export const useIsLoading = () => {
+  const { isFetching } = useQuery<Product[]>({
+    staleTime: 30 * 60 * 1000,
+    queryKey: ['lets-bike-base'],
+    queryFn: getData,
+  })
+
+  return isFetching
+}
+
 export const useSearch = (search: string): Product[] => {
   const { data = [] } = useQuery<Product[]>({
     staleTime: 30 * 60 * 1000,

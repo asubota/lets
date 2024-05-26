@@ -3,6 +3,8 @@ import { Cancel, Search } from '@mui/icons-material'
 import { FC, useState, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { SearchHistory } from './search-history.tsx'
+import { useIsLoading } from '../use-data.ts'
+import LoopIcon from '@mui/icons-material/Loop'
 
 interface FormData {
   input: string
@@ -30,6 +32,8 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
       }
     }, 100)
   }
+
+  const loading = useIsLoading()
 
   return (
     <Box
@@ -78,6 +82,20 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
           ),
         }}
       />
+
+      {loading && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+            position: 'absolute',
+            top: '65px',
+          }}
+        >
+          <LoopIcon className="rotate" color="primary" />
+        </Box>
+      )}
 
       <SearchHistory
         isOpen={showHistory && !inputValue.length}
