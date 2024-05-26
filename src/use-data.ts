@@ -67,22 +67,21 @@ const getData = async (): Promise<Product[]> => {
   return parseData(text)
 }
 
-export const useIsLoading = () => {
-  const { isFetching } = useQuery<Product[]>({
+const useData = () =>
+  useQuery<Product[]>({
     staleTime: 30 * 60 * 1000,
     queryKey: ['lets-bike-base'],
     queryFn: getData,
   })
+
+export const useIsLoading = () => {
+  const { isFetching } = useData()
 
   return isFetching
 }
 
 export const useSearch = (search: string): Product[] => {
-  const { data = [] } = useQuery<Product[]>({
-    staleTime: 30 * 60 * 1000,
-    queryKey: ['lets-bike-base'],
-    queryFn: getData,
-  })
+  const { data = [] } = useData()
 
   if (search.length < 3) {
     return []
