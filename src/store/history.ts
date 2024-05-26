@@ -37,4 +37,4 @@ const useTableStore = create<HistoryState>()(
 
 export const useHistoryActions = () => useTableStore((state) => state.actions)
 export const useHistoryItems = () =>
-  useTableStore((state) => state.items.slice().reverse().slice(0, 5))
+  useTableStore((state) => state.items.slice().reverse())

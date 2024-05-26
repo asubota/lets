@@ -14,7 +14,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   const ref = useRef<HTMLDivElement | null>(null)
   const { register, handleSubmit, setValue, watch, resetField } =
     useForm<FormData>({ defaultValues: { input: '' } })
-  const [showHistory, setShowHistory] = useState(true)
+  const [showHistory, setShowHistory] = useState(false)
   const inputValue = watch('input')
 
   const handleFormReset = () => {
@@ -82,6 +82,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
       <SearchHistory
         isOpen={showHistory && !inputValue.length}
         anchorEl={ref.current}
+        onClickOutside={() => setShowHistory(false)}
         setValue={(value: string) => {
           setValue('input', value)
           void handleSubmit(onSubmit)()
