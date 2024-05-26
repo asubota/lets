@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { SearchHistory } from './search-history.tsx'
 import { useIsLoading } from '../use-data.ts'
 import LoopIcon from '@mui/icons-material/Loop'
+import { clsx } from 'clsx'
 
 interface FormData {
   input: string
@@ -13,6 +14,7 @@ interface FormData {
 export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   onSubmit,
 }) => {
+  const loading = useIsLoading()
   const ref = useRef<HTMLDivElement | null>(null)
   const { register, handleSubmit, setValue, watch, resetField } =
     useForm<FormData>({ defaultValues: { input: '' } })
@@ -32,8 +34,6 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
       }
     }, 100)
   }
-
-  const loading = useIsLoading()
 
   return (
     <Box
@@ -55,6 +55,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
         inputRef={ref}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        disabled={loading}
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         InputProps={{
           endAdornment: (
@@ -72,30 +73,17 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
 
               <Box sx={{ backgroundColor: 'primary.main' }}>
                 <IconButton
+                  type={loading ? 'button' : 'submit'}
                   sx={{ color: 'primary.contrastText' }}
-                  type="submit"
+                  className={clsx({ rotate: loading })}
                 >
-                  <Search />
+                  {loading ? <LoopIcon /> : <Search />}
                 </IconButton>
               </Box>
             </InputAdornment>
           ),
         }}
       />
-
-      {loading && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            width: '100%',
-            position: 'absolute',
-            top: '65px',
-          }}
-        >
-          <LoopIcon className="rotate" color="primary" />
-        </Box>
-      )}
 
       <SearchHistory
         isOpen={showHistory && !inputValue.length}
