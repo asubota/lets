@@ -6,15 +6,15 @@ import { useSearch } from '../use-data.ts'
 import { Welcome } from './welcome.tsx'
 import { NoResults } from './no-results.tsx'
 
-import { useTableSettings } from './use-table-settings.ts'
 import { TableSettings } from './table-settings.tsx'
 import { Toolbar } from './toolbar.tsx'
-import { useAppView } from '../store'
+import { useAppView, useShowTableSettings } from '../store'
 
 export const List: FC<{ search: string }> = ({ search }) => {
   const list = useSearch(search)
   const view = useAppView()
-  const { open, toggle } = useTableSettings()
+
+  const showTableSettings = useShowTableSettings()
   const View = view === 'tile' ? TilesView : TableView
 
   if (list.length === 0 && search.length === 0) {
@@ -28,7 +28,7 @@ export const List: FC<{ search: string }> = ({ search }) => {
   return (
     <>
       <Toolbar total={list.length} />
-      <TableSettings open={open} handleClose={toggle} />
+      <TableSettings open={showTableSettings} />
       <View list={list} search={search} />
     </>
   )

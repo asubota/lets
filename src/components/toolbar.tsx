@@ -1,8 +1,7 @@
 import { Box, IconButton, Switch, Typography } from '@mui/material'
 import { FC } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings'
-import { useAppActions, useAppView } from '../store'
-import { useTableSettings } from './use-table-settings.ts'
+import { useAppActions, useAppView, useTableActions } from '../store'
 
 interface ToolbarProps {
   total: number
@@ -11,7 +10,7 @@ interface ToolbarProps {
 export const Toolbar: FC<ToolbarProps> = ({ total }) => {
   const view = useAppView()
   const { toggleView } = useAppActions()
-  const { toggle } = useTableSettings()
+  const { toggleSettings } = useTableActions()
 
   return (
     <Box
@@ -19,8 +18,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        pt: 1,
-        pb: 1,
+        height: '58px',
       }}
     >
       <Typography
@@ -33,7 +31,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
       </Typography>
 
       {view === 'table' && (
-        <IconButton onClick={toggle}>
+        <IconButton onClick={toggleSettings}>
           <SettingsIcon />
         </IconButton>
       )}

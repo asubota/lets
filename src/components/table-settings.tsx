@@ -44,11 +44,9 @@ const allFalse = {
   stock: false,
 }
 
-export const TableSettings: FC<{ open: boolean; handleClose: () => void }> = ({
-  open,
-  handleClose,
-}) => {
+export const TableSettings: FC<{ open: boolean }> = ({ open }) => {
   const { setColumns } = useTableActions()
+  const { toggleSettings } = useTableActions()
   const columns = useTableColumns()
   const values = columns.reduce((acc, key) => {
     acc[key] = true
@@ -59,14 +57,14 @@ export const TableSettings: FC<{ open: boolean; handleClose: () => void }> = ({
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     setColumns(getTrueValues(data))
-    handleClose()
+    toggleSettings()
   }
 
   return (
     <Dialog
       fullScreen
       open={open}
-      onClose={handleClose}
+      onClose={toggleSettings}
       TransitionComponent={Transition}
     >
       <AppBar sx={{ position: 'relative' }}>
@@ -74,7 +72,7 @@ export const TableSettings: FC<{ open: boolean; handleClose: () => void }> = ({
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleClose}
+            onClick={toggleSettings}
             aria-label="close"
           >
             <CloseIcon />
