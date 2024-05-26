@@ -9,7 +9,7 @@ interface HistoryState {
   }
 }
 
-const useTableStore = create<HistoryState>()(
+const useHistoryStore = create<HistoryState>()(
   persist(
     (set) => ({
       items: [],
@@ -35,6 +35,6 @@ const useTableStore = create<HistoryState>()(
   ),
 )
 
-export const useHistoryActions = () => useTableStore((state) => state.actions)
+export const useHistoryActions = () => useHistoryStore((state) => state.actions)
 export const useHistoryItems = () =>
-  useTableStore((state) => state.items.slice().reverse())
+  useHistoryStore((state) => state.items.slice().reverse())
