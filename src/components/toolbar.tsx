@@ -56,7 +56,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total, uniqueVendors }) => {
         </IconButton>
       )}
 
-      <ButtonGroup sx={{ alignItems: 'center' }}>
+      <ButtonGroup sx={{ alignItems: 'center', mr: '3px' }}>
         <IconButton
           size="small"
           color={view === 'table' ? 'primary' : 'secondary'}
@@ -68,7 +68,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total, uniqueVendors }) => {
           sx={{
             borderRight: '1px solid',
             borderColor: 'primary.main',
-            height: '26px',
+            height: '22px',
           }}
         />
         <IconButton
