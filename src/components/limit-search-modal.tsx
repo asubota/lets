@@ -16,6 +16,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 type FormData = {
   [key: string]: boolean
 }
+
 function getTrueValues(obj: FormData) {
   return Object.keys(obj).filter((key) => obj[key])
 }
@@ -29,23 +30,27 @@ export const LimitSearchModal: FC<{ vendors: string[] }> = ({ vendors }) => {
     return acc
   }, {} as FormData)
 
-  const { control, handleSubmit, setValue } = useForm({ values })
+  const { control, handleSubmit, setValue, getValues } = useForm({ values })
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     setSearchVendors(getTrueValues(data))
     toggleLimitModal()
   }
 
-  const handleSetAll = () => {
-    vendors.forEach((vendor) => {
-      setValue(vendor, true)
-    })
+  const setAll = (value: boolean) => {
+    vendors.forEach((vendor) => setValue(vendor, value))
   }
 
-  const handleResetAll = () => {
-    vendors.forEach((vendor) => {
-      setValue(vendor, false)
-    })
+  const handleToggleValues = () => {
+    const selectedVendors = getTrueValues(getValues())
+
+    if (selectedVendors.length < vendors.length) {
+      setAll(true)
+    }
+
+    if (selectedVendors.length === vendors.length) {
+      setAll(false)
+    }
   }
 
   return (
@@ -64,27 +69,6 @@ export const LimitSearchModal: FC<{ vendors: string[] }> = ({ vendors }) => {
             alignItems: 'flex-start',
           }}
         >
-          <FormGroup sx={{ width: '100%' }}>
-            <ButtonGroup
-              variant="outlined"
-              size="small"
-              fullWidth
-              color="secondary"
-            >
-              <Button sx={{ textTransform: 'none' }} onClick={handleSetAll}>
-                Set all
-              </Button>
-              <Button sx={{ textTransform: 'none' }} onClick={handleResetAll}>
-                Reset all
-              </Button>
-            </ButtonGroup>
-          </FormGroup>
-
-          <Divider
-            sx={{ mt: '18px', mb: 1, width: '100%' }}
-            orientation="horizontal"
-          />
-
           <FormGroup>
             {vendors.map((vendor) => (
               <Controller
@@ -102,6 +86,26 @@ export const LimitSearchModal: FC<{ vendors: string[] }> = ({ vendors }) => {
                 }}
               />
             ))}
+          </FormGroup>
+
+          <Divider
+            sx={{ mb: 2, mt: 1, width: '100%', borderColor: 'primary.main' }}
+            orientation="horizontal"
+          />
+          <FormGroup sx={{ width: '100%' }}>
+            <ButtonGroup
+              variant="outlined"
+              size="small"
+              fullWidth
+              color="primary"
+            >
+              <Button
+                sx={{ textTransform: 'none' }}
+                onClick={handleToggleValues}
+              >
+                Check / Uncheck
+              </Button>
+            </ButtonGroup>
           </FormGroup>
         </Box>
       </Paper>
