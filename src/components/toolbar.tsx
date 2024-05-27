@@ -1,7 +1,9 @@
-import { Box, IconButton, Switch, Typography } from '@mui/material'
+import { Box, ButtonGroup, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { useAppActions, useAppView, useTableActions } from '../store'
+import GridViewIcon from '@mui/icons-material/GridView'
+import ReorderIcon from '@mui/icons-material/Reorder'
 
 interface ToolbarProps {
   total: number
@@ -9,7 +11,7 @@ interface ToolbarProps {
 
 export const Toolbar: FC<ToolbarProps> = ({ total }) => {
   const view = useAppView()
-  const { toggleView } = useAppActions()
+  const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
 
   return (
@@ -36,7 +38,31 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
         </IconButton>
       )}
 
-      <Switch checked={view === 'table'} onChange={toggleView} />
+      <ButtonGroup sx={{ alignItems: 'center' }}>
+        <IconButton
+          size="small"
+          color={view === 'table' ? 'primary' : 'secondary'}
+          onClick={() => setView('table')}
+        >
+          <ReorderIcon />
+        </IconButton>
+        <Box
+          sx={{
+            borderRight: '1px solid',
+            borderColor: 'primary.main',
+            height: '26px',
+          }}
+        />
+        <IconButton
+          size="small"
+          color={view === 'tile' ? 'primary' : 'secondary'}
+          onClick={() => setView('tile')}
+        >
+          <GridViewIcon />
+        </IconButton>
+      </ButtonGroup>
+
+      {/*<Switch checked={view === 'table'} onChange={toggleView} />*/}
     </Box>
   )
 }
