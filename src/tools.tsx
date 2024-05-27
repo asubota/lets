@@ -34,3 +34,13 @@ export function getUniqueVendors(list: Product[]): string[] {
   list.forEach((item) => vendorsSet.add(item.vendor))
   return Array.from(vendorsSet)
 }
+
+export const groupByVendor = (list: Product[]): Record<string, number> => {
+  return list.reduce(
+    (acc, item) => {
+      acc[item.vendor] = (acc[item.vendor] || 0) + 1
+      return acc
+    },
+    {} as Record<string, number>,
+  )
+}
