@@ -10,9 +10,14 @@ import TuneIcon from '@mui/icons-material/Tune'
 interface ToolbarProps {
   total: number
   uniqueVendors: string[]
+  filteredSearch: boolean
 }
 
-export const Toolbar: FC<ToolbarProps> = ({ total, uniqueVendors }) => {
+export const Toolbar: FC<ToolbarProps> = ({
+  total,
+  uniqueVendors,
+  filteredSearch,
+}) => {
   const view = useAppView()
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
@@ -26,14 +31,34 @@ export const Toolbar: FC<ToolbarProps> = ({ total, uniqueVendors }) => {
         height: '50px',
       }}
     >
-      <Box sx={{ mr: 'auto', display: 'flex', alignItems: 'center' }}>
+      <Box
+        sx={{
+          mr: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <IconButton
           onClick={toggleLimitModal}
           size="small"
           color="secondary"
           disabled={uniqueVendors.length < 2}
+          sx={{ position: 'relative' }}
         >
           <TroubleshootIcon />
+          {filteredSearch && (
+            <Box
+              sx={{
+                backgroundColor: 'primary.main',
+                borderRadius: '50%',
+                width: '5px',
+                height: '5px',
+                position: 'absolute',
+                right: '4px',
+                top: '4px',
+              }}
+            />
+          )}
         </IconButton>
         <Typography
           component="div"

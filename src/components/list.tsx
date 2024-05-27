@@ -17,7 +17,7 @@ export const List: FC<{ list: Product[]; search: string }> = ({
 }) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(list)
-  const vendors = useSearchVendors()
+  const searchVendors = useSearchVendors()
 
   const View = view === 'tile' ? TilesView : TableView
 
@@ -30,13 +30,20 @@ export const List: FC<{ list: Product[]; search: string }> = ({
   }
 
   const filteredList =
-    vendors.length === 0
+    searchVendors.length === 0
       ? list
-      : list.filter((product) => vendors.includes(product.vendor))
+      : list.filter((product) => searchVendors.includes(product.vendor))
 
   return (
     <>
-      <Toolbar total={filteredList.length} uniqueVendors={uniqueVendors} />
+      <Toolbar
+        total={filteredList.length}
+        uniqueVendors={uniqueVendors}
+        filteredSearch={
+          searchVendors.length > 0 &&
+          searchVendors.length < uniqueVendors.length
+        }
+      />
       <View list={filteredList} search={search} />
     </>
   )
