@@ -8,14 +8,13 @@ import {
 } from './components'
 import { useHistoryActions } from './store'
 import { useSearch } from './use-data.ts'
-import { getUniqueVendors } from './tools.tsx'
 import { useSearchActions } from './store/search.ts'
 
 export const Shell: FC = () => {
   const [search, setSearch] = useState('')
   const { add } = useHistoryActions()
   const list = useSearch(search)
-  const uniqueVendors = getUniqueVendors(list)
+
   const { resetSearchVendors } = useSearchActions()
 
   const handleSubmit = ({ input }: { input: string }) => {
@@ -33,7 +32,7 @@ export const Shell: FC = () => {
       <SearchField onSubmit={handleSubmit} />
       <List list={list} search={search} />
 
-      <LimitSearchModal vendors={uniqueVendors} />
+      <LimitSearchModal list={list} />
       <TableSettingsModal />
     </Box>
   )

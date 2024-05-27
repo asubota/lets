@@ -10,8 +10,11 @@ import {
   FormControlLabel,
   FormGroup,
   Paper,
+  Typography,
 } from '@mui/material'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Product } from '../types.ts'
+import { getUniqueVendors, groupByVendor } from '../tools.tsx'
 
 type FormData = {
   [key: string]: boolean
@@ -21,7 +24,10 @@ function getTrueValues(obj: FormData) {
   return Object.keys(obj).filter((key) => obj[key])
 }
 
-export const LimitSearchModal: FC<{ vendors: string[] }> = ({ vendors }) => {
+export const LimitSearchModal: FC<{ list: Product[] }> = ({ list }) => {
+  const vendors = getUniqueVendors(list)
+  const countByVendor = groupByVendor(list)
+
   const { toggleLimitModal, setSearchVendors } = useSearchActions()
   const open = useShowLimitModal()
 
@@ -79,7 +85,19 @@ export const LimitSearchModal: FC<{ vendors: string[] }> = ({ vendors }) => {
                   return (
                     <FormControlLabel
                       control={<Checkbox {...field} />}
-                      label={vendor}
+                      label={
+                        <Typography
+                          component="span"
+                          variant="subtitle2"
+                          sx={{
+                            textDecoration: field.value
+                              ? 'none'
+                              : 'line-through',
+                          }}
+                        >
+                          {vendor} ({countByVendor[field.name]})
+                        </Typography>
+                      }
                       checked={field.value}
                     />
                   )
