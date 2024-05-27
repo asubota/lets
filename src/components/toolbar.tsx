@@ -26,24 +26,24 @@ export const Toolbar: FC<ToolbarProps> = ({ total, uniqueVendors }) => {
         height: '50px',
       }}
     >
-      <Typography
-        component="div"
-        color="secondary"
-        variant="body2"
-        sx={{ fontWeight: 'bold' }}
-      >
-        Total: {total}
-      </Typography>
-
-      <IconButton
-        sx={{ mr: 'auto', ml: 1 }}
-        onClick={toggleLimitModal}
-        size="small"
-        color="secondary"
-        disabled={uniqueVendors.length < 2}
-      >
-        <TroubleshootIcon />
-      </IconButton>
+      <Box sx={{ mr: 'auto', display: 'flex', alignItems: 'center' }}>
+        <IconButton
+          onClick={toggleLimitModal}
+          size="small"
+          color="secondary"
+          disabled={uniqueVendors.length < 2}
+        >
+          <TroubleshootIcon />
+        </IconButton>
+        <Typography
+          component="div"
+          color="secondary"
+          variant="body2"
+          sx={{ fontWeight: 'bold' }}
+        >
+          {total}
+        </Typography>
+      </Box>
 
       {view === 'table' && (
         <IconButton
