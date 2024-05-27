@@ -21,7 +21,6 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
         height: '50px',
       }}
