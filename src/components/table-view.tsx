@@ -15,6 +15,7 @@ import {
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
 import { useTableColumns } from '../store'
+import CheckIcon from '@mui/icons-material/Check'
 
 type Order = 'asc' | 'desc' | undefined
 
@@ -77,7 +78,14 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
             )}
             {columns.includes('stock') && (
               <TableCell
-                sx={{ pl: 1, pr: 0, whiteSpace: 'nowrap' }}
+                sx={{
+                  pl: 1,
+                  pr: 0,
+                  whiteSpace: 'nowrap',
+                  fontWeight: 'bold',
+                  fontStyle: 'italic',
+                  fontSize: '14px',
+                }}
                 align="right"
               >
                 К-ть
@@ -124,7 +132,20 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
 
               {columns.includes('stock') && (
                 <TableCell sx={{ pl: 1, pr: 0 }} align="right">
-                  {row['stock']}
+                  {row['stock'] ? (
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 'bold',
+                        fontStyle: 'italic',
+                        fontSize: '14px',
+                      }}
+                    >
+                      {row['stock']}
+                    </Typography>
+                  ) : (
+                    <CheckIcon color="primary" fontSize="small" />
+                  )}
                 </TableCell>
               )}
 

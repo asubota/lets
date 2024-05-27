@@ -2,10 +2,10 @@ import { Box, Card, Chip, Stack } from '@mui/material'
 import { FC, useState } from 'react'
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
-import CheckIcon from '@mui/icons-material/Check'
 import ImageIcon from '@mui/icons-material/Image'
 import LinkIcon from '@mui/icons-material/Link'
 import { DetailsPopup } from './details-popup.tsx'
+import { Stock } from './Stock.tsx'
 
 const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
   const [details, setDetails] = useState<Product | null>(null)
@@ -85,29 +85,9 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
           {p.pics && <ImageIcon color="info" fontSize="small" />}
           {p.link && <LinkIcon color="info" fontSize="small" />}
 
-          {!p['stock'] ? (
-            <Box
-              sx={{
-                'ml': 'auto',
-                'fontSize': 0,
-                'border': '2px solid',
-                'borderColor': 'primary.main',
-                '& > svg': {
-                  fontSize: '16px',
-                },
-              }}
-            >
-              <CheckIcon color="primary" />
-            </Box>
-          ) : (
-            <Chip
-              label={p['stock']}
-              color="primary"
-              size="small"
-              variant="outlined"
-              sx={{ borderRadius: 0, ml: 'auto', borderWidth: '2px' }}
-            />
-          )}
+          <Box sx={{ ml: 'auto' }}>
+            <Stock stock={p['stock']} />
+          </Box>
         </Box>
       </Card>
     </>
