@@ -7,13 +7,20 @@ import {
   TableSettingsModal,
 } from './components'
 import { useHistoryActions } from './store'
+import { useSearch } from './use-data.ts'
+import { getUniqueVendors } from './tools.tsx'
+import { useSearchActions } from './store/search.ts'
 
 export const Shell: FC = () => {
   const [search, setSearch] = useState('')
   const { add } = useHistoryActions()
+  const list = useSearch(search)
+  const uniqueVendors = getUniqueVendors(list)
+  const { resetSearchVendors } = useSearchActions()
 
   const handleSubmit = ({ input }: { input: string }) => {
     const term = input.trim()
+    resetSearchVendors()
     setSearch(term)
 
     if (term.length > 2) {
@@ -24,9 +31,9 @@ export const Shell: FC = () => {
   return (
     <Box sx={{ p: 1, pt: 0 }} className="bg">
       <SearchField onSubmit={handleSubmit} />
-      <List search={search} />
+      <List list={list} search={search} />
 
-      <LimitSearchModal />
+      <LimitSearchModal vendors={uniqueVendors} />
       <TableSettingsModal />
     </Box>
   )
