@@ -1,9 +1,11 @@
 import { Box, ButtonGroup, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
-import SettingsIcon from '@mui/icons-material/Settings'
 import { useAppActions, useAppView, useTableActions } from '../store'
 import GridViewIcon from '@mui/icons-material/GridView'
 import ReorderIcon from '@mui/icons-material/Reorder'
+import TroubleshootIcon from '@mui/icons-material/Troubleshoot'
+import { useSearchActions } from '../store/search.ts'
+import TuneIcon from '@mui/icons-material/Tune'
 
 interface ToolbarProps {
   total: number
@@ -13,6 +15,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
   const view = useAppView()
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
+  const { toggleLimitModal } = useSearchActions()
 
   return (
     <Box
@@ -20,7 +23,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: '58px',
+        height: '50px',
       }}
     >
       <Typography
@@ -32,9 +35,23 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
         Total: {total}
       </Typography>
 
+      <IconButton
+        sx={{ mr: 'auto', ml: 1 }}
+        onClick={toggleLimitModal}
+        size="small"
+        color="secondary"
+      >
+        <TroubleshootIcon />
+      </IconButton>
+
       {view === 'table' && (
-        <IconButton onClick={toggleSettings}>
-          <SettingsIcon />
+        <IconButton
+          sx={{ ml: 'auto' }}
+          onClick={toggleSettings}
+          size="small"
+          color="secondary"
+        >
+          <TuneIcon />
         </IconButton>
       )}
 
@@ -61,8 +78,6 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
           <GridViewIcon />
         </IconButton>
       </ButtonGroup>
-
-      {/*<Switch checked={view === 'table'} onChange={toggleView} />*/}
     </Box>
   )
 }

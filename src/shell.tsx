@@ -1,6 +1,11 @@
 import { FC, useState } from 'react'
 import { Box } from '@mui/material'
-import { SearchField, List } from './components'
+import {
+  SearchField,
+  List,
+  LimitSearchModal,
+  TableSettingsModal,
+} from './components'
 import { useHistoryActions } from './store'
 
 export const Shell: FC = () => {
@@ -20,6 +25,9 @@ export const Shell: FC = () => {
     <Box sx={{ p: 1, pt: 0 }} className="bg">
       <SearchField onSubmit={handleSubmit} />
       <List search={search} />
+
+      <LimitSearchModal />
+      <TableSettingsModal />
     </Box>
   )
 }
