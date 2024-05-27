@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material'
+import { Product } from './types.ts'
 
 export function getHighlightedText(text: string | null, highlight: string) {
   if (text === null) {
@@ -26,4 +27,10 @@ export function getHighlightedText(text: string | null, highlight: string) {
       )}
     </span>
   )
+}
+
+export function getUniqueVendors(list: Product[]): string[] {
+  const vendorsSet = new Set<string>()
+  list.forEach((item) => vendorsSet.add(item.vendor))
+  return Array.from(vendorsSet)
 }

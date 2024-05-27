@@ -9,9 +9,10 @@ import TuneIcon from '@mui/icons-material/Tune'
 
 interface ToolbarProps {
   total: number
+  uniqueVendors: string[]
 }
 
-export const Toolbar: FC<ToolbarProps> = ({ total }) => {
+export const Toolbar: FC<ToolbarProps> = ({ total, uniqueVendors }) => {
   const view = useAppView()
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
@@ -39,6 +40,7 @@ export const Toolbar: FC<ToolbarProps> = ({ total }) => {
         onClick={toggleLimitModal}
         size="small"
         color="secondary"
+        disabled={uniqueVendors.length < 2}
       >
         <TroubleshootIcon />
       </IconButton>

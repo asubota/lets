@@ -2,16 +2,22 @@ import { FC } from 'react'
 
 import { TilesView } from './tiles-view.tsx'
 import { TableView } from './table-view.tsx'
-import { useSearch } from '../use-data.ts'
 import { Welcome } from './welcome.tsx'
 import { NoResults } from './no-results.tsx'
 
 import { Toolbar } from './toolbar.tsx'
 import { useAppView } from '../store'
+import { getUniqueVendors } from '../tools.tsx'
+import { Product } from '../types.ts'
+import { useSearchVendors } from '../store/search.ts'
 
-export const List: FC<{ search: string }> = ({ search }) => {
-  const list = useSearch(search)
+export const List: FC<{ list: Product[]; search: string }> = ({
+  list,
+  search,
+}) => {
   const view = useAppView()
+  const uniqueVendors = getUniqueVendors(list)
+  const vendors = useSearchVendors()
 
   const View = view === 'tile' ? TilesView : TableView
 
@@ -23,10 +29,15 @@ export const List: FC<{ search: string }> = ({ search }) => {
     return <NoResults />
   }
 
+  const filteredList =
+    vendors.length === 0
+      ? list
+      : list.filter((product) => vendors.includes(product.vendor))
+
   return (
     <>
-      <Toolbar total={list.length} />
-      <View list={list} search={search} />
+      <Toolbar total={filteredList.length} uniqueVendors={uniqueVendors} />
+      <View list={filteredList} search={search} />
     </>
   )
 }
