@@ -86,7 +86,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
                   fontStyle: 'italic',
                   fontSize: '14px',
                 }}
-                align="right"
+                align="center"
               >
                 К-ть
               </TableCell>
@@ -131,7 +131,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
               )}
 
               {columns.includes('stock') && (
-                <TableCell sx={{ pl: 1, pr: 0 }} align="right">
+                <TableCell sx={{ pl: 1, pr: 0 }} align="center">
                   {row['stock'] ? (
                     <Typography
                       component="span"
