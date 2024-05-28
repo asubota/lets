@@ -15,7 +15,7 @@ import {
 import { Product } from '../types.ts'
 import { getHighlightedText } from '../tools.tsx'
 import { useTableColumns } from '../store'
-import CheckIcon from '@mui/icons-material/Check'
+import { Stock } from './Stock.tsx'
 
 type Order = 'asc' | 'desc' | undefined
 
@@ -132,20 +132,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
 
               {columns.includes('stock') && (
                 <TableCell sx={{ pl: 1, pr: 0 }} align="center">
-                  {row['stock'] ? (
-                    <Typography
-                      component="span"
-                      sx={{
-                        fontWeight: 'bold',
-                        fontStyle: 'italic',
-                        fontSize: '14px',
-                      }}
-                    >
-                      {row['stock']}
-                    </Typography>
-                  ) : (
-                    <CheckIcon color="primary" fontSize="small" />
-                  )}
+                  <Stock stock={row['stock']} />
                 </TableCell>
               )}
 
