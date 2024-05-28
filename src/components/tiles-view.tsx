@@ -82,8 +82,8 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
           ) : (
             <Chip label={p['vendor']} color="primary" size="small" />
           )}
-          {p.pics && <ImageIcon color="info" fontSize="small" />}
-          {p.link && <LinkIcon color="info" fontSize="small" />}
+          {p.pics && <ImageIcon color="secondary" fontSize="small" />}
+          {p.link && <LinkIcon color="secondary" fontSize="small" />}
 
           <Box sx={{ ml: 'auto' }}>
             <Stock stock={p['stock']} />
