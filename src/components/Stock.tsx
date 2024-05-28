@@ -1,28 +1,20 @@
-import { Box, Chip } from '@mui/material'
+import { Typography } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { FC } from 'react'
 
 export const Stock: FC<{ stock: string | null }> = ({ stock }) => {
-  return !stock ? (
-    <Box
+  return stock ? (
+    <Typography
+      component="span"
       sx={{
-        'fontSize': 0,
-        'border': '2px solid',
-        'borderColor': 'primary.main',
-        '& > svg': {
-          fontSize: '16px',
-        },
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        fontSize: '14px',
       }}
     >
-      <CheckIcon color="primary" />
-    </Box>
+      {stock}
+    </Typography>
   ) : (
-    <Chip
-      label={stock}
-      color="primary"
-      size="small"
-      variant="outlined"
-      sx={{ borderRadius: 0, borderWidth: '2px' }}
-    />
+    <CheckIcon color="secondary" fontSize="small" />
   )
 }
