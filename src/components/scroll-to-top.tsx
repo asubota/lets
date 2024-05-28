@@ -34,8 +34,8 @@ export const ScrollToTop: FC = () => {
         onClick={handleClick}
         sx={{
           position: 'fixed',
-          top: '20px',
-          right: '20px',
+          bottom: '40px',
+          right: '40px',
         }}
       >
         <KeyboardArrowUpIcon />
