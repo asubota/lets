@@ -36,7 +36,11 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           >
             <LinkIcon fontSize="small" sx={{ color: 'primary.main' }} />
             <Link
-              href={details.link}
+              href={
+                details.link.startsWith('http')
+                  ? details.link
+                  : `https://${details.link}`
+              }
               target="_blank"
               rel="noopener noreferrer"
               sx={{ textDecoration: 'none' }}
