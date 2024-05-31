@@ -30,12 +30,11 @@ export const ScrollToTop: FC = () => {
     <Zoom in={showFab}>
       <Fab
         color="primary"
-        size="small"
         onClick={handleClick}
         sx={{
           position: 'fixed',
-          bottom: '40px',
-          right: '40px',
+          bottom: '75px',
+          right: '75px',
         }}
       >
         <KeyboardArrowUpIcon />
