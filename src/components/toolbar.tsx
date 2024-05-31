@@ -37,9 +37,9 @@ export const Toolbar: FC<ToolbarProps> = ({
           display: 'flex',
           alignItems: 'center',
         }}
+        onClick={uniqueVendors.length < 2 ? undefined : toggleLimitModal}
       >
         <IconButton
-          onClick={toggleLimitModal}
           size="small"
           color="secondary"
           disabled={uniqueVendors.length < 2}
