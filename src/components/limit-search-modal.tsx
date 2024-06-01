@@ -3,18 +3,33 @@ import { FC } from 'react'
 import { useSearchActions, useShowLimitModal } from '../store/search.ts'
 import {
   Box,
-  Button,
-  ButtonGroup,
   Checkbox,
   Divider,
   FormControlLabel,
   FormGroup,
   Paper,
+  styled,
+  Switch,
   Typography,
 } from '@mui/material'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Product } from '../types.ts'
 import { getUniqueVendors, groupByVendor } from '../tools.tsx'
+import { clsx } from 'clsx'
+
+const StyledSwitch = styled(Switch)(({ theme }) => ({
+  '&.intermediate .MuiSwitch-track': {
+    backgroundColor: theme.palette.secondary.light,
+  },
+
+  '&.intermediate .MuiSwitch-switchBase': {
+    transform: 'translateX(10px)',
+  },
+
+  '&.intermediate .MuiSwitch-thumb': {
+    backgroundColor: theme.palette.primary.light,
+  },
+}))
 
 type FormData = {
   [key: string]: boolean
@@ -36,7 +51,9 @@ export const LimitSearchModal: FC<{ list: Product[] }> = ({ list }) => {
     return acc
   }, {} as FormData)
 
-  const { control, handleSubmit, setValue, getValues } = useForm({ values })
+  const { control, handleSubmit, setValue, getValues, watch } = useForm({
+    values,
+  })
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     setSearchVendors(getTrueValues(data))
@@ -58,6 +75,8 @@ export const LimitSearchModal: FC<{ list: Product[] }> = ({ list }) => {
       setAll(false)
     }
   }
+
+  const selectedVendors = getTrueValues(watch())
 
   return (
     <Modal
@@ -110,20 +129,16 @@ export const LimitSearchModal: FC<{ list: Product[] }> = ({ list }) => {
             sx={{ mb: 2, mt: 1, width: '100%', borderColor: 'primary.main' }}
             orientation="horizontal"
           />
-          <FormGroup sx={{ width: '100%' }}>
-            <ButtonGroup
-              variant="outlined"
-              size="small"
-              fullWidth
-              color="primary"
-            >
-              <Button
-                sx={{ textTransform: 'none' }}
-                onClick={handleToggleValues}
-              >
-                Check / Uncheck
-              </Button>
-            </ButtonGroup>
+          <FormGroup sx={{ width: '100%', alignItems: 'center' }}>
+            <StyledSwitch
+              checked={selectedVendors.length === vendors.length}
+              onClick={handleToggleValues}
+              className={clsx({
+                intermediate:
+                  selectedVendors.length > 0 &&
+                  selectedVendors.length < vendors.length,
+              })}
+            />
           </FormGroup>
         </Box>
       </Paper>
