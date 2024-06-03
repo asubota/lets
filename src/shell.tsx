@@ -5,7 +5,6 @@ import {
   List,
   LimitSearchModal,
   TableSettingsModal,
-  ScrollToTop,
 } from './components'
 import { useHistoryActions } from './store'
 import { useSearch } from './use-data.ts'
@@ -35,7 +34,6 @@ export const Shell: FC = () => {
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
-      <ScrollToTop />
     </Box>
   )
 }

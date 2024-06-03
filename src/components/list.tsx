@@ -10,6 +10,7 @@ import { useAppView } from '../store'
 import { getUniqueVendors } from '../tools.tsx'
 import { Product } from '../types.ts'
 import { useSearchVendors } from '../store/search.ts'
+import { ScrollToTop } from './scroll-to-top.tsx'
 
 export const List: FC<{ list: Product[]; search: string }> = ({
   list,
@@ -45,6 +46,7 @@ export const List: FC<{ list: Product[]; search: string }> = ({
         }
       />
       <View list={filteredList} search={search} />
+      <ScrollToTop />
     </>
   )
 }
