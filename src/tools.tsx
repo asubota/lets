@@ -1,12 +1,15 @@
 import { Typography } from '@mui/material'
 import { Product } from './types.ts'
 
+const escapeRegExp = (value = ''): string =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 export function getHighlightedText(text: string | null, highlight: string) {
   if (text === null) {
     return text
   }
 
-  const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
+  const parts = text.split(new RegExp(`(${escapeRegExp(highlight)})`, 'gi'))
 
   return (
     <span>
