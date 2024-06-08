@@ -1,7 +1,7 @@
 import { Box, Card, Chip, Stack } from '@mui/material'
 import { FC, useState } from 'react'
 import { Product } from '../types.ts'
-import { getHighlightedText } from '../tools.tsx'
+import { copyContent, getHighlightedText } from '../tools.tsx'
 import ImageIcon from '@mui/icons-material/Image'
 import LinkIcon from '@mui/icons-material/Link'
 import { DetailsPopup } from './details-popup.tsx'
@@ -49,7 +49,14 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
         </Box>
 
         <Box sx={{ gridArea: 'sku', textAlign: 'left' }}>
-          <Chip label={getHighlightedText(p['sku'], search)} size="small" />
+          <Chip
+            label={getHighlightedText(p['sku'], search)}
+            size="small"
+            onClick={async (e) => {
+              e.stopPropagation()
+              await copyContent(p.sku)
+            }}
+          />
         </Box>
 
         <Box
