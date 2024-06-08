@@ -47,3 +47,11 @@ export const groupByVendor = (list: Product[]): Record<string, number> => {
     {} as Record<string, number>,
   )
 }
+
+export async function copyContent(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch (err) {
+    console.error('Failed to copy: ', err)
+  }
+}

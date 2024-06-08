@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Product } from '../types.ts'
-import { getHighlightedText } from '../tools.tsx'
+import { copyContent, getHighlightedText } from '../tools.tsx'
 import { useTableColumns } from '../store'
 import { Stock } from './Stock.tsx'
 
@@ -125,7 +125,13 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {columns.includes('sku') && (
-                <TableCell sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1 }}>
+                <TableCell
+                  sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1 }}
+                  onClick={async (e) => {
+                    e.stopPropagation()
+                    await copyContent(row.sku)
+                  }}
+                >
                   {getHighlightedText(row['sku'], search)}
                 </TableCell>
               )}
