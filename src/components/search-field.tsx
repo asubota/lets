@@ -6,6 +6,7 @@ import { SearchHistory } from './search-history.tsx'
 import { useIsLoading } from '../use-data.ts'
 import LoopIcon from '@mui/icons-material/Loop'
 import { clsx } from 'clsx'
+import { SearchSuggestions } from './search-suggestions.tsx'
 
 interface FormData {
   input: string
@@ -19,6 +20,7 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   const { control, handleSubmit, setValue, watch, resetField } =
     useForm<FormData>({ defaultValues: { input: '' } })
   const [showHistory, setShowHistory] = useState(false)
+  const [showAhead, setShowAhead] = useState(false)
   const inputValue = watch('input')
 
   const handleFormReset = () => {
@@ -26,7 +28,11 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
     void handleSubmit(onSubmit)()
   }
 
-  const handleFocus = () => setShowHistory(true)
+  const handleFocus = () => {
+    setShowHistory(true)
+    setShowAhead(true)
+  }
+
   const handleBlur = () => {
     setTimeout(() => {
       if (inputValue) {
@@ -36,72 +42,78 @@ export const SearchField: FC<{ onSubmit: SubmitHandler<FormData> }> = ({
   }
 
   return (
-    <Box
-      sx={{
-        pt: 2,
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}
-    >
-      <Controller
-        name="input"
-        control={control}
-        render={({ field }) => {
-          return (
-            <TextField
-              sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
-              component="form"
-              label="Search"
-              variant="outlined"
-              fullWidth
-              size="small"
-              inputRef={ref}
-              {...field}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              disabled={loading}
-              onSubmit={(event) => void handleSubmit(onSubmit)(event)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ marginRight: -2 }}>
-                    <IconButton
-                      onClick={handleFormReset}
-                      size="small"
-                      sx={{
-                        'visibility': inputValue ? 'visible' : 'hidden',
-                        '& svg': { width: '26px', height: '26px' },
-                      }}
-                    >
-                      <Cancel />
-                    </IconButton>
-
-                    <Box sx={{ backgroundColor: 'primary.main' }}>
+    <>
+      <Box sx={{ pt: 2 }} ref={ref}>
+        <Controller
+          name="input"
+          control={control}
+          render={({ field }) => {
+            return (
+              <TextField
+                sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
+                component="form"
+                label="Search"
+                variant="outlined"
+                fullWidth
+                size="small"
+                {...field}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                disabled={loading}
+                onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ marginRight: -2 }}>
                       <IconButton
-                        type={loading ? 'button' : 'submit'}
-                        sx={{ color: 'primary.contrastText' }}
-                        className={clsx({ rotate: loading })}
+                        onClick={handleFormReset}
+                        size="small"
+                        sx={{
+                          'visibility': inputValue ? 'visible' : 'hidden',
+                          '& svg': { width: '26px', height: '26px' },
+                        }}
                       >
-                        {loading ? <LoopIcon /> : <Search />}
+                        <Cancel />
                       </IconButton>
-                    </Box>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )
-        }}
-      />
+
+                      <Box sx={{ backgroundColor: 'primary.main' }}>
+                        <IconButton
+                          type={loading ? 'button' : 'submit'}
+                          sx={{ color: 'primary.contrastText' }}
+                          className={clsx({ rotate: loading })}
+                        >
+                          {loading ? <LoopIcon /> : <Search />}
+                        </IconButton>
+                      </Box>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )
+          }}
+        />
+      </Box>
 
       <SearchHistory
-        isOpen={showHistory && !inputValue.length}
+        open={showHistory && !inputValue.length}
         anchorEl={ref.current}
-        onClickOutside={() => setShowHistory(false)}
+        onClickAway={() => setShowHistory(false)}
         setValue={(value: string) => {
           setValue('input', value)
           void handleSubmit(onSubmit)()
         }}
       />
-    </Box>
+
+      <SearchSuggestions
+        search={inputValue}
+        open={showAhead && inputValue.length >= 3}
+        anchorEl={ref.current}
+        onClickAway={() => setShowAhead(false)}
+        setValue={(value: string) => {
+          setValue('input', value)
+          setShowAhead(false)
+          void handleSubmit(onSubmit)()
+        }}
+      />
+    </>
   )
 }
