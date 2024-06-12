@@ -1,7 +1,8 @@
 import { FC } from 'react'
 import { FadePopper } from './fade-popper.tsx'
-import { List, ListItem, ListItemText, Typography } from '@mui/material'
+import { List, ListItem, ListItemText } from '@mui/material'
 import { useSearch } from '../use-data.ts'
+import { getHighlightedText } from '../tools.tsx'
 
 interface SearchSuggestionsProps {
   open: boolean
@@ -44,20 +45,25 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
                 flexDirection: 'column',
                 cursor: 'pointer',
               }}
-              primary={
-                <Typography component="span" variant="body2">
-                  {p.name}
-                </Typography>
-              }
-              secondary={
-                <Typography
-                  component="span"
-                  variant="caption"
-                  color="text.secondary"
-                >
-                  {p.sku}
-                </Typography>
-              }
+              primary={getHighlightedText(p.name, search, {
+                match: {
+                  variant: 'body2',
+                  color: 'primary.main',
+                },
+                noMatch: {
+                  variant: 'body2',
+                },
+              })}
+              secondary={getHighlightedText(p.sku, search, {
+                match: {
+                  variant: 'caption',
+                  color: 'primary.main',
+                },
+                noMatch: {
+                  variant: 'caption',
+                  color: 'text.secondary',
+                },
+              })}
             />
           </ListItem>
         ))}
