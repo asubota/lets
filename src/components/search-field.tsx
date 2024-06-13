@@ -70,7 +70,7 @@ export const SearchField: FC<{
                       size="small"
                       disabled={disabled}
                       sx={{
-                        'visibility': inputValue ? 'visible' : 'hidden',
+                        'visibility': field.value ? 'visible' : 'hidden',
                         '& svg': { width: '26px', height: '26px' },
                       }}
                     >
