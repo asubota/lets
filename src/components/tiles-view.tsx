@@ -1,5 +1,5 @@
 import { Box, Card, Chip, IconButton, Stack } from '@mui/material'
-import { FC, useState } from 'react'
+import { FC, memo, useState } from 'react'
 import { Product } from '../types.ts'
 import { copyContent, getHighlightedText } from '../tools.tsx'
 import ImageIcon from '@mui/icons-material/Image'
@@ -15,114 +15,119 @@ const Tile: FC<{
   search: string
   isFav: boolean
   toggle(): void
-}> = ({ p, search, isFav, toggle }) => {
-  const [details, setDetails] = useState<Product | null>(null)
+}> = memo(
+  ({ p, search, isFav, toggle }) => {
+    const [details, setDetails] = useState<Product | null>(null)
 
-  const handleCardClick = () => {
-    if (p.link || p.pics) {
-      setDetails(p)
+    const handleCardClick = () => {
+      if (p.link || p.pics) {
+        setDetails(p)
+      }
     }
-  }
 
-  return (
-    <>
-      {details && (
-        <DetailsPopup details={details} onClose={() => setDetails(null)} />
-      )}
-      <Card
-        variant="outlined"
-        sx={{
-          p: 1,
-          display: 'grid',
-          rowGap: '12px',
-          columnGap: '4px',
-          gridTemplateColumns: '1fr',
-          gridTemplateRows: 'auto auto auto',
-          gridTemplateAreas: ` 
+    return (
+      <>
+        {details && (
+          <DetailsPopup details={details} onClose={() => setDetails(null)} />
+        )}
+        <Card
+          variant="outlined"
+          sx={{
+            p: 1,
+            display: 'grid',
+            rowGap: '12px',
+            columnGap: '4px',
+            gridTemplateColumns: '1fr',
+            gridTemplateRows: 'auto auto auto',
+            gridTemplateAreas: ` 
           "name"
           "sku"
           "meta"
         `,
-        }}
-        onClick={handleCardClick}
-      >
-        <Box
-          sx={{
-            gridArea: 'name',
-            textAlign: 'left',
-            wordBreak: 'break-word',
           }}
+          onClick={handleCardClick}
         >
-          {getHighlightedText(p['name'], search)}
-        </Box>
-
-        <Box sx={{ gridArea: 'sku', textAlign: 'left' }}>
-          <Chip
-            label={getHighlightedText(p['sku'], search)}
-            size="small"
-            onClick={async (e) => {
-              e.stopPropagation()
-              await copyContent(p.sku)
-            }}
-          />
-        </Box>
-
-        <Box
-          sx={{
-            gridArea: 'meta',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-        >
-          <Chip
-            label={`${p['price']} uah`}
-            color="secondary"
-            size="small"
-            variant="outlined"
+          <Box
             sx={{
-              borderWidth: '2px',
-              borderColor: 'secondary.main',
+              gridArea: 'name',
+              textAlign: 'left',
+              wordBreak: 'break-word',
             }}
-          />
-          {p['vendor'] !== 'base' ? (
+          >
+            {getHighlightedText(p['name'], search)}
+          </Box>
+
+          <Box sx={{ gridArea: 'sku', textAlign: 'left' }}>
             <Chip
-              label={p['vendor']}
+              label={getHighlightedText(p['sku'], search)}
+              size="small"
+              onClick={async (e) => {
+                e.stopPropagation()
+                await copyContent(p.sku)
+              }}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              gridArea: 'meta',
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <Chip
+              label={`${p['price']} uah`}
               color="secondary"
               size="small"
               variant="outlined"
-              sx={{ borderWidth: '2px', borderColor: 'secondary.main' }}
-            />
-          ) : (
-            <Chip label={p['vendor']} color="primary" size="small" />
-          )}
-          {p.pics && <ImageIcon color="secondary" fontSize="small" />}
-          {p.link && <LinkIcon color="secondary" fontSize="small" />}
-
-          <Box sx={{ ml: 'auto' }}>
-            <IconButton
-              size="small"
               sx={{
-                pt: 0,
-                pb: 0,
-                color: isFav ? 'warning.light' : 'secondary.light',
+                borderWidth: '2px',
+                borderColor: 'secondary.main',
               }}
-              onClick={(e) => {
-                e.stopPropagation()
-                toggle()
-              }}
-            >
-              {isFav ? <StarIcon /> : <StarBorderIcon />}
-            </IconButton>
+            />
+            {p['vendor'] !== 'base' ? (
+              <Chip
+                label={p['vendor']}
+                color="secondary"
+                size="small"
+                variant="outlined"
+                sx={{ borderWidth: '2px', borderColor: 'secondary.main' }}
+              />
+            ) : (
+              <Chip label={p['vendor']} color="primary" size="small" />
+            )}
+            {p.pics && <ImageIcon color="secondary" fontSize="small" />}
+            {p.link && <LinkIcon color="secondary" fontSize="small" />}
 
-            <Stock stock={p['stock']} bordered />
+            <Box sx={{ ml: 'auto' }}>
+              <IconButton
+                size="small"
+                sx={{
+                  pt: 0,
+                  pb: 0,
+                  color: isFav ? 'warning.light' : 'secondary.light',
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggle()
+                }}
+              >
+                {isFav ? <StarIcon /> : <StarBorderIcon />}
+              </IconButton>
+
+              <Stock stock={p['stock']} bordered />
+            </Box>
           </Box>
-        </Box>
-      </Card>
-    </>
-  )
-}
+        </Card>
+      </>
+    )
+  },
+  (p1, p2) => {
+    return p1.isFav === p2.isFav
+  },
+)
 
 export const TilesView: FC<{ list: Product[]; search: string }> = ({
   list,
