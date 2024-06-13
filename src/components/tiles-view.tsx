@@ -1,13 +1,21 @@
-import { Box, Card, Chip, Stack } from '@mui/material'
+import { Box, Card, Chip, IconButton, Stack } from '@mui/material'
 import { FC, useState } from 'react'
 import { Product } from '../types.ts'
 import { copyContent, getHighlightedText } from '../tools.tsx'
 import ImageIcon from '@mui/icons-material/Image'
 import LinkIcon from '@mui/icons-material/Link'
+import StarIcon from '@mui/icons-material/Star'
+import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { DetailsPopup } from './details-popup.tsx'
 import { Stock } from './Stock.tsx'
+import { useFavsActions, useFavsItems } from '../store/favs.ts'
 
-const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
+const Tile: FC<{
+  p: Product
+  search: string
+  isFav: boolean
+  toggle(): void
+}> = ({ p, search, isFav, toggle }) => {
   const [details, setDetails] = useState<Product | null>(null)
 
   const handleCardClick = () => {
@@ -93,6 +101,21 @@ const Tile: FC<{ p: Product; search: string }> = ({ p, search }) => {
           {p.link && <LinkIcon color="secondary" fontSize="small" />}
 
           <Box sx={{ ml: 'auto' }}>
+            <IconButton
+              size="small"
+              sx={{
+                pt: 0,
+                pb: 0,
+                color: isFav ? 'warning.light' : 'secondary.light',
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                toggle()
+              }}
+            >
+              {isFav ? <StarIcon /> : <StarBorderIcon />}
+            </IconButton>
+
             <Stock stock={p['stock']} bordered />
           </Box>
         </Box>
@@ -105,11 +128,24 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
   list,
   search,
 }) => {
+  const favs = useFavsItems()
+  const { toggle } = useFavsActions()
+
   return (
     <Stack direction="column" spacing={1}>
-      {list.map((row) => (
-        <Tile p={row} search={search} key={row['sku'] + row['vendor']} />
-      ))}
+      {list.map((row) => {
+        const key = `${row.sku}:${row.vendor}`
+
+        return (
+          <Tile
+            p={row}
+            search={search}
+            key={key}
+            isFav={favs.includes(key)}
+            toggle={() => toggle(key)}
+          />
+        )
+      })}
     </Stack>
   )
 }

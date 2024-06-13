@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface HistoryState {
+interface StoreState {
   items: string[]
   actions: {
     add(this: void, value: string): void
@@ -9,7 +9,7 @@ interface HistoryState {
   }
 }
 
-const useHistoryStore = create<HistoryState>()(
+const useStore = create<StoreState>()(
   persist(
     (set) => ({
       items: [],
@@ -35,6 +35,6 @@ const useHistoryStore = create<HistoryState>()(
   ),
 )
 
-export const useHistoryActions = () => useHistoryStore((state) => state.actions)
+export const useHistoryActions = () => useStore((state) => state.actions)
 export const useHistoryItems = () =>
-  useHistoryStore((state) => state.items.slice().reverse())
+  useStore((state) => state.items.slice().reverse())

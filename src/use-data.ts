@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Product } from './types.ts'
+import { useFavsItems } from './store/favs.ts'
 
 interface Column {
   id: string
@@ -88,4 +89,14 @@ export const useSearch = (search: string): Product[] => {
   }
 
   return data.filter((item) => filterBySearch(item, search))
+}
+
+export const useFavs = (): Product[] => {
+  const favs = useFavsItems()
+  const { data = [] } = useData()
+
+  return data.filter((item) => {
+    const key = `${item.sku}:${item.vendor}`
+    return favs.includes(key)
+  })
 }
