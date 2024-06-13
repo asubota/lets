@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Product } from '../types.ts'
 
-interface TableState {
+interface StoreState {
   columns: (keyof Product)[]
   showSettings: boolean
   actions: {
@@ -11,7 +11,7 @@ interface TableState {
   }
 }
 
-const useTableStore = create<TableState>()(
+const useStore = create<StoreState>()(
   persist(
     (set) => ({
       columns: [],
@@ -29,7 +29,7 @@ const useTableStore = create<TableState>()(
   ),
 )
 
-export const useTableActions = () => useTableStore((state) => state.actions)
-export const useTableColumns = () => useTableStore((state) => state.columns)
+export const useTableActions = () => useStore((state) => state.actions)
+export const useTableColumns = () => useStore((state) => state.columns)
 export const useShowTableSettings = () =>
-  useTableStore((state) => state.showSettings)
+  useStore((state) => state.showSettings)

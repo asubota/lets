@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface SearchState {
+interface StoreState {
   displayLimitModal: boolean
   vendors: string[]
   actions: {
@@ -10,7 +10,7 @@ interface SearchState {
   }
 }
 
-const useSearchStore = create<SearchState>()((set) => ({
+const useStore = create<StoreState>()((set) => ({
   displayLimitModal: false,
   vendors: [],
   actions: {
@@ -21,7 +21,7 @@ const useSearchStore = create<SearchState>()((set) => ({
   },
 }))
 
-export const useSearchActions = () => useSearchStore((state) => state.actions)
-export const useSearchVendors = () => useSearchStore((state) => state.vendors)
+export const useSearchActions = () => useStore((state) => state.actions)
+export const useSearchVendors = () => useStore((state) => state.vendors)
 export const useShowLimitModal = () =>
-  useSearchStore((state) => state.displayLimitModal)
+  useStore((state) => state.displayLimitModal)

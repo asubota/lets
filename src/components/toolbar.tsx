@@ -1,6 +1,11 @@
 import { Box, ButtonGroup, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
-import { useAppActions, useAppView, useTableActions } from '../store'
+import {
+  useAppActions,
+  useAppView,
+  useShowFavs,
+  useTableActions,
+} from '../store'
 import GridViewIcon from '@mui/icons-material/GridView'
 import ReorderIcon from '@mui/icons-material/Reorder'
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot'
@@ -22,6 +27,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
   const { toggleLimitModal } = useSearchActions()
+  const showFavs = useShowFavs()
 
   return (
     <Box
@@ -37,7 +43,9 @@ export const Toolbar: FC<ToolbarProps> = ({
           display: 'flex',
           alignItems: 'center',
         }}
-        onClick={uniqueVendors.length < 2 ? undefined : toggleLimitModal}
+        onClick={
+          uniqueVendors.length < 2 || showFavs ? undefined : toggleLimitModal
+        }
       >
         <IconButton
           size="small"
