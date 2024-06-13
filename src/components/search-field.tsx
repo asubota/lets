@@ -68,6 +68,7 @@ export const SearchField: FC<{
                     <IconButton
                       onClick={handleFormReset}
                       size="small"
+                      disabled={disabled}
                       sx={{
                         'visibility': inputValue ? 'visible' : 'hidden',
                         '& svg': { width: '26px', height: '26px' },
