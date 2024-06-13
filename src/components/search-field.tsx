@@ -35,14 +35,6 @@ export const SearchField: FC<{
     setShowAhead(true)
   }
 
-  const handleBlur = () => {
-    setTimeout(() => {
-      if (inputValue) {
-        setShowHistory(false)
-      }
-    }, 100)
-  }
-
   return (
     <>
       <Controller
@@ -59,7 +51,6 @@ export const SearchField: FC<{
               size="small"
               {...field}
               onFocus={handleFocus}
-              onBlur={handleBlur}
               disabled={loading || disabled}
               onSubmit={(event) => void handleSubmit(onSubmit)(event)}
               InputProps={{
@@ -100,6 +91,7 @@ export const SearchField: FC<{
         onClickAway={() => setShowHistory(false)}
         setValue={(value: string) => {
           setValue('input', value)
+          setShowAhead(false)
           void handleSubmit(onSubmit)()
         }}
       />
