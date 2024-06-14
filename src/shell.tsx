@@ -7,7 +7,7 @@ import {
   TableSettingsModal,
 } from './components'
 import { useAppActions, useHistoryActions, useShowFavs } from './store'
-import { useFavs, useSearch } from './use-data.ts'
+import { useFavs, useIsLoading, useSearch } from './use-data.ts'
 import { useSearchActions } from './store/search.ts'
 import StarIcon from '@mui/icons-material/Star'
 
@@ -19,7 +19,7 @@ export const Shell: FC = () => {
   const favs = useFavs()
   const showFavs = useShowFavs()
   const { toggleFavs } = useAppActions()
-
+  const loading = useIsLoading()
   const { resetSearchVendors } = useSearchActions()
 
   const handleSubmit = ({ input }: { input: string }) => {
@@ -37,6 +37,7 @@ export const Shell: FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', pt: 2 }} ref={ref}>
         <Box sx={{ flexGrow: 0 }}>
           <IconButton
+            disabled={loading}
             onClick={toggleFavs}
             size="small"
             sx={{ color: showFavs ? 'warning.light' : 'secondary.light' }}

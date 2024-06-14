@@ -33,6 +33,9 @@ const Tile: FC<{
         <Card
           variant="outlined"
           sx={{
+            ...(p.missed && {
+              backgroundColor: '#ea2b060f',
+            }),
             p: 1,
             display: 'grid',
             rowGap: '12px',
@@ -101,7 +104,7 @@ const Tile: FC<{
             {p.pics && <ImageIcon color="secondary" fontSize="small" />}
             {p.link && <LinkIcon color="secondary" fontSize="small" />}
 
-            <Box sx={{ ml: 'auto' }}>
+            <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
               <IconButton
                 size="small"
                 sx={{
@@ -117,7 +120,7 @@ const Tile: FC<{
                 {isFav ? <StarIcon /> : <StarBorderIcon />}
               </IconButton>
 
-              <Stock stock={p['stock']} bordered />
+              <Stock stock={p.stock} bordered />
             </Box>
           </Box>
         </Card>

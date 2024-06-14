@@ -122,7 +122,12 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
           {sortedList.map((row) => (
             <TableRow
               key={row['sku'] + row['vendor']}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{
+                ...(row.missed && {
+                  backgroundColor: '#ea2b060f',
+                }),
+                '&:last-child td, &:last-child th': { border: 0 },
+              }}
             >
               {columns.includes('sku') && (
                 <TableCell
