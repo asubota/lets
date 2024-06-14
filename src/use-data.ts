@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Product } from './types.ts'
 import { useFavsItems } from './store/favs.ts'
+import { useMemo } from 'react'
 
 interface Column {
   id: string
@@ -91,12 +92,45 @@ export const useSearch = (search: string): Product[] => {
   return data.filter((item) => filterBySearch(item, search))
 }
 
+const getKey = (item: Product): string => `${item.sku}:${item.vendor}`
+
 export const useFavs = (): Product[] => {
   const favs = useFavsItems()
   const { data = [] } = useData()
 
-  return data.filter((item) => {
-    const key = `${item.sku}:${item.vendor}`
-    return favs.includes(key)
-  })
+  const favsSet = useMemo(() => new Set(favs), [favs])
+
+  return useMemo(() => {
+    const existingItems: Product[] = []
+    const missingItems: Product[] = []
+
+    const existingKeys = new Set<string>()
+
+    data.forEach((item) => {
+      const key = getKey(item)
+      if (favsSet.has(key)) {
+        existingItems.push(item)
+        existingKeys.add(key)
+      }
+    })
+
+    favs.forEach((key) => {
+      if (!existingKeys.has(key)) {
+        const [sku, vendor] = key.split(':')
+        missingItems.push({
+          sku,
+          vendor,
+          name: '-',
+          price: 0,
+          pics: null,
+          link: null,
+          availability: '',
+          stock: '0',
+          missed: true,
+        })
+      }
+    })
+
+    return [...missingItems, ...existingItems]
+  }, [favsSet, data, favs])
 }

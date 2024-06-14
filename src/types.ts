@@ -7,4 +7,6 @@ export interface Product {
   stock: string | null
   link: string | null
   pics: string[] | null
+
+  missed?: boolean
 }
