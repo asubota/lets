@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
-import { Box, Button, Paper } from '@mui/material'
+import { FC, useEffect, useRef, useState } from 'react'
+import { Box, Button, IconButton, Paper } from '@mui/material'
 import { createWorker } from 'tesseract.js'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useAppActions } from '../store'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import SearchIcon from '@mui/icons-material/Search'
 
 const getWorker = async () => {
-  return await createWorker('eng', 1)
+  return await createWorker(['ukr', 'eng'], 1)
 }
 
 const getStream = async () => {
@@ -22,8 +26,91 @@ const getStream = async () => {
   }
 }
 
-const width = 120
-const height = 35
+const width = 140
+const height = 32
+
+interface CropArea {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+const Blur: FC<{ cropArea: CropArea }> = ({ cropArea }) => {
+  return (
+    <Box
+      width="100%"
+      height="100%"
+      component="svg"
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+      }}
+    >
+      <defs>
+        <mask id="mask">
+          <rect x="0" y="0" width="100%" height="100%" fill="white" />
+          <rect
+            x={cropArea.x}
+            y={cropArea.y}
+            width={cropArea.width}
+            height={cropArea.height}
+            fill="black"
+          />
+        </mask>
+      </defs>
+      <rect
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        mask="url(#mask)"
+        fill="rgba(0, 0, 0, 0.5)"
+      />
+    </Box>
+  )
+}
+
+const ScanArea: FC<{ cropArea: CropArea }> = ({ cropArea }) => {
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        border: '1px solid',
+        borderColor: 'primary.main',
+        boxSizing: 'border-box',
+        pointerEvents: 'none',
+        left: cropArea.x,
+        top: cropArea.y,
+        width: cropArea.width,
+        height: cropArea.height,
+      }}
+    />
+  )
+}
+
+const Output: FC<{ cropArea: CropArea; output: string }> = ({
+  cropArea,
+  output,
+}) => {
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        left: cropArea.x,
+        top: cropArea.y + height + 30,
+        zIndex: 1,
+        minWidth: cropArea.width,
+      }}
+    >
+      <Paper sx={{ pl: '4px', pr: '4px' }}>{output}</Paper>
+    </Box>
+  )
+}
 
 const getCropArea = (element: HTMLVideoElement) => {
   const videoWidth = element.videoWidth
@@ -37,18 +124,24 @@ const getCropArea = (element: HTMLVideoElement) => {
   const _width = width * scaleX
   const _height = height * scaleY
   const x = (displayWidth - width) / 2
-  const y = (displayHeight - height) / 2
+  const y = (displayHeight - height) / 2 - 120
 
   return { x, y, width: _width, height: _height }
 }
 
-export const Scanner = () => {
+interface ScannerProps {
+  onSubmit(data: { input: string }): void
+}
+
+export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
   const [running, setRunning] = useState(false)
   const [output, setOutput] = useState('')
   const [working, setWorking] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  const { setMode } = useAppActions()
 
   const [cropArea, setCropArea] = useState({
     x: 0,
@@ -91,6 +184,15 @@ export const Scanner = () => {
 
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height)
+        context.strokeStyle = 'red'
+        context.lineWidth = 1
+
+        context.strokeRect(
+          cropArea.x,
+          cropArea.y,
+          cropArea.width,
+          cropArea.height,
+        )
 
         const imageSrc = canvas.toDataURL('image/jpeg')
         performOCR(imageSrc)
@@ -123,66 +225,66 @@ export const Scanner = () => {
     setWorking(false)
   }
 
+  const cancelIcon = (
+    <IconButton
+      onClick={() => setMode('search')}
+      sx={{
+        zIndex: 1,
+        position: 'absolute',
+        top: '15px',
+        left: '15px',
+        color: 'primary.main',
+      }}
+    >
+      <ArrowBackIcon />
+    </IconButton>
+  )
+
+  const actions = (
+    <Box
+      sx={{
+        position: 'absolute',
+        bottom: '80px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 1,
+        display: 'flex',
+        gap: '20px',
+      }}
+    >
+      <Button variant="contained" onClick={capture} disabled={working}>
+        <CameraAltIcon />
+      </Button>
+
+      <Button
+        variant="contained"
+        onClick={() => {
+          onSubmit({ input: output })
+          setMode('search')
+        }}
+      >
+        <SearchIcon />
+      </Button>
+    </Box>
+  )
+
   return (
     <Box
       sx={{
-        p: 3,
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        gap: '10px',
+        overflow: 'hidden',
+        position: 'relative',
       }}
     >
-      <Box sx={{ position: 'relative' }}>
-        {running && (
-          <Box
-            sx={{
-              position: 'absolute',
-              border: '1px solid',
-              borderColor: 'primary.main',
-              boxSizing: 'border-box',
-              pointerEvents: 'none',
-              left: cropArea.x,
-              top: cropArea.y,
-              width: cropArea.width,
-              height: cropArea.height,
-            }}
-          />
-        )}
+      {running && cancelIcon}
+      {running && actions}
 
-        <Box
-          sx={{
-            position: 'absolute',
-            left: cropArea.x,
-            top: cropArea.y - height - 30,
-            zIndex: 22,
-            width: cropArea.width,
-          }}
-        >
-          {output && <Paper sx={{ pl: '4px', pr: '4px' }}>{output}</Paper>}
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ position: 'relative' }}>
+          {running && <Output cropArea={cropArea} output={output} />}
+          {running && <Blur cropArea={cropArea} />}
+          {running && <ScanArea cropArea={cropArea} />}
+          <Box component="video" ref={videoRef} playsInline />
         </Box>
-
-        {running && (
-          <Button
-            onClick={capture}
-            variant="contained"
-            size="small"
-            disabled={working}
-            sx={{
-              position: 'absolute',
-              left: cropArea.x,
-              top: cropArea.y + height + 10,
-              zIndex: 22,
-              width: cropArea.width,
-            }}
-          >
-            {working ? 'Working...' : 'Capture'}
-          </Button>
-        )}
-
-        <Box component="video" ref={videoRef} playsInline />
       </Box>
 
       <Box component="canvas" ref={canvasRef} sx={{ display: 'none' }} />
