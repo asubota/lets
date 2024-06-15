@@ -32,7 +32,7 @@ export const Shell: FC = () => {
 
   return (
     <Box sx={{ p: 1 }} className="bg">
-      <SearchField onSubmit={handleSubmit} disabled={mode !== 'search'} />
+      <SearchField onSubmit={handleSubmit} disabled={mode === 'favs'} />
 
       <AppBar />
 
