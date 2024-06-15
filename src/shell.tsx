@@ -10,6 +10,7 @@ import { useAppMode, useHistoryActions } from './store'
 import { useFavs, useSearch } from './use-data.ts'
 import { useSearchActions } from './store/search.ts'
 import { AppBar } from './components/app-bar.tsx'
+import { Scanner } from './components/scanner.tsx'
 
 export const Shell: FC = () => {
   const [search, setSearch] = useState('')
@@ -30,14 +31,13 @@ export const Shell: FC = () => {
     }
   }
 
-  return (
+  return mode === 'scan' ? (
+    <Scanner onSubmit={handleSubmit} />
+  ) : (
     <Box sx={{ p: 1 }} className="bg">
       <SearchField onSubmit={handleSubmit} disabled={mode === 'favs'} />
-
       <AppBar />
-
       <List list={mode === 'favs' ? favs : list} search={search} />
-
       <LimitSearchModal list={list} />
       <TableSettingsModal />
     </Box>
