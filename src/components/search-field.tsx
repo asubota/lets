@@ -1,6 +1,6 @@
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import { Cancel, Search } from '@mui/icons-material'
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { SearchHistory } from './search-history.tsx'
 import { useIsLoading } from '../use-data.ts'
@@ -15,7 +15,8 @@ interface FormData {
 export const SearchField: FC<{
   onSubmit: SubmitHandler<FormData>
   disabled: boolean
-}> = ({ onSubmit, disabled }) => {
+  outerValue?: string
+}> = ({ onSubmit, disabled, outerValue }) => {
   const loading = useIsLoading()
   const ref = useRef<HTMLDivElement | null>(null)
   const { control, handleSubmit, setValue, watch, resetField } =
@@ -23,6 +24,12 @@ export const SearchField: FC<{
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
   const inputValue = watch('input')
+
+  useEffect(() => {
+    if (outerValue && inputValue !== outerValue) {
+      setValue('input', outerValue)
+    }
+  }, [outerValue, setValue, inputValue])
 
   const handleFormReset = () => {
     resetField('input', { defaultValue: '' })

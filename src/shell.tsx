@@ -32,10 +32,18 @@ export const Shell: FC = () => {
   }
 
   return mode === 'scan' ? (
-    <Scanner onSubmit={handleSubmit} />
+    <Scanner
+      onSubmit={({ input }) => {
+        setSearch(input)
+      }}
+    />
   ) : (
     <Box sx={{ p: 1 }} className="bg">
-      <SearchField onSubmit={handleSubmit} disabled={mode === 'favs'} />
+      <SearchField
+        onSubmit={handleSubmit}
+        disabled={mode === 'favs'}
+        outerValue={search}
+      />
       <AppBar />
       <List list={mode === 'favs' ? favs : list} search={search} />
       <LimitSearchModal list={list} />
