@@ -7,7 +7,7 @@ import { useIsLoading } from '../use-data.ts'
 
 export const AppBar: FC = () => {
   const mode = useAppMode()
-  const { toggleFavs } = useAppActions()
+  const { toggleFavs, setMode } = useAppActions()
   const loading = useIsLoading()
 
   return (
@@ -23,7 +23,11 @@ export const AppBar: FC = () => {
       </Box>
 
       <Box sx={{ ml: 'auto' }}>
-        <IconButton sx={{ color: 'secondary.light' }}>
+        <IconButton
+          sx={{ color: 'secondary.light' }}
+          disabled={loading || mode === 'favs'}
+          onClick={() => setMode('scan')}
+        >
           <VisibilityIcon />
         </IconButton>
       </Box>

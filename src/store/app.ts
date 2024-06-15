@@ -35,7 +35,7 @@ const useStore = create<StoreState>()(
     }),
     {
       name: 'lets-bike-app',
-      partialize: (state) => ({ view: state.view }),
+      partialize: (state) => ({ view: state.view, mode: state.mode }),
     },
   ),
 )
