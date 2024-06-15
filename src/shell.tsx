@@ -1,25 +1,23 @@
-import { FC, useRef, useState } from 'react'
-import { Box, IconButton } from '@mui/material'
+import { FC, useState } from 'react'
+import { Box } from '@mui/material'
 import {
   SearchField,
   List,
   LimitSearchModal,
   TableSettingsModal,
 } from './components'
-import { useAppActions, useHistoryActions, useShowFavs } from './store'
-import { useFavs, useIsLoading, useSearch } from './use-data.ts'
+import { useHistoryActions, useShowFavs } from './store'
+import { useFavs, useSearch } from './use-data.ts'
 import { useSearchActions } from './store/search.ts'
-import StarIcon from '@mui/icons-material/Star'
+import { AppBar } from './components/app-bar.tsx'
 
 export const Shell: FC = () => {
-  const ref = useRef<HTMLDivElement | null>(null)
   const [search, setSearch] = useState('')
   const { add } = useHistoryActions()
   const list = useSearch(search)
   const favs = useFavs()
   const showFavs = useShowFavs()
-  const { toggleFavs } = useAppActions()
-  const loading = useIsLoading()
+
   const { resetSearchVendors } = useSearchActions()
 
   const handleSubmit = ({ input }: { input: string }) => {
@@ -33,24 +31,10 @@ export const Shell: FC = () => {
   }
 
   return (
-    <Box sx={{ p: 1, pt: 0 }} className="bg">
-      <Box sx={{ display: 'flex', alignItems: 'center', pt: 2 }} ref={ref}>
-        <Box sx={{ flexGrow: 0 }}>
-          <IconButton
-            disabled={loading}
-            onClick={toggleFavs}
-            size="small"
-            sx={{ color: showFavs ? 'warning.light' : 'secondary.light' }}
-          >
-            <StarIcon />
-          </IconButton>
-        </Box>
-        <SearchField
-          onSubmit={handleSubmit}
-          el={ref.current}
-          disabled={showFavs}
-        />
-      </Box>
+    <Box sx={{ p: 1 }} className="bg">
+      <SearchField onSubmit={handleSubmit} disabled={showFavs} />
+
+      <AppBar />
 
       <List list={showFavs ? favs : list} search={search} />
 

@@ -34,7 +34,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        height: '50px',
+        height: '40px',
       }}
     >
       <Box
