@@ -2,8 +2,8 @@ import { Box, ButtonGroup, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
 import {
   useAppActions,
+  useAppMode,
   useAppView,
-  useShowFavs,
   useTableActions,
 } from '../store'
 import GridViewIcon from '@mui/icons-material/GridView'
@@ -27,7 +27,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
   const { toggleLimitModal } = useSearchActions()
-  const showFavs = useShowFavs()
+  const mode = useAppMode()
 
   return (
     <Box
@@ -44,7 +44,9 @@ export const Toolbar: FC<ToolbarProps> = ({
           alignItems: 'center',
         }}
         onClick={
-          uniqueVendors.length < 2 || showFavs ? undefined : toggleLimitModal
+          uniqueVendors.length < 2 || mode !== 'search'
+            ? undefined
+            : toggleLimitModal
         }
       >
         <IconButton

@@ -6,7 +6,7 @@ import {
   LimitSearchModal,
   TableSettingsModal,
 } from './components'
-import { useHistoryActions, useShowFavs } from './store'
+import { useAppMode, useHistoryActions } from './store'
 import { useFavs, useSearch } from './use-data.ts'
 import { useSearchActions } from './store/search.ts'
 import { AppBar } from './components/app-bar.tsx'
@@ -16,7 +16,7 @@ export const Shell: FC = () => {
   const { add } = useHistoryActions()
   const list = useSearch(search)
   const favs = useFavs()
-  const showFavs = useShowFavs()
+  const mode = useAppMode()
 
   const { resetSearchVendors } = useSearchActions()
 
@@ -32,11 +32,11 @@ export const Shell: FC = () => {
 
   return (
     <Box sx={{ p: 1 }} className="bg">
-      <SearchField onSubmit={handleSubmit} disabled={showFavs} />
+      <SearchField onSubmit={handleSubmit} disabled={mode !== 'search'} />
 
       <AppBar />
 
-      <List list={showFavs ? favs : list} search={search} />
+      <List list={mode === 'favs' ? favs : list} search={search} />
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
