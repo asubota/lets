@@ -26,13 +26,6 @@ interface Root {
 
 const sheetId = '1NJsdP-CUztIwlj1cnBkDj4pgqqaBuxPm'
 
-const filterBySearch = (item: Product, search: string): boolean => {
-  return (
-    item['sku'].toLowerCase().includes(search.toLowerCase()) ||
-    item['name'].toLowerCase().includes(search.toLowerCase())
-  )
-}
-
 const parseData = (text: string): Product[] => {
   const cleanText = text
     .replace('/*O_o*/', '')
@@ -82,14 +75,24 @@ export const useIsLoading = () => {
   return isFetching
 }
 
+const filterBySearch = (item: Product, search: string): boolean => {
+  return (
+    item['sku'].toLowerCase().includes(search) ||
+    item['name'].toLowerCase().includes(search)
+  )
+}
+
 export const useSearch = (search: string): Product[] => {
   const { data = [] } = useData()
 
-  if (search.length < 3) {
-    return []
-  }
+  return useMemo(() => {
+    if (search.length < 3) {
+      return []
+    }
 
-  return data.filter((item) => filterBySearch(item, search))
+    const lowerCaseSearch = search.toLowerCase()
+    return data.filter((item) => filterBySearch(item, lowerCaseSearch))
+  }, [search, data])
 }
 
 const getKey = (item: Product): string => `${item.sku}:${item.vendor}`

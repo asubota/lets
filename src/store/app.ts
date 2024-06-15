@@ -3,11 +3,11 @@ import { persist } from 'zustand/middleware'
 
 interface StoreState {
   view: 'tile' | 'table'
-  showFavs: boolean
+  mode: 'search' | 'favs' | 'scan'
   actions: {
-    toggleFavs(this: void): void
-    toggleView(this: void): void
+    setMode(this: void, mode: StoreState['mode']): void
     setView(this: void, view: StoreState['view']): void
+    toggleFavs(this: void): void
   }
 }
 
@@ -15,21 +15,21 @@ const useStore = create<StoreState>()(
   persist(
     (set) => ({
       view: 'tile',
-      showFavs: false,
+      mode: 'search',
       actions: {
         setView: (view) => {
           set(() => {
             return { view }
           })
         },
-        toggleFavs: () => {
-          set((state) => {
-            return { showFavs: !state.showFavs }
+        setMode: (mode) => {
+          set(() => {
+            return { mode }
           })
         },
-        toggleView: () =>
+        toggleFavs: () =>
           set((state) => {
-            return { view: state.view === 'tile' ? 'table' : 'tile' }
+            return { mode: state.mode === 'favs' ? 'search' : 'favs' }
           }),
       },
     }),
@@ -42,4 +42,4 @@ const useStore = create<StoreState>()(
 
 export const useAppActions = () => useStore((state) => state.actions)
 export const useAppView = () => useStore((state) => state.view)
-export const useShowFavs = () => useStore((state) => state.showFavs)
+export const useAppMode = () => useStore((state) => state.mode)

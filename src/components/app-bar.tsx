@@ -2,11 +2,11 @@ import { FC } from 'react'
 import { Box, IconButton } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import StarIcon from '@mui/icons-material/Star'
-import { useAppActions, useShowFavs } from '../store'
+import { useAppActions, useAppMode } from '../store'
 import { useIsLoading } from '../use-data.ts'
 
 export const AppBar: FC = () => {
-  const showFavs = useShowFavs()
+  const mode = useAppMode()
   const { toggleFavs } = useAppActions()
   const loading = useIsLoading()
 
@@ -16,7 +16,7 @@ export const AppBar: FC = () => {
         <IconButton
           disabled={loading}
           onClick={toggleFavs}
-          sx={{ color: showFavs ? 'warning.light' : 'secondary.light' }}
+          sx={{ color: mode === 'favs' ? 'warning.light' : 'secondary.light' }}
         >
           <StarIcon />
         </IconButton>
