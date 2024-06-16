@@ -1,44 +1,34 @@
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import { Cancel, Search } from '@mui/icons-material'
-import { FC, useEffect, useRef, useState } from 'react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { FC, useRef, useState } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 import { SearchHistory } from './search-history.tsx'
 import { useIsLoading } from '../use-data.ts'
 import LoopIcon from '@mui/icons-material/Loop'
 import { clsx } from 'clsx'
 import { SearchSuggestions } from './search-suggestions.tsx'
-
-interface FormData {
-  input: string
-}
+import { SearchForm } from '../types.ts'
 
 export const SearchField: FC<{
-  onSubmit: SubmitHandler<FormData>
   disabled: boolean
-  outerValue?: string
-}> = ({ onSubmit, disabled, outerValue }) => {
+  onSubmit(): void
+}> = ({ disabled, onSubmit }) => {
   const loading = useIsLoading()
   const ref = useRef<HTMLDivElement | null>(null)
-  const { control, handleSubmit, setValue, watch, resetField } =
-    useForm<FormData>({ defaultValues: { input: '' } })
+  const { setValue, control, watch, reset } = useFormContext<SearchForm>()
+
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
   const inputValue = watch('input')
 
-  useEffect(() => {
-    if (outerValue && inputValue !== outerValue) {
-      setValue('input', outerValue)
-    }
-  }, [outerValue, setValue, inputValue])
-
-  const handleFormReset = () => {
-    resetField('input', { defaultValue: '' })
-    void handleSubmit(onSubmit)()
-  }
-
   const handleFocus = () => {
     setShowHistory(true)
     setShowAhead(true)
+  }
+
+  const handleFormReset = () => {
+    reset()
+    onSubmit()
   }
 
   return (
@@ -51,7 +41,6 @@ export const SearchField: FC<{
             return (
               <TextField
                 sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
-                component="form"
                 label="Search"
                 variant="outlined"
                 fullWidth
@@ -59,7 +48,6 @@ export const SearchField: FC<{
                 {...field}
                 onFocus={handleFocus}
                 disabled={loading || disabled}
-                onSubmit={(event) => void handleSubmit(onSubmit)(event)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end" sx={{ marginRight: -2 }}>
@@ -100,7 +88,7 @@ export const SearchField: FC<{
         setValue={(value: string) => {
           setValue('input', value)
           setShowAhead(false)
-          void handleSubmit(onSubmit)()
+          onSubmit()
         }}
       />
 
@@ -112,7 +100,7 @@ export const SearchField: FC<{
         setValue={(value: string) => {
           setValue('input', value)
           setShowAhead(false)
-          void handleSubmit(onSubmit)()
+          onSubmit()
         }}
       />
     </>

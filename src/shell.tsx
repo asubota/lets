@@ -11,8 +11,14 @@ import { useFavs, useSearch } from './use-data.ts'
 import { useSearchActions } from './store/search.ts'
 import { AppBar } from './components/app-bar.tsx'
 import { Scanner } from './components/scanner.tsx'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { SearchForm } from './types.ts'
 
 export const Shell: FC = () => {
+  const methods = useForm<SearchForm>({
+    defaultValues: { input: '' },
+  })
+
   const [search, setSearch] = useState('')
   const { add } = useHistoryActions()
   const list = useSearch(search)
@@ -21,7 +27,7 @@ export const Shell: FC = () => {
 
   const { resetSearchVendors } = useSearchActions()
 
-  const handleSubmit = ({ input }: { input: string }) => {
+  const onSubmit: SubmitHandler<SearchForm> = ({ input }) => {
     const term = input.trim()
     resetSearchVendors()
     setSearch(term)
@@ -31,23 +37,24 @@ export const Shell: FC = () => {
     }
   }
 
-  return mode === 'scan' ? (
-    <Scanner
-      onSubmit={({ input }) => {
-        setSearch(input)
-      }}
-    />
-  ) : (
-    <Box sx={{ p: 1 }} className="bg">
-      <SearchField
-        onSubmit={handleSubmit}
-        disabled={mode === 'favs'}
-        outerValue={search}
-      />
-      <AppBar />
-      <List list={mode === 'favs' ? favs : list} search={search} />
-      <LimitSearchModal list={list} />
-      <TableSettingsModal />
-    </Box>
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        {mode === 'scan' ? (
+          <Scanner onSubmit={methods.handleSubmit(onSubmit)} />
+        ) : (
+          <Box sx={{ p: 1 }} className="bg">
+            <SearchField
+              disabled={mode === 'favs'}
+              onSubmit={methods.handleSubmit(onSubmit)}
+            />
+            <AppBar />
+            <List list={mode === 'favs' ? favs : list} search={search} />
+            <LimitSearchModal list={list} />
+            <TableSettingsModal />
+          </Box>
+        )}
+      </form>
+    </FormProvider>
   )
 }
