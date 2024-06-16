@@ -292,7 +292,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
           <Box />
         </Box>
       )}
-      {running && cancelIcon}
+      {cancelIcon}
       {running && actions}
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
