@@ -168,12 +168,21 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
             setCropArea(getCropArea(video))
           }
         }
+
+        return stream
       } catch (err) {
         console.error('Error accessing webcam: ', err)
       }
     }
 
-    startVideo()
+    const mediaStream = startVideo()
+    return () => {
+      mediaStream.then((stream) => {
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop())
+        }
+      })
+    }
   }, [])
 
   const capture = () => {
