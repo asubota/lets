@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react'
-import { Box, Button, IconButton, Paper } from '@mui/material'
+import { Box, Button, CircularProgress, IconButton, Paper } from '@mui/material'
 import { createWorker } from 'tesseract.js'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useAppActions } from '../store'
@@ -164,8 +164,8 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
 
           video.onresize = () => {
             video.play()
-            setRunning(true)
             setCropArea(getCropArea(video))
+            setRunning(true)
           }
         }
 
@@ -272,11 +272,26 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
 
   return (
     <Box
+      className="bg"
       sx={{
         overflow: 'hidden',
         position: 'relative',
       }}
     >
+      {!running && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            height: '100vh',
+          }}
+        >
+          <CircularProgress sx={{ color: 'primary.main' }} />
+          <Box />
+        </Box>
+      )}
       {running && cancelIcon}
       {running && actions}
 
@@ -285,7 +300,13 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
           {running && <Output cropArea={cropArea} output={output} />}
           {running && <Blur cropArea={cropArea} />}
           {running && <ScanArea cropArea={cropArea} />}
-          <Box component="video" ref={videoRef} playsInline />
+
+          <Box
+            component="video"
+            ref={videoRef}
+            playsInline
+            sx={{ visibility: running ? 'visible' : 'hidden' }}
+          />
         </Box>
       </Box>
 
