@@ -1,5 +1,12 @@
 import { FC, useEffect, useRef, useState } from 'react'
-import { Box, Button, CircularProgress, IconButton, Paper } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Paper,
+} from '@mui/material'
 import { createWorker } from 'tesseract.js'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useAppActions } from '../store'
@@ -140,6 +147,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
   const [running, setRunning] = useState(false)
   const [output, setOutput] = useState('')
   const [working, setWorking] = useState(false)
+  const [initError, setInitError] = useState<unknown>(null)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -172,6 +180,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
         return stream
       } catch (err) {
         console.error('Error accessing webcam: ', err)
+        setInitError(err?.toString())
       }
     }
 
@@ -278,6 +287,18 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
         position: 'relative',
       }}
     >
+      {!!initError && (
+        <Box
+          sx={{
+            p: 3,
+            position: 'absolute',
+            top: '200px',
+          }}
+        >
+          <Alert severity="error">{initError.toString()}</Alert>
+        </Box>
+      )}
+
       {!running && (
         <CircularProgress
           sx={{
