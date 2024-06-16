@@ -10,3 +10,7 @@ export interface Product {
 
   missed?: boolean
 }
+
+export interface SearchForm {
+  input: string
+}

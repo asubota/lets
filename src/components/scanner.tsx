@@ -5,6 +5,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useAppActions } from '../store'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import SearchIcon from '@mui/icons-material/Search'
+import { useFormContext } from 'react-hook-form'
+import { SearchForm } from '../types.ts'
 
 const getWorker = async () => {
   return await createWorker(['ukr', 'eng'], 1)
@@ -130,10 +132,11 @@ const getCropArea = (element: HTMLVideoElement) => {
 }
 
 interface ScannerProps {
-  onSubmit(data: { input: string }): void
+  onSubmit(): void
 }
 
 export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
+  const { setValue } = useFormContext<SearchForm>()
   const [running, setRunning] = useState(false)
   const [output, setOutput] = useState('')
   const [working, setWorking] = useState(false)
@@ -259,7 +262,8 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
       <Button
         variant="contained"
         onClick={() => {
-          onSubmit({ input: output })
+          setValue('input', output)
+          onSubmit()
           setMode('search')
         }}
       >
