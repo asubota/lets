@@ -300,15 +300,19 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
       )}
 
       {!running && (
-        <CircularProgress
+        <Box
           sx={{
-            color: 'primary.main',
             position: 'absolute',
-            top: '150px',
-            left: '50%',
-            transform: 'translateX(-50%)',
+            top: '0',
+            height: '150px',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'center',
           }}
-        />
+        >
+          <CircularProgress sx={{ color: 'primary.main' }} />
+        </Box>
       )}
       {cancelIcon}
       {running && actions}
