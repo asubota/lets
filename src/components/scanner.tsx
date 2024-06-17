@@ -22,12 +22,14 @@ const getWorker = async () => {
 const getStream = async () => {
   try {
     return await navigator.mediaDevices.getUserMedia({
+      audio: false,
       video: {
         facingMode: 'environment',
       },
     })
   } catch (e) {
     return await navigator.mediaDevices.getUserMedia({
+      audio: false,
       video: {
         facingMode: 'user',
       },
@@ -170,7 +172,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
         if (video) {
           video.srcObject = stream
 
-          video.onresize = () => {
+          video.onloadedmetadata = () => {
             video.play()
             setCropArea(getCropArea(video))
             setRunning(true)
