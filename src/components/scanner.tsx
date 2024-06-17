@@ -327,6 +327,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
             component="video"
             ref={videoRef}
             playsInline
+            muted
             sx={{ visibility: running ? 'visible' : 'hidden' }}
           />
         </Box>
