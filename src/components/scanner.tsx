@@ -206,8 +206,8 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
       canvas.height = video.videoHeight
 
       if (context) {
-        const imageSrc = canvas.toDataURL('image/jpeg')
-        performOCR(imageSrc)
+        context.drawImage(video, 0, 0, canvas.width, canvas.height)
+        performOCR(canvas.toDataURL('image/jpeg'))
       }
     }
   }
