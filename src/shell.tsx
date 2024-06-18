@@ -44,23 +44,21 @@ export const Shell: FC = () => {
           {mode === 'scan' ? (
             <Scanner onSubmit={methods.handleSubmit(onSubmit)} />
           ) : (
-            <Box sx={{ p: 1 }}>
-              <SearchField
-                disabled={mode === 'favs'}
-                onSubmit={methods.handleSubmit(onSubmit)}
-              />
-            </Box>
+            <SearchField
+              disabled={mode === 'favs'}
+              onSubmit={methods.handleSubmit(onSubmit)}
+            />
           )}
         </form>
       </FormProvider>
 
       {mode !== 'scan' && (
-        <>
+        <Box sx={{ p: 1, pt: 0 }}>
           <AppBar />
           <List list={mode === 'favs' ? favs : list} search={search} />
           <LimitSearchModal list={list} />
           <TableSettingsModal />
-        </>
+        </Box>
       )}
     </>
   )
