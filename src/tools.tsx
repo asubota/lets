@@ -29,7 +29,7 @@ export function getHighlightedText(
   const parts = text.split(new RegExp(`(${escapeRegExp(highlight)})`, 'gi'))
 
   return (
-    <span>
+    <>
       {parts.map((part, i) => (
         <Typography
           component="span"
@@ -41,7 +41,7 @@ export function getHighlightedText(
           {part}
         </Typography>
       ))}
-    </span>
+    </>
   )
 }
 

@@ -60,16 +60,15 @@ const Tile: FC<{
             {getHighlightedText(p['name'], search)}
           </Box>
 
-          <Box sx={{ gridArea: 'sku', textAlign: 'left' }}>
-            <Chip
-              label={getHighlightedText(p['sku'], search)}
-              size="small"
-              onClick={async (e) => {
-                e.stopPropagation()
-                await copyContent(p.sku)
-              }}
-            />
-          </Box>
+          <Chip
+            sx={{ gridArea: 'sku', justifySelf: 'flex-start' }}
+            label={getHighlightedText(p['sku'], search)}
+            size="small"
+            onClick={async (e) => {
+              e.stopPropagation()
+              await copyContent(p.sku)
+            }}
+          />
 
           <Box
             sx={{
