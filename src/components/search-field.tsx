@@ -29,6 +29,9 @@ export const SearchField: FC<{
   const handleFormReset = () => {
     reset()
     onSubmit()
+
+    setShowHistory(false)
+    setShowAhead(false)
   }
 
   return (
