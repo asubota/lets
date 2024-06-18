@@ -40,13 +40,19 @@ const parseData = (text: string): Product[] => {
     const obj: Record<string, unknown> = {}
 
     row.c.forEach((cell, index) => {
-      if (columns[index] === 'pics' && cell) {
+      const colName = columns[index]
+
+      if (colName === 'pics' && cell) {
         const value = cell.v.toString()
-        obj[columns[index]] = !value.includes('[')
+        obj[colName] = !value.includes('[')
           ? [value]
           : JSON.parse(value.replace(/'/g, '"'))
+      } else if (colName === 'name' && !cell) {
+        const skuIndex = columns.indexOf('sku')
+        const skuCell = row.c[skuIndex]
+        obj[colName] = skuCell ? skuCell.v : '-'
       } else {
-        obj[columns[index]] = cell ? cell.v : null
+        obj[colName] = cell?.v ?? null
       }
     })
 
