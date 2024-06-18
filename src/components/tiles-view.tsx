@@ -127,7 +127,7 @@ const Tile: FC<{
     )
   },
   (p1, p2) => {
-    return p1.isFav === p2.isFav
+    return p1.isFav === p2.isFav && p1.search === p2.search
   },
 )
 
