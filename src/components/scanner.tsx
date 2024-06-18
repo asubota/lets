@@ -283,7 +283,6 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
 
   return (
     <Box
-      className="bg"
       sx={{
         overflow: 'hidden',
         position: 'relative',
