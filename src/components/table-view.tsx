@@ -131,7 +131,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
             >
               {columns.includes('sku') && (
                 <TableCell
-                  sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1 }}
+                  sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1, cursor: 'pointer' }}
                   onClick={async (e) => {
                     e.stopPropagation()
                     await copyContent(row.sku)
