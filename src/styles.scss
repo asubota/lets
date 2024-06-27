@@ -51,6 +51,7 @@ div.swiper-main {
     height: auto;
     display: flex;
     align-items: center;
+    min-height: 250px;
   }
 }
 
@@ -78,5 +79,10 @@ div.swiper-thumbs {
     height: 100%;
     object-fit: cover;
   }
+}
+
+.no-scroll {
+  overflow: hidden;
+  touch-action: none
 }
 

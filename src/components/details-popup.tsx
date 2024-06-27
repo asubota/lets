@@ -6,7 +6,7 @@ import {
   IconButton,
   Link,
 } from '@mui/material'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Product } from '../types.ts'
 import { ImageSlider } from './image-slider.tsx'
 import LinkIcon from '@mui/icons-material/Link'
@@ -17,11 +17,22 @@ const getHref = (link: string): string => {
   return link.startsWith('http') ? link : `https://${link}`
 }
 
+const useNoScroll = () => {
+  useEffect(() => {
+    document.body.classList.add('no-scroll')
+
+    return () => {
+      document.body.classList.remove('no-scroll')
+    }
+  }, [])
+}
+
 export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
   details,
   onClose,
 }) => {
   const [isFullScreen, setIsFullScreen] = useState(false)
+  useNoScroll()
 
   return (
     <Dialog
@@ -90,6 +101,7 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           p: 0,
           pl: isFullScreen ? 0 : '2px',
           pr: isFullScreen ? 0 : '2px',
+          pb: isFullScreen ? 0 : '2px',
           minHeight: '250px',
         }}
       >
