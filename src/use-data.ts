@@ -46,7 +46,7 @@ const parseData = (text: string): Product[] => {
         const value = cell.v.toString()
         obj[colName] = !value.includes('[')
           ? [value]
-          : JSON.parse(value.replace(/'/g, '"'))
+          : Array.from(new Set(JSON.parse(value.replace(/'/g, '"'))))
       } else if (colName === 'name' && !cell) {
         const skuIndex = columns.indexOf('sku')
         const skuCell = row.c[skuIndex]
