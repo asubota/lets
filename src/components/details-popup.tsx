@@ -107,7 +107,7 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
       >
         {details.pics && (
           <ImageSlider
-            key={isFullScreen ? 1 : 0}
+            key={isFullScreen ? 1 : 2}
             pics={details.pics}
             title={details.name}
             isFullScreen={isFullScreen}
