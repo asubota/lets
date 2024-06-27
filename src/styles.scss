@@ -40,5 +40,29 @@
 }
 
 body {
-  --swiper-pagination-color: #ea2b06;
+  margin: 0;
+  padding: 0;
+  --swiper-theme-color: #ea2b06
 }
+
+
+div.swiper-thumbs {
+  box-sizing: border-box;
+
+  .swiper-slide {
+    opacity: 0.4;
+    height: auto;
+  }
+
+  .swiper-slide-thumb-active {
+    opacity: 1;
+  }
+
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
