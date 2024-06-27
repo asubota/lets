@@ -51,7 +51,7 @@ export const ImageSlider: FC<{
 
   return (
     <>
-      {!thumbsSwiper?.destroyed && (
+      {thumbsSwiper !== null && !thumbsSwiper.destroyed && (
         <Swiper
           className="swiper-main"
           modules={[Thumbs, Navigation]}
@@ -72,7 +72,7 @@ export const ImageSlider: FC<{
           modules={[Thumbs]}
           watchSlidesProgress
           onSwiper={setThumbsSwiper}
-          onDestroy={() => setThumbsSwiper(null)}
+          onDestroy={setThumbsSwiper}
           spaceBetween={10}
           slidesPerView={4}
         >
