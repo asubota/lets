@@ -77,17 +77,19 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
 
         {!details.link && details.name}
 
-        <IconButton
-          size="small"
-          sx={{ ml: 'auto', color: 'primary.main' }}
-          onClick={() => setIsFullScreen((v) => !v)}
-        >
-          {isFullScreen ? (
-            <CloseFullscreenIcon fontSize="small" />
-          ) : (
-            <OpenInFullIcon fontSize="small" />
-          )}
-        </IconButton>
+        {details.pics && (
+          <IconButton
+            size="small"
+            sx={{ ml: 'auto', color: 'primary.main' }}
+            onClick={() => setIsFullScreen((v) => !v)}
+          >
+            {isFullScreen ? (
+              <CloseFullscreenIcon fontSize="small" />
+            ) : (
+              <OpenInFullIcon fontSize="small" />
+            )}
+          </IconButton>
+        )}
       </DialogTitle>
 
       {!isFullScreen && (
@@ -96,24 +98,24 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
         />
       )}
 
-      <DialogContent
-        sx={{
-          p: 0,
-          pl: isFullScreen ? 0 : '2px',
-          pr: isFullScreen ? 0 : '2px',
-          pb: isFullScreen ? 0 : '2px',
-          minHeight: '250px',
-        }}
-      >
-        {details.pics && (
+      {details.pics && (
+        <DialogContent
+          sx={{
+            p: 0,
+            pl: isFullScreen ? 0 : '2px',
+            pr: isFullScreen ? 0 : '2px',
+            pb: isFullScreen ? 0 : '2px',
+            minHeight: '250px',
+          }}
+        >
           <ImageSlider
             key={isFullScreen ? 1 : 2}
             pics={details.pics}
             title={details.name}
             isFullScreen={isFullScreen}
           />
-        )}
-      </DialogContent>
+        </DialogContent>
+      )}
     </Dialog>
   )
 }
