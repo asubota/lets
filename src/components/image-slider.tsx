@@ -51,7 +51,7 @@ export const ImageSlider: FC<{
 
   return (
     <>
-      {thumbsSwiper !== null && !thumbsSwiper.destroyed && (
+      {((thumbsSwiper && !thumbsSwiper.destroyed) || pics.length === 1) && (
         <Swiper
           className="swiper-main"
           modules={[Thumbs, Navigation]}
