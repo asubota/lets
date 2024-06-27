@@ -16,14 +16,14 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
   onClose,
 }) => {
   return (
-    <Dialog open={!!details} onClose={onClose}>
+    <Dialog open={true} onClose={onClose}>
       <DialogTitle typography="subtitle2" textAlign="left" sx={{ p: 1 }}>
         {details.name}
       </DialogTitle>
 
       <Divider sx={{ ml: 1, mr: 1, borderColor: 'primary.main' }} />
 
-      <DialogContent sx={{ p: 1, minHeight: '200px' }}>
+      <DialogContent sx={{ p: 1, pl: '2px', pr: '2px', minHeight: '250px' }}>
         {details.link && (
           <Typography
             textAlign="center"
@@ -50,9 +50,7 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           </Typography>
         )}
 
-        {details.pics && details.pics.length > 0 && (
-          <ImageSlider pics={details.pics} alt={details.name} />
-        )}
+        {details.pics && <ImageSlider pics={details.pics} alt={details.name} />}
       </DialogContent>
     </Dialog>
   )
