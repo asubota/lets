@@ -79,7 +79,11 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
         </IconButton>
       </DialogTitle>
 
-      <Divider sx={{ ml: 1, mr: 1, mb: '4px', borderColor: 'primary.main' }} />
+      {!isFullScreen && (
+        <Divider
+          sx={{ ml: 1, mr: 1, mb: '4px', borderColor: 'primary.main' }}
+        />
+      )}
 
       <DialogContent
         sx={{
