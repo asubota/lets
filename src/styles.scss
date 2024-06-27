@@ -86,3 +86,7 @@ div.swiper-thumbs {
   touch-action: none
 }
 
+.no-root {
+  height: 0;
+  overflow: hidden;
+}
