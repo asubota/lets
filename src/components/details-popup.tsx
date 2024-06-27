@@ -51,7 +51,7 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
         )}
 
         {details.pics && details.pics.length > 0 && (
-          <ImageSlider pics={details.pics} />
+          <ImageSlider pics={details.pics} alt={details.name} />
         )}
       </DialogContent>
     </Dialog>
