@@ -42,14 +42,24 @@
 body {
   margin: 0;
   padding: 0;
-  --swiper-theme-color: #ea2b06
+  --swiper-theme-color: #ea2b06;
+  --swiper-navigation-size: 24px;
 }
 
+div.swiper-main {
+  .swiper-slide {
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+}
 
 div.swiper-thumbs {
+  margin-top: 10px;
   box-sizing: border-box;
 
   .swiper-slide {
+    display: block;
     opacity: 0.4;
     height: auto;
   }

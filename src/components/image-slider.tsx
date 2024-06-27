@@ -37,6 +37,7 @@ export const ImageSlider: FC<{
   return (
     <>
       <Swiper
+        className="swiper-main"
         modules={isFullScreen ? [Thumbs, Navigation] : [Pagination]}
         pagination={isFullScreen ? false : { clickable: true }}
         navigation={isFullScreen}
