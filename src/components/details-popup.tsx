@@ -24,16 +24,23 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
   const [isFullScreen, setIsFullScreen] = useState(false)
 
   return (
-    <Dialog open={true} onClose={onClose} fullScreen={isFullScreen}>
+    <Dialog
+      open={true}
+      onClose={onClose}
+      fullScreen={isFullScreen}
+      PaperProps={{
+        sx: { ...(isFullScreen && { backgroundColor: '#000' }) },
+      }}
+    >
       <DialogTitle
         typography="subtitle2"
-        textAlign="left"
         sx={{
           p: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-start',
           gap: '6px',
+          color: isFullScreen ? 'white' : 'text.primary',
         }}
       >
         {details.link && (
@@ -46,9 +53,11 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
               href={getHref(details.link)}
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ textDecoration: 'none' }}
+              sx={{
+                textDecoration: 'none',
+                color: isFullScreen ? 'white' : 'text.primary',
+              }}
               typography="subtitle2"
-              color="text.primary"
             >
               {details.name}
             </Link>
@@ -78,7 +87,6 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           pl: isFullScreen ? 0 : '2px',
           pr: isFullScreen ? 0 : '2px',
           minHeight: '250px',
-          ...(isFullScreen && { backgroundColor: '#000' }),
         }}
       >
         {details.pics && (
