@@ -34,28 +34,45 @@ export const ImageSlider: FC<{
 }> = ({ pics, title, isFullScreen }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null)
 
-  return (
-    <>
+  if (!isFullScreen) {
+    return (
       <Swiper
         className="swiper-main"
-        modules={isFullScreen ? [Thumbs, Navigation] : [Pagination]}
-        pagination={isFullScreen ? false : { clickable: true }}
-        navigation={isFullScreen}
+        modules={[Pagination]}
+        pagination={{ clickable: true }}
         slidesPerView={'auto'}
         centeredSlides={true}
         spaceBetween={12}
-        {...(isFullScreen &&
-          thumbsSwiper && { thumbs: { swiper: thumbsSwiper } })}
       >
         {getSlides(pics, title)}
       </Swiper>
+    )
+  }
 
-      {isFullScreen && pics.length > 1 && (
+  return (
+    <>
+      {!thumbsSwiper?.destroyed && (
+        <Swiper
+          className="swiper-main"
+          modules={[Thumbs, Navigation]}
+          pagination={false}
+          navigation
+          slidesPerView={'auto'}
+          centeredSlides={true}
+          spaceBetween={12}
+          thumbs={{ swiper: thumbsSwiper }}
+        >
+          {getSlides(pics, title)}
+        </Swiper>
+      )}
+
+      {pics.length > 1 && (
         <Swiper
           className="swiper-thumbs"
           modules={[Thumbs]}
           watchSlidesProgress
           onSwiper={setThumbsSwiper}
+          onDestroy={() => setThumbsSwiper(null)}
           spaceBetween={10}
           slidesPerView={4}
         >
