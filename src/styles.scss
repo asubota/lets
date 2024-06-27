@@ -56,12 +56,16 @@ div.swiper-main {
 
 div.swiper-thumbs {
   margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   box-sizing: border-box;
 
   .swiper-slide {
     display: block;
-    opacity: 0.4;
+    opacity: 0.33;
     height: auto;
+    border-radius: 10px;
+    overflow: hidden;
   }
 
   .swiper-slide-thumb-active {
