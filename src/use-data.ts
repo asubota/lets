@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Product } from './types.ts'
 import { useFavsItems } from './store/favs.ts'
 import { useMemo } from 'react'
+import { useBikeId } from './store'
 
 interface Column {
   id: string
@@ -23,8 +24,6 @@ interface Root {
   cols: Column[]
   rows: Row[]
 }
-
-const sheetId = '1NJsdP-CUztIwlj1cnBkDj4pgqqaBuxPm'
 
 const parseData = (text: string): Product[] => {
   const cleanText = text
@@ -60,20 +59,22 @@ const parseData = (text: string): Product[] => {
   }) as unknown as Product[]
 }
 
-const getData = async (): Promise<Product[]> => {
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&tq&gid=0`
+const getData = async (id: string): Promise<Product[]> => {
+  const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=0`
   const response = await fetch(url)
   const text = await response.text()
 
   return parseData(text)
 }
 
-const useData = () =>
-  useQuery<Product[]>({
+const useData = () => {
+  const id = useBikeId()
+  return useQuery<Product[]>({
     staleTime: 30 * 60 * 1000,
-    queryKey: ['lets-bike-base'],
-    queryFn: getData,
+    queryKey: ['lets-bike-base', id],
+    queryFn: () => getData(id),
   })
+}
 
 export const useIsLoading = () => {
   const { isFetching } = useData()
