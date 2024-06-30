@@ -60,6 +60,10 @@ const parseData = (text: string): Product[] => {
 }
 
 const getData = async (id: string): Promise<Product[]> => {
+  if (id.length === 0) {
+    return []
+  }
+
   const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=0`
   const response = await fetch(url)
   const text = await response.text()
