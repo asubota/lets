@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material'
 import { Product } from './types.ts'
+import html2canvas from 'html2canvas'
 
 const escapeRegExp = (value = ''): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -67,4 +68,20 @@ export async function copyContent(text: string) {
   } catch (err) {
     console.error('Failed to copy: ', err)
   }
+}
+
+export const handleTakeScreenshot = async () => {
+  const el = document.getElementById('tiles-view')
+
+  if (!el) {
+    return
+  }
+
+  const canvas = await html2canvas(el)
+  const imgData = canvas.toDataURL('image/png', 1.0)
+  const link = document.createElement('a')
+
+  link.href = imgData
+  link.download = 'screenshot.png'
+  link.click()
 }

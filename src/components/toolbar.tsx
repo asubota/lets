@@ -11,6 +11,8 @@ import ReorderIcon from '@mui/icons-material/Reorder'
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot'
 import { useSearchActions } from '../store/search.ts'
 import TuneIcon from '@mui/icons-material/Tune'
+import IosShareIcon from '@mui/icons-material/IosShare'
+import { handleTakeScreenshot } from '../tools.tsx'
 
 interface ToolbarProps {
   total: number
@@ -39,7 +41,6 @@ export const Toolbar: FC<ToolbarProps> = ({
     >
       <Box
         sx={{
-          mr: 'auto',
           display: 'flex',
           alignItems: 'center',
         }}
@@ -79,6 +80,17 @@ export const Toolbar: FC<ToolbarProps> = ({
           {total}
         </Typography>
       </Box>
+
+      {view === 'tile' && (
+        <IconButton
+          sx={{ mr: 'auto', ml: '16px' }}
+          size="small"
+          color="secondary"
+          onClick={handleTakeScreenshot}
+        >
+          <IosShareIcon />
+        </IconButton>
+      )}
 
       {view === 'table' && (
         <IconButton
