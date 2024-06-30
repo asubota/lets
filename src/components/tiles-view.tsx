@@ -139,7 +139,7 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
   const { toggle } = useFavsActions()
 
   return (
-    <Stack direction="column" spacing={1}>
+    <Stack direction="column" spacing={1} id="tiles-view">
       {list.map((row) => {
         const key = `${row.sku}:${row.vendor}`
 
