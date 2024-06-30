@@ -27,5 +27,4 @@ const useStore = create<StoreState>()(
   ),
 )
 
-export const useIdActions = () => useStore((state) => state.actions)
 export const useBikeId = () => useStore((state) => state.id)
