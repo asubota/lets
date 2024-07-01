@@ -6,42 +6,33 @@ export const Stock: FC<{ stock: string | null; bordered?: boolean }> = ({
   stock,
   bordered,
 }) => {
-  if (bordered && stock) {
+  if (!stock) {
+    return <CheckIcon color="primary" fontSize="small" />
+  }
+
+  if (bordered) {
     return (
       <Chip
         label={stock}
         color="primary"
         size="small"
         variant="outlined"
-        sx={{ borderRadius: 0, ml: 'auto', borderWidth: '2px' }}
+        sx={{ borderRadius: 0, borderWidth: '2px' }}
       />
     )
   }
 
-  return stock ? (
+  return (
     <Typography
       component="span"
       sx={{
-        ...(bordered
-          ? {
-              border: '2px solid',
-              borderColor: 'primary.main',
-
-              pl: 1,
-              pr: 1,
-              color: 'primary.main',
-            }
-          : {
-              color: 'primary.main',
-              fontWeight: 'bold',
-              fontStyle: 'italic',
-              fontSize: '14px',
-            }),
+        color: 'primary.main',
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        fontSize: '14px',
       }}
     >
       {stock}
     </Typography>
-  ) : (
-    <CheckIcon color="primary" fontSize="small" />
   )
 }
