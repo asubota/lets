@@ -7,7 +7,7 @@ import LinkIcon from '@mui/icons-material/Link'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { DetailsPopup } from './details-popup.tsx'
-import { Stock } from './Stock.tsx'
+import { Stock } from './stock'
 import { useFavsActions, useFavsItems } from '../store/favs.ts'
 
 const Tile: FC<{

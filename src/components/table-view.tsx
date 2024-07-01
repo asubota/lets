@@ -15,7 +15,7 @@ import {
 import { Product } from '../types.ts'
 import { copyContent, getHighlightedText } from '../tools.tsx'
 import { useTableColumns } from '../store'
-import { Stock } from './Stock.tsx'
+import { Stock } from './stock'
 
 type Order = 'asc' | 'desc' | undefined
 
