@@ -9,6 +9,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { DetailsPopup } from './details-popup.tsx'
 import { Stock } from './stock'
 import { useFavsActions, useFavsItems } from '../store/favs.ts'
+import { HiddenInput } from './hidden-input.tsx'
 
 const Tile: FC<{
   p: Product
@@ -31,18 +32,22 @@ const Tile: FC<{
           <DetailsPopup details={details} onClose={() => setDetails(null)} />
         )}
         <Card
+          className="product-tile"
           variant="outlined"
           sx={{
             ...(p.missed && {
               backgroundColor: '#ea2b060f',
             }),
-            p: 1,
-            display: 'grid',
-            rowGap: '12px',
-            columnGap: '4px',
-            gridTemplateColumns: '1fr',
-            gridTemplateRows: 'auto auto auto',
-            gridTemplateAreas: ` 
+            'p': 1,
+            'display': 'grid',
+            'rowGap': '12px',
+            'columnGap': '4px',
+            '&:has(input:checked)': {
+              borderColor: 'secondary.main',
+            },
+            'gridTemplateColumns': '1fr',
+            'gridTemplateRows': 'auto auto auto',
+            'gridTemplateAreas': ` 
           "name"
           "sku"
           "meta"
@@ -119,7 +124,9 @@ const Tile: FC<{
                 {isFav ? <StarIcon /> : <StarBorderIcon />}
               </IconButton>
 
-              <Stock stock={p.stock} bordered />
+              <HiddenInput>
+                <Stock stock={p.stock} bordered />
+              </HiddenInput>
             </Box>
           </Box>
         </Card>
