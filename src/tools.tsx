@@ -77,7 +77,27 @@ export const handleTakeScreenshot = async () => {
     return
   }
 
-  const canvas = await html2canvas(el)
+  const canvas = await html2canvas(el, {
+    onclone(_: Document, element: HTMLElement) {
+      const checked = element.querySelectorAll('input:checked')
+
+      if (checked.length > 0) {
+        const selector = '.product-tile:not(:has(input:checked))'
+        const unselected = element.querySelectorAll<HTMLDivElement>(selector)
+        unselected.forEach((el) => {
+          el.remove()
+        })
+      }
+
+      element
+        .querySelectorAll<HTMLDivElement>('.product-tile')
+        .forEach((el) => {
+          el.style.borderColor = 'rgba(0, 0, 0, 0.12)'
+        })
+
+      element.style.padding = '6px'
+    },
+  })
   const imgData = canvas.toDataURL('image/png', 1.0)
   const link = document.createElement('a')
 
