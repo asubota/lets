@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { Product } from '../types.ts'
 import { copyContent, getHighlightedText } from '../tools.tsx'
-import { useTableColumns } from '../store'
+import { useTableActions, useTableColumns } from '../store'
 import { Stock } from './stock'
 
 type Order = 'asc' | 'desc' | undefined
@@ -33,6 +33,28 @@ function getComparator(order: Order): (a: Product, b: Product) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b)
     : (a, b) => -descendingComparator(a, b)
+}
+
+const AllColumnsAreDisabled: FC = () => {
+  const { toggleSettings } = useTableActions()
+
+  return (
+    <Box
+      sx={{
+        mt: '100px',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <Typography
+        variant="subtitle2"
+        sx={{ color: 'primary.main', cursor: 'pointer' }}
+        onClick={toggleSettings}
+      >
+        All columns are disabled!
+      </Typography>
+    </Box>
+  )
 }
 
 export const TableView: FC<{ list: Product[]; search: string }> = ({
@@ -57,13 +79,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
   }
 
   if (!columns.length) {
-    return (
-      <Box sx={{ p: 1, textAlign: 'center', mt: '100px' }}>
-        <Typography variant="subtitle2" sx={{ color: 'primary.main' }}>
-          All columns are disabled!
-        </Typography>
-      </Box>
-    )
+    return <AllColumnsAreDisabled />
   }
 
   const sortedList = order ? list.slice().sort(getComparator(order)) : list
