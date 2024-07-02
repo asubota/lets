@@ -4,8 +4,8 @@ import { persist } from 'zustand/middleware'
 interface StoreState {
   items: string[]
   actions: {
-    add(this: void, value: string): void
-    remove(this: void, value: string): void
+    addHistoryItem(this: void, value: string): void
+    removeHistoryItem(this: void, value: string): void
   }
 }
 
@@ -14,15 +14,18 @@ const useStore = create<StoreState>()(
     (set) => ({
       items: [],
       actions: {
-        add: (item) => {
+        addHistoryItem: (item) => {
           set((state) => {
             const set = new Set(state.items)
-            set.add(item)
+
+            if (item.length > 2) {
+              set.add(item)
+            }
 
             return { items: Array.from(set) }
           })
         },
-        remove: (toRemove) =>
+        removeHistoryItem: (toRemove) =>
           set((state) => ({
             items: state.items.filter((item) => item !== toRemove),
           })),

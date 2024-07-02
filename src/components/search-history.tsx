@@ -11,7 +11,7 @@ export const SearchHistory: FC<{
   open: boolean
 }> = ({ anchorEl, setValue, open, onClickAway }) => {
   const items = useHistoryItems()
-  const { remove } = useHistoryActions()
+  const { removeHistoryItem } = useHistoryActions()
 
   if (!items.length) {
     return null
@@ -35,7 +35,7 @@ export const SearchHistory: FC<{
               onClick={() => setValue(term)}
               sx={{ cursor: 'pointer' }}
             />
-            <IconButton onClick={() => remove(term)}>
+            <IconButton onClick={() => removeHistoryItem(term)}>
               <DeleteIcon />
             </IconButton>
           </ListItem>
