@@ -1,18 +1,18 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { Box, IconButton } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import StarIcon from '@mui/icons-material/Star'
 import { useAppActions, useAppMode } from '../store'
 import { useIsLoading } from '../use-data.ts'
 
-export const AppBar: FC = () => {
+export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
   const mode = useAppMode()
   const { toggleFavs, setMode } = useAppActions()
   const loading = useIsLoading()
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Box>
+    <Box className="app-bar" sx={{ p: 1 }}>
+      <Box className="app-bar-left">
         <IconButton
           disabled={loading}
           onClick={toggleFavs}
@@ -22,7 +22,9 @@ export const AppBar: FC = () => {
         </IconButton>
       </Box>
 
-      <Box sx={{ ml: 'auto' }}>
+      <Box className="app-bar-center">{children}</Box>
+
+      <Box className="app-bar-right">
         <IconButton
           sx={{ color: 'secondary.light' }}
           disabled={loading || mode === 'favs'}

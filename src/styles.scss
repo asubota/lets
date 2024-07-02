@@ -83,10 +83,40 @@ div.swiper-thumbs {
 
 .no-scroll {
   overflow: hidden;
-  touch-action: none
+  touch-action: none;
 }
 
 .no-root {
   height: 0;
   overflow: hidden;
+}
+
+.app-bar {
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
+
+  &:not(:has(input[value=''])),
+  &:has(input:focus) {
+    gap: 0;
+
+    .app-bar-left,
+    .app-bar-right {
+      width: 0;
+      opacity: 0;
+    }
+  }
+}
+
+.app-bar-left,
+.app-bar-right {
+  width: 40px;
+
+  transition:
+    width 220ms ease-in-out,
+    opacity 160ms ease-in-out;
+}
+
+.app-bar-center {
+  flex-grow: 1;
 }
