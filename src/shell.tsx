@@ -20,7 +20,7 @@ export const Shell: FC = () => {
   })
 
   const [search, setSearch] = useState('')
-  const { add } = useHistoryActions()
+  const { addHistoryItem } = useHistoryActions()
   const list = useSearch(search)
   const favs = useFavs()
   const mode = useAppMode()
@@ -31,10 +31,7 @@ export const Shell: FC = () => {
     const term = input.trim()
     resetSearchVendors()
     setSearch(term)
-
-    if (term.length > 2) {
-      add(term)
-    }
+    addHistoryItem(term)
   }
 
   if (mode === 'scan') {
