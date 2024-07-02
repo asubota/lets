@@ -37,29 +37,34 @@ export const Shell: FC = () => {
     }
   }
 
+  if (mode === 'scan') {
+    return (
+      <Scanner
+        onSubmit={(input) => {
+          methods.setValue('input', input)
+          onSubmit({ input })
+        }}
+      />
+    )
+  }
+
   return (
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          {mode === 'scan' ? (
-            <Scanner onSubmit={methods.handleSubmit(onSubmit)} />
-          ) : (
-            <SearchField
-              disabled={mode === 'favs'}
-              onSubmit={methods.handleSubmit(onSubmit)}
-            />
-          )}
+          <SearchField
+            disabled={mode === 'favs'}
+            onSubmit={methods.handleSubmit(onSubmit)}
+          />
         </form>
       </FormProvider>
 
-      {mode !== 'scan' && (
-        <Box sx={{ p: 1, pt: 0 }}>
-          <AppBar />
-          <List list={mode === 'favs' ? favs : list} search={search} />
-          <LimitSearchModal list={list} />
-          <TableSettingsModal />
-        </Box>
-      )}
+      <Box sx={{ p: 1, pt: 0 }}>
+        <AppBar />
+        <List list={mode === 'favs' ? favs : list} search={search} />
+        <LimitSearchModal list={list} />
+        <TableSettingsModal />
+      </Box>
     </>
   )
 }
