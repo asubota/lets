@@ -1,5 +1,4 @@
 import { FC, useState } from 'react'
-import { Box } from '@mui/material'
 import {
   SearchField,
   List,
@@ -47,21 +46,21 @@ export const Shell: FC = () => {
 
   return (
     <>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <SearchField
-            disabled={mode === 'favs'}
-            onSubmit={methods.handleSubmit(onSubmit)}
-          />
-        </form>
-      </FormProvider>
+      <AppBar>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <SearchField
+              disabled={mode === 'favs'}
+              onSubmit={methods.handleSubmit(onSubmit)}
+            />
+          </form>
+        </FormProvider>
+      </AppBar>
 
-      <Box sx={{ p: 1, pt: 0 }}>
-        <AppBar />
-        <List list={mode === 'favs' ? favs : list} search={search} />
-        <LimitSearchModal list={list} />
-        <TableSettingsModal />
-      </Box>
+      <List list={mode === 'favs' ? favs : list} search={search} />
+
+      <LimitSearchModal list={list} />
+      <TableSettingsModal />
     </>
   )
 }

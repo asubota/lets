@@ -36,7 +36,7 @@ export const SearchField: FC<{
 
   return (
     <>
-      <Box ref={ref} sx={{ p: 1, pb: 0 }}>
+      <Box ref={ref}>
         <Controller
           name="input"
           control={control}
