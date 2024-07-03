@@ -1,6 +1,7 @@
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
+import PaletteIcon from '@mui/icons-material/Palette'
 
 export const Welcome = () => {
   return (
@@ -16,6 +17,17 @@ export const Welcome = () => {
 
       <Bike type="safe" />
       <Logo />
+
+      <IconButton
+        sx={{
+          position: 'absolute',
+          right: '20px',
+          bottom: '20px',
+          color: 'secondary.light',
+        }}
+      >
+        <PaletteIcon />
+      </IconButton>
     </Box>
   )
 }
