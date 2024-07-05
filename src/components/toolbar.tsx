@@ -52,7 +52,6 @@ export const Toolbar: FC<ToolbarProps> = ({
       >
         <IconButton
           size="small"
-          color="secondary"
           disabled={uniqueVendors.length < 2}
           sx={{ position: 'relative' }}
         >
@@ -85,7 +84,6 @@ export const Toolbar: FC<ToolbarProps> = ({
         <IconButton
           sx={{ mr: 'auto', ml: '16px' }}
           size="small"
-          color="secondary"
           onClick={handleTakeScreenshot}
         >
           <IosShareIcon />
@@ -93,12 +91,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       )}
 
       {view === 'table' && (
-        <IconButton
-          sx={{ ml: 'auto' }}
-          onClick={toggleSettings}
-          size="small"
-          color="secondary"
-        >
+        <IconButton sx={{ ml: 'auto' }} onClick={toggleSettings} size="small">
           <TuneIcon />
         </IconButton>
       )}
@@ -106,7 +99,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       <ButtonGroup sx={{ alignItems: 'center', mr: '3px' }}>
         <IconButton
           size="small"
-          color={view === 'table' ? 'primary' : 'secondary'}
+          color={view === 'table' ? 'primary' : 'default'}
           onClick={() => setView('table')}
         >
           <ReorderIcon />
@@ -120,7 +113,7 @@ export const Toolbar: FC<ToolbarProps> = ({
         />
         <IconButton
           size="small"
-          color={view === 'tile' ? 'primary' : 'secondary'}
+          color={view === 'tile' ? 'primary' : 'default'}
           onClick={() => setView('tile')}
         >
           <GridViewIcon />

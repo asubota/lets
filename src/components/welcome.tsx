@@ -3,6 +3,7 @@ import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import PaletteIcon from '@mui/icons-material/Palette'
 import { useAppActions } from '../store'
+import { ColorModeSwitch } from './color-mode-switch.tsx'
 
 export const Welcome = () => {
   const { setMode } = useAppActions()
@@ -21,13 +22,13 @@ export const Welcome = () => {
       <Bike type="safe" />
       <Logo />
 
+      <ColorModeSwitch />
       <IconButton
         onClick={() => setMode('colors')}
         sx={{
           position: 'absolute',
           right: '20px',
           bottom: '20px',
-          color: 'secondary.light',
         }}
       >
         <PaletteIcon />
