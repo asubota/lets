@@ -10,6 +10,7 @@ import { DetailsPopup } from './details-popup.tsx'
 import { Stock } from './stock'
 import { useFavsActions, useFavsItems } from '../store/favs.ts'
 import { HiddenInput } from './hidden-input.tsx'
+import { VendorChip } from './vendor-chip.tsx'
 
 const Tile: FC<{
   p: Product
@@ -94,17 +95,9 @@ const Tile: FC<{
                 borderColor: 'secondary.main',
               }}
             />
-            {p['vendor'] !== 'base' ? (
-              <Chip
-                label={p['vendor']}
-                color="secondary"
-                size="small"
-                variant="outlined"
-                sx={{ borderWidth: '2px', borderColor: 'secondary.main' }}
-              />
-            ) : (
-              <Chip label={p['vendor']} color="primary" size="small" />
-            )}
+
+            <VendorChip vendor={p.vendor} />
+
             {p.pics && <ImageIcon color="secondary" fontSize="small" />}
             {p.link && <LinkIcon color="secondary" fontSize="small" />}
 

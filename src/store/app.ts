@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 
 interface StoreState {
   view: 'tile' | 'table'
-  mode: 'search' | 'favs' | 'scan'
+  mode: 'search' | 'favs' | 'scan' | 'colors'
   actions: {
     setMode(this: void, mode: StoreState['mode']): void
     setView(this: void, view: StoreState['view']): void

@@ -3,6 +3,7 @@ import { Product } from './types.ts'
 import { useFavsItems } from './store/favs.ts'
 import { useMemo } from 'react'
 import { useBikeId } from './store'
+import { getUniqueVendors } from './tools.tsx'
 
 interface Column {
   id: string
@@ -84,6 +85,12 @@ export const useIsLoading = () => {
   const { isFetching } = useData()
 
   return isFetching
+}
+
+export const useAllVendors = () => {
+  const { data = [] } = useData()
+
+  return getUniqueVendors(data)
 }
 
 const filterBySearch = (item: Product, search: string): boolean => {

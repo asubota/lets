@@ -2,8 +2,11 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import PaletteIcon from '@mui/icons-material/Palette'
+import { useAppActions } from '../store'
 
 export const Welcome = () => {
+  const { setMode } = useAppActions()
+
   return (
     <Box>
       <Typography variant="h3" gutterBottom textAlign="center" sx={{ mt: 4 }}>
@@ -19,6 +22,7 @@ export const Welcome = () => {
       <Logo />
 
       <IconButton
+        onClick={() => setMode('colors')}
         sx={{
           position: 'absolute',
           right: '20px',
