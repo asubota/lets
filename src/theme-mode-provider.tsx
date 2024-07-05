@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useMemo } from 'react'
+import { createContext, FC, ReactNode, useEffect, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { useAppActions, useAppTheme } from './store'
 
@@ -9,6 +9,13 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const theme = useAppTheme()
   const { setTheme } = useAppActions()
+
+  useEffect(() => {
+    const el = document.getElementById('root')
+    if (el) {
+      el.classList.add(theme)
+    }
+  }, [theme])
 
   const colorMode = {
     toggleColorMode: () => {
