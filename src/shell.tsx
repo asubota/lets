@@ -13,6 +13,7 @@ import { Scanner } from './components/scanner.tsx'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { SearchForm } from './types.ts'
 import { Box } from '@mui/material'
+import { ColorSettingsModal } from './components/color-settings-modal.tsx'
 
 export const Shell: FC = () => {
   const methods = useForm<SearchForm>({
@@ -64,6 +65,7 @@ export const Shell: FC = () => {
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
+      <ColorSettingsModal />
     </>
   )
 }

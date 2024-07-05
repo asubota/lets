@@ -1,7 +1,6 @@
 import { FC, useState } from 'react'
 import {
   Box,
-  Chip,
   Paper,
   Table,
   TableBody,
@@ -16,6 +15,7 @@ import { Product } from '../types.ts'
 import { copyContent, getHighlightedText } from '../tools.tsx'
 import { useTableActions, useTableColumns } from '../store'
 import { Stock } from './stock'
+import { VendorChip } from './vendor-chip.tsx'
 
 type Order = 'asc' | 'desc' | undefined
 
@@ -171,11 +171,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
 
               {columns.includes('vendor') && (
                 <TableCell align="right" sx={{ pr: 1 }}>
-                  {row['vendor'] === 'base' ? (
-                    <Chip label={row['vendor']} color="primary" size="small" />
-                  ) : (
-                    row['vendor']
-                  )}
+                  <VendorChip vendor={row.vendor} />
                 </TableCell>
               )}
 
