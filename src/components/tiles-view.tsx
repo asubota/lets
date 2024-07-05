@@ -91,7 +91,6 @@ const Tile: FC<{
           >
             <Chip
               label={`${p['price']} uah`}
-              color="secondary"
               size="small"
               variant="outlined"
               sx={{

@@ -26,7 +26,6 @@ export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
 
       <Box className="app-bar-right">
         <IconButton
-          sx={{ color: 'secondary.light' }}
           disabled={loading || mode === 'favs'}
           onClick={() => setMode('scan')}
         >
