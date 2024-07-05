@@ -62,6 +62,10 @@ const Tile: FC<{
               textAlign: 'left',
               wordBreak: 'break-word',
             }}
+            onClick={async (e) => {
+              e.stopPropagation()
+              await copyContent(p.name)
+            }}
           >
             {getHighlightedText(p['name'], search)}
           </Box>
