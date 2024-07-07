@@ -13,7 +13,6 @@ interface SearchSuggestionsProps {
 
 export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
   search,
-  onClickAway,
   setValue,
   open,
 }) => {
@@ -21,7 +20,7 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
   const anchorEl = document.querySelector('.app-bar')
 
   return (
-    <FadePopper anchorEl={anchorEl} open={open} onClickAway={onClickAway}>
+    <FadePopper anchorEl={anchorEl} open={open}>
       <List
         sx={{
           width: anchorEl?.clientWidth,
