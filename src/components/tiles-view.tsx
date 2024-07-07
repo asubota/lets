@@ -11,6 +11,7 @@ import { Stock } from './stock'
 import { useFavsActions, useFavsItems } from '../store/favs.ts'
 import { HiddenInput } from './hidden-input.tsx'
 import { VendorChip } from './vendor-chip.tsx'
+import { RippleText } from './ripple-text.tsx'
 
 const Tile: FC<{
   p: Product
@@ -67,7 +68,7 @@ const Tile: FC<{
               await copyContent(p.name)
             }}
           >
-            {getHighlightedText(p['name'], search)}
+            <RippleText text={getHighlightedText(p['name'], search)} />
           </Box>
 
           <Chip

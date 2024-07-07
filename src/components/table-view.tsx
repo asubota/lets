@@ -16,6 +16,7 @@ import { copyContent, getHighlightedText } from '../tools.tsx'
 import { useTableActions, useTableColumns } from '../store'
 import { Stock } from './stock'
 import { VendorChip } from './vendor-chip.tsx'
+import { RippleText } from './ripple-text.tsx'
 
 type Order = 'asc' | 'desc' | undefined
 
@@ -147,13 +148,13 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
             >
               {columns.includes('sku') && (
                 <TableCell
-                  sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1, cursor: 'pointer' }}
+                  sx={{ whiteSpace: 'nowrap', pr: 0, pl: 1 }}
                   onClick={async (e) => {
                     e.stopPropagation()
                     await copyContent(row.sku)
                   }}
                 >
-                  {getHighlightedText(row['sku'], search)}
+                  <RippleText text={getHighlightedText(row['sku'], search)} />
                 </TableCell>
               )}
 
@@ -171,7 +172,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
                     await copyContent(row.name)
                   }}
                 >
-                  {getHighlightedText(row['name'], search)}
+                  <RippleText text={getHighlightedText(row['name'], search)} />
                 </TableCell>
               )}
 
