@@ -21,11 +21,15 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
 }) => {
   const list = useSearch(search).slice(0, 12)
 
+  if (!anchorEl) {
+    return null
+  }
+
   return (
     <FadePopper anchorEl={anchorEl} open={open} onClickAway={onClickAway}>
       <List
         sx={{
-          width: 'calc(100vw - 16px)',
+          width: anchorEl.clientWidth,
           pt: 0,
           pb: 0,
           maxHeight: '400px',

@@ -47,7 +47,7 @@ export const Shell: FC = () => {
   }
 
   return (
-    <Container sx={{ pl: 1, pr: 1 }}>
+    <Container sx={{ pl: 1, pr: 1, pb: 1 }}>
       <AppBar>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>

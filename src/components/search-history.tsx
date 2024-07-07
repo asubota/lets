@@ -13,7 +13,7 @@ export const SearchHistory: FC<{
   const items = useHistoryItems()
   const { removeHistoryItem } = useHistoryActions()
 
-  if (!items.length) {
+  if (!items.length || !anchorEl) {
     return null
   }
 
@@ -21,7 +21,7 @@ export const SearchHistory: FC<{
     <FadePopper anchorEl={anchorEl} open={open} onClickAway={onClickAway}>
       <List
         sx={{
-          width: 'calc(100vw - 16px)',
+          width: anchorEl.clientWidth,
           pt: 0,
           pb: 0,
           maxHeight: '250px',
