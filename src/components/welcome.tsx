@@ -1,13 +1,9 @@
-import { Box, IconButton, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
-import PaletteIcon from '@mui/icons-material/Palette'
-import { useAppActions } from '../store'
-import { ColorModeSwitch } from './color-mode-switch.tsx'
+import { ExtraViewOptions } from './extra-view-options.tsx'
 
 export const Welcome = () => {
-  const { setMode } = useAppActions()
-
   return (
     <Box>
       <Typography variant="h3" gutterBottom textAlign="center" sx={{ mt: 4 }}>
@@ -22,17 +18,7 @@ export const Welcome = () => {
       <Bike type="safe" />
       <Logo />
 
-      <ColorModeSwitch />
-      <IconButton
-        onClick={() => setMode('colors')}
-        sx={{
-          position: 'absolute',
-          right: '20px',
-          bottom: '20px',
-        }}
-      >
-        <PaletteIcon />
-      </IconButton>
+      <ExtraViewOptions />
     </Box>
   )
 }
