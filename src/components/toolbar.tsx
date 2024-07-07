@@ -43,6 +43,10 @@ export const Toolbar: FC<ToolbarProps> = ({
         sx={{
           display: 'flex',
           alignItems: 'center',
+          cursor:
+            uniqueVendors.length < 2 || mode !== 'search'
+              ? 'default'
+              : 'pointer',
         }}
         onClick={
           uniqueVendors.length < 2 || mode !== 'search'
