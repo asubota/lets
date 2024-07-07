@@ -1,21 +1,23 @@
 import { FC, useContext } from 'react'
-import { Box, IconButton, useTheme } from '@mui/material'
-
-import Brightness4Icon from '@mui/icons-material/Brightness4'
+import PaletteIcon from '@mui/icons-material/Palette'
+import { IconButton, Stack, useTheme } from '@mui/material'
+import { useAppActions } from '../store'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
+import Brightness4Icon from '@mui/icons-material/Brightness4'
 import { ColorModeContext } from '../theme-mode-provider.tsx'
 
-export const ColorModeSwitch: FC = () => {
+export const ExtraViewOptions: FC = () => {
+  const { setMode } = useAppActions()
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
 
   return (
-    <Box
+    <Stack
+      spacing={1}
       sx={{
         position: 'absolute',
-        right: '20px',
-        bottom: '60px',
-        color: 'secondary.light',
+        right: '25px',
+        bottom: '25px',
       }}
     >
       <IconButton onClick={colorMode.toggleColorMode}>
@@ -25,6 +27,10 @@ export const ColorModeSwitch: FC = () => {
           <Brightness4Icon />
         )}
       </IconButton>
-    </Box>
+
+      <IconButton onClick={() => setMode('colors')}>
+        <PaletteIcon />
+      </IconButton>
+    </Stack>
   )
 }

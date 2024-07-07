@@ -72,9 +72,8 @@ export const Toolbar: FC<ToolbarProps> = ({
         </IconButton>
         <Typography
           component="div"
-          color="secondary"
           variant="body2"
-          sx={{ fontWeight: 'bold' }}
+          sx={{ fontWeight: 'bold', color: 'secondary.main' }}
         >
           {total}
         </Typography>
