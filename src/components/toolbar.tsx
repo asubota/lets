@@ -53,7 +53,7 @@ export const Toolbar: FC<ToolbarProps> = ({
         <IconButton
           size="small"
           disabled={uniqueVendors.length < 2}
-          sx={{ position: 'relative' }}
+          sx={{ position: 'relative', color: 'text.secondary' }}
         >
           <TroubleshootIcon />
           {filteredSearch && (
@@ -73,7 +73,8 @@ export const Toolbar: FC<ToolbarProps> = ({
         <Typography
           component="div"
           variant="body2"
-          sx={{ fontWeight: 'bold', color: 'secondary.main' }}
+          color="text.secondary"
+          sx={{ fontWeight: 'bold' }}
         >
           {total}
         </Typography>
@@ -81,7 +82,7 @@ export const Toolbar: FC<ToolbarProps> = ({
 
       {view === 'tile' && (
         <IconButton
-          sx={{ mr: 'auto', ml: '16px' }}
+          sx={{ mr: 'auto', ml: '16px', color: 'text.secondary' }}
           size="small"
           onClick={handleTakeScreenshot}
         >
@@ -90,7 +91,11 @@ export const Toolbar: FC<ToolbarProps> = ({
       )}
 
       {view === 'table' && (
-        <IconButton sx={{ ml: 'auto' }} onClick={toggleSettings} size="small">
+        <IconButton
+          sx={{ ml: 'auto', color: 'text.secondary' }}
+          onClick={toggleSettings}
+          size="small"
+        >
           <TuneIcon />
         </IconButton>
       )}
@@ -98,7 +103,9 @@ export const Toolbar: FC<ToolbarProps> = ({
       <ButtonGroup sx={{ alignItems: 'center', mr: '3px' }}>
         <IconButton
           size="small"
-          color={view === 'table' ? 'primary' : 'default'}
+          sx={{
+            color: view === 'table' ? 'primary.main' : 'text.secondary',
+          }}
           onClick={() => setView('table')}
         >
           <ReorderIcon />
@@ -112,7 +119,9 @@ export const Toolbar: FC<ToolbarProps> = ({
         />
         <IconButton
           size="small"
-          color={view === 'tile' ? 'primary' : 'default'}
+          sx={{
+            color: view === 'tile' ? 'primary.main' : 'text.secondary',
+          }}
           onClick={() => setView('tile')}
         >
           <GridViewIcon />

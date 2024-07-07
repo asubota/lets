@@ -44,7 +44,7 @@ const Tile: FC<{
             'rowGap': '12px',
             'columnGap': '4px',
             '&:has(input:checked)': {
-              borderColor: 'secondary.main',
+              borderColor: 'text.secondary',
             },
             'gridTemplateColumns': '1fr',
             'gridTemplateRows': 'auto auto auto',
