@@ -7,21 +7,22 @@ import { FadePopper } from './fade-popper.tsx'
 export const SearchHistory: FC<{
   onClickAway(): void
   setValue(value: string): void
-  anchorEl: null | HTMLElement
   open: boolean
-}> = ({ anchorEl, setValue, open, onClickAway }) => {
+}> = ({ setValue, open, onClickAway }) => {
   const items = useHistoryItems()
   const { removeHistoryItem } = useHistoryActions()
 
-  if (!items.length || !anchorEl) {
+  if (!items.length) {
     return null
   }
+
+  const anchorEl = document.querySelector('.app-bar')
 
   return (
     <FadePopper anchorEl={anchorEl} open={open} onClickAway={onClickAway}>
       <List
         sx={{
-          width: anchorEl.clientWidth,
+          width: anchorEl?.clientWidth,
           pt: 0,
           pb: 0,
           maxHeight: '250px',
