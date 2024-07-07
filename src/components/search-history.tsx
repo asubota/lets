@@ -8,7 +8,7 @@ export const SearchHistory: FC<{
   onClickAway(): void
   setValue(value: string): void
   open: boolean
-}> = ({ setValue, open, onClickAway }) => {
+}> = ({ setValue, open }) => {
   const items = useHistoryItems()
   const { removeHistoryItem } = useHistoryActions()
 
@@ -19,7 +19,7 @@ export const SearchHistory: FC<{
   const anchorEl = document.querySelector('.app-bar')
 
   return (
-    <FadePopper anchorEl={anchorEl} open={open} onClickAway={onClickAway}>
+    <FadePopper anchorEl={anchorEl} open={open}>
       <List
         sx={{
           width: anchorEl?.clientWidth,
