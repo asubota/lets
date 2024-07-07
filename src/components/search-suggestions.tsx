@@ -8,31 +8,26 @@ interface SearchSuggestionsProps {
   open: boolean
   search: string
   onClickAway(): void
-  anchorEl: null | HTMLElement
   setValue(value: string): void
 }
 
 export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
   search,
-  anchorEl,
   onClickAway,
   setValue,
   open,
 }) => {
-  const list = useSearch(search).slice(0, 12)
-
-  if (!anchorEl) {
-    return null
-  }
+  const list = useSearch(search).slice(0, 15)
+  const anchorEl = document.querySelector('.app-bar')
 
   return (
     <FadePopper anchorEl={anchorEl} open={open} onClickAway={onClickAway}>
       <List
         sx={{
-          width: anchorEl.clientWidth,
+          width: anchorEl?.clientWidth,
           pt: 0,
           pb: 0,
-          maxHeight: '400px',
+          maxHeight: '420px',
           overflow: 'auto',
         }}
       >
