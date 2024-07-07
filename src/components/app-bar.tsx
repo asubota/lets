@@ -16,7 +16,7 @@ export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
         <IconButton
           disabled={loading}
           onClick={toggleFavs}
-          sx={{ color: mode === 'favs' ? 'warning.light' : 'secondary.light' }}
+          sx={{ color: mode === 'favs' ? 'warning.light' : 'text.secondary' }}
         >
           <StarIcon />
         </IconButton>
@@ -26,6 +26,7 @@ export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
 
       <Box className="app-bar-right">
         <IconButton
+          sx={{ color: 'text.secondary' }}
           disabled={loading || mode === 'favs'}
           onClick={() => setMode('scan')}
         >

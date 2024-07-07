@@ -20,7 +20,10 @@ export const ExtraViewOptions: FC = () => {
         bottom: '25px',
       }}
     >
-      <IconButton onClick={colorMode.toggleColorMode}>
+      <IconButton
+        onClick={colorMode.toggleColorMode}
+        sx={{ color: 'text.secondary' }}
+      >
         {theme.palette.mode === 'dark' ? (
           <Brightness7Icon />
         ) : (
@@ -28,7 +31,10 @@ export const ExtraViewOptions: FC = () => {
         )}
       </IconButton>
 
-      <IconButton onClick={() => setMode('colors')}>
+      <IconButton
+        onClick={() => setMode('colors')}
+        sx={{ color: 'text.secondary' }}
+      >
         <PaletteIcon />
       </IconButton>
     </Stack>
