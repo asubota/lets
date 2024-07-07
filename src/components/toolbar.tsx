@@ -115,6 +115,8 @@ export const Toolbar: FC<ToolbarProps> = ({
             borderRight: '1px solid',
             borderColor: 'primary.main',
             height: '22px',
+            pl: '2px',
+            pr: '2px',
           }}
         />
         <IconButton

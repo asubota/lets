@@ -12,7 +12,7 @@ import { AppBar } from './components/app-bar.tsx'
 import { Scanner } from './components/scanner.tsx'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { SearchForm } from './types.ts'
-import { Box } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { ColorSettingsModal } from './components/color-settings-modal.tsx'
 
 export const Shell: FC = () => {
@@ -47,7 +47,7 @@ export const Shell: FC = () => {
   }
 
   return (
-    <>
+    <Container sx={{ pl: 1, pr: 1 }}>
       <AppBar>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -59,13 +59,13 @@ export const Shell: FC = () => {
         </FormProvider>
       </AppBar>
 
-      <Box sx={{ p: 1, pt: 0 }}>
+      <Box>
         <List list={mode === 'favs' ? favs : list} search={search} />
       </Box>
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
       <ColorSettingsModal />
-    </>
+    </Container>
   )
 }
