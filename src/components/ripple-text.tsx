@@ -21,7 +21,6 @@ export const RippleText: FC<{ text: ReactNode }> = ({ text }) => {
         display: 'inline-block',
         position: 'relative',
         cursor: 'pointer',
-        zIndex: 1,
       }}
     >
       {text}
