@@ -11,7 +11,7 @@ export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
   const loading = useIsLoading()
 
   return (
-    <Box className="app-bar" sx={{ p: 1 }}>
+    <Box className="app-bar" sx={{ pt: 1 }}>
       <Box className="app-bar-left">
         <IconButton
           disabled={loading}
