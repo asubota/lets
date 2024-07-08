@@ -13,11 +13,23 @@ import { useSearchActions } from '../store/search.ts'
 import TuneIcon from '@mui/icons-material/Tune'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { handleTakeScreenshot } from '../tools.tsx'
+import GoogleIcon from '@mui/icons-material/Google';
 
 interface ToolbarProps {
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
+}
+
+const handleGoogle = async () => {
+     navigator.clipboard
+        const text = await navigator.clipboard.readText();
+
+
+         window.open(
+            `https://www.google.com/search?q=${text}&tbm=isch`    , '_blank'
+        )
+
 }
 
 export const Toolbar: FC<ToolbarProps> = ({
@@ -84,6 +96,7 @@ export const Toolbar: FC<ToolbarProps> = ({
         </Typography>
       </Box>
 
+
       {view === 'tile' && (
         <IconButton
           sx={{ mr: 'auto', ml: '16px', color: 'text.secondary' }}
@@ -93,6 +106,12 @@ export const Toolbar: FC<ToolbarProps> = ({
           <IosShareIcon />
         </IconButton>
       )}
+
+         <IconButton size="small" sx={{ml: 'auto', mr: '20px',  color: 'text.secondary'}}  onClick={handleGoogle}>
+        <GoogleIcon />
+      </IconButton>
+
+
 
       {view === 'table' && (
         <IconButton
