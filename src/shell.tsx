@@ -29,6 +29,8 @@ export const Shell: FC = () => {
   const { resetSearchVendors } = useSearchActions()
 
   const onSubmit: SubmitHandler<SearchForm> = ({ input }) => {
+
+    console.log('W$W$#$W')
     const term = input.trim()
     resetSearchVendors()
     setSearch(term)
