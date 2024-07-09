@@ -26,6 +26,22 @@ const handleGoogle = async () => {
   window.open(`https://www.google.com/search?q=${text}`, '_blank')
 }
 
+const RedDot: FC = () => {
+  return (
+    <Box
+      sx={{
+        backgroundColor: 'primary.main',
+        borderRadius: '50%',
+        width: '5px',
+        height: '5px',
+        position: 'absolute',
+        right: '4px',
+        top: '4px',
+      }}
+    />
+  )
+}
+
 export const Toolbar: FC<ToolbarProps> = ({
   total,
   uniqueVendors,
@@ -37,6 +53,8 @@ export const Toolbar: FC<ToolbarProps> = ({
   const { toggleLimitModal } = useSearchActions()
   const mode = useAppMode()
 
+  const fewVendorsAvailable = uniqueVendors.length > 1 && mode === 'search'
+
   return (
     <Box
       sx={{
@@ -45,108 +63,89 @@ export const Toolbar: FC<ToolbarProps> = ({
         height: '40px',
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          cursor:
-            uniqueVendors.length < 2 || mode !== 'search'
-              ? 'default'
-              : 'pointer',
-        }}
-        onClick={
-          uniqueVendors.length < 2 || mode !== 'search'
-            ? undefined
-            : toggleLimitModal
-        }
-      >
-        <IconButton
-          size="small"
-          disabled={uniqueVendors.length < 2}
-          sx={{ position: 'relative', color: 'text.secondary' }}
-        >
-          <TroubleshootIcon />
-          {filteredSearch && (
-            <Box
-              sx={{
-                backgroundColor: 'primary.main',
-                borderRadius: '50%',
-                width: '5px',
-                height: '5px',
-                position: 'absolute',
-                right: '4px',
-                top: '4px',
-              }}
-            />
-          )}
-        </IconButton>
-        <Typography
-          component="div"
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontWeight: 'bold' }}
-        >
-          {total}
-        </Typography>
-      </Box>
-
-      {view === 'tile' && (
-        <IconButton
-          sx={{ mr: 'auto', ml: '16px', color: 'text.secondary' }}
-          size="small"
-          onClick={handleTakeScreenshot}
-        >
-          <IosShareIcon />
-        </IconButton>
-      )}
-
-      <IconButton
-        size="small"
-        sx={{ ml: 'auto', mr: '20px', color: 'text.secondary' }}
-        onClick={handleGoogle}
-      >
-        <GoogleIcon />
-      </IconButton>
-
-      {view === 'table' && (
-        <IconButton
-          sx={{ ml: 'auto', color: 'text.secondary' }}
-          onClick={toggleSettings}
-          size="small"
-        >
-          <TuneIcon />
-        </IconButton>
-      )}
-
-      <ButtonGroup sx={{ alignItems: 'center', mr: '3px' }}>
-        <IconButton
-          size="small"
-          sx={{
-            color: view === 'table' ? 'primary.main' : 'text.secondary',
-          }}
-          onClick={() => setView('table')}
-        >
-          <ReorderIcon />
-        </IconButton>
+      <Box sx={{ mr: 'auto', display: 'flex' }}>
         <Box
-          sx={{
-            borderRight: '1px solid',
-            borderColor: 'primary.main',
-            height: '22px',
-            pl: '2px',
-            pr: '2px',
-          }}
-        />
+          onClick={fewVendorsAvailable ? toggleLimitModal : undefined}
+          sx={{ cursor: fewVendorsAvailable ? 'pointer' : 'default' }}
+        >
+          <IconButton
+            size="small"
+            disabled={uniqueVendors.length < 2 || mode !== 'search'}
+            sx={{ position: 'relative', color: 'text.secondary' }}
+          >
+            <TroubleshootIcon />
+            {filteredSearch && <RedDot />}
+          </IconButton>
+          <Typography
+            component="span"
+            variant="body2"
+            sx={{
+              fontWeight: 'bold',
+              color: mode === 'search' ? 'text.secondary' : 'text.disabled',
+            }}
+          >
+            {total}
+          </Typography>
+        </Box>
+        {view === 'tile' && (
+          <IconButton
+            sx={{ ml: '16px', color: 'text.secondary' }}
+            size="small"
+            onClick={handleTakeScreenshot}
+          >
+            <IosShareIcon />
+          </IconButton>
+        )}
+      </Box>
+      <Box sx={{ ml: 'auto', display: 'flex' }}>
         <IconButton
           size="small"
-          sx={{
-            color: view === 'tile' ? 'primary.main' : 'text.secondary',
-          }}
-          onClick={() => setView('tile')}
+          sx={{ color: 'text.secondary', mr: '20px' }}
+          onClick={handleGoogle}
         >
-          <GridViewIcon />
+          <GoogleIcon />
         </IconButton>
-      </ButtonGroup>
+
+        {view === 'table' && (
+          <IconButton
+            sx={{ ml: 'auto', color: 'text.secondary' }}
+            onClick={toggleSettings}
+            size="small"
+          >
+            <TuneIcon />
+          </IconButton>
+        )}
+
+        <ButtonGroup sx={{ alignItems: 'center', mr: '3px' }}>
+          <IconButton
+            size="small"
+            sx={{
+              color: view === 'table' ? 'primary.main' : 'text.secondary',
+            }}
+            onClick={() => setView('table')}
+          >
+            <ReorderIcon />
+          </IconButton>
+          <Box
+            sx={{
+              borderRight: '1px solid',
+              borderColor: 'primary.main',
+              height: '22px',
+              pl: '2px',
+              pr: '2px',
+            }}
+          />
+          <IconButton
+            size="small"
+            sx={{
+              color: view === 'tile' ? 'primary.main' : 'text.secondary',
+            }}
+            onClick={() => setView('tile')}
+          >
+            <GridViewIcon />
+          </IconButton>
+        </ButtonGroup>
+      </Box>
     </Box>
   )
 }
