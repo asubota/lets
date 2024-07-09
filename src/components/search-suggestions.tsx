@@ -7,7 +7,6 @@ import { getHighlightedText } from '../tools.tsx'
 interface SearchSuggestionsProps {
   open: boolean
   search: string
-  onClickAway(): void
   setValue(value: string): void
 }
 
@@ -16,7 +15,7 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
   setValue,
   open,
 }) => {
-  const list = useSearch(search).slice(0, 15)
+  const list = useSearch(search).slice(0, 12)
   const anchorEl = document.querySelector('.app-bar')
 
   return (
@@ -26,7 +25,7 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
           width: anchorEl?.clientWidth,
           pt: 0,
           pb: 0,
-          maxHeight: '420px',
+          maxHeight: '380px',
           overflow: 'auto',
         }}
       >
