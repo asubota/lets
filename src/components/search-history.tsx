@@ -5,7 +5,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { FadePopper } from './fade-popper.tsx'
 
 export const SearchHistory: FC<{
-  onClickAway(): void
   setValue(value: string): void
   open: boolean
 }> = ({ setValue, open }) => {
