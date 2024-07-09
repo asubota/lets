@@ -78,6 +78,9 @@ export const handleTakeScreenshot = async () => {
   }
 
   const canvas = await html2canvas(el, {
+    ignoreElements(element) {
+      return element.hasAttribute('data-no-export')
+    },
     onclone(_: Document, element: HTMLElement) {
       const checked = element.querySelectorAll('input:checked')
 

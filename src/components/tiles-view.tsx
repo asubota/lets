@@ -102,8 +102,12 @@ const Tile: FC<{
 
             <VendorChip vendor={p.vendor} />
 
-            {p.pics && <ImageIcon color="secondary" fontSize="small" />}
-            {p.link && <LinkIcon color="secondary" fontSize="small" />}
+            {p.pics && (
+              <ImageIcon color="secondary" fontSize="small" data-no-export />
+            )}
+            {p.link && (
+              <LinkIcon color="secondary" fontSize="small" data-no-export />
+            )}
 
             <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
               <IconButton
@@ -118,7 +122,11 @@ const Tile: FC<{
                   toggle()
                 }}
               >
-                {isFav ? <StarIcon /> : <StarBorderIcon />}
+                {isFav ? (
+                  <StarIcon data-no-export />
+                ) : (
+                  <StarBorderIcon data-no-export />
+                )}
               </IconButton>
 
               <HiddenInput>

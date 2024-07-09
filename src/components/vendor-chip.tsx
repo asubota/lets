@@ -23,6 +23,7 @@ export const VendorChip: FC<{
 
   return vendor !== 'base' ? (
     <Chip
+      data-no-export
       label={vendor}
       size="small"
       variant="outlined"
@@ -34,6 +35,6 @@ export const VendorChip: FC<{
       }}
     />
   ) : (
-    <Chip label={vendor} color="primary" size="small" />
+    <Chip data-no-export label={vendor} color="primary" size="small" />
   )
 }
