@@ -17,7 +17,11 @@ const getSlides = (pics: string[], title: string) => {
         src={src}
         alt={title}
         title={title}
-        sx={{ width: '100%' }}
+        sx={{
+          width: '100%',
+          maxHeight: '75vh',
+          objectFit: 'contain',
+        }}
         onError={(e) => {
           const target = e.target as HTMLImageElement
           target.src = '/lets/logo.webp'
