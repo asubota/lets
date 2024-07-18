@@ -153,15 +153,16 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
   return (
     <Stack direction="column" spacing={1} id="tiles-view">
       {list.map((row) => {
-        const key = `${row.sku}:${row.vendor}`
+        const favId = `${row.sku}:${row.vendor}`
+        const key = `${favId}:${row.price}}`
 
         return (
           <Tile
+            key={key}
             p={row}
             search={search}
-            key={key}
-            isFav={favs.includes(key)}
-            toggle={() => toggle(key)}
+            isFav={favs.includes(favId)}
+            toggle={() => toggle(favId)}
           />
         )
       })}
