@@ -51,6 +51,7 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
         typography="subtitle2"
         sx={{
           p: 1,
+          pb: isFullScreen ? 0 : 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-start',
@@ -110,6 +111,9 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
             pr: isFullScreen ? 0 : '2px',
             pb: isFullScreen ? 0 : '2px',
             minHeight: '250px',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
           }}
         >
           <ImageSlider
