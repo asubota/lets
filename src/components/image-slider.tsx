@@ -61,6 +61,7 @@ export const ImageSlider: FC<{
           modules={[Thumbs, Navigation]}
           pagination={false}
           navigation
+          loop
           slidesPerView={'auto'}
           centeredSlides={true}
           spaceBetween={12}
