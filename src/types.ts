@@ -4,6 +4,7 @@ export interface Product {
   availability: string
   vendor: string
   price: number
+  p2: number | null
   stock: string | null
   link: string | null
   pics: string[] | null
