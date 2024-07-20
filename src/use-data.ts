@@ -143,6 +143,7 @@ export const useFavs = (): Product[] => {
           vendor,
           name: '-',
           price: 0,
+          p2: 0,
           pics: null,
           link: null,
           availability: '',

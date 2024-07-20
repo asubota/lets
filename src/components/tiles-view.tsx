@@ -12,6 +12,7 @@ import { useFavsActions, useFavsItems } from '../store/favs.ts'
 import { HiddenInput } from './hidden-input.tsx'
 import { VendorChip } from './vendor-chip.tsx'
 import { RippleText } from './ripple-text.tsx'
+import { PriceChip } from './price-chip.tsx'
 
 const Tile: FC<{
   p: Product
@@ -90,16 +91,7 @@ const Tile: FC<{
               gap: '8px',
             }}
           >
-            <Chip
-              label={`${p['price']} uah`}
-              size="small"
-              variant="outlined"
-              sx={{
-                borderWidth: '2px',
-                borderColor: 'secondary.main',
-              }}
-            />
-
+            <PriceChip product={p} />
             <VendorChip vendor={p.vendor} />
 
             {p.pics && (
