@@ -7,7 +7,7 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
 
   const label = {
     price: `${product[key]} uah`,
-    p2: `+${product[key] || 0} uah`,
+    p2: `+${product.p2 ? product.price - product.p2 : '?'} uah`,
   }
 
   const props: Record<string, unknown> = {}
