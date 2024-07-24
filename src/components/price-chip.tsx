@@ -2,24 +2,37 @@ import { FC, useState } from 'react'
 import { Chip } from '@mui/material'
 import { Product } from '../types.ts'
 
-export const PriceChip: FC<{ product: Product }> = ({ product }) => {
-  const [key, setKey] = useState<'price' | 'p2'>('price')
+type PriceKey = 'earn' | 'base-price' | 'full-price'
 
-  const label = {
-    price: `${product[key]} uah`,
-    p2: `+${product.p2 ? product.price - product.p2 : '?'} uah`,
+export const PriceChip: FC<{ product: Product }> = ({ product }) => {
+  const [key, setKey] = useState<PriceKey>('full-price')
+
+  const label: Record<PriceKey, string> = {
+    'full-price': `${product.price} uah`,
+    'base-price': `${product.p2 || '?'} uah`,
+    'earn': `+${product.p2 ? product.price - product.p2 : '?'} uah`,
   }
 
   const props: Record<string, unknown> = {}
-  if (key === 'p2') {
+  if (['earn', 'base-price'].includes(key)) {
     props['data-no-export'] = true
+  }
+
+  const rotateDisplayedPrice = () => {
+    const map: Record<PriceKey, PriceKey> = {
+      'full-price': 'base-price',
+      'base-price': 'earn',
+      'earn': 'full-price',
+    }
+
+    setKey((value) => map[value])
   }
 
   return (
     <Chip
       onClick={(e) => {
         e.stopPropagation()
-        setKey((val) => (val === 'p2' ? 'price' : 'p2'))
+        rotateDisplayedPrice()
       }}
       label={label[key]}
       size="small"
@@ -27,9 +40,15 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
       sx={{
         borderWidth: '2px',
         borderColor: 'secondary.main',
-        ...(key === 'p2' && {
+
+        ...(key === 'earn' && {
           color: 'success.main',
           fontWeight: 'bold',
+        }),
+
+        ...(key === 'base-price' && {
+          color: 'info.main',
+          fontStyle: 'italic',
         }),
       }}
       {...props}
