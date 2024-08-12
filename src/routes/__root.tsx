@@ -1,25 +1,25 @@
-import { CssBaseline } from '@mui/material'
-import { Shell } from './shell.tsx'
+import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { ThemeModeProvider } from '../theme-mode-provider.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ThemeModeProvider } from './theme-mode-provider.tsx'
+import { CssBaseline } from '@mui/material'
 
 const queryClient = new QueryClient()
 
-function App() {
-  return (
+export const Route = createRootRoute({
+  component: () => (
     <ThemeModeProvider>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools
           initialIsOpen={false}
-          buttonPosition={'bottom-left'}
+          buttonPosition="bottom-left"
         />
+        <TanStackRouterDevtools />
         <CssBaseline />
 
-        <Shell />
+        <Outlet />
       </QueryClientProvider>
     </ThemeModeProvider>
-  )
-}
-
-export default App
+  ),
+})
