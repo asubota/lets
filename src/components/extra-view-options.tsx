@@ -1,13 +1,12 @@
 import { FC, useContext } from 'react'
 import PaletteIcon from '@mui/icons-material/Palette'
 import { IconButton, Stack, useTheme } from '@mui/material'
-import { useAppActions } from '../store'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import { ColorModeContext } from '../theme-mode-provider.tsx'
+import { Link } from '@tanstack/react-router'
 
 export const ExtraViewOptions: FC = () => {
-  const { setMode } = useAppActions()
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
 
@@ -32,8 +31,9 @@ export const ExtraViewOptions: FC = () => {
       </IconButton>
 
       <IconButton
-        onClick={() => setMode('colors')}
+        component={Link}
         sx={{ color: 'text.secondary' }}
+        to="/colors"
       >
         <PaletteIcon />
       </IconButton>

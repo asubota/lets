@@ -18,7 +18,6 @@ import {
 } from 'react-hook-form'
 import { SearchForm } from './types.ts'
 import { ClickAwayListener, Container } from '@mui/material'
-import { ColorSettingsModal } from './components/color-settings-modal.tsx'
 import { SearchHistory } from './components/search-history.tsx'
 import { SearchSuggestions } from './components/search-suggestions.tsx'
 
@@ -115,7 +114,6 @@ export const Shell: FC = () => {
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
-      <ColorSettingsModal />
     </Container>
   )
 }

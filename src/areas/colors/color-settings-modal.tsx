@@ -1,6 +1,4 @@
 import { FC, useState } from 'react'
-import { Modal } from './modal.tsx'
-import { useAppActions, useAppMode } from '../store'
 import {
   Box,
   Button,
@@ -10,18 +8,22 @@ import {
   ToggleButtonGroup,
 } from '@mui/material'
 import { CirclePicker, HuePicker, ColorChangeHandler } from 'react-color'
-import { useAllVendors, useIsLoading } from '../use-data.ts'
-import { VendorChip } from './vendor-chip.tsx'
-import { useSetVendorColorsAction, useVendorColors } from '../store/colors.ts'
+import { useAllVendors, useIsLoading } from '../../use-data.ts'
+import {
+  useSetVendorColorsAction,
+  useVendorColors,
+} from '../../store/colors.ts'
+import { Modal } from '../../components/modal.tsx'
+import { VendorChip } from '../../components/vendor-chip.tsx'
+import { useNavigate } from '@tanstack/react-router'
 
 export const ColorSettingsModal: FC = () => {
-  const mode = useAppMode()
-  const { setMode } = useAppActions()
   const vendors = useAllVendors()
   const isLoading = useIsLoading()
   const [color, setColor] = useState('')
   const setVendorColors = useSetVendorColorsAction()
   const [activeVendor, setActiveVendor] = useState('')
+  const navigate = useNavigate()
 
   const c = useVendorColors()
 
@@ -68,14 +70,14 @@ export const ColorSettingsModal: FC = () => {
   const handleSave = () => {
     setVendorColors(colors)
     setActiveVendor('')
-    setMode('search')
+    navigate({ to: '/' })
   }
 
   const handleClose = () => {
-    setMode('search')
     setActiveVendor('')
     setColors(c)
     setFill('both')
+    navigate({ to: '/' })
   }
 
   const [fill, setFill] = useState<'color' | 'borderColor' | 'both' | 'bg'>(
@@ -89,14 +91,8 @@ export const ColorSettingsModal: FC = () => {
   }
 
   return (
-    <Modal
-      open={mode === 'colors'}
-      title=""
-      onSave={handleSave}
-      onClose={handleClose}
-    >
+    <Modal open title="" onSave={handleSave} onClose={handleClose}>
       <Box
-        component="div"
         sx={{
           mt: '20px',
           display: 'flex',
