@@ -1,148 +1,16 @@
 import { FC, useEffect, useRef, useState } from 'react'
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Paper,
-} from '@mui/material'
-import { createWorker } from 'tesseract.js'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { useAppActions } from '../store'
+import { Alert, Box, Button, CircularProgress } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import SearchIcon from '@mui/icons-material/Search'
+import { height, width } from './constants.ts'
+import { getCropArea, getStream, getWorker } from './tools.ts'
+import { Output } from './output.tsx'
+import { Blur } from './blur.tsx'
+import { ScanArea } from './scan-area.tsx'
+import { Cancel } from './cancel.tsx'
+import { Link } from '@tanstack/react-router'
 
-const getWorker = async () => {
-  return await createWorker(['ukr', 'eng'], 1)
-}
-
-const getStream = async () => {
-  try {
-    return await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'environment',
-      },
-    })
-  } catch (e) {
-    return await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: 'user',
-      },
-    })
-  }
-}
-
-const width = 140
-const height = 32
-
-interface CropArea {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-const Blur: FC<{ cropArea: CropArea }> = ({ cropArea }) => {
-  return (
-    <Box
-      width="100%"
-      height="100%"
-      component="svg"
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-      }}
-    >
-      <defs>
-        <mask id="mask">
-          <rect x="0" y="0" width="100%" height="100%" fill="white" />
-          <rect
-            x={cropArea.x}
-            y={cropArea.y}
-            width={cropArea.width}
-            height={cropArea.height}
-            fill="black"
-          />
-        </mask>
-      </defs>
-      <rect
-        x="0"
-        y="0"
-        width="100%"
-        height="100%"
-        mask="url(#mask)"
-        fill="rgba(0, 0, 0, 0.5)"
-      />
-    </Box>
-  )
-}
-
-const ScanArea: FC<{ cropArea: CropArea }> = ({ cropArea }) => {
-  return (
-    <Box
-      sx={{
-        position: 'absolute',
-        border: '1px solid',
-        borderColor: 'primary.main',
-        boxSizing: 'border-box',
-        pointerEvents: 'none',
-        left: cropArea.x,
-        top: cropArea.y,
-        width: cropArea.width,
-        height: cropArea.height,
-      }}
-    />
-  )
-}
-
-const Output: FC<{ cropArea: CropArea; output: string }> = ({
-  cropArea,
-  output,
-}) => {
-  return (
-    <Box
-      sx={{
-        position: 'absolute',
-        left: cropArea.x,
-        top: cropArea.y + height + 30,
-        zIndex: 1,
-        minWidth: cropArea.width,
-      }}
-    >
-      <Paper sx={{ pl: '4px', pr: '4px' }}>{output}</Paper>
-    </Box>
-  )
-}
-
-const getCropArea = (element: HTMLVideoElement) => {
-  const videoWidth = element.videoWidth
-  const videoHeight = element.videoHeight
-  const displayWidth = element.clientWidth
-  const displayHeight = element.clientHeight
-
-  const scaleX = displayWidth / videoWidth
-  const scaleY = displayHeight / videoHeight
-
-  const _width = width * scaleX
-  const _height = height * scaleY
-  const x = (displayWidth - width) / 2
-  const y = (displayHeight - height) / 2 - 120
-
-  return { x, y, width: _width, height: _height }
-}
-
-interface ScannerProps {
-  onSubmit(value: string): void
-}
-
-export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
+export const Scanner: FC = () => {
   const [running, setRunning] = useState(false)
   const [output, setOutput] = useState('')
   const [working, setWorking] = useState(false)
@@ -150,8 +18,6 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  const { setMode } = useAppActions()
 
   const [cropArea, setCropArea] = useState({
     x: 0,
@@ -225,7 +91,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
           height: cropArea.height,
         },
       })
-      setOutput(text)
+      setOutput(text.trim())
       await worker.terminate()
     } catch (e) {
       console.log('## e', e)
@@ -233,21 +99,6 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
 
     setWorking(false)
   }
-
-  const cancelIcon = (
-    <IconButton
-      onClick={() => setMode('search')}
-      sx={{
-        zIndex: 1,
-        position: 'absolute',
-        top: '15px',
-        left: '15px',
-        color: 'primary.main',
-      }}
-    >
-      <ArrowBackIcon />
-    </IconButton>
-  )
 
   const actions = (
     <Box
@@ -266,11 +117,10 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
       </Button>
 
       <Button
+        component={Link}
+        to={'/'}
+        search={output.length ? { s: output } : {}}
         variant="contained"
-        onClick={() => {
-          onSubmit(output)
-          setMode('search')
-        }}
       >
         <SearchIcon />
       </Button>
@@ -311,7 +161,7 @@ export const Scanner: FC<ScannerProps> = ({ onSubmit }) => {
           <CircularProgress sx={{ color: 'primary.main' }} />
         </Box>
       )}
-      {cancelIcon}
+      <Cancel />
       {running && actions}
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
