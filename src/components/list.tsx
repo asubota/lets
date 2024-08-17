@@ -38,6 +38,7 @@ export const List: FC<{ list: Product[]; search: string }> = ({
   return (
     <>
       <Toolbar
+        search={search}
         total={filteredList.length}
         uniqueVendors={uniqueVendors}
         filteredSearch={

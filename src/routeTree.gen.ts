@@ -13,20 +13,26 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const ScannerLazyImport = createFileRoute('/scanner')()
 const ColorsLazyImport = createFileRoute('/colors')()
-const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const ScannerLazyRoute = ScannerLazyImport.update({
+  path: '/scanner',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/scanner.lazy').then((d) => d.Route))
 
 const ColorsLazyRoute = ColorsLazyImport.update({
   path: '/colors',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/colors.lazy').then((d) => d.Route))
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
@@ -39,7 +45,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/colors': {
@@ -49,14 +55,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ColorsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/scanner': {
+      id: '/scanner'
+      path: '/scanner'
+      fullPath: '/scanner'
+      preLoaderRoute: typeof ScannerLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
+  IndexRoute,
   ColorsLazyRoute,
+  ScannerLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,14 +82,18 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/colors"
+        "/colors",
+        "/scanner"
       ]
     },
     "/": {
-      "filePath": "index.lazy.tsx"
+      "filePath": "index.tsx"
     },
     "/colors": {
       "filePath": "colors.lazy.tsx"
+    },
+    "/scanner": {
+      "filePath": "scanner.lazy.tsx"
     }
   }
 }

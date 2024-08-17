@@ -4,10 +4,11 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import StarIcon from '@mui/icons-material/Star'
 import { useAppActions, useAppMode } from '../store'
 import { useIsLoading } from '../use-data.ts'
+import { Link } from '@tanstack/react-router'
 
 export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
   const mode = useAppMode()
-  const { toggleFavs, setMode } = useAppActions()
+  const { toggleFavs } = useAppActions()
   const loading = useIsLoading()
 
   return (
@@ -26,9 +27,10 @@ export const AppBar: FC<{ children: ReactNode }> = ({ children }) => {
 
       <Box className="app-bar-right">
         <IconButton
+          component={Link}
+          to="/scanner"
           sx={{ color: 'text.secondary' }}
           disabled={loading || mode === 'favs'}
-          onClick={() => setMode('scan')}
         >
           <VisibilityIcon />
         </IconButton>

@@ -8,14 +8,17 @@ import {
 } from '../store'
 import GridViewIcon from '@mui/icons-material/GridView'
 import ReorderIcon from '@mui/icons-material/Reorder'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot'
 import { useSearchActions } from '../store/search.ts'
 import TuneIcon from '@mui/icons-material/Tune'
 import IosShareIcon from '@mui/icons-material/IosShare'
-import { handleTakeScreenshot } from '../tools.tsx'
+import { copyContent, handleTakeScreenshot } from '../tools.tsx'
 import GoogleIcon from '@mui/icons-material/Google'
+import { useLinkProps } from '@tanstack/react-router'
 
 interface ToolbarProps {
+  search: string
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
@@ -24,6 +27,21 @@ interface ToolbarProps {
 const handleGoogle = async () => {
   const text = await navigator.clipboard.readText()
   window.open(`https://www.google.com/search?q=${text}`, '_blank')
+}
+
+const BookmarkButton: FC<{ search: string }> = ({ search }) => {
+  const { href } = useLinkProps({ to: '/', search: { s: search } })
+  const fullUrl = window.origin + href
+
+  return (
+    <IconButton
+      size="small"
+      sx={{ color: 'text.secondary', mr: '20px' }}
+      onClick={() => copyContent(fullUrl)}
+    >
+      <BookmarkIcon />
+    </IconButton>
+  )
 }
 
 const RedDot: FC = () => {
@@ -43,6 +61,7 @@ const RedDot: FC = () => {
 }
 
 export const Toolbar: FC<ToolbarProps> = ({
+  search,
   total,
   uniqueVendors,
   filteredSearch,
@@ -98,6 +117,7 @@ export const Toolbar: FC<ToolbarProps> = ({
         )}
       </Box>
       <Box sx={{ ml: 'auto', display: 'flex' }}>
+        <BookmarkButton search={search} />
         <IconButton
           size="small"
           sx={{ color: 'text.secondary', mr: '20px' }}
