@@ -31,7 +31,9 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-
+      workbox: {
+        importScripts: ['src/sw2.js'],
+      },
       manifest: {
         name: 'Lets Bike',
         short_name: 'Lets Bike',

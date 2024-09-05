@@ -2,28 +2,10 @@ import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import { ExtraViewOptions } from './extra-view-options.tsx'
-
-function showNotification() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then((sw) => {
-      const options: NotificationOptions = {
-        body: 'Tra ta ta!',
-        icon: '/lets/logo.webp',
-      }
-
-      sw.showNotification('new SKU added', options)
-    })
-  }
-}
+import { useShowNotification } from '../hooks/use-show-notification.ts'
 
 export const Welcome = () => {
-  const doPush = () => {
-    Notification.requestPermission().then((result) => {
-      if (result === 'granted') {
-        showNotification()
-      }
-    })
-  }
+  const showNotification = useShowNotification('silex 400')
 
   return (
     <Box>
@@ -34,7 +16,7 @@ export const Welcome = () => {
         sx={{ mt: 4 }}
         color="textSecondary"
       >
-        <Box onClick={doPush}>Вітаю!</Box>
+        <Box onClick={showNotification}>Вітаю!</Box>
       </Typography>
 
       <Typography
