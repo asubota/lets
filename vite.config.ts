@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
-const base = '/lets'
+const base = '/lets/'
 
 export default defineConfig({
   base,
@@ -26,6 +26,7 @@ export default defineConfig({
     svgr(),
     basicSsl(),
     VitePWA({
+      scope: '/lets/',
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
@@ -40,7 +41,7 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: `${base}/192.png`,
+            src: `${base}192.png`,
             sizes: '192x192',
             type: 'image/png',
           },
