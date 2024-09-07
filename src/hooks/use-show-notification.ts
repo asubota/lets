@@ -14,7 +14,7 @@ export const useShowNotification = (s: string) => {
     Notification.requestPermission().then((result) => {
       if (result === 'granted' && 'serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then((sw) => {
-          return sw.showNotification('Мужчіна!', options)
+          return sw.showNotification('Мущіна, ХУЙ!', options)
         })
       }
     })
