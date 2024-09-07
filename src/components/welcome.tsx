@@ -5,7 +5,7 @@ import { ExtraViewOptions } from './extra-view-options.tsx'
 import { useShowNotification } from '../hooks/use-show-notification.ts'
 
 export const Welcome = () => {
-  const showNotification = useShowNotification('silex 405')
+  const showNotification = useShowNotification('SKD-55-84')
 
   return (
     <Box>
