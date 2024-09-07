@@ -32,7 +32,8 @@ export default defineConfig({
         enabled: true,
       },
       workbox: {
-        importScripts: ['src/sw2.js'],
+        importScripts: ['sw-4.js'],
+        navigateFallbackAllowlist: [new RegExp('/lets/')],
       },
       manifest: {
         name: 'Lets Bike',
