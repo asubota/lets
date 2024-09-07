@@ -1,14 +1,13 @@
 import { useLinkProps } from '@tanstack/react-router'
 
 export const useShowNotification = (s: string) => {
-  const { href } = useLinkProps({ to: '/', search: { s } })
-  const url = window.origin + href
+  const { href: to } = useLinkProps({ to: '/', search: { s } })
 
   return () => {
     const options: NotificationOptions = {
       icon: '/lets/logo.webp',
       body: s,
-      data: { s, url },
+      data: { s, to },
     }
 
     Notification.requestPermission().then((result) => {

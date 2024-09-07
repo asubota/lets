@@ -5,7 +5,7 @@ import { ExtraViewOptions } from './extra-view-options.tsx'
 import { useShowNotification } from '../hooks/use-show-notification.ts'
 
 export const Welcome = () => {
-  const showNotification = useShowNotification('SKD-55-84')
+  const showNotification = useShowNotification('GARNEAU BARYUM 020 BLACK 43')
 
   return (
     <Box>

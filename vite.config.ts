@@ -30,6 +30,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
+        navigateFallbackAllowlist: [new RegExp('/lets/')],
       },
       workbox: {
         importScripts: ['sw-4.js'],
