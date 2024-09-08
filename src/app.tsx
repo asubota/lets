@@ -12,11 +12,11 @@ declare module '@tanstack/react-router' {
 
 export const App: FC = () => {
   useEffect(() => {
-    const fn = (event: MessageEvent) => {
+    const fn = async (event: MessageEvent) => {
       if (event.data && event.data.type === 'navigate') {
         const to: string = event.data.to
 
-        router.navigate({ to })
+        await router.navigate({ to })
       }
     }
 
