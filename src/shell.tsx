@@ -18,7 +18,7 @@ import {
   UseFormSetValue,
 } from 'react-hook-form'
 import { SearchForm } from './types.ts'
-import { ClickAwayListener, Container } from '@mui/material'
+import { ClickAwayListener, Container, Divider, TextField } from '@mui/material'
 import { SearchHistory } from './components/search-history.tsx'
 import { SearchSuggestions } from './components/search-suggestions.tsx'
 import { getRouteApi } from '@tanstack/react-router'
@@ -125,6 +125,13 @@ export const Shell: FC = () => {
         <Loader />
       ) : (
         <List list={mode === 'favs' ? favs : list} search={search} />
+      )}
+
+      {!isLoading && mode === 'favs' && (
+        <>
+          <Divider sx={{ mt: 1, mb: 1 }} />
+          <TextField size="small" fullWidth sx={{ pl: 3, pr: 3 }} />
+        </>
       )}
 
       <LimitSearchModal list={list} />
