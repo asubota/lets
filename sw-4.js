@@ -15,7 +15,7 @@ self.addEventListener('notificationclick', (event) => {
             ...data,
           })
         } else {
-          clients.openWindow(data.url)
+          clients.openWindow(data.to)
         }
       })
   }
