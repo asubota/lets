@@ -1,59 +1,32 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
+import { ClickAwayListener, Portal } from '@mui/material'
+import { useSearch } from '../../use-data.ts'
 import {
-  SearchField,
-  List,
   LimitSearchModal,
+  List as List2,
   TableSettingsModal,
-} from './components'
-import { useAppMode, useHistoryActions } from './store'
-import { useFavs, useIsLoading, useSearch } from './use-data.ts'
-import { useSearchActions } from './store/search.ts'
-import { AppBar } from './components/app-bar.tsx'
-
+} from '../../components'
 import {
   Controller,
   FormProvider,
   SubmitHandler,
   useForm,
-  UseFormSetValue,
 } from 'react-hook-form'
-import { SearchForm } from './types.ts'
-import { ClickAwayListener, Container, Divider, TextField } from '@mui/material'
-import { SearchHistory } from './components/search-history.tsx'
-import { SearchSuggestions } from './components/search-suggestions.tsx'
-import { getRouteApi } from '@tanstack/react-router'
-import { Loader } from './components/loader.tsx'
+import { SearchForm } from '../../types.ts'
+import {
+  Redirecto,
+  SearchField,
+  SearchHistory,
+  SearchSuggestions,
+} from './components'
+import { useSearchActions } from '../../store/search.ts'
+import { useHistoryActions } from '../../store'
 
-const route = getRouteApi('/')
-
-const Redirecto: FC<{
-  setValue: UseFormSetValue<SearchForm>
-  setSearch(value: string): void
-}> = ({ setValue, setSearch }) => {
-  const { s } = route.useSearch()
-  const navigate = route.useNavigate()
-
-  useEffect(() => {
-    if (s?.length) {
-      navigate({ to: '/' }).then(() => {
-        setValue('input', s)
-        setSearch(s)
-      })
-    }
-  }, [setValue, navigate, setSearch, s])
-
-  return null
-}
-
-export const Shell: FC = () => {
+export const List: FC = () => {
   const methods = useForm<SearchForm>({ defaultValues: { input: '' } })
   const [search, setSearch] = useState('')
-  const { addHistoryItem } = useHistoryActions()
   const list = useSearch(search)
-  const favs = useFavs()
-  const mode = useAppMode()
-  const isLoading = useIsLoading()
-
+  const { addHistoryItem } = useHistoryActions()
   const { resetSearchVendors } = useSearchActions()
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
@@ -72,14 +45,14 @@ export const Shell: FC = () => {
   }
 
   return (
-    <Container sx={{ pl: 1, pr: 1, pb: 1 }}>
-      <AppBar>
+    <div>
+      <Redirecto setValue={methods.setValue} setSearch={setSearch} />
+
+      <Portal container={() => document.getElementById('app-bar-center')}>
         <FormProvider {...methods}>
-          <Redirecto setValue={methods.setValue} setSearch={setSearch} />
           <ClickAwayListener onClickAway={hideHints}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
               <SearchField
-                disabled={mode === 'favs'}
                 onSubmit={methods.handleSubmit(onSubmit)}
                 onFocus={() => {
                   setShowHistory(true)
@@ -119,23 +92,12 @@ export const Shell: FC = () => {
             </form>
           </ClickAwayListener>
         </FormProvider>
-      </AppBar>
+      </Portal>
 
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <List list={mode === 'favs' ? favs : list} search={search} />
-      )}
-
-      {!isLoading && mode === 'favs' && (
-        <>
-          <Divider sx={{ mt: 1, mb: 1 }} />
-          <TextField size="small" fullWidth sx={{ pl: 3, pr: 3 }} />
-        </>
-      )}
+      <List2 list={list} search={search} />
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
-    </Container>
+    </div>
   )
 }

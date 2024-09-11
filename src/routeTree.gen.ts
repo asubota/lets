@@ -13,7 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
 
 // Create Virtual Routes
 
@@ -32,20 +34,30 @@ const ColorsLazyRoute = ColorsLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/colors.lazy').then((d) => d.Route))
 
-const IndexRoute = IndexImport.update({
-  path: '/',
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
+
+const LayoutIndexRoute = LayoutIndexImport.update({
+  path: '/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutFavoritesRoute = LayoutFavoritesImport.update({
+  path: '/favorites',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
     '/colors': {
@@ -62,13 +74,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScannerLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_layout/favorites': {
+      id: '/_layout/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof LayoutFavoritesImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/': {
+      id: '/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutIndexImport
+      parentRoute: typeof LayoutImport
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  IndexRoute,
+  LayoutRoute: LayoutRoute.addChildren({
+    LayoutFavoritesRoute,
+    LayoutIndexRoute,
+  }),
   ColorsLazyRoute,
   ScannerLazyRoute,
 })
@@ -81,19 +110,31 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
+        "/_layout",
         "/colors",
         "/scanner"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_layout": {
+      "filePath": "_layout.tsx",
+      "children": [
+        "/_layout/favorites",
+        "/_layout/"
+      ]
     },
     "/colors": {
       "filePath": "colors.lazy.tsx"
     },
     "/scanner": {
       "filePath": "scanner.lazy.tsx"
+    },
+    "/_layout/favorites": {
+      "filePath": "_layout/favorites.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/": {
+      "filePath": "_layout/index.tsx",
+      "parent": "/_layout"
     }
   }
 }
