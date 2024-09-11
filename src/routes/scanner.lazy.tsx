@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Scanner } from '../areas/scanner/scanner.tsx'
+import { Scanner } from '../areas'
 
 export const Route = createLazyFileRoute('/scanner')({
   component: Scanner,

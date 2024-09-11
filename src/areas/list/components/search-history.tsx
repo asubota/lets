@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { IconButton, List, ListItem, ListItemText } from '@mui/material'
-import { useHistoryActions, useHistoryItems } from '../store'
+import { useHistoryActions, useHistoryItems } from '../../../store'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { FadePopper } from './fade-popper.tsx'
+import { FadePopper } from '../../../components/fade-popper.tsx'
 
 export const SearchHistory: FC<{
   setValue(value: string): void

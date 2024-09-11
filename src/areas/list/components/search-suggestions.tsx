@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { FadePopper } from './fade-popper.tsx'
 import { List, ListItem, ListItemText } from '@mui/material'
-import { useSearch } from '../use-data.ts'
-import { getHighlightedText } from '../tools.tsx'
+import { useSearch } from '../../../use-data.ts'
+import { FadePopper } from '../../../components/fade-popper.tsx'
+import { getHighlightedText } from '../../../tools.tsx'
 
 interface SearchSuggestionsProps {
   open: boolean

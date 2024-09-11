@@ -2,16 +2,16 @@ import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import { Cancel, Search } from '@mui/icons-material'
 import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useIsLoading } from '../use-data.ts'
+
 import LoopIcon from '@mui/icons-material/Loop'
 import { clsx } from 'clsx'
-import { SearchForm } from '../types.ts'
+import { useIsLoading } from '../../../use-data.ts'
+import { SearchForm } from '../../../types.ts'
 
 export const SearchField: FC<{
-  disabled: boolean
   onSubmit(): void
   onFocus(): void
-}> = ({ disabled, onSubmit, onFocus }) => {
+}> = ({ onSubmit, onFocus }) => {
   const loading = useIsLoading()
   const { control, reset } = useFormContext<SearchForm>()
 
@@ -34,14 +34,13 @@ export const SearchField: FC<{
             size="small"
             {...field}
             onFocus={onFocus}
-            disabled={loading || disabled}
+            disabled={loading}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end" sx={{ marginRight: -2 }}>
                   <IconButton
                     onClick={handleFormReset}
                     size="small"
-                    disabled={disabled}
                     sx={{
                       'color': 'text.secondary',
                       'visibility': field.value ? 'visible' : 'hidden',
