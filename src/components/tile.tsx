@@ -1,4 +1,4 @@
-import { FC, memo, useState } from 'react'
+import { FC, memo, MouseEventHandler, useState } from 'react'
 import { Product } from '../types.ts'
 import { DetailsPopup } from './details-popup.tsx'
 import { Box, Card, Chip, IconButton } from '@mui/material'
@@ -14,6 +14,7 @@ import { HiddenInput } from './hidden-input.tsx'
 import { Stock } from './stock.tsx'
 import { useMatchRoute } from '@tanstack/react-router'
 import SettingsIcon from '@mui/icons-material/Settings'
+import { TileSettings } from './tile-settings.tsx'
 
 export const Tile: FC<{
   p: Product
@@ -25,6 +26,7 @@ export const Tile: FC<{
     const [details, setDetails] = useState<Product | null>(null)
     const matchRoute = useMatchRoute()
     const iFavouriteRoute = !!matchRoute({ to: '/favorites' })
+    const [showSettings, setShowSettings] = useState(false)
 
     const handleCardClick = () => {
       if (p.link || p.pics) {
@@ -32,11 +34,17 @@ export const Tile: FC<{
       }
     }
 
+    const handleToggleSettings: MouseEventHandler = (e) => {
+      e.stopPropagation()
+      setShowSettings((value) => !value)
+    }
+
     return (
       <>
         {details && (
           <DetailsPopup details={details} onClose={() => setDetails(null)} />
         )}
+
         <Card
           className="product-tile"
           variant="outlined"
@@ -45,6 +53,7 @@ export const Tile: FC<{
               backgroundColor: '#ea2b060f',
             }),
             'p': 1,
+            'position': 'relative',
             'display': 'grid',
             'rowGap': '12px',
             'columnGap': '4px',
@@ -61,6 +70,23 @@ export const Tile: FC<{
           }}
           onClick={handleCardClick}
         >
+          {iFavouriteRoute && (
+            <IconButton
+              size="small"
+              sx={{
+                color: 'secondary.main',
+                position: 'absolute',
+                top: '0',
+                right: '0',
+                zIndex: 10,
+              }}
+              data-no-export
+              onClick={handleToggleSettings}
+            >
+              <SettingsIcon />
+            </IconButton>
+          )}
+
           <Box
             sx={{
               gridArea: 'name',
@@ -84,57 +110,62 @@ export const Tile: FC<{
               await copyContent(p.sku)
             }}
           />
+          {showSettings && (
+            <Box
+              sx={{
+                gridArea: 'meta',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <TileSettings />
+            </Box>
+          )}
 
-          <Box
-            sx={{
-              gridArea: 'meta',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-          >
-            <PriceChip product={p} />
-            <VendorChip vendor={p.vendor} />
+          {!showSettings && (
+            <Box
+              sx={{
+                gridArea: 'meta',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <PriceChip product={p} />
+              <VendorChip vendor={p.vendor} />
 
-            {p.pics && (
-              <ImageIcon color="secondary" fontSize="small" data-no-export />
-            )}
-            {p.link && (
-              <LinkIcon color="secondary" fontSize="small" data-no-export />
-            )}
+              {p.pics && (
+                <ImageIcon color="secondary" fontSize="small" data-no-export />
+              )}
+              {p.link && (
+                <LinkIcon color="secondary" fontSize="small" data-no-export />
+              )}
 
-            <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
-              {iFavouriteRoute && (
+              <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
                 <IconButton
                   size="small"
-                  sx={{ pt: 0, pb: 0, color: 'secondary.main' }}
                   data-no-export
+                  sx={{
+                    p: 0,
+                    mr: 1,
+                    color: isFav ? 'warning.light' : 'secondary.light',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggle()
+                  }}
                 >
-                  <SettingsIcon />
+                  {isFav ? <StarIcon /> : <StarBorderIcon />}
                 </IconButton>
-              )}
-              <IconButton
-                size="small"
-                data-no-export
-                sx={{
-                  pt: 0,
-                  pb: 0,
-                  color: isFav ? 'warning.light' : 'secondary.light',
-                }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  toggle()
-                }}
-              >
-                {isFav ? <StarIcon /> : <StarBorderIcon />}
-              </IconButton>
 
-              <HiddenInput>
-                <Stock stock={p.stock} bordered />
-              </HiddenInput>
+                <HiddenInput>
+                  <Stock stock={p.stock} bordered />
+                </HiddenInput>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Card>
       </>
     )
