@@ -1,11 +1,6 @@
 import { Box, ButtonGroup, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
-import {
-  useAppActions,
-  useAppMode,
-  useAppView,
-  useTableActions,
-} from '../store'
+import { useAppActions, useAppView, useTableActions } from '../store'
 import GridViewIcon from '@mui/icons-material/GridView'
 import ReorderIcon from '@mui/icons-material/Reorder'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
@@ -15,7 +10,7 @@ import TuneIcon from '@mui/icons-material/Tune'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { copyContent, handleTakeScreenshot } from '../tools.tsx'
 import GoogleIcon from '@mui/icons-material/Google'
-import { useLinkProps } from '@tanstack/react-router'
+import { useLinkProps, useMatchRoute } from '@tanstack/react-router'
 
 interface ToolbarProps {
   search: string
@@ -70,9 +65,11 @@ export const Toolbar: FC<ToolbarProps> = ({
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
   const { toggleLimitModal } = useSearchActions()
-  const mode = useAppMode()
 
-  const fewVendorsAvailable = uniqueVendors.length > 1 && mode === 'search'
+  const matchRoute = useMatchRoute()
+  const isMainRoute = !!matchRoute({ to: '/' })
+
+  const fewVendorsAvailable = uniqueVendors.length > 1
 
   return (
     <Box
@@ -89,7 +86,7 @@ export const Toolbar: FC<ToolbarProps> = ({
         >
           <IconButton
             size="small"
-            disabled={uniqueVendors.length < 2 || mode !== 'search'}
+            disabled={uniqueVendors.length < 2}
             sx={{ position: 'relative', color: 'text.secondary' }}
           >
             <TroubleshootIcon />
@@ -100,7 +97,7 @@ export const Toolbar: FC<ToolbarProps> = ({
             variant="body2"
             sx={{
               fontWeight: 'bold',
-              color: mode === 'search' ? 'text.secondary' : 'text.disabled',
+              color: isMainRoute ? 'text.disabled' : 'text.secondary',
             }}
           >
             {total}
@@ -117,16 +114,18 @@ export const Toolbar: FC<ToolbarProps> = ({
         )}
       </Box>
       <Box sx={{ ml: 'auto', display: 'flex' }}>
-        <BookmarkButton search={search} />
-        <IconButton
-          size="small"
-          sx={{ color: 'text.secondary', mr: '20px' }}
-          onClick={handleGoogle}
-        >
-          <GoogleIcon />
-        </IconButton>
+        {isMainRoute && <BookmarkButton search={search} />}
+        {isMainRoute && (
+          <IconButton
+            size="small"
+            sx={{ color: 'text.secondary', mr: '20px' }}
+            onClick={handleGoogle}
+          >
+            <GoogleIcon />
+          </IconButton>
+        )}
 
-        {view === 'table' && (
+        {isMainRoute && view === 'table' && (
           <IconButton
             sx={{ ml: 'auto', color: 'text.secondary' }}
             onClick={toggleSettings}

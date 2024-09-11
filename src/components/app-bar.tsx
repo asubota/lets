@@ -7,7 +7,6 @@ import { Link, useMatchRoute } from '@tanstack/react-router'
 
 export const AppBar: FC = () => {
   const loading = useIsLoading()
-
   const matchRoute = useMatchRoute()
   const isFavouritesRoute = !!matchRoute({ to: '/favorites' })
 
