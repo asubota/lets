@@ -2,11 +2,8 @@ import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import { ExtraViewOptions } from './extra-view-options.tsx'
-import { useShowNotification } from '../hooks/use-show-notification.ts'
 
 export const Welcome = () => {
-  const showNotification = useShowNotification('GARNEAU BARYUM 020 BLACK 43')
-
   return (
     <Box>
       <Typography
@@ -16,7 +13,7 @@ export const Welcome = () => {
         sx={{ mt: 4 }}
         color="textSecondary"
       >
-        <Box onClick={showNotification}>Вітаю!</Box>
+        <Box>Вітаю!</Box>
       </Typography>
 
       <Typography

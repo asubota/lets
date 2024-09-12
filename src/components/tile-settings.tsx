@@ -1,12 +1,25 @@
 import { FC } from 'react'
 import { InputAdornment, TextField } from '@mui/material'
+import {
+  useGetMaxBySku,
+  useGetMinBySku,
+  useSkuSettingsActions,
+} from '../store/sku-settings.ts'
 
-export const TileSettings: FC = () => {
+export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
+  const min = useGetMinBySku(sku)
+  const max = useGetMaxBySku(sku)
+  const { setSetting } = useSkuSettingsActions()
+
   return (
     <>
       <TextField
         type="number"
         size="small"
+        defaultValue={min}
+        onBlur={(e) => {
+          setSetting(sku, { min: e.target.value.replace(/\D/g, '') })
+        }}
         InputProps={{
           startAdornment: (
             <InputAdornment
@@ -32,6 +45,10 @@ export const TileSettings: FC = () => {
       <TextField
         type="number"
         size="small"
+        defaultValue={max}
+        onBlur={(e) => {
+          setSetting(sku, { max: e.target.value.replace(/\D/g, '') })
+        }}
         InputProps={{
           startAdornment: (
             <InputAdornment

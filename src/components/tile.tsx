@@ -123,7 +123,7 @@ export const Tile: FC<{
                 gap: '8px',
               }}
             >
-              <TileSettings />
+              <TileSettings sku={p.sku} />
             </Box>
           )}
 

@@ -81,6 +81,12 @@ const useData = () => {
   })
 }
 
+export const useNotifyData = () => {
+  const { data } = useData()
+
+  return data
+}
+
 export const useIsLoading = () => {
   const { isFetching } = useData()
 
