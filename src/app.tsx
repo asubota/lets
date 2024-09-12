@@ -22,7 +22,7 @@ export const App: FC = () => {
 
         const sku: string = event.data.sku
         if (sku) {
-          await router.navigate({ to: '/', params: { s: sku } })
+          await router.navigate({ to: '/', search: { s: sku } })
         }
       }
     }
