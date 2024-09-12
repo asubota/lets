@@ -29,6 +29,10 @@ export const Tile: FC<{
     const [showSettings, setShowSettings] = useState(false)
 
     const handleCardClick = () => {
+      if (showSettings) {
+        return
+      }
+
       if (p.link || p.pics) {
         setDetails(p)
       }
