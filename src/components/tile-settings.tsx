@@ -8,7 +8,19 @@ export const TileSettings: FC = () => {
         type="number"
         size="small"
         InputProps={{
-          startAdornment: <InputAdornment position="start">min</InputAdornment>,
+          startAdornment: (
+            <InputAdornment
+              sx={{
+                '& p': {
+                  fontSize: '12px',
+                  color: 'text.dark',
+                },
+              }}
+              position="start"
+            >
+              min
+            </InputAdornment>
+          ),
         }}
         sx={{
           '& input': {
@@ -21,7 +33,19 @@ export const TileSettings: FC = () => {
         type="number"
         size="small"
         InputProps={{
-          startAdornment: <InputAdornment position="start">max</InputAdornment>,
+          startAdornment: (
+            <InputAdornment
+              sx={{
+                '& p': {
+                  fontSize: '12px',
+                  color: 'text.dark',
+                },
+              }}
+              position="start"
+            >
+              max
+            </InputAdornment>
+          ),
         }}
         sx={{
           '& input': {
