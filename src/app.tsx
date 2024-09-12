@@ -16,7 +16,14 @@ export const App: FC = () => {
       if (event.data && event.data.type === 'navigate') {
         const to: string = event.data.to
 
-        await router.navigate({ to })
+        if (to) {
+          await router.navigate({ to })
+        }
+
+        const sku: string = event.data.sku
+        if (sku) {
+          await router.navigate({ to: '/', params: { s: sku } })
+        }
       }
     }
 
