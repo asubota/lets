@@ -28,11 +28,11 @@ export const useNotifyAboutChange = () => {
       const max = parseInt(settings[p.sku].max, 10)
 
       if (stock <= min) {
-        notify(p.name, `${p.sku}, цього стало менше ніж ${min}`)
+        notify(p.name, `${p.sku}, цього стало менше ніж ${min}`, p.sku)
       }
 
       if (stock >= max) {
-        notify(p.name, `${p.sku}, цього стало більше ніж ${max}`)
+        notify(p.name, `${p.sku}, цього стало більше ніж ${max}`, p.sku)
       }
     })
   }, [data, notify, settings])

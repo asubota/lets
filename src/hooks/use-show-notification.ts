@@ -1,9 +1,9 @@
 export const useShowNotification = () => {
-  return (title: string, body: string) => {
+  return (title: string, body: string, sku: string) => {
     const options: NotificationOptions = {
       icon: '/lets/logo.webp',
       body,
-      data: { s: '', to: '' },
+      data: { s: '', to: '', sku },
     }
 
     Notification.requestPermission().then((result) => {
