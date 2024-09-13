@@ -15,3 +15,10 @@ export interface Product {
 export interface SearchForm {
   input: string
 }
+
+export interface NotificationData {
+  s: string
+  to: string
+  sku: string
+  type: 'navigate'
+}
