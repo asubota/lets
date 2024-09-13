@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen.ts'
+import { NotificationData } from './types.ts'
 
 const router = createRouter({ routeTree })
 
@@ -12,15 +13,15 @@ declare module '@tanstack/react-router' {
 
 export const App: FC = () => {
   useEffect(() => {
-    const fn = async (event: MessageEvent) => {
+    const fn = async (event: MessageEvent<NotificationData>) => {
       if (event.data && event.data.type === 'navigate') {
-        const to: string = event.data.to
+        const to = event.data.to
 
         if (to) {
           await router.navigate({ to })
         }
 
-        const sku: string = event.data.sku
+        const sku = event.data.sku
         if (sku) {
           await router.navigate({ to: '/', search: { s: sku } })
         }
