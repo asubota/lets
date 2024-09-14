@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { ClickAwayListener, Portal } from '@mui/material'
-import { useSearch } from '../../use-data.ts'
+import { useIsLoading, useSearch } from '../../use-data.ts'
 import {
   LimitSearchModal,
   List as List2,
@@ -21,6 +21,7 @@ import {
 } from './components'
 import { useSearchActions } from '../../store/search.ts'
 import { useHistoryActions } from '../../store'
+import { Loader } from '../../components/loader.tsx'
 
 export const List: FC = () => {
   const methods = useForm<SearchForm>({ defaultValues: { input: '' } })
@@ -30,6 +31,7 @@ export const List: FC = () => {
   const { resetSearchVendors } = useSearchActions()
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
+  const isLoading = useIsLoading()
 
   const onSubmit: SubmitHandler<SearchForm> = ({ input }) => {
     const term = input.trim()
@@ -45,7 +47,7 @@ export const List: FC = () => {
   }
 
   return (
-    <div>
+    <>
       <Redirecto setValue={methods.setValue} setSearch={setSearch} />
 
       <Portal container={() => document.getElementById('app-bar-center')}>
@@ -94,10 +96,10 @@ export const List: FC = () => {
         </FormProvider>
       </Portal>
 
-      <List2 list={list} search={search} />
+      {isLoading ? <Loader /> : <List2 list={list} search={search} />}
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
-    </div>
+    </>
   )
 }
