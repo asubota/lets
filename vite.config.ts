@@ -1,25 +1,57 @@
-import { defineConfig } from 'vite'
+import { defineConfig, Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { rollup, InputOptions, OutputOptions } from 'rollup'
+import rollupPluginTypescript from '@rollup/plugin-typescript'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 const base = '/lets/'
 
-export default defineConfig({
-  base,
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-          swiper: ['swiper'],
-          mui: ['@mui/material'],
-        },
-      },
-    },
+const swFile = 'sw-custom.ts'
+
+const CompileTsServiceWorker = (): Plugin => ({
+  name: 'compile-typescript-service-worker',
+  async buildStart() {
+    await compileServiceWorker()
   },
+  async writeBundle() {
+    await compileServiceWorker()
+  },
+  async watchChange(id) {
+    if (id.endsWith(swFile)) {
+      console.log('Service Worker updated. Recompiling...')
+      await compileServiceWorker()
+    }
+  },
+
+  async handleHotUpdate({ file }) {
+    if (file.endsWith(swFile)) {
+      console.log('Service Worker file changed. Recompiling...')
+      await compileServiceWorker()
+    }
+  },
+})
+
+async function compileServiceWorker() {
+  const inputOptions: InputOptions = {
+    input: `src/${swFile}`,
+    plugins: [rollupPluginTypescript({}), nodeResolve()],
+  }
+
+  const outputOptions: OutputOptions = {
+    file: `public/${swFile.replace('.ts', '.js')}`,
+    format: 'es',
+  }
+
+  const bundle = await rollup(inputOptions)
+  await bundle.write(outputOptions)
+  await bundle.close()
+}
+
+export default defineConfig({
   plugins: [
     react(),
     TanStackRouterVite(),
@@ -33,10 +65,11 @@ export default defineConfig({
         navigateFallbackAllowlist: [new RegExp('/lets/')],
       },
       workbox: {
-        importScripts: ['sw-4.js'],
+        importScripts: [swFile.replace('.ts', '.js')],
         navigateFallbackAllowlist: [new RegExp('/lets/')],
       },
       manifest: {
+        scope: '/lets/',
         name: 'Lets Bike',
         short_name: 'Lets Bike',
         description: '',
@@ -52,6 +85,7 @@ export default defineConfig({
         ],
       },
     }),
+    CompileTsServiceWorker(),
   ],
   server: {
     port: 8000,

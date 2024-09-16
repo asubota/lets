@@ -1,8 +1,10 @@
-self.addEventListener('notificationclick', (event) => {
+const sw = self as unknown as ServiceWorkerGlobalScope
+
+sw.addEventListener('notificationclick', (event) => {
   const data = event.notification.data
 
   const doNavigation = async () => {
-    return clients
+    return sw.clients
       .matchAll({ type: 'window', includeUncontrolled: true })
       .then((windowClients) => {
         const focusedClient = windowClients.find(
@@ -15,7 +17,7 @@ self.addEventListener('notificationclick', (event) => {
             ...data,
           })
         } else {
-          clients.openWindow(data.to)
+          sw.clients.openWindow(data.to)
         }
       })
   }
