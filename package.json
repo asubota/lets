@@ -30,6 +30,7 @@
     "zustand": "4.5.5"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "11.1.6",
     "@tanstack/eslint-plugin-query": "5.51.15",
     "@tanstack/router-devtools": "1.48.1",
     "@tanstack/router-plugin": "1.47.0",
@@ -46,8 +47,8 @@
     "gh-pages": "6.1.1",
     "prettier": "3.3.3",
     "sass": "1.77.8",
-    "typescript": "5.5.4",
-    "vite": "5.4.3",
+    "typescript": "5.6.2",
+    "vite": "5.4.5",
     "vite-plugin-pwa": "0.20.5"
   }
 }
