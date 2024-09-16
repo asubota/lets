@@ -24,3 +24,7 @@ sw.addEventListener('notificationclick', (event) => {
 
   event.waitUntil(doNavigation().then(() => event.notification.close()))
 })
+
+sw.addEventListener('fetch', (event) => {
+  console.log('## event.request.url', event.request.url)
+})
