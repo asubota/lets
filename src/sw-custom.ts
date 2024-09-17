@@ -1,4 +1,4 @@
-import { AppMessage } from './types.ts'
+import { AppMessage, NotificationData } from './types.ts'
 
 const sw = self as unknown as ServiceWorkerGlobalScope
 
@@ -30,7 +30,7 @@ function notifyApp() {
 }
 
 sw.addEventListener('notificationclick', (event) => {
-  const data = event.notification.data
+  const data: NotificationData = event.notification.data
 
   const doNavigation = async () => {
     return sw.clients
@@ -43,12 +43,14 @@ sw.addEventListener('notificationclick', (event) => {
         if (focusedClient) {
           const message: AppMessage = {
             type: 'navigate',
-            ...data,
+            payload: {
+              sku: data.sku,
+            },
           }
 
           focusedClient.postMessage(message)
         } else {
-          sw.clients.openWindow(data.to)
+          sw.clients.openWindow('/lets/')
         }
       })
   }
@@ -60,7 +62,10 @@ sw.addEventListener('message', async (event) => {
   const message: AppMessage = event.data
 
   if (message.type === 'push-me') {
-    await sw.registration.showNotification(message.title, message.options)
+    await sw.registration.showNotification(
+      message.payload.title,
+      message.payload.options,
+    )
   }
 })
 

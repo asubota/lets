@@ -37,16 +37,18 @@ export const useNotifyAboutChange = () => {
       const min = parseInt(settings[p.sku].min, 10)
       const max = parseInt(settings[p.sku].max, 10)
 
-      const data: NotificationData = { sku: p.sku, to: '/', type: 'navigate' }
+      const data: NotificationData = { sku: p.sku }
 
       if (stock <= min) {
         const message: AppMessage = {
           type: 'push-me' as const,
-          title: p.name,
-          options: {
-            body: `${p.sku}, цього менше ніж ${min}`,
-            icon: '/lets/logo.webp',
-            data,
+          payload: {
+            title: p.name,
+            options: {
+              body: `${p.sku}, цього менше ніж ${min}`,
+              icon: '/lets/logo.webp',
+              data,
+            },
           },
         }
 
@@ -56,11 +58,13 @@ export const useNotifyAboutChange = () => {
       if (stock >= max) {
         const message: AppMessage = {
           type: 'push-me' as const,
-          title: p.name,
-          options: {
-            body: `${p.sku}, цього більше ніж ${max}`,
-            icon: '/lets/logo.webp',
-            data,
+          payload: {
+            title: p.name,
+            options: {
+              body: `${p.sku}, цього більше ніж ${max}`,
+              icon: '/lets/logo.webp',
+              data,
+            },
           },
         }
 

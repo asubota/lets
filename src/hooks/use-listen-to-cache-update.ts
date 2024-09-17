@@ -18,5 +18,5 @@ export const useListenToCacheUpdate = () => {
     return () => {
       navigator.serviceWorker.removeEventListener('message', fn)
     }
-  }, [])
+  }, [queryClient])
 }
