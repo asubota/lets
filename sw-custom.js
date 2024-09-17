@@ -28,7 +28,9 @@ sw.addEventListener('notificationclick', (event) => {
             if (focusedClient) {
                 const message = {
                     type: 'navigate',
-                    ...data,
+                    payload: {
+                        sku: data.sku,
+                    },
                 };
                 focusedClient.postMessage(message);
             }
@@ -42,15 +44,7 @@ sw.addEventListener('notificationclick', (event) => {
 sw.addEventListener('message', async (event) => {
     const message = event.data;
     if (message.type === 'push-me') {
-        await sw.registration.showNotification(message.title, {
-            ...message.options,
-            tag: message.title,
-            silent: false,
-            data: {
-                ...message.options.data,
-                id: message.title,
-            },
-        });
+        await sw.registration.showNotification(message.payload.title, message.payload.options);
     }
 });
 sw.addEventListener('fetch', (event) => {
