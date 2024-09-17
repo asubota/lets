@@ -59,15 +59,15 @@ sw.addEventListener('fetch', (event) => {
                     const now = new Date();
                     if (isStale(cachedDate, now)) {
                         console.log('Cache is stale, fetching new data...');
-                        return fetchAndCache(event.request, cache).then((response) => {
+                        fetchAndCache(event.request, cache).then(() => {
+                            console.log('Cache updated, app notified.');
                             notifyApp();
-                            return response;
                         });
                     }
                     else {
                         console.log('Cache is still valid, returning cached data.');
-                        return cachedResponse;
                     }
+                    return cachedResponse;
                 }
             }
             console.log('No cache found, fetching new data...');
