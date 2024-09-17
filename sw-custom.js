@@ -33,7 +33,7 @@ sw.addEventListener('notificationclick', (event) => {
                 focusedClient.postMessage(message);
             }
             else {
-                sw.clients.openWindow(data.to);
+                sw.clients.openWindow('/lets/');
             }
         });
     };
@@ -42,7 +42,15 @@ sw.addEventListener('notificationclick', (event) => {
 sw.addEventListener('message', async (event) => {
     const message = event.data;
     if (message.type === 'push-me') {
-        await sw.registration.showNotification(message.title, message.options);
+        await sw.registration.showNotification(message.title, {
+            ...message.options,
+            tag: message.title,
+            silent: false,
+            data: {
+                ...message.options.data,
+                id: message.title,
+            },
+        });
     }
 });
 sw.addEventListener('fetch', (event) => {
