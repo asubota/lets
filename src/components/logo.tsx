@@ -11,12 +11,7 @@ export const Logo: FC = () => {
         width: '220px',
       }}
     >
-      <Box
-        component="img"
-        src="/lets/logo.webp"
-        alt="Logo"
-        sx={{ width: '100%' }}
-      />
+      <Box component="img" src="/logo.webp" alt="Logo" sx={{ width: '100%' }} />
     </Box>
   )
 }

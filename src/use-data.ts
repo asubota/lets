@@ -4,6 +4,7 @@ import { useFavsItems } from './store/favs.ts'
 import { useMemo } from 'react'
 import { useBikeId } from './store'
 import { getUniqueVendors } from './tools.tsx'
+import { CACHE_BASE_KEY } from './constants.ts'
 
 interface Column {
   id: string
@@ -75,8 +76,8 @@ const getData = async (id: string): Promise<Product[]> => {
 const useData = () => {
   const id = useBikeId()
   return useQuery<Product[]>({
-    staleTime: 30 * 60 * 1000,
-    queryKey: ['lets-bike-base', id],
+    staleTime: 1000 * 60 * 12, // 12 minutes
+    queryKey: [CACHE_BASE_KEY, id],
     queryFn: () => getData(id),
   })
 }

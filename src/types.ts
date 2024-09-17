@@ -16,9 +16,13 @@ export interface SearchForm {
   input: string
 }
 
-export interface NotificationData {
-  s: string
-  to: string
-  sku: string
-  type: 'navigate'
-}
+export type NotificationData =
+  | {
+      type: 'navigate'
+      s: string
+      to: string
+      sku: string
+    }
+  | {
+      type: 'cache-update'
+    }
