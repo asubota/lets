@@ -52,13 +52,24 @@ async function compileServiceWorker() {
 }
 
 export default defineConfig({
+  base,
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          swiper: ['swiper'],
+          mui: ['@mui/material'],
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     TanStackRouterVite(),
     svgr(),
     basicSsl(),
     VitePWA({
-      scope: '/lets/',
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
@@ -99,17 +110,15 @@ export default defineConfig({
         ],
       },
       manifest: {
-        scope: '/lets/',
-        start_url: '/lets/',
         name: 'Lets Bike',
         short_name: 'Lets Bike',
-        description: '',
+        description: 'Lets Bike',
         theme_color: '#ea2b06',
         background_color: '#525252',
         display: 'standalone',
         icons: [
           {
-            src: '/192.png',
+            src: `${base}192.png`,
             sizes: '192x192',
             type: 'image/png',
           },

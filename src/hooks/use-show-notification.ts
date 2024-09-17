@@ -5,7 +5,7 @@ export const useShowNotification = () => {
     const data: NotificationData = { s: sku, to: '/', sku, type: 'navigate' }
 
     const options: NotificationOptions = {
-      icon: '/logo.webp',
+      icon: '/lets/logo.webp',
       body,
       data,
     }
