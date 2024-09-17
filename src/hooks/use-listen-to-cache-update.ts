@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { NotificationData } from '../types.ts'
+import { AppMessage } from '../types.ts'
 import { useQueryClient } from '@tanstack/react-query'
 import { CACHE_BASE_KEY } from '../constants.ts'
 
@@ -7,9 +7,9 @@ export const useListenToCacheUpdate = () => {
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    const fn = async (event: MessageEvent<NotificationData>) => {
+    const fn = async (event: MessageEvent<AppMessage>) => {
       if (event.data && event.data.type === 'cache-update') {
-        queryClient.invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
+        await queryClient.invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
       }
     }
 

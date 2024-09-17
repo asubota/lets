@@ -1,6 +1,18 @@
 import { useNotifyData } from '../use-data.ts'
 import { useEffect } from 'react'
-import { useShowNotification } from './use-show-notification.ts'
+import { AppMessage, NotificationData } from '../types.ts'
+
+const sendMessageToWorker = (message: AppMessage) => {
+  Notification.requestPermission().then((result) => {
+    if (result === 'granted' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(() => {
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage(message)
+        }
+      })
+    }
+  })
+}
 
 export const useNotifyAboutChange = () => {
   const data = useNotifyData()
@@ -8,8 +20,6 @@ export const useNotifyAboutChange = () => {
   const settings = JSON.parse(
     localStorage.getItem('lets-bike-sku-settings') || '{"state": {"data": {}}}',
   ).state.data
-
-  const notify = useShowNotification()
 
   useEffect(() => {
     if (!data) {
@@ -27,13 +37,35 @@ export const useNotifyAboutChange = () => {
       const min = parseInt(settings[p.sku].min, 10)
       const max = parseInt(settings[p.sku].max, 10)
 
+      const data: NotificationData = { sku: p.sku, to: '/', type: 'navigate' }
+
       if (stock <= min) {
-        notify(p.name, `${p.sku}, цього стало менше ніж ${min}`, p.sku)
+        const message: AppMessage = {
+          type: 'push-me' as const,
+          title: p.name,
+          options: {
+            body: `${p.sku}, цього менше ніж ${min}`,
+            icon: '/lets/logo.webp',
+            data,
+          },
+        }
+
+        sendMessageToWorker(message)
       }
 
       if (stock >= max) {
-        notify(p.name, `${p.sku}, цього стало більше ніж ${max}`, p.sku)
+        const message: AppMessage = {
+          type: 'push-me' as const,
+          title: p.name,
+          options: {
+            body: `${p.sku}, цього більше ніж ${max}`,
+            icon: '/lets/logo.webp',
+            data,
+          },
+        }
+
+        sendMessageToWorker(message)
       }
     })
-  }, [data, notify, settings])
+  }, [data, settings])
 }
