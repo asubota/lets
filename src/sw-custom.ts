@@ -1,29 +1,6 @@
+import { AppMessage } from './types.ts'
+
 const sw = self as unknown as ServiceWorkerGlobalScope
-
-sw.addEventListener('notificationclick', (event) => {
-  const data = event.notification.data
-
-  const doNavigation = async () => {
-    return sw.clients
-      .matchAll({ type: 'window', includeUncontrolled: true })
-      .then((windowClients) => {
-        const focusedClient = windowClients.find(
-          (client) => 'focus' in client && client.focused,
-        )
-
-        if (focusedClient) {
-          focusedClient.postMessage({
-            type: 'navigate',
-            ...data,
-          })
-        } else {
-          sw.clients.openWindow(data.to)
-        }
-      })
-  }
-
-  event.waitUntil(doNavigation().then(() => event.notification.close()))
-})
 
 async function fetchAndCache(request: FetchEvent['request'], cache: Cache) {
   const networkResponse = await fetch(request)
@@ -46,10 +23,46 @@ function isStale(cachedDate: Date, currentDate: Date) {
 function notifyApp() {
   sw.clients.matchAll().then((clients) => {
     clients.forEach((client) => {
-      client.postMessage({ type: 'cache-update' })
+      const message: AppMessage = { type: 'cache-update' }
+      client.postMessage(message)
     })
   })
 }
+
+sw.addEventListener('notificationclick', (event) => {
+  const data = event.notification.data
+
+  const doNavigation = async () => {
+    return sw.clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((windowClients) => {
+        const focusedClient = windowClients.find(
+          (client) => 'focus' in client && client.focused,
+        )
+
+        if (focusedClient) {
+          const message: AppMessage = {
+            type: 'navigate',
+            ...data,
+          }
+
+          focusedClient.postMessage(message)
+        } else {
+          sw.clients.openWindow(data.to)
+        }
+      })
+  }
+
+  event.waitUntil(doNavigation().then(() => event.notification.close()))
+})
+
+sw.addEventListener('message', async (event) => {
+  const message: AppMessage = event.data
+
+  if (message.type === 'push-me') {
+    await sw.registration.showNotification(message.title, message.options)
+  }
+})
 
 sw.addEventListener('fetch', (event) => {
   const {

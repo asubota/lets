@@ -16,12 +16,17 @@ export interface SearchForm {
   input: string
 }
 
-export type NotificationData =
+export type NotificationData = {
+  type: 'navigate'
+  sku: string
+  to: string
+}
+
+export type AppMessage =
   | {
-      type: 'navigate'
-      s: string
-      to: string
-      sku: string
+      type: 'push-me'
+      title: string
+      options: NotificationOptions
     }
   | {
       type: 'cache-update'
