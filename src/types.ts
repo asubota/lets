@@ -20,14 +20,16 @@ export type NotificationData = {
   sku: string
 }
 
+export type AppMessagePush = {
+  type: 'push-me'
+  payload: {
+    title: string
+    options: NotificationOptions
+  }
+}
+
 export type AppMessage =
-  | {
-      type: 'push-me'
-      payload: {
-        title: string
-        options: NotificationOptions
-      }
-    }
+  | AppMessagePush
   | {
       type: 'navigate'
       payload: NotificationData
