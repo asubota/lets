@@ -85,8 +85,8 @@ export default defineConfig({
             options: {
               cacheName: 'google-fonts-cache',
               expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 28, // <== 28 days
+                maxEntries: 8,
+                maxAgeSeconds: 60 * 60 * 24 * 300, // <== 300 days
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -99,8 +99,8 @@ export default defineConfig({
             options: {
               cacheName: 'gstatic-fonts-cache',
               expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 28, // <== 28 days
+                maxEntries: 8,
+                maxAgeSeconds: 60 * 60 * 24 * 300, // <== 300 days
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -109,6 +109,7 @@ export default defineConfig({
           },
         ],
       },
+      includeAssets: ['logo.webp', '192.png', 'favicon.ico'],
       manifest: {
         name: 'Lets Bike',
         short_name: 'Lets Bike',
