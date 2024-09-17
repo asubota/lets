@@ -2,11 +2,8 @@ import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import { ExtraViewOptions } from './extra-view-options.tsx'
-import { useNotifyAboutChange } from '../hooks/use-notify-about-change.ts'
 
 export const Welcome = () => {
-  const doCheckStockUpdates = useNotifyAboutChange()
-
   return (
     <Box>
       <Typography
@@ -16,7 +13,7 @@ export const Welcome = () => {
         sx={{ mt: 4 }}
         color="textSecondary"
       >
-        <Box onClick={doCheckStockUpdates}>Вітаю!</Box>
+        <Box>Вітаю!</Box>
       </Typography>
 
       <Typography

@@ -89,14 +89,4 @@ export const useNotifyAboutChange = () => {
   useEffect(() => {
     spam()
   }, [spam])
-
-  return async () => {
-    if (Notification.permission !== 'granted') {
-      await Notification.requestPermission()
-    }
-
-    if (Notification.permission === 'granted') {
-      spam()
-    }
-  }
 }
