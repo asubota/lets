@@ -1,24 +1,4 @@
 const sw = self;
-sw.addEventListener('notificationclick', (event) => {
-    const data = event.notification.data;
-    const doNavigation = async () => {
-        return sw.clients
-            .matchAll({ type: 'window', includeUncontrolled: true })
-            .then((windowClients) => {
-            const focusedClient = windowClients.find((client) => 'focus' in client && client.focused);
-            if (focusedClient) {
-                focusedClient.postMessage({
-                    type: 'navigate',
-                    ...data,
-                });
-            }
-            else {
-                sw.clients.openWindow(data.to);
-            }
-        });
-    };
-    event.waitUntil(doNavigation().then(() => event.notification.close()));
-});
 async function fetchAndCache(request, cache) {
     const networkResponse = await fetch(request);
     await cache.put(request, networkResponse.clone());
@@ -33,10 +13,38 @@ function isStale(cachedDate, currentDate) {
 function notifyApp() {
     sw.clients.matchAll().then((clients) => {
         clients.forEach((client) => {
-            client.postMessage({ type: 'cache-update' });
+            const message = { type: 'cache-update' };
+            client.postMessage(message);
         });
     });
 }
+sw.addEventListener('notificationclick', (event) => {
+    const data = event.notification.data;
+    const doNavigation = async () => {
+        return sw.clients
+            .matchAll({ type: 'window', includeUncontrolled: true })
+            .then((windowClients) => {
+            const focusedClient = windowClients.find((client) => 'focus' in client && client.focused);
+            if (focusedClient) {
+                const message = {
+                    type: 'navigate',
+                    ...data,
+                };
+                focusedClient.postMessage(message);
+            }
+            else {
+                sw.clients.openWindow(data.to);
+            }
+        });
+    };
+    event.waitUntil(doNavigation().then(() => event.notification.close()));
+});
+sw.addEventListener('message', async (event) => {
+    const message = event.data;
+    if (message.type === 'push-me') {
+        await sw.registration.showNotification(message.title, message.options);
+    }
+});
 sw.addEventListener('fetch', (event) => {
     const { request: { url, method }, } = event;
     if (method === 'GET' && url.includes('docs.google.com')) {
