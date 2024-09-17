@@ -24,7 +24,7 @@ const getSlides = (pics: string[], title: string) => {
         }}
         onError={(e) => {
           const target = e.target as HTMLImageElement
-          target.src = '/lets/logo.webp'
+          target.src = '/logo.webp'
         }}
       />
     </SwiperSlide>

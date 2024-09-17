@@ -25,6 +25,65 @@ sw.addEventListener('notificationclick', (event) => {
   event.waitUntil(doNavigation().then(() => event.notification.close()))
 })
 
+async function fetchAndCache(request: FetchEvent['request'], cache: Cache) {
+  const networkResponse = await fetch(request)
+
+  await cache.put(request, networkResponse.clone())
+  await cache.put(`${request.url}-time`, new Response(Date.now().toString()))
+
+  return networkResponse
+}
+
+function isStale(cachedDate: Date, currentDate: Date) {
+  const currentHour = currentDate.getHours()
+  const cachedHour = cachedDate.getHours()
+
+  return (
+    currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour
+  )
+}
+
+function notifyApp() {
+  sw.clients.matchAll().then((clients) => {
+    clients.forEach((client) => {
+      client.postMessage({ type: 'cache-update' })
+    })
+  })
+}
+
 sw.addEventListener('fetch', (event) => {
-  console.log('## event.request.url', event.request.url)
+  const {
+    request: { url, method },
+  } = event
+
+  if (method === 'GET' && url.includes('docs.google.com')) {
+    const response = sw.caches.open('lets-bike-api').then(async (cache) => {
+      const cachedResponse = await cache.match(event.request)
+
+      if (cachedResponse) {
+        const cachedTime = await cache.match(`${event.request.url}-time`)
+
+        if (cachedTime) {
+          const cachedDate = new Date(Number(await cachedTime.text()))
+          const now = new Date()
+
+          if (isStale(cachedDate, now)) {
+            console.log('Cache is stale, fetching new data...')
+            return fetchAndCache(event.request, cache).then((response) => {
+              notifyApp()
+              return response
+            })
+          } else {
+            console.log('Cache is still valid, returning cached data.')
+            return cachedResponse
+          }
+        }
+      }
+
+      console.log('No cache found, fetching new data...')
+      return fetchAndCache(event.request, cache)
+    })
+
+    event.respondWith(response)
+  }
 })

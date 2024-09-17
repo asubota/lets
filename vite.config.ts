@@ -75,7 +75,7 @@ export default defineConfig({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 28, // <== 28 days
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -89,7 +89,7 @@ export default defineConfig({
               cacheName: 'gstatic-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 28, // <== 28 days
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -100,6 +100,7 @@ export default defineConfig({
       },
       manifest: {
         scope: '/lets/',
+        start_url: '/lets/',
         name: 'Lets Bike',
         short_name: 'Lets Bike',
         description: '',
@@ -108,7 +109,7 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: `${base}192.png`,
+            src: '/192.png',
             sizes: '192x192',
             type: 'image/png',
           },
