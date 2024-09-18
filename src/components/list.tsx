@@ -12,10 +12,7 @@ import { Product } from '../types.ts'
 import { useSearchVendors } from '../store/search.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 
-export const List: FC<{ list: Product[]; search: string }> = ({
-  list,
-  search,
-}) => {
+const List: FC<{ list: Product[]; search: string }> = ({ list, search }) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(list)
   const searchVendors = useSearchVendors()
@@ -51,3 +48,5 @@ export const List: FC<{ list: Product[]; search: string }> = ({
     </>
   )
 }
+
+export default List
