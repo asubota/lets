@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { Product } from '../types.ts'
 import { useFavsActions, useFavsItems } from '../store/favs.ts'
 import { Tile } from './tile.tsx'
+import { useMatchRoute } from '@tanstack/react-router'
 
 export const TilesView: FC<{ list: Product[]; search: string }> = ({
   list,
@@ -10,6 +11,8 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
 }) => {
   const favs = useFavsItems()
   const { toggle } = useFavsActions()
+  const matchRoute = useMatchRoute()
+  const iFavouriteRoute = !!matchRoute({ to: '/favorites' })
 
   return (
     <Stack direction="column" spacing={1} id="tiles-view">
@@ -23,6 +26,7 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
             p={row}
             search={search}
             isFav={favs.includes(favId)}
+            iFavouriteRoute={iFavouriteRoute}
             toggle={() => toggle(favId)}
           />
         )

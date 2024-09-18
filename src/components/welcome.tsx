@@ -5,11 +5,7 @@ import { ExtraViewOptions } from './extra-view-options.tsx'
 
 export const Welcome = () => {
   const handleThing = () => {
-    navigator.serviceWorker.ready.then(() => {
-      if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({ type: 'xxx' })
-      }
-    })
+    //
   }
 
   return (
