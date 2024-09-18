@@ -68,6 +68,10 @@ sw.addEventListener('message', async (event) => {
       message.payload.options,
     )
   }
+
+  if (message.type === 'xxx') {
+    notifyApp()
+  }
 })
 
 sw.addEventListener('fetch', (event) => {
