@@ -1,6 +1,6 @@
 import { useAllData } from '../use-data.ts'
 import { useCallback, useEffect } from 'react'
-import { AppMessagePush } from '../types.ts'
+import { AppMessage, AppMessagePush } from '../types.ts'
 import { useSkuSettings } from '../store/sku-settings.ts'
 import { closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack'
 import { getMessages } from '../tools.tsx'
@@ -88,6 +88,16 @@ export const useNotifyAboutChange = () => {
   }, [data, settings])
 
   useEffect(() => {
-    doWork()
+    const fn = async (event: MessageEvent<AppMessage>) => {
+      if (event.data && event.data.type === 'cache-update') {
+        doWork()
+      }
+    }
+
+    navigator.serviceWorker.addEventListener('message', fn)
+
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', fn)
+    }
   }, [doWork])
 }

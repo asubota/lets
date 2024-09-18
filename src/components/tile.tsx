@@ -123,6 +123,7 @@ export const Tile: FC<{
                 gap: '8px',
               }}
             >
+              <Box sx={{ minWidth: '120px' }} />
               <TileSettings sku={p.sku} />
             </Box>
           )}
