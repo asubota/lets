@@ -12,7 +12,6 @@ import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { HiddenInput } from './hidden-input.tsx'
 import { Stock } from './stock.tsx'
-import { useMatchRoute } from '@tanstack/react-router'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { TileSettings } from './tile-settings.tsx'
 
@@ -20,12 +19,12 @@ export const Tile: FC<{
   p: Product
   search: string
   isFav: boolean
+  iFavouriteRoute: boolean
   toggle(): void
 }> = memo(
-  ({ p, search, isFav, toggle }) => {
+  ({ p, search, isFav, toggle, iFavouriteRoute }) => {
     const [details, setDetails] = useState<Product | null>(null)
-    const matchRoute = useMatchRoute()
-    const iFavouriteRoute = !!matchRoute({ to: '/favorites' })
+
     const [showSettings, setShowSettings] = useState(false)
 
     const handleCardClick = () => {
@@ -176,6 +175,10 @@ export const Tile: FC<{
     )
   },
   (p1, p2) => {
-    return p1.isFav === p2.isFav && p1.search === p2.search
+    return (
+      p1.isFav === p2.isFav &&
+      p1.search === p2.search &&
+      p1.iFavouriteRoute === p2.iFavouriteRoute
+    )
   },
 )
