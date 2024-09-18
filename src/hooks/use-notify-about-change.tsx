@@ -67,6 +67,7 @@ const showAlert = (message: AppMessagePush) => {
     persist: true,
     variant: 'warning',
     hideIconVariant: true,
+    preventDuplicate: true,
     action,
   })
 }
