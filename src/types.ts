@@ -18,6 +18,7 @@ export interface SearchForm {
 
 export type NotificationData = {
   sku: string
+  to?: string
 }
 
 export type AppMessagePush = {

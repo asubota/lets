@@ -82,8 +82,8 @@ const useData = () => {
   })
 }
 
-export const useNotifyData = () => {
-  const { data } = useData()
+export const useAllData = () => {
+  const { data = [] } = useData()
 
   return data
 }
