@@ -37,3 +37,6 @@ export type AppMessage =
   | {
       type: 'cache-update'
     }
+  | {
+      type: 'xxx'
+    }
