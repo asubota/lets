@@ -4,6 +4,10 @@ import { Bike } from './bike.tsx'
 import { ExtraViewOptions } from './extra-view-options.tsx'
 
 export const Welcome = () => {
+  const handleThing = () => {
+    //
+  }
+
   return (
     <Box>
       <Typography
@@ -13,7 +17,7 @@ export const Welcome = () => {
         sx={{ mt: 4 }}
         color="textSecondary"
       >
-        <Box>Вітаю!</Box>
+        <Box onClick={handleThing}>Вітаю!</Box>
       </Typography>
 
       <Typography
