@@ -1,11 +1,7 @@
-import { FC, useState } from 'react'
+import { FC, lazy, Suspense, useState } from 'react'
 import { ClickAwayListener, Portal } from '@mui/material'
 import { useIsLoading, useSearch } from '../../use-data.ts'
-import {
-  LimitSearchModal,
-  List as List2,
-  TableSettingsModal,
-} from '../../components'
+import { LimitSearchModal, TableSettingsModal } from '../../components'
 import {
   Controller,
   FormProvider,
@@ -22,6 +18,8 @@ import {
 import { useSearchActions } from '../../store/search.ts'
 import { useHistoryActions } from '../../store'
 import { Loader } from '../../components/loader.tsx'
+
+const List2 = lazy(() => import('../../components/list.tsx'))
 
 export const List: FC = () => {
   const methods = useForm<SearchForm>({ defaultValues: { input: '' } })
@@ -96,7 +94,13 @@ export const List: FC = () => {
         </FormProvider>
       </Portal>
 
-      {isLoading ? <Loader /> : <List2 list={list} search={search} />}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Suspense>
+          <List2 list={list} search={search} />
+        </Suspense>
+      )}
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />

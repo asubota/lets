@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC, lazy, Suspense } from 'react'
 import { useFavs, useIsLoading } from '../../use-data.ts'
 import { Loader } from '../../components/loader.tsx'
-import { List } from '../../components'
 import { Portal, TextField } from '@mui/material'
+const List2 = lazy(() => import('../../components/list.tsx'))
 
 export const Favorites: FC = () => {
   const favs = useFavs()
@@ -14,7 +14,13 @@ export const Favorites: FC = () => {
         <TextField size="small" fullWidth />
       </Portal>
 
-      {isLoading ? <Loader /> : <List list={favs} search="" />}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Suspense>
+          <List2 list={favs} search="" />
+        </Suspense>
+      )}
     </>
   )
 }
