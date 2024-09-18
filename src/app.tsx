@@ -15,8 +15,13 @@ export const App: FC = () => {
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
       if (event.data && event.data.type === 'navigate') {
-        const sku = event.data.payload.sku
-        await router.navigate({ to: '/', search: { s: sku } })
+        const to = event.data.payload.to
+        if (to) {
+          await router.navigate({ to })
+        } else {
+          const sku = event.data.payload.sku
+          await router.navigate({ to: '/', search: { s: sku } })
+        }
       }
     }
 
