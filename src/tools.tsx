@@ -125,6 +125,7 @@ export const getMessages = (
       const max = parseInt(settings[p.sku].max, 10)
 
       const data: NotificationData = { sku: p.sku }
+      const result: AppMessagePush[] = []
 
       if (stock <= min) {
         const message: AppMessagePush = {
@@ -132,14 +133,14 @@ export const getMessages = (
           payload: {
             title: p.name,
             options: {
-              body: `${p.sku}, цього менше ніж ${min}`,
+              body: `${p.sku}, цього ${stock}, менше ніж ${min}`,
               icon: '/lets/logo.webp',
               data,
             },
           },
         }
 
-        return message
+        result.push(message)
       }
 
       if (stock >= max) {
@@ -148,17 +149,18 @@ export const getMessages = (
           payload: {
             title: p.name,
             options: {
-              body: `${p.sku}, цього більше ніж ${max}`,
+              body: `${p.sku}, цього ${stock}, більше ніж ${max}`,
               icon: '/lets/logo.webp',
               data,
             },
           },
         }
 
-        return message
+        result.push(message)
       }
 
-      return undefined
+      return result
     })
+    .flat()
     .filter(isMessage)
 }

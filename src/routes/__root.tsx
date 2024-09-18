@@ -10,7 +10,7 @@ const queryClient = new QueryClient()
 export const Route = createRootRoute({
   component: () => (
     <ThemeModeProvider>
-      <SnackbarProvider />
+      <SnackbarProvider maxSnack={10} />
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools
           initialIsOpen={false}
