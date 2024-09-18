@@ -30,6 +30,7 @@ sw.addEventListener('notificationclick', (event) => {
                     type: 'navigate',
                     payload: {
                         sku: data.sku,
+                        to: data.to,
                     },
                 };
                 focusedClient.postMessage(message);
