@@ -5,14 +5,23 @@ interface StoreState {
   data: Record<string, Record<string, string>>
   actions: {
     setSetting(this: void, sku: string, config: Record<string, string>): void
+    removeSku(this: void, favItem: string): void
   }
 }
 
-const useStore = create<StoreState>()(
+export const useStore = create<StoreState>()(
   persist(
     (set) => ({
       data: {},
       actions: {
+        removeSku: (favItem) => {
+          set((state) => {
+            const [sku] = favItem.split(':')
+            const { [sku]: _, ...data } = state.data
+
+            return { data }
+          })
+        },
         setSetting: (sku, config) => {
           set((state) => {
             const update = { ...state.data[sku], ...config }
