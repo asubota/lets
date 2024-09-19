@@ -17,20 +17,22 @@ const sx = {
   },
 }
 
-const InputProps = {
-  startAdornment: (
-    <InputAdornment
-      sx={{
-        '& p': {
-          fontSize: '12px',
-          color: 'text.dark',
-        },
-      }}
-      position="start"
-    >
-      max
-    </InputAdornment>
-  ),
+const getInputProps = (text: string) => {
+  return {
+    startAdornment: (
+      <InputAdornment
+        sx={{
+          '& p': {
+            fontSize: '12px',
+            color: 'text.dark',
+          },
+        }}
+        position="start"
+      >
+        {text}
+      </InputAdornment>
+    ),
+  }
 }
 
 export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
@@ -47,7 +49,7 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
         onBlur={(e) => {
           setSetting(sku, { min: e.target.value.replace(/\D/g, '') })
         }}
-        InputProps={InputProps}
+        InputProps={getInputProps('min')}
         sx={sx}
       />
       <TextField
@@ -57,7 +59,7 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
         onBlur={(e) => {
           setSetting(sku, { max: e.target.value.replace(/\D/g, '') })
         }}
-        InputProps={InputProps}
+        InputProps={getInputProps('max')}
         sx={sx}
       />
     </>
