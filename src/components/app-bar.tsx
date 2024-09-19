@@ -3,12 +3,12 @@ import { Box, IconButton } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import StarIcon from '@mui/icons-material/Star'
 import { useIsLoading } from '../use-data.ts'
-import { Link, useMatchRoute } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
+import { useIsRoute } from '../hooks/use-is-route.hook.ts'
 
 export const AppBar: FC = () => {
   const loading = useIsLoading()
-  const matchRoute = useMatchRoute()
-  const isFavouritesRoute = !!matchRoute({ to: '/favorites' })
+  const isFavouritesRoute = useIsRoute('/favorites')
 
   return (
     <Box className="app-bar" sx={{ pt: 1 }}>

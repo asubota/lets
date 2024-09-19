@@ -5,7 +5,7 @@ import { TableView } from './table-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { NoResults } from './no-results.tsx'
 
-import { Toolbar } from './toolbar.tsx'
+import { Toolbar } from './toolbar'
 import { useAppView } from '../store'
 import { getUniqueVendors } from '../tools.tsx'
 import { Product } from '../types.ts'
