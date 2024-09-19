@@ -1,58 +1,23 @@
 import { Box, ButtonGroup, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
-import { useAppActions, useAppView, useTableActions } from '../store'
+import { useAppActions, useAppView, useTableActions } from '../../store'
 import GridViewIcon from '@mui/icons-material/GridView'
 import ReorderIcon from '@mui/icons-material/Reorder'
-import BookmarkIcon from '@mui/icons-material/Bookmark'
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot'
-import { useSearchActions } from '../store/search.ts'
+import { useSearchActions } from '../../store/search.ts'
 import TuneIcon from '@mui/icons-material/Tune'
 import IosShareIcon from '@mui/icons-material/IosShare'
-import { copyContent, handleTakeScreenshot } from '../tools.tsx'
-import GoogleIcon from '@mui/icons-material/Google'
-import { useLinkProps, useMatchRoute } from '@tanstack/react-router'
+import { handleTakeScreenshot } from '../../tools.tsx'
+import { BookmarkButton } from './bookmark-button.tsx'
+import { RedDot } from './red-dot.tsx'
+import { GoogleButton } from './google-button.tsx'
+import { useIsRoute } from '../../hooks/use-is-route.hook.ts'
 
 interface ToolbarProps {
   search: string
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
-}
-
-const handleGoogle = async () => {
-  const text = await navigator.clipboard.readText()
-  window.open(`https://www.google.com/search?q=${text}`, '_blank')
-}
-
-const BookmarkButton: FC<{ search: string }> = ({ search }) => {
-  const { href } = useLinkProps({ to: '/', search: { s: search } })
-  const fullUrl = window.origin + href
-
-  return (
-    <IconButton
-      size="small"
-      sx={{ color: 'text.secondary', mr: '20px' }}
-      onClick={() => copyContent(fullUrl)}
-    >
-      <BookmarkIcon />
-    </IconButton>
-  )
-}
-
-const RedDot: FC = () => {
-  return (
-    <Box
-      sx={{
-        backgroundColor: 'primary.main',
-        borderRadius: '50%',
-        width: '5px',
-        height: '5px',
-        position: 'absolute',
-        right: '4px',
-        top: '4px',
-      }}
-    />
-  )
 }
 
 export const Toolbar: FC<ToolbarProps> = ({
@@ -65,10 +30,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   const { setView } = useAppActions()
   const { toggleSettings } = useTableActions()
   const { toggleLimitModal } = useSearchActions()
-
-  const matchRoute = useMatchRoute()
-  const isMainRoute = !!matchRoute({ to: '/' })
-
+  const isMainRoute = useIsRoute('/')
   const fewVendorsAvailable = uniqueVendors.length > 1
 
   return (
@@ -115,16 +77,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       </Box>
       <Box sx={{ ml: 'auto', display: 'flex' }}>
         {isMainRoute && <BookmarkButton search={search} />}
-        {isMainRoute && (
-          <IconButton
-            size="small"
-            sx={{ color: 'text.secondary', mr: '20px' }}
-            onClick={handleGoogle}
-          >
-            <GoogleIcon />
-          </IconButton>
-        )}
-
+        {isMainRoute && <GoogleButton />}
         {isMainRoute && view === 'table' && (
           <IconButton
             sx={{ ml: 'auto', color: 'text.secondary' }}
