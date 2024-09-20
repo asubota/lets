@@ -1,4 +1,3 @@
-import { useAllData } from '../use-data.ts'
 import { useCallback, useEffect } from 'react'
 import { AppMessage, AppMessagePush } from '../types.ts'
 import { useSkuSettings } from '../store/sku-settings.ts'
@@ -7,30 +6,27 @@ import { getMessages } from '../tools.tsx'
 import { Box, IconButton, Typography } from '@mui/material'
 import { Close } from '@mui/icons-material'
 import { Link } from '@tanstack/react-router'
+import { useGetChangedProducts } from './use-get-changed-products.hook.ts'
 
 const showNotification = () => {
   Notification.requestPermission().then((result) => {
-    if (result === 'granted') {
-      Notification.requestPermission().then((result) => {
-        if (result === 'granted' && 'serviceWorker' in navigator) {
-          navigator.serviceWorker.ready.then(() => {
-            if (navigator.serviceWorker.controller) {
-              const message: AppMessagePush = {
-                type: 'push-me' as const,
-                payload: {
-                  title: 'Мущіна, там щось оновилось...',
-                  options: {
-                    icon: '/lets/logo.webp',
-                    data: {
-                      to: '/favorites',
-                    },
-                  },
+    if (result === 'granted' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(() => {
+        if (navigator.serviceWorker.controller) {
+          const message: AppMessagePush = {
+            type: 'push-me' as const,
+            payload: {
+              title: 'Мущіна, там щось оновилось...',
+              options: {
+                icon: '/lets/logo.webp',
+                data: {
+                  to: '/favorites',
                 },
-              }
+              },
+            },
+          }
 
-              navigator.serviceWorker.controller.postMessage(message)
-            }
-          })
+          navigator.serviceWorker.controller.postMessage(message)
         }
       })
     }
@@ -73,11 +69,10 @@ const showAlert = (message: AppMessagePush) => {
 }
 
 export const useNotifyAboutChange = () => {
-  const data = useAllData()
   const settings = useSkuSettings()
+  const { items } = useGetChangedProducts()
 
   const doWork = useCallback(() => {
-    const items = data.filter((p) => p.sku in settings && !!p.stock) || []
     const messages = getMessages(items, settings)
 
     messages.forEach(showAlert)
@@ -85,7 +80,7 @@ export const useNotifyAboutChange = () => {
     if (messages.length > 0) {
       showNotification()
     }
-  }, [data, settings])
+  }, [items, settings])
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {

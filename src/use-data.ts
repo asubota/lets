@@ -125,7 +125,6 @@ const getKey = (item: Product): string => `${item.sku}:${item.vendor}`
 export const useFavs = (): Product[] => {
   const favs = useFavsItems()
   const { data = [] } = useData()
-
   const favsSet = useMemo(() => new Set(favs), [favs])
 
   return useMemo(() => {
