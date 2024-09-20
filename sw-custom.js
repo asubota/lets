@@ -44,6 +44,9 @@ sw.addEventListener('notificationclick', (event) => {
 });
 sw.addEventListener('message', async (event) => {
     const message = event.data;
+    // if (message.type === 'xxx') {
+    //   notifyApp()
+    // }
     if (message.type === 'push-me') {
         await sw.registration.showNotification(message.payload.title, message.payload.options);
     }
