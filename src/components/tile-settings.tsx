@@ -8,7 +8,7 @@ import {
 } from '../store/sku-settings.ts'
 
 const sx = {
-  'maxWidth': '100px',
+  'maxWidth': '122px',
   '& input': {
     pt: '2px',
     pb: '2px',
@@ -66,7 +66,7 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
         onBlur={(e) => {
           setSetting(sku, { min: e.target.value.replace(/\D/g, '') })
         }}
-        InputProps={getInputProps('min')}
+        InputProps={getInputProps('менш ніж')}
         sx={sx}
       />
       <TextField
@@ -77,7 +77,7 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
         onBlur={(e) => {
           setSetting(sku, { max: e.target.value.replace(/\D/g, '') })
         }}
-        InputProps={getInputProps('max')}
+        InputProps={getInputProps('більш ніж')}
         sx={sx}
       />
     </>
