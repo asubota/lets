@@ -20,11 +20,11 @@ export const Tile: FC<{
   search: string
   isFav: boolean
   iFavouriteRoute: boolean
+  isChanged: boolean
   toggle(): void
 }> = memo(
-  ({ p, search, isFav, toggle, iFavouriteRoute }) => {
+  ({ p, search, isFav, toggle, iFavouriteRoute, isChanged }) => {
     const [details, setDetails] = useState<Product | null>(null)
-
     const [showSettings, setShowSettings] = useState(false)
 
     const handleCardClick = () => {
@@ -86,7 +86,10 @@ export const Tile: FC<{
               data-no-export
               onClick={handleToggleSettings}
             >
-              <SettingsIcon />
+              <SettingsIcon
+                sx={{ color: isChanged ? 'primary.dark' : 'text.secondary' }}
+                fontSize="small"
+              />
             </IconButton>
           )}
 
@@ -178,6 +181,7 @@ export const Tile: FC<{
     return (
       p1.isFav === p2.isFav &&
       p1.search === p2.search &&
+      p1.isChanged === p2.isChanged &&
       p1.iFavouriteRoute === p2.iFavouriteRoute
     )
   },

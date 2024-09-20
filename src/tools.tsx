@@ -118,7 +118,6 @@ export const getMessages = (
   settings: Record<string, Record<string, string>>,
 ): AppMessagePush[] => {
   return products
-    .filter((p) => p.sku in settings && !!p.stock)
     .map((p) => {
       const stock = parseInt(p.stock || '', 10)
       const min = parseInt(settings[p.sku].min, 10)
