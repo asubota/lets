@@ -1,55 +1,14 @@
-import { defineConfig, Plugin } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
-import { rollup, InputOptions, OutputOptions } from 'rollup'
-import rollupPluginTypescript from '@rollup/plugin-typescript'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
+import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin'
 
 const base = '/lets/'
 
 const swFile = 'sw-custom.ts'
-
-const CompileTsServiceWorker = (): Plugin => ({
-  name: 'compile-typescript-service-worker',
-  async buildStart() {
-    await compileServiceWorker()
-  },
-  async writeBundle() {
-    await compileServiceWorker()
-  },
-  async watchChange(id) {
-    if (id.endsWith(swFile)) {
-      console.log('Service Worker updated. Recompiling...')
-      await compileServiceWorker()
-    }
-  },
-
-  async handleHotUpdate({ file }) {
-    if (file.endsWith(swFile)) {
-      console.log('Service Worker file changed. Recompiling...')
-      await compileServiceWorker()
-    }
-  },
-})
-
-async function compileServiceWorker() {
-  const inputOptions: InputOptions = {
-    input: `src/${swFile}`,
-    plugins: [rollupPluginTypescript({}), nodeResolve()],
-  }
-
-  const outputOptions: OutputOptions = {
-    file: `public/${swFile.replace('.ts', '.js')}`,
-    format: 'es',
-  }
-
-  const bundle = await rollup(inputOptions)
-  await bundle.write(outputOptions)
-  await bundle.close()
-}
 
 export default defineConfig({
   base,
@@ -59,6 +18,8 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom'],
           swiper: ['swiper'],
+          html2canvas: ['html2canvas'],
+          tanstack: ['@tanstack/react-router', '@tanstack/react-query'],
           mui: ['@mui/material'],
         },
       },
@@ -73,11 +34,12 @@ export default defineConfig({
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
-        navigateFallbackAllowlist: [new RegExp('/lets/')],
+        type: 'module',
+        navigateFallbackAllowlist: [new RegExp('^/lets/')],
       },
       workbox: {
         importScripts: [swFile.replace('.ts', '.js')],
-        navigateFallbackAllowlist: [new RegExp('/lets/')],
+        navigateFallbackAllowlist: [new RegExp('^/lets/')],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
