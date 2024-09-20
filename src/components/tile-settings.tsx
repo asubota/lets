@@ -1,5 +1,6 @@
 import { FC } from 'react'
-import { InputAdornment, TextField } from '@mui/material'
+import { IconButton, InputAdornment, TextField } from '@mui/material'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import {
   useGetMaxBySku,
   useGetMinBySku,
@@ -7,6 +8,7 @@ import {
 } from '../store/sku-settings.ts'
 
 const sx = {
+  'maxWidth': '100px',
   '& input': {
     pt: '2px',
     pb: '2px',
@@ -38,13 +40,28 @@ const getInputProps = (text: string) => {
 export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
   const min = useGetMinBySku(sku)
   const max = useGetMaxBySku(sku)
-  const { setSetting } = useSkuSettingsActions()
+  const { setSetting, removeSku } = useSkuSettingsActions()
+  const handleReset = () => removeSku(sku)
+
+  const minKey = `${min}-min-key`
+  const maxKey = `${max}-max-key`
 
   return (
     <>
+      {(min || max) && (
+        <IconButton
+          size="small"
+          sx={{ pt: '2px', pb: '2px', color: 'text.secondary' }}
+          onClick={handleReset}
+        >
+          <HighlightOffIcon fontSize="small" />
+        </IconButton>
+      )}
+
       <TextField
         type="number"
         size="small"
+        key={minKey}
         defaultValue={min}
         onBlur={(e) => {
           setSetting(sku, { min: e.target.value.replace(/\D/g, '') })
@@ -55,6 +72,7 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
       <TextField
         type="number"
         size="small"
+        key={maxKey}
         defaultValue={max}
         onBlur={(e) => {
           setSetting(sku, { max: e.target.value.replace(/\D/g, '') })

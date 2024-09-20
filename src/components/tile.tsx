@@ -119,10 +119,10 @@ export const Tile: FC<{
                 gridArea: 'meta',
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'flex-end',
                 gap: '8px',
               }}
             >
-              <Box sx={{ minWidth: '120px' }} />
               <TileSettings sku={p.sku} />
             </Box>
           )}
