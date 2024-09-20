@@ -34,7 +34,6 @@ export default defineConfig({
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
-        type: 'module',
         navigateFallbackAllowlist: [new RegExp('^/lets/')],
       },
       workbox: {
