@@ -9,9 +9,9 @@ import TuneIcon from '@mui/icons-material/Tune'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { handleTakeScreenshot } from '../../tools.tsx'
 import { BookmarkButton } from './bookmark-button.tsx'
-import { RedDot } from './red-dot.tsx'
 import { GoogleButton } from './google-button.tsx'
 import { useIsRoute } from '../../hooks/use-is-route.hook.ts'
+import { RedDot } from '../red-dot.tsx'
 
 interface ToolbarProps {
   search: string
