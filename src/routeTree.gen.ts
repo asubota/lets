@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
+import { Route as LayoutFavoritesSkuNotesImport } from './routes/_layout/favorites.$sku.notes'
 
 // Create Virtual Routes
 
@@ -47,6 +48,11 @@ const LayoutIndexRoute = LayoutIndexImport.update({
 const LayoutFavoritesRoute = LayoutFavoritesImport.update({
   path: '/favorites',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutFavoritesSkuNotesRoute = LayoutFavoritesSkuNotesImport.update({
+  path: '/$sku/notes',
+  getParentRoute: () => LayoutFavoritesRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -88,6 +94,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/favorites/$sku/notes': {
+      id: '/_layout/favorites/$sku/notes'
+      path: '/$sku/notes'
+      fullPath: '/favorites/$sku/notes'
+      preLoaderRoute: typeof LayoutFavoritesSkuNotesImport
+      parentRoute: typeof LayoutFavoritesImport
+    }
   }
 }
 
@@ -95,7 +108,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   LayoutRoute: LayoutRoute.addChildren({
-    LayoutFavoritesRoute,
+    LayoutFavoritesRoute: LayoutFavoritesRoute.addChildren({
+      LayoutFavoritesSkuNotesRoute,
+    }),
     LayoutIndexRoute,
   }),
   ColorsLazyRoute,
@@ -130,11 +145,18 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_layout/favorites": {
       "filePath": "_layout/favorites.tsx",
-      "parent": "/_layout"
+      "parent": "/_layout",
+      "children": [
+        "/_layout/favorites/$sku/notes"
+      ]
     },
     "/_layout/": {
       "filePath": "_layout/index.tsx",
       "parent": "/_layout"
+    },
+    "/_layout/favorites/$sku/notes": {
+      "filePath": "_layout/favorites.$sku.notes.tsx",
+      "parent": "/_layout/favorites"
     }
   }
 }

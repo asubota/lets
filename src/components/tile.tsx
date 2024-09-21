@@ -8,12 +8,28 @@ import { PriceChip } from './price-chip.tsx'
 import { VendorChip } from './vendor-chip.tsx'
 import ImageIcon from '@mui/icons-material/Image'
 import LinkIcon from '@mui/icons-material/Link'
-import StarIcon from '@mui/icons-material/Star'
-import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { HiddenInput } from './hidden-input.tsx'
 import { Stock } from './stock.tsx'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { TileSettings } from './tile-settings.tsx'
+import { FavoritesButton } from './favorites-button.tsx'
+import EditNoteIcon from '@mui/icons-material/EditNote'
+import { Link } from '@tanstack/react-router'
+
+const NotesButton: FC<{ sku: string }> = ({ sku }) => {
+  return (
+    <IconButton
+      size="small"
+      sx={{ mr: '10px', color: 'text.secondary' }}
+      component={Link}
+      to="/favorites/$sku/notes"
+      params={{ sku }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <EditNoteIcon fontSize="small" />
+    </IconButton>
+  )
+}
 
 export const Tile: FC<{
   p: Product
@@ -21,9 +37,8 @@ export const Tile: FC<{
   isFav: boolean
   iFavouriteRoute: boolean
   isChanged: boolean
-  toggle(): void
 }> = memo(
-  ({ p, search, isFav, toggle, iFavouriteRoute, isChanged }) => {
+  ({ p, search, isFav, iFavouriteRoute, isChanged }) => {
     const [details, setDetails] = useState<Product | null>(null)
     const [showSettings, setShowSettings] = useState(false)
 
@@ -150,23 +165,18 @@ export const Tile: FC<{
                 <LinkIcon color="secondary" fontSize="small" data-no-export />
               )}
 
-              <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
-                <IconButton
-                  size="small"
-                  data-no-export
-                  sx={{
-                    p: 0,
-                    mr: 1,
-                    color: isFav ? 'warning.light' : 'secondary.light',
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    toggle()
-                  }}
-                >
-                  {isFav ? <StarIcon /> : <StarBorderIcon />}
-                </IconButton>
-
+              <Box
+                sx={{
+                  ml: 'auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <NotesButton sku={p.sku} />
+                <FavoritesButton
+                  isFavorite={isFav}
+                  favId={`${p.sku}:${p.vendor}`}
+                />
                 <HiddenInput>
                   <Stock stock={p.stock} bordered />
                 </HiddenInput>
