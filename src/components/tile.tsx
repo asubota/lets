@@ -23,7 +23,11 @@ const NotesButton: FC<{ sku: string }> = ({ sku }) => {
   return (
     <IconButton
       size="small"
-      sx={{ mr: '10px', color: hasNote ? 'primary.main' : 'text.secondary' }}
+      sx={{
+        mr: '10px',
+        mb: '-6px',
+        color: hasNote ? 'primary.main' : 'text.secondary',
+      }}
       component={Link}
       to="/favorites/$sku/notes"
       params={{ sku }}

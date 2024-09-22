@@ -20,8 +20,8 @@ export const FavoritesButton: FC<FavoritesButtonProps> = ({
       size="small"
       data-no-export
       sx={{
-        p: 0,
         mr: 1,
+        mb: '-6px',
         color: isFavorite ? 'warning.light' : 'secondary.light',
       }}
       onClick={(e) => {
