@@ -15,12 +15,15 @@ import { TileSettings } from './tile-settings.tsx'
 import { FavoritesButton } from './favorites-button.tsx'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import { Link } from '@tanstack/react-router'
+import { useGetNoteBySku } from '../store/sku-settings.ts'
 
 const NotesButton: FC<{ sku: string }> = ({ sku }) => {
+  const hasNote = !!useGetNoteBySku(sku)
+
   return (
     <IconButton
       size="small"
-      sx={{ mr: '10px', color: 'text.secondary' }}
+      sx={{ mr: '10px', color: hasNote ? 'primary.main' : 'text.secondary' }}
       component={Link}
       to="/favorites/$sku/notes"
       params={{ sku }}
@@ -172,7 +175,7 @@ export const Tile: FC<{
                   alignItems: 'center',
                 }}
               >
-                <NotesButton sku={p.sku} />
+                {iFavouriteRoute && <NotesButton sku={p.sku} />}
                 <FavoritesButton
                   isFavorite={isFav}
                   favId={`${p.sku}:${p.vendor}`}

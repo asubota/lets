@@ -10,8 +10,9 @@ type SkuData = {
 interface StoreState {
   data: Record<string, SkuData>
   actions: {
+    removeSettings(this: void, favItem: string): void
     setSetting(this: void, sku: string, config: Partial<SkuData>): void
-    removeMinMax(this: void, favItem: string): void
+    removeMinMax(this: void, sku: string): void
     removeNote(this: void, sku: string): void
   }
 }
@@ -21,6 +22,14 @@ export const useStore = create<StoreState>()(
     (set) => ({
       data: {},
       actions: {
+        removeSettings: (favItem) => {
+          set((state) => {
+            const [sku] = favItem.split(':')
+            const { [sku]: _, ...data } = state.data
+
+            return { data }
+          })
+        },
         removeMinMax: (favItem) => {
           set((state) => {
             const [sku] = favItem.split(':')
