@@ -40,8 +40,8 @@ const getInputProps = (text: string) => {
 export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
   const min = useGetMinBySku(sku)
   const max = useGetMaxBySku(sku)
-  const { setSetting, removeSku } = useSkuSettingsActions()
-  const handleReset = () => removeSku(sku)
+  const { setSetting, removeMinMax } = useSkuSettingsActions()
+  const handleReset = () => removeMinMax(sku)
 
   const minKey = `${min}-min-key`
   const maxKey = `${max}-max-key`

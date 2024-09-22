@@ -7,13 +7,35 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import {
+  useGetNoteBySku,
+  useSkuSettingsActions,
+} from '../../store/sku-settings.ts'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
+type NoteForm = {
+  note: string
+}
 
 export const NotesDialog: FC = () => {
+  const { sku } = useParams({ strict: false })
+  const { setSetting } = useSkuSettingsActions()
   const navigate = useNavigate()
+  const note = useGetNoteBySku(sku || '')
+  const { register, handleSubmit } = useForm<NoteForm>({
+    defaultValues: { note },
+  })
 
   const handleClose = () => {
     navigate({ to: '/favorites' })
+  }
+
+  const onSubmit: SubmitHandler<NoteForm> = ({ note }) => {
+    if (sku) {
+      setSetting(sku, { note })
+      handleClose()
+    }
   }
 
   return (
@@ -27,15 +49,13 @@ export const NotesDialog: FC = () => {
           maxWidth: '600px',
         },
         component: 'form',
-        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault()
-          handleClose()
-        },
+        onSubmit: handleSubmit(onSubmit),
       }}
     >
       <DialogTitle fontSize="medium">Нотатки</DialogTitle>
       <DialogContent>
         <TextField
+          {...register('note')}
           autoFocus
           fullWidth
           variant="outlined"
@@ -51,7 +71,7 @@ export const NotesDialog: FC = () => {
         <Button component={Link} to="/favorites" size="small">
           Cancel
         </Button>
-        <Button type="button" size="small">
+        <Button type="submit" size="small">
           Save
         </Button>
       </DialogActions>
