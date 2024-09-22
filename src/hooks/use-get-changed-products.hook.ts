@@ -11,8 +11,8 @@ export const useGetChangedProducts = () => {
       .filter((p) => p.sku in settings && !!p.stock)
       .filter((p) => {
         const stock = parseInt(p.stock || '', 10)
-        const min = parseInt(settings[p.sku].min, 10)
-        const max = parseInt(settings[p.sku].max, 10)
+        const min = parseInt(settings[p.sku].min || '', 10)
+        const max = parseInt(settings[p.sku].max || '', 10)
 
         if (stock <= min || stock >= max) {
           return p
