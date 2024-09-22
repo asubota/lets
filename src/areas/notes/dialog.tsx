@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
 } from '@mui/material'
@@ -36,10 +35,19 @@ export const NotesDialog: FC = () => {
     >
       <DialogTitle fontSize="medium">Нотатки</DialogTitle>
       <DialogContent>
-        <TextField autoFocus fullWidth variant="standard" multiline />
+        <TextField
+          autoFocus
+          fullWidth
+          variant="outlined"
+          multiline
+          minRows={3}
+        />
       </DialogContent>
 
       <DialogActions>
+        <Button sx={{ mr: 'auto' }} size="small">
+          Delete
+        </Button>
         <Button component={Link} to="/favorites" size="small">
           Cancel
         </Button>
