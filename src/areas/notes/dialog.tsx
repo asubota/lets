@@ -43,6 +43,11 @@ export const NotesDialog: FC = () => {
       maxWidth="sm"
       open={true}
       onClose={handleClose}
+      sx={{
+        '.MuiDialog-scrollPaper': {
+          alignItems: 'flex-start',
+        },
+      }}
       PaperProps={{
         sx: {
           width: '100vw',
