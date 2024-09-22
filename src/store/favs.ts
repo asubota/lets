@@ -48,8 +48,8 @@ const getDiff = (arr1: string[], arr2: string[]) => {
 useStore.subscribe(
   (state) => state.items,
   (current, old) => {
-    const { removeMinMax } = useSkuSettingsStore.getState().actions
+    const { removeSettings } = useSkuSettingsStore.getState().actions
 
-    getDiff(old, current).forEach(removeMinMax)
+    getDiff(old, current).forEach(removeSettings)
   },
 )
