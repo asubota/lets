@@ -1,11 +1,18 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+type SkuData = {
+  min: string
+  max: string
+  note: string
+}
+
 interface StoreState {
   data: Record<string, Record<string, string>>
   actions: {
-    setSetting(this: void, sku: string, config: Record<string, string>): void
-    removeSku(this: void, favItem: string): void
+    setSetting(this: void, sku: string, config: Partial<SkuData>): void
+    removeMinMax(this: void, favItem: string): void
+    removeNote(this: void, sku: string): void
   }
 }
 
@@ -14,9 +21,16 @@ export const useStore = create<StoreState>()(
     (set) => ({
       data: {},
       actions: {
-        removeSku: (favItem) => {
+        removeMinMax: (favItem) => {
           set((state) => {
             const [sku] = favItem.split(':')
+            const { [sku]: _, ...data } = state.data
+
+            return { data }
+          })
+        },
+        removeNote: (sku) => {
+          set((state) => {
             const { [sku]: _, ...data } = state.data
 
             return { data }
@@ -42,3 +56,5 @@ export const useSkuSettingsActions = () => useStore((state) => state.actions)
 
 export const useGetMinBySku = (sku: string) => useSkuSettings()[sku]?.min || ''
 export const useGetMaxBySku = (sku: string) => useSkuSettings()[sku]?.max || ''
+export const useGetNoteBySku = (sku: string) =>
+  useSkuSettings()[sku]?.note || ''
