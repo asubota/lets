@@ -20,20 +20,25 @@ type NoteForm = {
 
 export const NotesDialog: FC = () => {
   const { sku } = useParams({ strict: false })
-  const { setSetting } = useSkuSettingsActions()
+  const { setSetting, removeNote } = useSkuSettingsActions()
   const navigate = useNavigate()
   const note = useGetNoteBySku(sku || '')
   const { register, handleSubmit } = useForm<NoteForm>({
     defaultValues: { note },
   })
 
-  const handleClose = () => {
-    navigate({ to: '/favorites' })
-  }
+  const handleClose = () => navigate({ to: '/favorites' })
 
   const onSubmit: SubmitHandler<NoteForm> = ({ note }) => {
     if (sku) {
       setSetting(sku, { note })
+      handleClose()
+    }
+  }
+
+  const handleDelete = () => {
+    if (sku) {
+      removeNote(sku)
       handleClose()
     }
   }
@@ -70,7 +75,7 @@ export const NotesDialog: FC = () => {
       </DialogContent>
 
       <DialogActions>
-        <Button sx={{ mr: 'auto' }} size="small">
+        <Button sx={{ mr: 'auto' }} size="small" onClick={handleDelete}>
           Delete
         </Button>
         <Button component={Link} to="/favorites" size="small">

@@ -2,13 +2,13 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type SkuData = {
-  min: string
-  max: string
-  note: string
+  min?: string
+  max?: string
+  note?: string
 }
 
 interface StoreState {
-  data: Record<string, Record<string, string>>
+  data: Record<string, SkuData>
   actions: {
     setSetting(this: void, sku: string, config: Partial<SkuData>): void
     removeMinMax(this: void, favItem: string): void
@@ -24,16 +24,14 @@ export const useStore = create<StoreState>()(
         removeMinMax: (favItem) => {
           set((state) => {
             const [sku] = favItem.split(':')
-            const { [sku]: _, ...data } = state.data
-
-            return { data }
+            const { min: _, max: __, ...rest } = state.data[sku]
+            return { data: { ...state.data, [sku]: rest } }
           })
         },
         removeNote: (sku) => {
           set((state) => {
-            const { [sku]: _, ...data } = state.data
-
-            return { data }
+            const { note: _, ...rest } = state.data[sku]
+            return { data: { ...state.data, [sku]: rest } }
           })
         },
         setSetting: (sku, config) => {
