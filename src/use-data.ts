@@ -30,7 +30,7 @@ interface Root {
 const parseData = (text: string): Product[] => {
   const cleanText = text
     .replace('/*O_o*/', '')
-    .replace('\n', '')
+    .replace(/\n/g, '')
     .replace('google.visualization.Query.setResponse(', '')
     .replace(/\);$/, '')
 
