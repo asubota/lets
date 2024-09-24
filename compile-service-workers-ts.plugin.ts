@@ -35,7 +35,6 @@ export const CompileTsServiceWorker = (): Plugin => ({
       await compileServiceWorker()
     }
   },
-
   async handleHotUpdate({ file }) {
     if (file.endsWith(swFile)) {
       console.log('Service Worker file changed. Recompiling...')
