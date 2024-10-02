@@ -8,20 +8,18 @@ import { useSearchActions } from '../../store/search.ts'
 import TuneIcon from '@mui/icons-material/Tune'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { handleTakeScreenshot } from '../../tools.tsx'
-import { BookmarkButton } from './bookmark-button.tsx'
 import { GoogleButton } from './google-button.tsx'
 import { useIsRoute } from '../../hooks/use-is-route.hook.ts'
 import { RedDot } from '../red-dot.tsx'
+import { PasteInSearchButton } from './paste-in-search-button.tsx'
 
 interface ToolbarProps {
-  search: string
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
 }
 
 export const Toolbar: FC<ToolbarProps> = ({
-  search,
   total,
   uniqueVendors,
   filteredSearch,
@@ -76,7 +74,7 @@ export const Toolbar: FC<ToolbarProps> = ({
         )}
       </Box>
       <Box sx={{ ml: 'auto', display: 'flex' }}>
-        {isMainRoute && <BookmarkButton search={search} />}
+        {isMainRoute && <PasteInSearchButton />}
         {isMainRoute && <GoogleButton />}
         {isMainRoute && view === 'table' && (
           <IconButton
