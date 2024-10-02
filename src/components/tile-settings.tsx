@@ -1,17 +1,13 @@
 import { FC } from 'react'
 import { IconButton, InputAdornment, TextField } from '@mui/material'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import {
-  useGetMaxBySku,
-  useGetMinBySku,
-  useSkuSettingsActions,
-} from '../store/sku-settings.ts'
+import { useGetPropFromFavorite, useSetPropOnFavorite } from '../api.ts'
 
 const sx = {
   'maxWidth': '122px',
   '& input': {
-    pt: '2px',
-    pb: '2px',
+    pt: '4px',
+    pb: '4px',
     height: '20px',
     color: 'primary.main',
     fontSize: '14px',
@@ -37,11 +33,11 @@ const getInputProps = (text: string) => {
   }
 }
 
-export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
-  const min = useGetMinBySku(sku)
-  const max = useGetMaxBySku(sku)
-  const { setSetting, removeMinMax } = useSkuSettingsActions()
-  const handleReset = () => removeMinMax(sku)
+export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
+  const min = useGetPropFromFavorite(favoriteId, 'min')
+  const max = useGetPropFromFavorite(favoriteId, 'max')
+  const { mutate } = useSetPropOnFavorite()
+  const handleReset = () => mutate({ favoriteId, min: '', max: '' })
 
   const minKey = `${min}-min-key`
   const maxKey = `${max}-max-key`
@@ -64,7 +60,14 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
         key={minKey}
         defaultValue={min}
         onBlur={(e) => {
-          setSetting(sku, { min: e.target.value.replace(/\D/g, '') })
+          const value = e.target.value.replace(/\D/g, '')
+
+          if (value !== (min || '').toString()) {
+            mutate({
+              favoriteId,
+              min: value,
+            })
+          }
         }}
         InputProps={getInputProps('менш ніж')}
         sx={sx}
@@ -75,7 +78,14 @@ export const TileSettings: FC<{ sku: string }> = ({ sku }) => {
         key={maxKey}
         defaultValue={max}
         onBlur={(e) => {
-          setSetting(sku, { max: e.target.value.replace(/\D/g, '') })
+          const value = e.target.value.replace(/\D/g, '')
+
+          if (value !== (max || '')?.toString()) {
+            mutate({
+              favoriteId,
+              max: e.target.value.replace(/\D/g, ''),
+            })
+          }
         }}
         InputProps={getInputProps('більш ніж')}
         sx={sx}

@@ -1,19 +1,27 @@
-import { FC } from 'react'
+import { FC, MouseEventHandler } from 'react'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { IconButton } from '@mui/material'
-import { useFavsActions } from '../store/favs.ts'
+import { useToggleFavorite } from '../api.ts'
 
 interface FavoritesButtonProps {
   isFavorite: boolean
-  favId: string
+  favoriteId: string
 }
 
 export const FavoritesButton: FC<FavoritesButtonProps> = ({
   isFavorite,
-  favId,
+  favoriteId,
 }) => {
-  const { toggle } = useFavsActions()
+  const { mutate } = useToggleFavorite()
+
+  const handleToggle: MouseEventHandler = (e) => {
+    e.stopPropagation()
+    mutate({
+      favoriteId,
+      isFavorite: !isFavorite,
+    })
+  }
 
   return (
     <IconButton
@@ -24,10 +32,7 @@ export const FavoritesButton: FC<FavoritesButtonProps> = ({
         mb: '-6px',
         color: isFavorite ? 'warning.light' : 'secondary.light',
       }}
-      onClick={(e) => {
-        e.stopPropagation()
-        toggle(favId)
-      }}
+      onClick={handleToggle}
     >
       {isFavorite ? <StarIcon /> : <StarBorderIcon />}
     </IconButton>
