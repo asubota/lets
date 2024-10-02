@@ -58,11 +58,8 @@ export const getAllFavorites = async (
   }))
 }
 
-export const removeFavorite = async (
-  favoriteId: string,
-  token: string,
-  favorites: FavoriteItem[],
-) => {
+export const removeFavorite = async (favoriteId: string, token: string) => {
+  const favorites = await getAllFavorites(token)
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {
@@ -101,8 +98,8 @@ export const setProp = async (
   propName: keyof FavoriteItem,
   propValue: string,
   token: string,
-  favorites: FavoriteItem[],
 ) => {
+  const favorites = await getAllFavorites(token)
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {
