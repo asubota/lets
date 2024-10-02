@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material'
 import { AppMessagePush, NotificationData, Product } from './types.ts'
 import html2canvas from 'html2canvas'
+import { MinMax } from './hooks/use-get-min-max-by-sku.ts'
 
 const escapeRegExp = (value = ''): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -115,18 +116,18 @@ const isMessage = (
 
 export const getMessages = (
   products: Product[],
-  settings: Record<string, Record<string, string>>,
+  minmax: MinMax,
 ): AppMessagePush[] => {
   return products
     .map((p) => {
       const stock = parseInt(p.stock || '', 10)
-      const min = parseInt(settings[p.sku].min, 10)
-      const max = parseInt(settings[p.sku].max, 10)
+      const min = minmax[p.sku].min
+      const max = minmax[p.sku].max
 
       const data: NotificationData = { sku: p.sku }
       const result: AppMessagePush[] = []
 
-      if (stock <= min) {
+      if (min !== undefined && stock <= min) {
         const message: AppMessagePush = {
           type: 'push-me' as const,
           payload: {
@@ -142,7 +143,7 @@ export const getMessages = (
         result.push(message)
       }
 
-      if (stock >= max) {
+      if (max !== undefined && stock >= max) {
         const message: AppMessagePush = {
           type: 'push-me' as const,
           payload: {
@@ -163,3 +164,5 @@ export const getMessages = (
     .flat()
     .filter(isMessage)
 }
+
+export const getFavoriteId = (p: Product) => `${p.sku}:${p.vendor}`

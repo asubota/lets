@@ -41,3 +41,10 @@ export type AppMessage =
   | {
       type: 'xxx'
     }
+
+export type FavoriteItem = {
+  favoriteId: string
+  note?: string
+  min?: number
+  max?: number
+}

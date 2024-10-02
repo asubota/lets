@@ -3,10 +3,14 @@ import { Container } from '@mui/material'
 import { AppBar } from '../components/app-bar.tsx'
 import { useNotifyAboutChange } from '../hooks/use-notify-about-change.tsx'
 import { useListenToCacheUpdate } from '../hooks/use-listen-to-cache-update.ts'
+import { useInitGoogle } from '../hooks/use-init-google.ts'
+import { useVisibilityChangeReset } from '../hooks/use-visibility-change-reset.ts'
 
 const Component = () => {
   useNotifyAboutChange()
   useListenToCacheUpdate()
+  useInitGoogle()
+  useVisibilityChangeReset()
 
   return (
     <Container sx={{ pl: 1, pr: 1, pb: 1 }}>

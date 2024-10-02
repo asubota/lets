@@ -8,37 +8,35 @@ import {
   TextField,
 } from '@mui/material'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import {
-  useGetNoteBySku,
-  useSkuSettingsActions,
-} from '../../store/sku-settings.ts'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useGetPropFromFavorite, useSetPropOnFavorite } from '../../api.ts'
 
 type NoteForm = {
   note: string
 }
 
 export const NotesDialog: FC = () => {
-  const { sku } = useParams({ strict: false })
-  const { setSetting, removeNote } = useSkuSettingsActions()
+  const { favoriteId = '' } = useParams({ strict: false })
   const navigate = useNavigate()
-  const note = useGetNoteBySku(sku || '')
+  const note = useGetPropFromFavorite(favoriteId, 'note')
   const { register, handleSubmit } = useForm<NoteForm>({
     defaultValues: { note },
   })
 
+  const { mutate } = useSetPropOnFavorite()
+
   const handleClose = () => navigate({ to: '/favorites' })
 
   const onSubmit: SubmitHandler<NoteForm> = ({ note }) => {
-    if (sku) {
-      setSetting(sku, { note })
+    if (favoriteId) {
+      mutate({ favoriteId, note })
       handleClose()
     }
   }
 
   const handleDelete = () => {
-    if (sku) {
-      removeNote(sku)
+    if (favoriteId) {
+      mutate({ favoriteId, note: '' })
       handleClose()
     }
   }

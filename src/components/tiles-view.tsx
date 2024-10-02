@@ -1,32 +1,33 @@
 import { Stack } from '@mui/material'
 import { FC } from 'react'
 import { Product } from '../types.ts'
-import { useFavsItems } from '../store/favs.ts'
 import { Tile } from './tile.tsx'
 import { useIsRoute } from '../hooks/use-is-route.hook.ts'
 import { useGetChangedProducts } from '../hooks/use-get-changed-products.hook.ts'
+import { getFavoriteId } from '../tools.tsx'
+import { useFavoriteIds } from '../api.ts'
 
 export const TilesView: FC<{ list: Product[]; search: string }> = ({
   list,
   search,
 }) => {
-  const favs = useFavsItems()
+  const favoriteIds = useFavoriteIds()
   const isFavouritesRoute = useIsRoute('/favorites')
   const { skus } = useGetChangedProducts()
 
   return (
     <Stack direction="column" spacing={1} id="tiles-view">
-      {list.map((row) => {
-        const favId = `${row.sku}:${row.vendor}`
-        const key = `${favId}:${row.price}}`
+      {list.map((p) => {
+        const favoriteId = getFavoriteId(p)
+        const key = `${favoriteId}:${p.price}}`
 
         return (
           <Tile
             key={key}
-            p={row}
+            p={p}
             search={search}
-            isFav={favs.includes(favId)}
-            isChanged={skus.includes(row.sku)}
+            isFavorite={favoriteIds.includes(favoriteId)}
+            isChanged={skus.includes(p.sku)}
             iFavouriteRoute={isFavouritesRoute}
           />
         )

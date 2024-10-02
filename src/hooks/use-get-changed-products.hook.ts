@@ -1,24 +1,27 @@
 import { useAllData } from '../use-data.ts'
-import { useSkuSettings } from '../store/sku-settings.ts'
 import { useMemo } from 'react'
+import { useGetMinMaxBySku } from './use-get-min-max-by-sku.ts'
 
 export const useGetChangedProducts = () => {
   const data = useAllData()
-  const settings = useSkuSettings()
+  const minmax = useGetMinMaxBySku()
 
   const items = useMemo(() => {
     return data
-      .filter((p) => p.sku in settings && !!p.stock)
+      .filter((p) => p.sku in minmax && !!p.stock)
       .filter((p) => {
         const stock = parseInt(p.stock || '', 10)
-        const min = parseInt(settings[p.sku].min || '', 10)
-        const max = parseInt(settings[p.sku].max || '', 10)
+        const min = minmax[p.sku].min
+        const max = minmax[p.sku].max
 
-        if (stock <= min || stock >= max) {
+        if (
+          (min !== undefined && stock <= min) ||
+          (max !== undefined && stock >= max)
+        ) {
           return p
         }
       })
-  }, [data, settings])
+  }, [data, minmax])
 
   const skus = items.map((item) => item.sku)
 

@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { Product } from './types.ts'
-import { useFavsItems } from './store/favs.ts'
 import { useMemo } from 'react'
-import { useBikeId } from './store'
 import { getUniqueVendors } from './tools.tsx'
 import { CACHE_BASE_KEY } from './constants.ts'
+import { getGoogleFileId } from './secrets.ts'
 
 interface Column {
   id: string
@@ -74,7 +73,7 @@ const getData = async (id: string): Promise<Product[]> => {
 }
 
 const useData = () => {
-  const id = useBikeId()
+  const id = getGoogleFileId()
   return useQuery<Product[]>({
     staleTime: 1000 * 60 * 12, // 12 minutes
     queryKey: [CACHE_BASE_KEY, id],
@@ -118,47 +117,4 @@ export const useSearch = (search: string): Product[] => {
     const lowerCaseSearch = search.toLowerCase()
     return data.filter((item) => filterBySearch(item, lowerCaseSearch))
   }, [search, data])
-}
-
-const getKey = (item: Product): string => `${item.sku}:${item.vendor}`
-
-export const useFavs = (): Product[] => {
-  const favs = useFavsItems()
-  const { data = [] } = useData()
-  const favsSet = useMemo(() => new Set(favs), [favs])
-
-  return useMemo(() => {
-    const existingItems: Product[] = []
-    const missingItems: Product[] = []
-
-    const existingKeys = new Set<string>()
-
-    data.forEach((item) => {
-      const key = getKey(item)
-      if (favsSet.has(key)) {
-        existingItems.push(item)
-        existingKeys.add(key)
-      }
-    })
-
-    favs.forEach((key) => {
-      if (!existingKeys.has(key)) {
-        const [sku, vendor] = key.split(':')
-        missingItems.push({
-          sku,
-          vendor,
-          name: '-',
-          price: 0,
-          p2: 0,
-          pics: null,
-          link: null,
-          availability: '',
-          stock: '0',
-          missed: true,
-        })
-      }
-    })
-
-    return [...missingItems, ...existingItems]
-  }, [favsSet, data, favs])
 }

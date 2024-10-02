@@ -2,7 +2,7 @@ import { FC, memo, MouseEventHandler, useState } from 'react'
 import { Product } from '../types.ts'
 import { DetailsPopup } from './details-popup.tsx'
 import { Box, Card, Chip, IconButton } from '@mui/material'
-import { copyContent, getHighlightedText } from '../tools.tsx'
+import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
 import { RippleText } from './ripple-text.tsx'
 import { PriceChip } from './price-chip.tsx'
 import { VendorChip } from './vendor-chip.tsx'
@@ -13,39 +13,16 @@ import { Stock } from './stock.tsx'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { TileSettings } from './tile-settings.tsx'
 import { FavoritesButton } from './favorites-button.tsx'
-import EditNoteIcon from '@mui/icons-material/EditNote'
-import { Link } from '@tanstack/react-router'
-import { useGetNoteBySku } from '../store/sku-settings.ts'
-
-const NotesButton: FC<{ sku: string }> = ({ sku }) => {
-  const hasNote = !!useGetNoteBySku(sku)
-
-  return (
-    <IconButton
-      size="small"
-      sx={{
-        mr: '10px',
-        mb: '-6px',
-        color: hasNote ? 'primary.main' : 'text.secondary',
-      }}
-      component={Link}
-      to="/favorites/$sku/notes"
-      params={{ sku }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <EditNoteIcon fontSize="small" />
-    </IconButton>
-  )
-}
+import { NotesButton } from './notes-button.tsx'
 
 export const Tile: FC<{
   p: Product
   search: string
-  isFav: boolean
+  isFavorite: boolean
   iFavouriteRoute: boolean
   isChanged: boolean
 }> = memo(
-  ({ p, search, isFav, iFavouriteRoute, isChanged }) => {
+  ({ p, search, isFavorite, iFavouriteRoute, isChanged }) => {
     const [details, setDetails] = useState<Product | null>(null)
     const [showSettings, setShowSettings] = useState(false)
 
@@ -148,7 +125,7 @@ export const Tile: FC<{
                 gap: '8px',
               }}
             >
-              <TileSettings sku={p.sku} />
+              <TileSettings favoriteId={getFavoriteId(p)} />
             </Box>
           )}
 
@@ -179,10 +156,12 @@ export const Tile: FC<{
                   alignItems: 'center',
                 }}
               >
-                {iFavouriteRoute && <NotesButton sku={p.sku} />}
+                {iFavouriteRoute && (
+                  <NotesButton favoriteId={getFavoriteId(p)} />
+                )}
                 <FavoritesButton
-                  isFavorite={isFav}
-                  favId={`${p.sku}:${p.vendor}`}
+                  isFavorite={isFavorite}
+                  favoriteId={getFavoriteId(p)}
                 />
                 <HiddenInput>
                   <Stock stock={p.stock} bordered />
@@ -196,7 +175,7 @@ export const Tile: FC<{
   },
   (p1, p2) => {
     return (
-      p1.isFav === p2.isFav &&
+      p1.isFavorite === p2.isFavorite &&
       p1.search === p2.search &&
       p1.isChanged === p2.isChanged &&
       p1.iFavouriteRoute === p2.iFavouriteRoute

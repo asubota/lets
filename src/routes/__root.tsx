@@ -7,8 +7,8 @@ import { SnackbarProvider } from 'notistack'
 
 const queryClient = new QueryClient()
 
-export const Route = createRootRoute({
-  component: () => (
+const Component = () => {
+  return (
     <ThemeModeProvider>
       <SnackbarProvider maxSnack={10} />
       <QueryClientProvider client={queryClient}>
@@ -18,9 +18,12 @@ export const Route = createRootRoute({
         />
 
         <CssBaseline />
-
         <Outlet />
       </QueryClientProvider>
     </ThemeModeProvider>
-  ),
+  )
+}
+
+export const Route = createRootRoute({
+  component: Component,
 })

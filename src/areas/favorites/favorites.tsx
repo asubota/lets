@@ -1,12 +1,13 @@
 import { FC, lazy, Suspense } from 'react'
-import { useFavs, useIsLoading } from '../../use-data.ts'
+import { useIsLoading } from '../../use-data.ts'
 import { Loader } from '../../components/loader.tsx'
 import { Portal, TextField } from '@mui/material'
 import { Outlet } from '@tanstack/react-router'
+import { useFavoriteItems } from './use-favorite-items.ts'
 const List2 = lazy(() => import('../../components/list.tsx'))
 
 export const Favorites: FC = () => {
-  const favs = useFavs()
+  const list = useFavoriteItems()
   const isLoading = useIsLoading()
 
   return (
@@ -19,7 +20,7 @@ export const Favorites: FC = () => {
         <Loader />
       ) : (
         <Suspense>
-          <List2 list={favs} search="" />
+          <List2 list={list} search="" />
         </Suspense>
       )}
 

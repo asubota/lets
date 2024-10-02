@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from 'react'
 import { AppMessage, AppMessagePush } from '../types.ts'
-import { useSkuSettings } from '../store/sku-settings.ts'
 import { closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack'
 import { getMessages } from '../tools.tsx'
 import { Box, IconButton, Typography } from '@mui/material'
 import { Close } from '@mui/icons-material'
 import { Link } from '@tanstack/react-router'
 import { useGetChangedProducts } from './use-get-changed-products.hook.ts'
+import { useGetMinMaxBySku } from './use-get-min-max-by-sku.ts'
 
 const showNotification = () => {
   Notification.requestPermission().then((result) => {
@@ -69,18 +69,20 @@ const showAlert = (message: AppMessagePush) => {
 }
 
 export const useNotifyAboutChange = () => {
-  const settings = useSkuSettings()
+  const minmax = useGetMinMaxBySku()
   const { items } = useGetChangedProducts()
 
   const doWork = useCallback(() => {
-    const messages = getMessages(items, settings)
+    const messages = getMessages(items, minmax)
 
     messages.forEach(showAlert)
+
+    console.log('## messages', messages)
 
     if (messages.length > 0) {
       showNotification()
     }
-  }, [items, settings])
+  }, [items, minmax])
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
