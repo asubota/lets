@@ -49,10 +49,9 @@ export const useToggleFavorite = () => {
     },
     mutationFn: ({ isFavorite, favoriteId }) => {
       const token = getGoogleAuthToken()
-      const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) || []
       return isFavorite
         ? addFavorite(favoriteId, token)
-        : removeFavorite(favoriteId, token, list)
+        : removeFavorite(favoriteId, token)
     },
   })
 }
@@ -93,19 +92,18 @@ export const useSetPropOnFavorite = () => {
       queryClient.setQueryData([getQueryKey()[1]], context?.list)
     },
     mutationFn: async ({ min, max, favoriteId, note }) => {
-      const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) || []
       const token = getGoogleAuthToken()
 
       if (min !== undefined) {
-        await setProp(favoriteId, 'min', min, token, list)
+        await setProp(favoriteId, 'min', min, token)
       }
 
       if (max !== undefined) {
-        await setProp(favoriteId, 'max', max, token, list)
+        await setProp(favoriteId, 'max', max, token)
       }
 
       if (note !== undefined) {
-        await setProp(favoriteId, 'note', note, token, list)
+        await setProp(favoriteId, 'note', note, token)
       }
     },
   })
