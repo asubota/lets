@@ -113,7 +113,7 @@ export const useGetFavorites = () => {
   return useQuery({
     staleTime: 1000 * 60 * 55, // 55 minutes
     queryKey: getQueryKey(),
-    queryFn: ({ queryKey }) => getAllFavorites(queryKey[1]),
+    queryFn: ({ queryKey, signal }) => getAllFavorites(queryKey[1], signal),
   })
 }
 

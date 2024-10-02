@@ -34,12 +34,14 @@ export const healthCheck = (token: string) => {
 
 export const getAllFavorites = async (
   token: string,
+  signal?: AbortSignal,
 ): Promise<FavoriteItem[]> => {
   if (!SPREADSHEET_ID || !API_KEY) {
     return []
   }
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`
   const response = await fetch(url, {
+    signal,
     headers: { Authorization: `Bearer ${token}` },
   })
 
