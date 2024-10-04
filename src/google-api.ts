@@ -1,9 +1,6 @@
 import { FavoriteItem } from './types.ts'
-import {
-  getGoogleApiKey,
-  getGoogleSpreadSheetId,
-  removeGoogleAuthToken,
-} from './secrets.ts'
+import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
+import { getAccessToken } from './google-auth.ts'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
@@ -18,36 +15,18 @@ const mapping: Record<keyof FavoriteItem, string> = {
   note: 'D',
 }
 
-export const healthCheck = (token: string) => {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`
-
-  fetch(url, { headers: { Authorization: `Bearer ${token}` } }).then(
-    (response) => {
-      if (response.status === 401) {
-        removeGoogleAuthToken()
-      }
-
-      return response.json()
-    },
-  )
-}
-
 export const getAllFavorites = async (
-  token: string,
   signal?: AbortSignal,
 ): Promise<FavoriteItem[]> => {
   if (!SPREADSHEET_ID || !API_KEY) {
     return []
   }
+  const token = await getAccessToken()
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`
   const response = await fetch(url, {
     signal,
     headers: { Authorization: `Bearer ${token}` },
   })
-
-  if (response.status === 401) {
-    removeGoogleAuthToken()
-  }
 
   const result = await response.json()
   const rows = result.values
@@ -61,7 +40,7 @@ export const getAllFavorites = async (
 }
 
 export const removeFavorite = async (favoriteId: string, token: string) => {
-  const favorites = await getAllFavorites(token)
+  const favorites = await getAllFavorites()
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {
@@ -101,7 +80,7 @@ export const setProp = async (
   propValue: string,
   token: string,
 ) => {
-  const favorites = await getAllFavorites(token)
+  const favorites = await getAllFavorites()
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {

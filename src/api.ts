@@ -9,8 +9,8 @@ import {
 import { FavoriteItem } from './types.ts'
 import { getGoogleAuthToken } from './secrets.ts'
 
-const getQueryKey = (): [string, string] => {
-  return [CACHE_FAVORITE_KEY, getGoogleAuthToken()]
+const getQueryKey = (): [string] => {
+  return [CACHE_FAVORITE_KEY]
 }
 
 export const useToggleFavorite = () => {
@@ -45,7 +45,7 @@ export const useToggleFavorite = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()[1]], context?.list)
+      queryClient.setQueryData([getQueryKey()], context?.list)
     },
     mutationFn: ({ isFavorite, favoriteId }) => {
       const token = getGoogleAuthToken()
@@ -89,7 +89,7 @@ export const useSetPropOnFavorite = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()[1]], context?.list)
+      queryClient.setQueryData([getQueryKey()], context?.list)
     },
     mutationFn: async ({ min, max, favoriteId, note }) => {
       const token = getGoogleAuthToken()
@@ -113,7 +113,7 @@ export const useGetFavorites = () => {
   return useQuery({
     staleTime: 1000 * 60 * 55, // 55 minutes
     queryKey: getQueryKey(),
-    queryFn: ({ queryKey, signal }) => getAllFavorites(queryKey[1], signal),
+    queryFn: () => getAllFavorites(),
   })
 }
 
