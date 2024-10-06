@@ -26,7 +26,8 @@ export const Modal: FC<{
   title: string
   onSave(): void
   children: ReactNode
-}> = ({ open, onClose, title, onSave, children }) => {
+  hasSave?: boolean
+}> = ({ open, onClose, title, onSave, children, hasSave = true }) => {
   return (
     <Dialog
       fullScreen
@@ -47,9 +48,12 @@ export const Modal: FC<{
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {title}
           </Typography>
-          <Button autoFocus color="inherit" onClick={onSave}>
-            Save
-          </Button>
+
+          {hasSave && (
+            <Button autoFocus color="inherit" onClick={onSave}>
+              Save
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 
