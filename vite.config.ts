@@ -12,6 +12,13 @@ const swFile = 'sw-custom.ts'
 
 export default defineConfig({
   base,
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
+    },
+  },
   build: {
     rollupOptions: {
       output: {
