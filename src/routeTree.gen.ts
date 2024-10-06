@@ -107,100 +107,16 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface LayoutFavoritesRouteChildren {
-  LayoutFavoritesFavoriteIdNotesRoute: typeof LayoutFavoritesFavoriteIdNotesRoute
-}
-
-const LayoutFavoritesRouteChildren: LayoutFavoritesRouteChildren = {
-  LayoutFavoritesFavoriteIdNotesRoute: LayoutFavoritesFavoriteIdNotesRoute,
-}
-
-const LayoutFavoritesRouteWithChildren = LayoutFavoritesRoute._addFileChildren(
-  LayoutFavoritesRouteChildren,
-)
-
-interface LayoutRouteChildren {
-  LayoutFavoritesRoute: typeof LayoutFavoritesRouteWithChildren
-  LayoutIndexRoute: typeof LayoutIndexRoute
-}
-
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutFavoritesRoute: LayoutFavoritesRouteWithChildren,
-  LayoutIndexRoute: LayoutIndexRoute,
-}
-
-const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
-
-export interface FileRoutesByFullPath {
-  '': typeof LayoutRouteWithChildren
-  '/colors': typeof ColorsLazyRoute
-  '/scanner': typeof ScannerLazyRoute
-  '/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/': typeof LayoutIndexRoute
-  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
-}
-
-export interface FileRoutesByTo {
-  '/colors': typeof ColorsLazyRoute
-  '/scanner': typeof ScannerLazyRoute
-  '/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/': typeof LayoutIndexRoute
-  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_layout': typeof LayoutRouteWithChildren
-  '/colors': typeof ColorsLazyRoute
-  '/scanner': typeof ScannerLazyRoute
-  '/_layout/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/_layout/': typeof LayoutIndexRoute
-  '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ''
-    | '/colors'
-    | '/scanner'
-    | '/favorites'
-    | '/'
-    | '/favorites/$favoriteId/notes'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/colors'
-    | '/scanner'
-    | '/favorites'
-    | '/'
-    | '/favorites/$favoriteId/notes'
-  id:
-    | '__root__'
-    | '/_layout'
-    | '/colors'
-    | '/scanner'
-    | '/_layout/favorites'
-    | '/_layout/'
-    | '/_layout/favorites/$favoriteId/notes'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  LayoutRoute: typeof LayoutRouteWithChildren
-  ColorsLazyRoute: typeof ColorsLazyRoute
-  ScannerLazyRoute: typeof ScannerLazyRoute
-}
-
-const rootRouteChildren: RootRouteChildren = {
-  LayoutRoute: LayoutRouteWithChildren,
-  ColorsLazyRoute: ColorsLazyRoute,
-  ScannerLazyRoute: ScannerLazyRoute,
-}
-
-export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRoute.addChildren({
+  LayoutRoute: LayoutRoute.addChildren({
+    LayoutFavoritesRoute: LayoutFavoritesRoute.addChildren({
+      LayoutFavoritesFavoriteIdNotesRoute,
+    }),
+    LayoutIndexRoute,
+  }),
+  ColorsLazyRoute,
+  ScannerLazyRoute,
+})
 
 /* prettier-ignore-end */
 
