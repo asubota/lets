@@ -34,7 +34,7 @@ export const useToggleFavorite = () => {
       if (isFavorite) {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) => [
           ...(old || []),
-          { favoriteId, time: 0 },
+          { favoriteId, time: +new Date() },
         ])
       } else {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) =>
