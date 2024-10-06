@@ -12,6 +12,7 @@ export const NotesButton: FC<{ favoriteId: string }> = ({ favoriteId }) => {
       size="small"
       sx={{
         color: hasNote ? 'primary.main' : 'text.secondary',
+        mr: '2px',
       }}
       component={Link}
       to="/favorites/$favoriteId/notes"
