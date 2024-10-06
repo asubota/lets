@@ -5,15 +5,13 @@ import { CropArea } from './types.ts'
 export const Blur: FC<{ cropArea: CropArea }> = ({ cropArea }) => {
   return (
     <Box
-      width="100%"
-      height="100%"
       component="svg"
       sx={{
+        width: '100%',
+        height: '100%',
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
         pointerEvents: 'none',
       }}
     >

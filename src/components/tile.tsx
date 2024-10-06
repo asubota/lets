@@ -46,7 +46,6 @@ export const Tile: FC<{
         {details && (
           <DetailsPopup details={details} onClose={() => setDetails(null)} />
         )}
-
         <Card
           className="product-tile"
           variant="outlined"
@@ -65,10 +64,10 @@ export const Tile: FC<{
             'gridTemplateColumns': '1fr',
             'gridTemplateRows': 'auto auto auto',
             'gridTemplateAreas': ` 
-          "name"
-          "sku"
-          "meta"
-        `,
+        "name"
+        "sku"
+        "meta"
+      `,
           }}
           onClick={handleCardClick}
         >
@@ -146,7 +145,13 @@ export const Tile: FC<{
                 <ImageIcon color="secondary" fontSize="small" data-no-export />
               )}
               {p.link && (
-                <LinkIcon color="secondary" fontSize="small" data-no-export />
+                <LinkIcon
+                  color="secondary"
+                  data-no-export
+                  sx={{
+                    fontSize: 'small',
+                  }}
+                />
               )}
 
               <Box

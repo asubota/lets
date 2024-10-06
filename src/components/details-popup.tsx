@@ -62,7 +62,12 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
         {details.link && (
           <>
             {!isFullScreen && (
-              <LinkIcon fontSize="small" sx={{ color: 'primary.main' }} />
+              <LinkIcon
+                sx={{
+                  fontSize: 'small',
+                  color: 'primary.main',
+                }}
+              />
             )}
             <Link
               title={details.name}
@@ -70,10 +75,10 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
               target="_blank"
               rel="noopener noreferrer"
               sx={{
+                typography: 'subtitle2',
                 textDecoration: 'none',
                 color: isFullScreen ? 'white' : 'text.primary',
               }}
-              typography="subtitle2"
             >
               {details.name}
             </Link>
@@ -96,13 +101,11 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           </IconButton>
         )}
       </DialogTitle>
-
       {!isFullScreen && (
         <Divider
           sx={{ ml: 1, mr: 1, mb: '4px', borderColor: 'primary.main' }}
         />
       )}
-
       {details.pics && (
         <DialogContent
           sx={{
