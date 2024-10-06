@@ -17,7 +17,10 @@ export const Stock: FC<{ stock: string | null; bordered?: boolean }> = ({
         color="primary"
         size="small"
         variant="outlined"
-        sx={{ borderRadius: 0, borderWidth: '2px', mb: '-2px' }}
+        sx={{
+          borderRadius: 0,
+          borderWidth: '2px',
+        }}
       />
     )
   }

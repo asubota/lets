@@ -8,8 +8,11 @@ export interface Product {
   stock: string | null
   link: string | null
   pics: string[] | null
+}
 
+export interface FavoriteProduct extends Product {
   missed?: boolean
+  time: number
 }
 
 export interface SearchForm {
@@ -47,4 +50,5 @@ export type FavoriteItem = {
   note?: string
   min?: number
   max?: number
+  time: number
 }

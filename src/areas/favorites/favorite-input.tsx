@@ -16,9 +16,11 @@ type FavoriteInputForm = {
 }
 
 export const FavoriteInput: FC = () => {
-  const { watch, register, handleSubmit, reset } = useForm<FavoriteInputForm>(
-    {},
-  )
+  const { watch, register, handleSubmit, reset } = useForm<FavoriteInputForm>({
+    defaultValues: {
+      sku: '',
+    },
+  })
   const { mutate } = useToggleFavorite()
 
   const onSubmit: SubmitHandler<FavoriteInputForm> = ({ sku }) => {

@@ -5,18 +5,7 @@ import {
   setGoogleAuthToken,
 } from './secrets.ts'
 import { enqueueSnackbar } from 'notistack'
-
-const formatDate = (date: Date) => {
-  const options: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }
-
-  return date.toLocaleString('en-US', options).replace(',', '')
-}
+import { formatDate } from './tools.tsx'
 
 const CLIENT_ID = getGoogleClientId()
 const API_KEY = getGoogleApiKey()

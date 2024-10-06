@@ -29,7 +29,8 @@ export const FavoritesButton: FC<FavoritesButtonProps> = ({
       data-no-export
       sx={{
         mr: 1,
-        mb: '-6px',
+        pb: '3px',
+        pt: '3px',
         color: isFavorite ? 'warning.light' : 'secondary.light',
       }}
       onClick={handleToggle}

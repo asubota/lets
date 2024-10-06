@@ -77,8 +77,6 @@ export const useNotifyAboutChange = () => {
 
     messages.forEach(showAlert)
 
-    console.log('## messages', messages)
-
     if (messages.length > 0) {
       showNotification()
     }
