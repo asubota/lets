@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Product } from '../types.ts'
-import { copyContent, getHighlightedText } from '../tools.tsx'
+import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
 import { useTableActions, useTableColumns } from '../store'
 import { Stock } from './stock'
 import { VendorChip } from './vendor-chip.tsx'
@@ -138,8 +138,9 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
         <TableBody className="t-body">
           {sortedList.map((row) => (
             <TableRow
-              key={row['sku'] + row['vendor']}
+              key={getFavoriteId(row)}
               sx={{
+                // @ts-ignore
                 ...(row.missed && {
                   backgroundColor: '#ea2b060f',
                 }),

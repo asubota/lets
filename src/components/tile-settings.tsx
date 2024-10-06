@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { IconButton, InputAdornment, TextField } from '@mui/material'
+import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { useGetPropFromFavorite, useSetPropOnFavorite } from '../api.ts'
 
@@ -43,7 +43,16 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
   const maxKey = `${max}-max-key`
 
   return (
-    <>
+    <Box
+      sx={{
+        gridArea: 'meta',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: '8px',
+        mb: '2px',
+      }}
+    >
       {(min || max) && (
         <IconButton
           size="small"
@@ -93,6 +102,6 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
           input: getInputProps('більш ніж'),
         }}
       />
-    </>
+    </Box>
   )
 }

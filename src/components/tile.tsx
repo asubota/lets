@@ -1,5 +1,5 @@
 import { FC, memo, MouseEventHandler, useState } from 'react'
-import { Product } from '../types.ts'
+import { FavoriteProduct, Product } from '../types.ts'
 import { DetailsPopup } from './details-popup.tsx'
 import { Box, Card, Chip, IconButton } from '@mui/material'
 import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
@@ -14,9 +14,10 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import { TileSettings } from './tile-settings.tsx'
 import { FavoritesButton } from './favorites-button.tsx'
 import { NotesButton } from './notes-button.tsx'
+import { FavoriteTime } from './favorite-time.tsx'
 
 export const Tile: FC<{
-  p: Product
+  p: Product | FavoriteProduct
   search: string
   isFavorite: boolean
   iFavouriteRoute: boolean
@@ -50,10 +51,12 @@ export const Tile: FC<{
           className="product-tile"
           variant="outlined"
           sx={{
-            ...(p.missed && {
-              backgroundColor: '#ea2b060f',
-            }),
+            ...('missed' in p &&
+              p.missed && {
+                backgroundColor: '#ea2b060f',
+              }),
             'p': 1,
+            'pb': '2px',
             'position': 'relative',
             'display': 'grid',
             'rowGap': '12px',
@@ -69,7 +72,6 @@ export const Tile: FC<{
         "meta"
       `,
           }}
-          onClick={handleCardClick}
         >
           {iFavouriteRoute && (
             <IconButton
@@ -97,10 +99,7 @@ export const Tile: FC<{
               textAlign: 'left',
               wordBreak: 'break-word',
             }}
-            onClick={async (e) => {
-              e.stopPropagation()
-              await copyContent(p.name)
-            }}
+            onClick={async () => await copyContent(p.name)}
           >
             <RippleText text={getHighlightedText(p['name'], search)} />
           </Box>
@@ -109,24 +108,9 @@ export const Tile: FC<{
             sx={{ gridArea: 'sku', justifySelf: 'flex-start' }}
             label={getHighlightedText(p['sku'], search)}
             size="small"
-            onClick={async (e) => {
-              e.stopPropagation()
-              await copyContent(p.sku)
-            }}
+            onClick={async () => await copyContent(p.sku)}
           />
-          {showSettings && (
-            <Box
-              sx={{
-                gridArea: 'meta',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                gap: '8px',
-              }}
-            >
-              <TileSettings favoriteId={getFavoriteId(p)} />
-            </Box>
-          )}
+          {showSettings && <TileSettings favoriteId={getFavoriteId(p)} />}
 
           {!showSettings && (
             <Box
@@ -142,15 +126,23 @@ export const Tile: FC<{
               <VendorChip vendor={p.vendor} />
 
               {p.pics && (
-                <ImageIcon color="secondary" fontSize="small" data-no-export />
+                <ImageIcon
+                  sx={{
+                    color: 'secondary',
+                    fontSize: 'small',
+                  }}
+                  data-no-export
+                  onClick={handleCardClick}
+                />
               )}
               {p.link && (
                 <LinkIcon
-                  color="secondary"
                   data-no-export
                   sx={{
+                    color: 'secondary',
                     fontSize: 'small',
                   }}
+                  onClick={handleCardClick}
                 />
               )}
 
@@ -161,6 +153,9 @@ export const Tile: FC<{
                   alignItems: 'center',
                 }}
               >
+                {iFavouriteRoute && 'time' in p && (
+                  <FavoriteTime time={p.time} />
+                )}
                 {iFavouriteRoute && (
                   <NotesButton favoriteId={getFavoriteId(p)} />
                 )}

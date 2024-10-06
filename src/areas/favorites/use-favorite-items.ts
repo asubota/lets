@@ -1,31 +1,36 @@
-import { Product } from '../../types.ts'
-import { useFavoriteIds } from '../../api.ts'
+import { FavoriteProduct } from '../../types.ts'
+import { useGetFavorites } from '../../api.ts'
 import { useMemo } from 'react'
 import { useAllData } from '../../use-data.ts'
-import { getFavoriteId } from '../../tools.tsx'
+import { compareByTime, getFavoriteId } from '../../tools.tsx'
 
-export const useFavoriteItems = (): Product[] => {
-  const favoriteIds = useFavoriteIds()
+export const useFavoriteItems = (): FavoriteProduct[] => {
+  const { data: favoriteItems = [] } = useGetFavorites()
   const products = useAllData()
-  const favsSet = useMemo(() => new Set(favoriteIds), [favoriteIds])
+
+  const byId = useMemo(
+    () => new Map(favoriteItems.map((item) => [item.favoriteId, item])),
+    [favoriteItems],
+  )
 
   return useMemo(() => {
-    const existingItems: Product[] = []
-    const missingItems: Product[] = []
+    const result: FavoriteProduct[] = []
     const existingKeys = new Set<string>()
 
     products.forEach((item) => {
-      const key = getFavoriteId(item)
-      if (favsSet.has(key)) {
-        existingItems.push(item)
-        existingKeys.add(key)
+      const favoriteId = getFavoriteId(item)
+
+      if (byId.has(favoriteId)) {
+        result.push({ ...item, time: byId.get(favoriteId)?.time || 0 })
+
+        existingKeys.add(favoriteId)
       }
     })
 
-    favoriteIds.forEach((favoriteId) => {
-      if (!existingKeys.has(favoriteId)) {
-        const [sku, vendor] = favoriteId.split(':')
-        missingItems.push({
+    favoriteItems.forEach((favoriteItem) => {
+      if (!existingKeys.has(favoriteItem.favoriteId)) {
+        const [sku, vendor] = favoriteItem.favoriteId.split(':')
+        result.push({
           sku,
           vendor,
           name: '-',
@@ -36,10 +41,11 @@ export const useFavoriteItems = (): Product[] => {
           availability: '',
           stock: '0',
           missed: true,
+          time: favoriteItem.time,
         })
       }
     })
 
-    return [...missingItems, ...existingItems]
-  }, [favsSet, products, favoriteIds])
+    return result.sort(compareByTime).reverse()
+  }, [byId, products, favoriteItems])
 }

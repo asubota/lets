@@ -34,7 +34,7 @@ export const useToggleFavorite = () => {
       if (isFavorite) {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) => [
           ...(old || []),
-          { favoriteId },
+          { favoriteId, time: 0 },
         ])
       } else {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) =>
@@ -113,7 +113,10 @@ export const useGetFavorites = () => {
   return useQuery({
     staleTime: 1000 * 60 * 55, // 55 minutes
     queryKey: getQueryKey(),
-    queryFn: () => getAllFavorites(),
+    queryFn: ({ signal }) =>
+      getAllFavorites(signal).then((items) => {
+        return items.filter((item) => !!item.favoriteId)
+      }),
   })
 }
 
@@ -133,5 +136,5 @@ export const useGetPropFromFavorite = <T extends keyof FavoriteItem>(
 export const useFavoriteIds = (): string[] => {
   const { data = [] } = useGetFavorites()
 
-  return data.map((item) => item.favoriteId).filter(Boolean)
+  return data.map((item) => item.favoriteId)
 }

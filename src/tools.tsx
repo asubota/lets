@@ -166,3 +166,28 @@ export const getMessages = (
 }
 
 export const getFavoriteId = (p: Product) => `${p.sku}:${p.vendor}`
+
+export const formatDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }
+
+  return date.toLocaleString('en-US', options).replace(',', '')
+}
+
+export function compareByTime(
+  a: { time: number },
+  b: { time: number },
+): number {
+  if (a.time < b.time) {
+    return -1
+  }
+  if (a.time > b.time) {
+    return 1
+  }
+  return 0
+}
