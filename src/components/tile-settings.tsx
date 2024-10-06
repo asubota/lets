@@ -68,8 +68,10 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
             })
           }
         }}
-        InputProps={getInputProps('менш ніж')}
         sx={sx}
+        slotProps={{
+          input: getInputProps('менш ніж'),
+        }}
       />
       <TextField
         type="number"
@@ -86,8 +88,10 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
             })
           }
         }}
-        InputProps={getInputProps('більш ніж')}
         sx={sx}
+        slotProps={{
+          input: getInputProps('більш ніж'),
+        }}
       />
     </>
   )

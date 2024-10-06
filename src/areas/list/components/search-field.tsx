@@ -35,32 +35,34 @@ export const SearchField: FC<{
             {...field}
             onFocus={onFocus}
             disabled={loading}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end" sx={{ marginRight: -2 }}>
-                  <IconButton
-                    onClick={handleFormReset}
-                    size="small"
-                    sx={{
-                      'color': 'text.secondary',
-                      'visibility': field.value ? 'visible' : 'hidden',
-                      '& svg': { width: '26px', height: '26px' },
-                    }}
-                  >
-                    <Cancel />
-                  </IconButton>
-
-                  <Box sx={{ backgroundColor: 'primary.main' }}>
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ marginRight: -2 }}>
                     <IconButton
-                      type={loading ? 'button' : 'submit'}
-                      sx={{ color: 'primary.contrastText' }}
-                      className={clsx({ rotate: loading })}
+                      onClick={handleFormReset}
+                      size="small"
+                      sx={{
+                        'color': 'text.secondary',
+                        'visibility': field.value ? 'visible' : 'hidden',
+                        '& svg': { width: '26px', height: '26px' },
+                      }}
                     >
-                      {loading ? <LoopIcon /> : <Search />}
+                      <Cancel />
                     </IconButton>
-                  </Box>
-                </InputAdornment>
-              ),
+
+                    <Box sx={{ backgroundColor: 'primary.main' }}>
+                      <IconButton
+                        type={loading ? 'button' : 'submit'}
+                        sx={{ color: 'primary.contrastText' }}
+                        className={clsx({ rotate: loading })}
+                      >
+                        {loading ? <LoopIcon /> : <Search />}
+                      </IconButton>
+                    </Box>
+                  </InputAdornment>
+                ),
+              },
             }}
           />
         )
