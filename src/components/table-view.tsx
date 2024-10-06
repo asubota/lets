@@ -1,6 +1,5 @@
 import { FC, useState } from 'react'
 import {
-  Box,
   Paper,
   Table,
   TableBody,
@@ -9,14 +8,14 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Typography,
 } from '@mui/material'
 import { Product } from '../types.ts'
 import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
-import { useTableActions, useTableColumns } from '../store'
+import { useTableColumns } from '../store'
 import { Stock } from './stock'
 import { VendorChip } from './vendor-chip.tsx'
 import { RippleText } from './ripple-text.tsx'
+import { AllColumnsAreDisabled } from './all-columns-are-disabled.tsx'
 
 type Order = 'asc' | 'desc' | undefined
 
@@ -34,28 +33,6 @@ function getComparator(order: Order): (a: Product, b: Product) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b)
     : (a, b) => -descendingComparator(a, b)
-}
-
-const AllColumnsAreDisabled: FC = () => {
-  const { toggleSettings } = useTableActions()
-
-  return (
-    <Box
-      sx={{
-        mt: '100px',
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
-      <Typography
-        variant="subtitle2"
-        sx={{ color: 'primary.main', cursor: 'pointer' }}
-        onClick={toggleSettings}
-      >
-        All columns are disabled!
-      </Typography>
-    </Box>
-  )
 }
 
 export const TableView: FC<{ list: Product[]; search: string }> = ({
@@ -140,10 +117,6 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
             <TableRow
               key={getFavoriteId(row)}
               sx={{
-                // @ts-ignore
-                ...(row.missed && {
-                  backgroundColor: '#ea2b060f',
-                }),
                 '&:last-child td, &:last-child th': { border: 0 },
               }}
             >
