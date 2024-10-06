@@ -53,7 +53,6 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
           <HighlightOffIcon fontSize="small" />
         </IconButton>
       )}
-
       <TextField
         type="number"
         size="small"
