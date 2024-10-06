@@ -21,6 +21,7 @@ import { Route as LayoutFavoritesFavoriteIdNotesImport } from './routes/_layout/
 // Create Virtual Routes
 
 const ScannerLazyImport = createFileRoute('/scanner')()
+const NotificationsLazyImport = createFileRoute('/notifications')()
 const ColorsLazyImport = createFileRoute('/colors')()
 
 // Create/Update Routes
@@ -29,6 +30,11 @@ const ScannerLazyRoute = ScannerLazyImport.update({
   path: '/scanner',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/scanner.lazy').then((d) => d.Route))
+
+const NotificationsLazyRoute = NotificationsLazyImport.update({
+  path: '/notifications',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
 
 const ColorsLazyRoute = ColorsLazyImport.update({
   path: '/colors',
@@ -74,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ColorsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/scanner': {
       id: '/scanner'
       path: '/scanner'
@@ -115,6 +128,7 @@ export const routeTree = rootRoute.addChildren({
     LayoutIndexRoute,
   }),
   ColorsLazyRoute,
+  NotificationsLazyRoute,
   ScannerLazyRoute,
 })
 
@@ -128,6 +142,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_layout",
         "/colors",
+        "/notifications",
         "/scanner"
       ]
     },
@@ -140,6 +155,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/colors": {
       "filePath": "colors.lazy.tsx"
+    },
+    "/notifications": {
+      "filePath": "notifications.lazy.tsx"
     },
     "/scanner": {
       "filePath": "scanner.lazy.tsx"

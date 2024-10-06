@@ -3,12 +3,17 @@ import PaletteIcon from '@mui/icons-material/Palette'
 import { IconButton, Stack, useTheme } from '@mui/material'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+
 import { ColorModeContext } from '../theme-mode-provider.tsx'
 import { Link } from '@tanstack/react-router'
+import { useGetChangedProducts } from '../hooks/use-get-changed-products.hook.ts'
+import { RedDot } from './red-dot.tsx'
 
 export const ExtraViewOptions: FC = () => {
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
+  const { skus } = useGetChangedProducts()
 
   return (
     <Stack
@@ -19,6 +24,15 @@ export const ExtraViewOptions: FC = () => {
         bottom: '25px',
       }}
     >
+      <IconButton
+        component={Link}
+        sx={{ color: 'text.secondary' }}
+        to="/notifications"
+      >
+        <NotificationsNoneIcon />
+        {skus.length > 0 && <RedDot />}
+      </IconButton>
+
       <IconButton
         onClick={colorMode.toggleColorMode}
         sx={{ color: 'text.secondary' }}
