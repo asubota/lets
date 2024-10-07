@@ -13,7 +13,8 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
 }) => {
   const favoriteIds = useFavoriteIds()
   const isFavouritesRoute = useIsRoute('/favorites')
-  const { skus } = useGetChangedProducts()
+  const changedProducts = useGetChangedProducts()
+  const skus = changedProducts.map((p) => p.sku)
 
   return (
     <Stack direction="column" spacing={1} id="tiles-view">
