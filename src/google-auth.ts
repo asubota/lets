@@ -1,27 +1,35 @@
-import { gapi } from 'gapi-script'
 import {
   getGoogleApiKey,
+  getGoogleAuthToken,
+  getGoogleAuthTokenExpiration,
   getGoogleClientId,
   setGoogleAuthToken,
+  setGoogleAuthTokenExpiration,
 } from './secrets.ts'
-import { enqueueSnackbar } from 'notistack'
-import { formatDate } from './tools.tsx'
 
 const CLIENT_ID = getGoogleClientId()
 const API_KEY = getGoogleApiKey()
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 
 export const loadGoogleApi = (): Promise<void> => {
+  console.log('## loadGoogleApi 1')
+
+  if (gapi.auth2) {
+    console.log('## loadGoogleApi 2')
+    return Promise.resolve()
+  }
+
   return new Promise<void>((resolve, reject) => {
+    console.log('## loadGoogleApi 3')
     function start() {
       gapi.client
         .init({
           apiKey: API_KEY,
           clientId: CLIENT_ID,
+          scope: SCOPES,
           discoveryDocs: [
             'https://sheets.googleapis.com/$discovery/rest?version=v4',
           ],
-          scope: SCOPES,
         })
         .then(resolve, reject)
     }
@@ -30,27 +38,38 @@ export const loadGoogleApi = (): Promise<void> => {
   })
 }
 
-export const signIn = async (): Promise<string> => {
-  const auth = gapi.auth2.getAuthInstance()
-  await auth.signIn()
+const signIn = async (): Promise<string> => {
+  const authInstance = gapi.auth2.getAuthInstance()
+  await authInstance.signIn()
 
-  return auth.currentUser.get().getAuthResponse().access_token
+  return authInstance.currentUser.get().getAuthResponse().access_token
+}
+
+export const initGoogleAuth = async () => {
+  const authInstance = gapi.auth2.getAuthInstance()
+
+  if (!authInstance.isSignedIn.get()) {
+    await signIn()
+  }
+
+  await getAccessToken()
 }
 
 export const getAccessToken = async (): Promise<string> => {
-  const auth = gapi.auth2.getAuthInstance()
-  const user = auth.currentUser.get()
-  const authResponse = await user.reloadAuthResponse()
+  const expiresAt = getGoogleAuthTokenExpiration()
+  const minutesLeft = (parseInt(expiresAt, 10) - +new Date()) / 1000 / 60
+  const token = getGoogleAuthToken()
 
-  setGoogleAuthToken(authResponse.access_token)
+  if (minutesLeft < 5 || !token) {
+    const auth = gapi.auth2.getAuthInstance()
+    const user = auth.currentUser.get()
+    const authResponse = await user.reloadAuthResponse()
 
-  enqueueSnackbar(`Expires: ${formatDate(new Date(authResponse.expires_at))}`, {
-    variant: 'info',
-    hideIconVariant: true,
-    preventDuplicate: true,
-    anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
-    autoHideDuration: 3000,
-  })
+    setGoogleAuthTokenExpiration(authResponse.expires_at.toString())
+    setGoogleAuthToken(authResponse.access_token)
 
-  return authResponse.access_token
+    return authResponse.access_token
+  }
+
+  return token
 }

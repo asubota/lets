@@ -1,6 +1,7 @@
 import {
   GOOGLE_API_KEY_KEY,
   GOOGLE_AUTH_TOKEN_KEY,
+  GOOGLE_AUTH_TOKEN_KEY_EXPIRES_AT,
   GOOGLE_CLIENT_ID_KEY,
   GOOGLE_DATABASE_SPREADSHEET_ID,
   GOOGLE_PRODUCTS_FILE_ID,
@@ -8,6 +9,14 @@ import {
 
 export const removeGoogleAuthToken = () => {
   localStorage.removeItem(GOOGLE_AUTH_TOKEN_KEY)
+}
+
+export const setGoogleAuthTokenExpiration = (value: string) => {
+  localStorage.setItem(GOOGLE_AUTH_TOKEN_KEY_EXPIRES_AT, value)
+}
+
+export const getGoogleAuthTokenExpiration = () => {
+  return localStorage.getItem(GOOGLE_AUTH_TOKEN_KEY_EXPIRES_AT) || '0'
 }
 
 export const setGoogleAuthToken = (value: string) => {
