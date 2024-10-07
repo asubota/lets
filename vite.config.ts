@@ -48,6 +48,20 @@ export default defineConfig({
         navigateFallbackAllowlist: [new RegExp('^/lets/')],
         runtimeCaching: [
           {
+            urlPattern: /^https:\/\/apis\.google\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-api-cache',
+              expiration: {
+                maxEntries: 8,
+                maxAgeSeconds: 60 * 60 * 24 * 21, // <== 21 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
