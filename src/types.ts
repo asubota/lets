@@ -15,6 +15,16 @@ export interface FavoriteProduct extends Product {
   time: number
 }
 
+export type FavNotification = {
+  title: string
+  body: string
+  sku: string
+  favoriteId: string
+  min?: number
+  max?: number
+  read?: boolean
+}
+
 export interface SearchForm {
   input: string
 }
@@ -51,4 +61,5 @@ export type FavoriteItem = {
   min?: number
   max?: number
   time: number
+  read: boolean
 }

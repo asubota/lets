@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import { AppMessagePush, NotificationData, Product } from './types.ts'
+import { FavNotification, Product } from './types.ts'
 import html2canvas from 'html2canvas'
 import { MinMax } from './hooks/use-get-min-max-by-sku.ts'
 
@@ -110,59 +110,55 @@ export const handleTakeScreenshot = async () => {
   link.click()
 }
 
-const isMessage = (
+const isNotification = (
   item: Record<string, unknown> | undefined,
-): item is AppMessagePush => !!item
+): item is FavNotification => !!item
 
-export const getMessages = (
+export const getNotifications = (
   products: Product[],
   minmax: MinMax,
-): AppMessagePush[] => {
+): FavNotification[] => {
   return products
     .map((p) => {
       const stock = parseInt(p.stock || '', 10)
       const min = minmax[p.sku].min
       const max = minmax[p.sku].max
+      const read = minmax[p.sku].read
 
-      const data: NotificationData = { sku: p.sku }
-      const result: AppMessagePush[] = []
+      const result: FavNotification[] = []
 
       if (min !== undefined && stock <= min) {
-        const message: AppMessagePush = {
-          type: 'push-me' as const,
-          payload: {
-            title: p.name,
-            options: {
-              body: `${p.sku}, цього ${stock}, менше ніж ${min}`,
-              icon: '/lets/logo.webp',
-              data,
-            },
-          },
+        const notification: FavNotification = {
+          title: p.name,
+          body: `${p.sku}, цього ${stock}, менше ніж ${min}`,
+          min,
+          max,
+          read,
+          sku: p.sku,
+          favoriteId: getFavoriteId(p),
         }
 
-        result.push(message)
+        result.push(notification)
       }
 
       if (max !== undefined && stock >= max) {
-        const message: AppMessagePush = {
-          type: 'push-me' as const,
-          payload: {
-            title: p.name,
-            options: {
-              body: `${p.sku}, цього ${stock}, більше ніж ${max}`,
-              icon: '/lets/logo.webp',
-              data,
-            },
-          },
+        const notification: FavNotification = {
+          title: p.name,
+          body: `${p.sku}, цього ${stock}, більше ніж ${max}`,
+          min,
+          max,
+          read,
+          sku: p.sku,
+          favoriteId: getFavoriteId(p),
         }
 
-        result.push(message)
+        result.push(notification)
       }
 
       return result
     })
     .flat()
-    .filter(isMessage)
+    .filter(isNotification)
 }
 
 export const getFavoriteId = (p: Product) => `${p.sku}:${p.vendor}`

@@ -1,12 +1,10 @@
-import { useCallback, useEffect } from 'react'
-import { AppMessage, AppMessagePush } from '../types.ts'
+import { useEffect } from 'react'
+import { AppMessage, AppMessagePush, FavNotification } from '../types.ts'
 import { closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack'
-import { getMessages } from '../tools.tsx'
-import { Box, IconButton, Typography } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { Close } from '@mui/icons-material'
-import { Link } from '@tanstack/react-router'
-import { useGetChangedProducts } from './use-get-changed-products.hook.ts'
-import { useGetMinMaxBySku } from './use-get-min-max-by-sku.ts'
+import { NotificationSnackbar } from '../components/notification-snackbar.tsx'
+import { useGetNotifications } from './use-get-notifications.ts'
 
 const showNotification = () => {
   Notification.requestPermission().then((result) => {
@@ -39,27 +37,9 @@ const action = (snackbarId: SnackbarKey) => (
   </IconButton>
 )
 
-const showAlert = (message: AppMessagePush) => {
+const showAlert = (n: FavNotification) => {
   enqueueSnackbar({
-    message: (
-      <Box
-        sx={{
-          maxWidth: 'calc(100vw - 112px)',
-          color: 'text.primary',
-          textDecoration: 'none',
-        }}
-        component={Link}
-        to="/"
-        search={{ s: message.payload.options.data.sku }}
-      >
-        <Box component={Typography} variant="body2">
-          {message.payload.title}
-        </Box>
-        <Box component={Typography} variant="caption">
-          {message.payload.options.body}
-        </Box>
-      </Box>
-    ),
+    message: <NotificationSnackbar n={n} />,
     persist: true,
     variant: 'warning',
     hideIconVariant: true,
@@ -69,23 +49,16 @@ const showAlert = (message: AppMessagePush) => {
 }
 
 export const useNotifyAboutChange = () => {
-  const minmax = useGetMinMaxBySku()
-  const { items } = useGetChangedProducts()
-
-  const doWork = useCallback(() => {
-    const messages = getMessages(items, minmax)
-
-    messages.forEach(showAlert)
-
-    if (messages.length > 0) {
-      showNotification()
-    }
-  }, [items, minmax])
+  const notifications = useGetNotifications()
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
       if (event.data && event.data.type === 'cache-update') {
-        doWork()
+        notifications.forEach(showAlert)
+
+        if (notifications.length > 0) {
+          showNotification()
+        }
       }
     }
 
@@ -94,5 +67,5 @@ export const useNotifyAboutChange = () => {
     return () => {
       navigator.serviceWorker.removeEventListener('message', fn)
     }
-  }, [doWork])
+  }, [notifications])
 }

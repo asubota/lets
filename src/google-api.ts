@@ -6,7 +6,7 @@ const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
 const SHEET_NAME = 'favorites'
 
-type GRow = [string, string, string, string, string]
+type GRow = [string, string, string, string, string, string]
 
 const mapping: Record<keyof FavoriteItem, string> = {
   favoriteId: 'A',
@@ -14,6 +14,7 @@ const mapping: Record<keyof FavoriteItem, string> = {
   max: 'C',
   note: 'D',
   time: 'E',
+  read: 'F',
 }
 
 export const getAllFavorites = async (
@@ -40,6 +41,7 @@ export const getAllFavorites = async (
     max: row[2] ? parseInt(row[2], 10) : undefined,
     note: row[3] || undefined,
     time: row[4] ? parseInt(row[4], 10) : 0,
+    read: !!row[5],
   }))
 }
 
@@ -48,7 +50,7 @@ export const removeFavorite = async (favoriteId: string) => {
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {
-    const range = `${SHEET_NAME}!A${rowIndex + 2}:E${rowIndex + 2}`
+    const range = `${SHEET_NAME}!A${rowIndex + 2}:F${rowIndex + 2}`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:clear?key=${API_KEY}`
     const token = await getAccessToken()
 

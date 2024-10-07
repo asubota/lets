@@ -7,13 +7,13 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 
 import { ColorModeContext } from '../theme-mode-provider.tsx'
 import { Link } from '@tanstack/react-router'
-import { useGetChangedProducts } from '../hooks/use-get-changed-products.hook.ts'
 import { RedDot } from './red-dot.tsx'
+import { useGetNotifications } from '../hooks/use-get-notifications.ts'
 
 export const ExtraViewOptions: FC = () => {
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
-  const { skus } = useGetChangedProducts()
+  const unread = useGetNotifications('unread')
 
   return (
     <Stack
@@ -30,7 +30,7 @@ export const ExtraViewOptions: FC = () => {
         to="/notifications"
       >
         <NotificationsNoneIcon />
-        {skus.length > 0 && <RedDot />}
+        {unread.length > 0 && <RedDot />}
       </IconButton>
 
       <IconButton

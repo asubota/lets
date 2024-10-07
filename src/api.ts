@@ -33,7 +33,7 @@ export const useToggleFavorite = () => {
       if (isFavorite) {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) => [
           ...(old || []),
-          { favoriteId, time: +new Date() },
+          { favoriteId, time: +new Date(), read: false },
         ])
       } else {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) =>
@@ -58,7 +58,13 @@ export const useSetPropOnFavorite = () => {
   return useMutation<
     void,
     unknown,
-    { favoriteId: string; min?: string; max?: string; note?: string },
+    {
+      favoriteId: string
+      min?: string
+      max?: string
+      note?: string
+      read?: boolean
+    },
     { list: FavoriteItem[] }
   >({
     async onSettled() {
@@ -66,7 +72,7 @@ export const useSetPropOnFavorite = () => {
         queryKey: [CACHE_FAVORITE_KEY],
       })
     },
-    onMutate: async ({ favoriteId, max, min, note }) => {
+    onMutate: async ({ favoriteId, max, min, note, read }) => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
       const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) || []
       const updatedList = list.map((item) => {
@@ -77,6 +83,7 @@ export const useSetPropOnFavorite = () => {
               max: max !== undefined ? max : item.max,
               min: min !== undefined ? min : item.min,
               note: note !== undefined ? note : item.note,
+              read: read !== undefined ? read : item.read,
             }
       })
 
@@ -87,7 +94,11 @@ export const useSetPropOnFavorite = () => {
     onError: (_, __, context) => {
       queryClient.setQueryData([getQueryKey()], context?.list)
     },
-    mutationFn: async ({ min, max, favoriteId, note }) => {
+    mutationFn: async ({ min, max, favoriteId, note, read }) => {
+      if (read !== undefined) {
+        await setProp(favoriteId, 'read', read ? 'yes' : '')
+      }
+
       if (min !== undefined) {
         await setProp(favoriteId, 'min', min)
       }
