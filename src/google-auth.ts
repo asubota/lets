@@ -12,15 +12,7 @@ const API_KEY = getGoogleApiKey()
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 
 export const loadGoogleApi = (): Promise<void> => {
-  console.log('## loadGoogleApi 1')
-
-  if (gapi.auth2) {
-    console.log('## loadGoogleApi 2')
-    return Promise.resolve()
-  }
-
   return new Promise<void>((resolve, reject) => {
-    console.log('## loadGoogleApi 3')
     function start() {
       gapi.client
         .init({
