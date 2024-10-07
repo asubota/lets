@@ -9,8 +9,8 @@ import { useVisibilityChangeReset } from '../hooks/use-visibility-change-reset.t
 const Component = () => {
   useNotifyAboutChange()
   useListenToCacheUpdate()
-  useInitGoogle()
   useVisibilityChangeReset()
+  useInitGoogle()
 
   return (
     <Container sx={{ pl: 1, pr: 1, pb: 1 }}>

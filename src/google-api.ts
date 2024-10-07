@@ -22,8 +22,10 @@ export const getAllFavorites = async (
   if (!SPREADSHEET_ID || !API_KEY) {
     return []
   }
-  const token = await getAccessToken()
+
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`
+  const token = await getAccessToken()
+
   const response = await fetch(url, {
     signal,
     headers: { Authorization: `Bearer ${token}` },
@@ -41,13 +43,14 @@ export const getAllFavorites = async (
   }))
 }
 
-export const removeFavorite = async (favoriteId: string, token: string) => {
+export const removeFavorite = async (favoriteId: string) => {
   const favorites = await getAllFavorites()
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {
     const range = `${SHEET_NAME}!A${rowIndex + 2}:E${rowIndex + 2}`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:clear?key=${API_KEY}`
+    const token = await getAccessToken()
 
     await fetch(url, {
       method: 'POST',
@@ -56,15 +59,13 @@ export const removeFavorite = async (favoriteId: string, token: string) => {
   }
 }
 
-export const addFavorite = async (favoriteId: string, token: string) => {
+export const addFavorite = async (favoriteId: string) => {
+  const body = { values: [[favoriteId, '', '', '', +new Date()]] }
   const range = `${SHEET_NAME}!A1`
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`
+  const token = await getAccessToken()
 
-  const body = {
-    values: [[favoriteId, '', '', '', +new Date()]],
-  }
-
-  const response = await fetch(url, {
+  await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -72,25 +73,21 @@ export const addFavorite = async (favoriteId: string, token: string) => {
     },
     body: JSON.stringify(body),
   })
-
-  await response.json()
 }
 
 export const setProp = async (
   favoriteId: string,
   propName: keyof FavoriteItem,
   propValue: string,
-  token: string,
 ) => {
   const favorites = await getAllFavorites()
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
   if (rowIndex !== -1) {
+    const body = { values: [[propValue]] }
     const range = `${SHEET_NAME}!${mapping[propName]}${rowIndex + 2}`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`
-    const body = {
-      values: [[propValue]],
-    }
+    const token = await getAccessToken()
 
     await fetch(url, {
       method: 'PUT',

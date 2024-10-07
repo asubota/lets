@@ -7,7 +7,6 @@ import {
   setProp,
 } from './google-api.ts'
 import { FavoriteItem } from './types.ts'
-import { getGoogleAuthToken } from './secrets.ts'
 
 const getQueryKey = (): [string] => {
   return [CACHE_FAVORITE_KEY]
@@ -48,10 +47,7 @@ export const useToggleFavorite = () => {
       queryClient.setQueryData([getQueryKey()], context?.list)
     },
     mutationFn: ({ isFavorite, favoriteId }) => {
-      const token = getGoogleAuthToken()
-      return isFavorite
-        ? addFavorite(favoriteId, token)
-        : removeFavorite(favoriteId, token)
+      return isFavorite ? addFavorite(favoriteId) : removeFavorite(favoriteId)
     },
   })
 }
@@ -92,18 +88,16 @@ export const useSetPropOnFavorite = () => {
       queryClient.setQueryData([getQueryKey()], context?.list)
     },
     mutationFn: async ({ min, max, favoriteId, note }) => {
-      const token = getGoogleAuthToken()
-
       if (min !== undefined) {
-        await setProp(favoriteId, 'min', min, token)
+        await setProp(favoriteId, 'min', min)
       }
 
       if (max !== undefined) {
-        await setProp(favoriteId, 'max', max, token)
+        await setProp(favoriteId, 'max', max)
       }
 
       if (note !== undefined) {
-        await setProp(favoriteId, 'note', note, token)
+        await setProp(favoriteId, 'note', note)
       }
     },
   })
