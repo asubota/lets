@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useGetMinMaxBySku } from '../../hooks/use-get-min-max-by-sku.ts'
 import { useGetChangedProducts } from '../../hooks/use-get-changed-products.hook.ts'
 import { getMessages } from '../../tools.tsx'
-import { Alert, Box, Stack, Typography } from '@mui/material'
+import { Alert, Box, Stack, Switch, Typography } from '@mui/material'
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'
 
 export const Notifications: FC = () => {
@@ -52,21 +52,31 @@ export const Notifications: FC = () => {
           return (
             <Alert
               key={m.payload.options.body}
+              sx={{
+                '.MuiAlert-action': {
+                  p: 0,
+                  pl: 1,
+                  alignItems: 'center',
+                },
+              }}
               severity="warning"
               variant="outlined"
+              action={<Switch size="small" />}
             >
               <Box
-                sx={{
-                  color: 'text.primary',
-                }}
+                component={Typography}
+                variant="body2"
+                sx={{ color: 'text.primary' }}
               >
-                <Box component={Typography} variant="body2">
-                  {m.payload.title}
-                </Box>
+                {m.payload.title}
+              </Box>
 
-                <Box component={Typography} variant="caption">
-                  {m.payload.options.body}
-                </Box>
+              <Box
+                component={Typography}
+                variant="caption"
+                sx={{ color: 'text.primary' }}
+              >
+                {m.payload.options.body}
               </Box>
             </Alert>
           )
