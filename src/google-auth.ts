@@ -50,7 +50,7 @@ export const getAccessToken = async (): Promise<string> => {
   const minutesLeft = (parseInt(expiresAt, 10) - +new Date()) / 1000 / 60
   const token = getGoogleAuthToken()
 
-  if (minutesLeft < 5 || !token) {
+  if (minutesLeft < 2 || !token) {
     const auth = gapi.auth2.getAuthInstance()
     const user = auth.currentUser.get()
     const authResponse = await user.reloadAuthResponse()
