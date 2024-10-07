@@ -19,9 +19,6 @@ export const loadGoogleApi = (): Promise<void> => {
           apiKey: API_KEY,
           clientId: CLIENT_ID,
           scope: SCOPES,
-          discoveryDocs: [
-            'https://sheets.googleapis.com/$discovery/rest?version=v4',
-          ],
         })
         .then(resolve, reject)
     }
