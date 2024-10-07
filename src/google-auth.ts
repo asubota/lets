@@ -1,3 +1,4 @@
+import { gapi } from 'gapi-script'
 import {
   getGoogleApiKey,
   getGoogleAuthToken,
