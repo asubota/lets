@@ -11,6 +11,7 @@ import { useToggleFavorite } from '../../api.ts'
 import { Cancel } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import { useAllData } from '../../use-data.ts'
+import { DUMMY_VENDOR } from '../../constants.ts'
 
 type FavoriteInputForm = {
   sku: string
@@ -35,7 +36,7 @@ export const FavoriteInput: FC = () => {
       if (product) {
         value.push(product.vendor)
       } else {
-        value.push('hand')
+        value.push(DUMMY_VENDOR)
       }
     }
 

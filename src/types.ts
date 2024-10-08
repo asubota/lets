@@ -1,7 +1,6 @@
 export interface Product {
   sku: string
   name: string
-  availability: string
   vendor: string
   price: number
   p2: number | null
