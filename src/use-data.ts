@@ -84,6 +84,21 @@ const useData = () => {
 export const useAllData = () => {
   const { data = [] } = useData()
 
+  const p: Product = {
+    sku: 'asdasdasdasdasd',
+    name: 'ololo',
+    stock: '10',
+    vendor: 'adm',
+    pics: [],
+    price: 100,
+    p2: 1,
+    link: null,
+  }
+
+  if (data.length > 0) {
+    data.push(p)
+  }
+
   return data
 }
 

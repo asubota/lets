@@ -1,6 +1,8 @@
 export const CACHE_BASE_KEY = 'lets-bike-cache-products'
 export const CACHE_FAVORITE_KEY = 'lets-bike-cache-favorites'
 
+export const DUMMY_VENDOR = 'hand'
+
 export const GOOGLE_AUTH_TOKEN_KEY_EXPIRES_AT =
   'lets-bike-google-auth-token-expires-at'
 export const GOOGLE_AUTH_TOKEN_KEY = 'lets-bike-google-auth-token'
