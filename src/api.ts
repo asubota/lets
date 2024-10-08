@@ -101,10 +101,12 @@ export const useSetPropOnFavorite = () => {
 
       if (min !== undefined) {
         await setProp(favoriteId, 'min', min)
+        await setProp(favoriteId, 'read', '')
       }
 
       if (max !== undefined) {
         await setProp(favoriteId, 'max', max)
+        await setProp(favoriteId, 'read', '')
       }
 
       if (note !== undefined) {
