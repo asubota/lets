@@ -10,12 +10,14 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useToggleFavorite } from '../../api.ts'
 import { Cancel } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
+import { useAllData } from '../../use-data.ts'
 
 type FavoriteInputForm = {
   sku: string
 }
 
 export const FavoriteInput: FC = () => {
+  const products = useAllData()
   const { watch, register, handleSubmit, reset } = useForm<FavoriteInputForm>({
     defaultValues: {
       sku: '',
@@ -24,10 +26,21 @@ export const FavoriteInput: FC = () => {
   const { mutate } = useToggleFavorite()
 
   const onSubmit: SubmitHandler<FavoriteInputForm> = ({ sku }) => {
-    const favoriteId = sku.includes(':') ? sku : `${sku}:hand`
+    const value = [sku]
+
+    if (!sku.includes(':')) {
+      const lowerSku = sku.toLowerCase()
+      const product = products.find((p) => p.sku.toLowerCase() === lowerSku)
+
+      if (product) {
+        value.push(product.vendor)
+      } else {
+        value.push('hand')
+      }
+    }
 
     reset({ sku: '' })
-    mutate({ favoriteId, isFavorite: true })
+    mutate({ favoriteId: value.join(':'), isFavorite: true })
   }
 
   const value = watch('sku')
