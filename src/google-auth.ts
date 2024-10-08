@@ -7,6 +7,7 @@ import {
   setGoogleAuthToken,
   setGoogleAuthTokenExpiration,
 } from './secrets.ts'
+import { enqueueSnackbar } from 'notistack'
 
 const CLIENT_ID = getGoogleClientId()
 const API_KEY = getGoogleApiKey()
@@ -42,7 +43,16 @@ export const initGoogleAuth = async () => {
     await signIn()
   }
 
-  await getAccessToken()
+  await getAccessToken().then(() => {
+    enqueueSnackbar('Google In', {
+      variant: 'info',
+      autoHideDuration: 2000,
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'center',
+      },
+    })
+  })
 }
 
 export const getAccessToken = async (): Promise<string> => {
