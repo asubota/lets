@@ -20,7 +20,7 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
     <Stack direction="column" spacing={1} id="tiles-view">
       {list.map((p) => {
         const favoriteId = getFavoriteId(p)
-        const key = `${favoriteId}:${p.price}}`
+        const key = `${favoriteId}:${p.price}`
 
         return (
           <Tile

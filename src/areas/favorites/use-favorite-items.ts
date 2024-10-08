@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { useAllData } from '../../use-data.ts'
 import { compareByTime, getFavoriteId } from '../../tools.tsx'
 import { DUMMY_VENDOR } from '../../constants.ts'
+import { setProp } from '../../google-api.ts'
 
 export const useFavoriteItems = (): FavoriteProduct[] => {
   const { data: favoriteItems = [] } = useGetFavorites()
@@ -54,6 +55,11 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
 
           if (product) {
             missedProduct.vendor = product.vendor
+            setProp(
+              favoriteItem.favoriteId,
+              'favoriteId',
+              getFavoriteId(product),
+            )
           }
         }
 
