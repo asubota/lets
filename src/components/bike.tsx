@@ -4,11 +4,9 @@ import SafeBike from './bike.svg?react'
 import BrokenBike from './broken-bike.svg?react'
 import { initGoogleAuth, loadGoogleApi } from '../google-auth.ts'
 
-export const Bike: FC<{ type: 'safe' | 'broken' }> = ({ type }) => {
-  const handleClick = () => {
-    loadGoogleApi().then(initGoogleAuth)
-  }
+const handleClick = () => loadGoogleApi().then(initGoogleAuth)
 
+export const Bike: FC<{ type: 'safe' | 'broken' }> = ({ type }) => {
   return (
     <Box
       sx={{
