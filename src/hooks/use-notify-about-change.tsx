@@ -49,7 +49,7 @@ const showAlert = (n: FavNotification) => {
 }
 
 export const useNotifyAboutChange = () => {
-  const notifications = useGetNotifications()
+  const notifications = useGetNotifications('unread')
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
