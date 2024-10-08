@@ -8,8 +8,8 @@ export const Version: FC = () => {
       sx={{
         color: 'text.secondary',
         position: 'absolute',
-        left: '2px',
-        bottom: 0,
+        left: '10px',
+        bottom: '12px',
         fontSize: '10px',
       }}
     >
