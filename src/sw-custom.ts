@@ -62,9 +62,9 @@ sw.addEventListener('notificationclick', (event) => {
 sw.addEventListener('message', async (event) => {
   const message: AppMessage = event.data
 
-  if (message.type === 'xxx') {
-    notifyAppAboutCacheReset()
-  }
+  // if (message.type === 'xxx') {
+  //   notifyAppAboutCacheReset()
+  // }
 
   if (message.type === 'push-me') {
     await sw.registration.showNotification(
