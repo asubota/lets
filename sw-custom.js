@@ -10,7 +10,7 @@ function isStale(cachedDate, currentDate) {
     const cachedHour = cachedDate.getHours();
     return (currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour);
 }
-function notifyApp() {
+function notifyAppAboutCacheReset() {
     sw.clients.matchAll().then((clients) => {
         clients.forEach((client) => {
             const message = { type: 'cache-update' };
@@ -45,7 +45,7 @@ sw.addEventListener('notificationclick', (event) => {
 sw.addEventListener('message', async (event) => {
     const message = event.data;
     // if (message.type === 'xxx') {
-    //   notifyApp()
+    //   notifyAppAboutCacheReset()
     // }
     if (message.type === 'push-me') {
         await sw.registration.showNotification(message.payload.title, message.payload.options);
@@ -65,7 +65,7 @@ sw.addEventListener('fetch', (event) => {
                         console.log('Cache is stale, fetching new data...');
                         fetchAndCache(event.request, cache).then(() => {
                             console.log('Cache updated, app notified.');
-                            notifyApp();
+                            notifyAppAboutCacheReset();
                         });
                     }
                     else {
