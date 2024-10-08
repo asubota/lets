@@ -20,7 +20,7 @@ function isStale(cachedDate: Date, currentDate: Date) {
   )
 }
 
-function notifyApp() {
+function notifyAppAboutCacheReset() {
   sw.clients.matchAll().then((clients) => {
     clients.forEach((client) => {
       const message: AppMessage = { type: 'cache-update' }
@@ -62,9 +62,9 @@ sw.addEventListener('notificationclick', (event) => {
 sw.addEventListener('message', async (event) => {
   const message: AppMessage = event.data
 
-  // if (message.type === 'xxx') {
-  //   notifyApp()
-  // }
+  if (message.type === 'xxx') {
+    notifyAppAboutCacheReset()
+  }
 
   if (message.type === 'push-me') {
     await sw.registration.showNotification(
@@ -95,7 +95,7 @@ sw.addEventListener('fetch', (event) => {
 
             fetchAndCache(event.request, cache).then(() => {
               console.log('Cache updated, app notified.')
-              notifyApp()
+              notifyAppAboutCacheReset()
             })
           } else {
             console.log('Cache is still valid, returning cached data.')

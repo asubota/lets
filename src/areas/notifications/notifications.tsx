@@ -9,22 +9,14 @@ import { useSetPropOnFavorite } from '../../api.ts'
 export const Notifications: FC = () => {
   const notifications = useGetNotifications()
   const { mutate } = useSetPropOnFavorite()
-
   const navigate = useNavigate()
-
-  const handleSave = () => {
-    navigate({ to: '/' })
-  }
-
-  const handleClose = () => {
-    navigate({ to: '/' })
-  }
+  const handleClose = () => navigate({ to: '/' })
 
   return (
     <Modal
       open
       title=""
-      onSave={handleSave}
+      onSave={handleClose}
       onClose={handleClose}
       hasSave={false}
     >
@@ -50,9 +42,9 @@ export const Notifications: FC = () => {
                 action={
                   <Switch
                     size="small"
-                    value={n.read}
+                    checked={!n.read}
                     onChange={(_, v) => {
-                      mutate({ favoriteId: n.favoriteId, read: v })
+                      mutate({ favoriteId: n.favoriteId, read: !v })
                     }}
                   />
                 }
