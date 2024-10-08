@@ -1,6 +1,11 @@
 import { FavoriteItem } from './types.ts'
-import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
+import {
+  getGoogleApiKey,
+  getGoogleSpreadSheetId,
+  removeGoogleAuthTokenAndExpiry,
+} from './secrets.ts'
 import { getAccessToken } from './google-auth.ts'
+import { alertNetworkError } from './alerts.tsx'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
@@ -33,6 +38,12 @@ export const getAllFavorites = async (
   })
 
   const result = await response.json()
+
+  if (result.error) {
+    alertNetworkError('Сталась прикра помилка, пробуй ще раз')
+    removeGoogleAuthTokenAndExpiry()
+  }
+
   const rows = result.values
 
   return rows.slice(1).map((row: GRow) => ({
@@ -67,7 +78,7 @@ export const addFavorite = async (favoriteId: string) => {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`
   const token = await getAccessToken()
 
-  await fetch(url, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -75,6 +86,15 @@ export const addFavorite = async (favoriteId: string) => {
     },
     body: JSON.stringify(body),
   })
+
+  const result = await response.json()
+
+  if (result.error) {
+    alertNetworkError('Сталась прикра помилка, пробуй ще раз')
+    removeGoogleAuthTokenAndExpiry()
+  }
+
+  return result
 }
 
 export const setProp = async (

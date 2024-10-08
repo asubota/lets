@@ -7,8 +7,9 @@ import {
   GOOGLE_PRODUCTS_FILE_ID,
 } from './constants.ts'
 
-export const removeGoogleAuthToken = () => {
+export const removeGoogleAuthTokenAndExpiry = () => {
   localStorage.removeItem(GOOGLE_AUTH_TOKEN_KEY)
+  localStorage.removeItem(GOOGLE_AUTH_TOKEN_KEY_EXPIRES_AT)
 }
 
 export const setGoogleAuthTokenExpiration = (value: string) => {

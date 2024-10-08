@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import { ExtraViewOptions } from './extra-view-options.tsx'
+import { ReAuth } from './re-auth.tsx'
 
 export const Welcome = () => {
   const handleThing = () => {
@@ -37,6 +38,8 @@ export const Welcome = () => {
         <Box sx={{ mt: 4, mb: 1 }}>Вам щось підказати?</Box>
         <Box>Проконсультувати?</Box>
       </Typography>
+
+      <ReAuth />
       <Bike type="safe" />
       <Logo />
       <ExtraViewOptions />
