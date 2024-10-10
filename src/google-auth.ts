@@ -1,12 +1,13 @@
 import { gapi } from 'gapi-script'
 import {
   getGoogleAuthToken,
-  getGoogleAuthTokenExpiration,
   getGoogleClientId,
+  removeGoogleAuthTokenAndExpiry,
   setGoogleAuthToken,
   setGoogleAuthTokenExpiration,
 } from './secrets.ts'
-import { showSuccess } from './alerts.tsx'
+import { showError } from './alerts.tsx'
+import { getMinutesLeft } from './tools.tsx'
 
 const CLIENT_ID = getGoogleClientId()
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -37,24 +38,27 @@ export const initGoogleAuth = async () => {
     await signIn()
   }
 
-  await getAccessToken()
+  return await getAccessToken()
 }
 
 export const getAccessToken = async (): Promise<string> => {
-  const expiresAt = getGoogleAuthTokenExpiration()
-  const minutesLeft = (parseInt(expiresAt, 10) - +new Date()) / 1000 / 60
+  const minutesLeft = getMinutesLeft()
   const token = getGoogleAuthToken()
 
-  if (minutesLeft < 2 || !token || token.length === 0) {
-    const auth = gapi.auth2.getAuthInstance()
-    const user = auth.currentUser.get()
-    const authResponse = await user.reloadAuthResponse()
+  if (minutesLeft < 30 || !token || token.length === 0) {
+    try {
+      const authInstance = gapi.auth2.getAuthInstance()
+      const user = authInstance.currentUser.get()
+      const authResponse = await user.reloadAuthResponse()
 
-    setGoogleAuthTokenExpiration(authResponse.expires_at.toString())
-    setGoogleAuthToken(authResponse.access_token)
+      setGoogleAuthTokenExpiration(authResponse.expires_at.toString())
+      setGoogleAuthToken(authResponse.access_token)
 
-    showSuccess('Token refreshed')
-    return authResponse.access_token
+      return authResponse.access_token
+    } catch (error) {
+      showError('Треба авторизуватись!')
+      removeGoogleAuthTokenAndExpiry()
+    }
   }
 
   return token

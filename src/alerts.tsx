@@ -1,9 +1,9 @@
 import { enqueueSnackbar } from 'notistack'
 
-export const alertNetworkError = (message: string) => {
+export const showError = (message: string) => {
   enqueueSnackbar(message, {
     variant: 'error',
-    autoHideDuration: 3000,
+    autoHideDuration: 8000,
     anchorOrigin: {
       vertical: 'top',
       horizontal: 'center',
@@ -14,7 +14,7 @@ export const alertNetworkError = (message: string) => {
 export const showSuccess = (message: string) => {
   enqueueSnackbar(message, {
     variant: 'info',
-    autoHideDuration: 2000,
+    autoHideDuration: 5000,
     anchorOrigin: {
       vertical: 'top',
       horizontal: 'center',

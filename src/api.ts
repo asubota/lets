@@ -118,7 +118,7 @@ export const useSetPropOnFavorite = () => {
 
 export const useGetFavorites = () => {
   return useQuery({
-    staleTime: 1000 * 60 * 55, // 55 minutes
+    staleTime: 1000 * 60 * 35, // 35 minutes
     queryKey: getQueryKey(),
     queryFn: ({ signal }) =>
       getAllFavorites(signal).then((items) => {
