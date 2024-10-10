@@ -49,6 +49,7 @@ export type AppMessage =
     }
   | {
       type: 'cache-update'
+      payload: { count: number }
     }
   | {
       type: 'xxx'
