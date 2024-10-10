@@ -1,11 +1,6 @@
 import { FavoriteItem } from './types.ts'
-import {
-  getGoogleApiKey,
-  getGoogleSpreadSheetId,
-  removeGoogleAuthTokenAndExpiry,
-} from './secrets.ts'
+import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
 import { getAccessToken } from './google-auth.ts'
-import { alertNetworkError } from './alerts.tsx'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
@@ -30,20 +25,8 @@ export const getAllFavorites = async (
   }
 
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`
-  const token = await getAccessToken()
-
-  const response = await fetch(url, {
-    signal,
-    headers: { Authorization: `Bearer ${token}` },
-  })
-
+  const response = await fetch(url, { signal })
   const result = await response.json()
-
-  if (result.error) {
-    alertNetworkError('Сталась прикра помилка, пробуй ще раз')
-    removeGoogleAuthTokenAndExpiry()
-  }
-
   const rows = result.values
 
   return rows.slice(1).map((row: GRow) => ({
@@ -56,6 +39,18 @@ export const getAllFavorites = async (
   }))
 }
 
+const send = async (url: string, options: RequestInit) => {
+  const token = await getAccessToken()
+
+  await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    ...options,
+  })
+}
+
 export const removeFavorite = async (favoriteId: string) => {
   const favorites = await getAllFavorites()
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
@@ -63,12 +58,8 @@ export const removeFavorite = async (favoriteId: string) => {
   if (rowIndex !== -1) {
     const range = `${SHEET_NAME}!A${rowIndex + 2}:F${rowIndex + 2}`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:clear?key=${API_KEY}`
-    const token = await getAccessToken()
 
-    await fetch(url, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    await send(url, { method: 'POST' })
   }
 }
 
@@ -76,25 +67,8 @@ export const addFavorite = async (favoriteId: string) => {
   const body = { values: [[favoriteId, '', '', '', +new Date()]] }
   const range = `${SHEET_NAME}!A1`
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`
-  const token = await getAccessToken()
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify(body),
-  })
-
-  const result = await response.json()
-
-  if (result.error) {
-    alertNetworkError('Сталась прикра помилка, пробуй ще раз')
-    removeGoogleAuthTokenAndExpiry()
-  }
-
-  return result
+  await send(url, { body: JSON.stringify(body), method: 'POST' })
 }
 
 export const setProp = async (
@@ -109,15 +83,7 @@ export const setProp = async (
     const body = { values: [[propValue]] }
     const range = `${SHEET_NAME}!${mapping[propName]}${rowIndex + 2}`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`
-    const token = await getAccessToken()
 
-    await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    })
+    await send(url, { body: JSON.stringify(body), method: 'PUT' })
   }
 }
