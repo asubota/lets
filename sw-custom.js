@@ -1,3 +1,34 @@
+const parseData = (text) => {
+    const cleanText = text
+        .replace('/*O_o*/', '')
+        .replace(/\n/g, '')
+        .replace('google.visualization.Query.setResponse(', '')
+        .replace(/\);$/, '');
+    const table = JSON.parse(cleanText).table;
+    const columns = table.cols.map((column) => column.label);
+    return table.rows.map((row) => {
+        const obj = {};
+        row.c.forEach((cell, index) => {
+            const colName = columns[index];
+            if (colName === 'pics' && cell) {
+                const value = cell.v.toString();
+                obj[colName] = !value.includes('[')
+                    ? [value]
+                    : Array.from(new Set(JSON.parse(value.replace(/'/g, '"'))));
+            }
+            else if (colName === 'name' && !cell) {
+                const skuIndex = columns.indexOf('sku');
+                const skuCell = row.c[skuIndex];
+                obj[colName] = skuCell ? skuCell.v : '-';
+            }
+            else {
+                obj[colName] = cell?.v ?? null;
+            }
+        });
+        return obj;
+    });
+};
+
 const sw = self;
 async function fetchAndCache(request, cache) {
     const networkResponse = await fetch(request);
@@ -10,10 +41,10 @@ function isStale(cachedDate, currentDate) {
     const cachedHour = cachedDate.getHours();
     return (currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour);
 }
-function notifyAppAboutCacheReset() {
+function notifyAppAboutCacheReset(count) {
     sw.clients.matchAll().then((clients) => {
         clients.forEach((client) => {
-            const message = { type: 'cache-update' };
+            const message = { type: 'cache-update', payload: { count } };
             client.postMessage(message);
         });
     });
@@ -45,7 +76,7 @@ sw.addEventListener('notificationclick', (event) => {
 sw.addEventListener('message', async (event) => {
     const message = event.data;
     // if (message.type === 'xxx') {
-    //   notifyAppAboutCacheReset()
+    //   notifyAppAboutCacheReset(123)
     // }
     if (message.type === 'push-me') {
         await sw.registration.showNotification(message.payload.title, message.payload.options);
@@ -61,11 +92,14 @@ sw.addEventListener('fetch', (event) => {
                 if (cachedTime) {
                     const cachedDate = new Date(Number(await cachedTime.text()));
                     const now = new Date();
-                    if (isStale(cachedDate, now)) {
+                    if (isStale(cachedDate, now) || 2 > 1) {
                         console.log('Cache is stale, fetching new data...');
-                        fetchAndCache(event.request, cache).then(() => {
-                            console.log('Cache updated, app notified.');
-                            notifyAppAboutCacheReset();
+                        fetchAndCache(event.request, cache).then((response) => {
+                            response.text().then((text) => {
+                                const items = parseData(text);
+                                console.log('Cache updated, app notified.');
+                                notifyAppAboutCacheReset(items.length);
+                            });
                         });
                     }
                     else {
