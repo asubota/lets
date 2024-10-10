@@ -1,4 +1,5 @@
 import { AppMessage, NotificationData } from './types.ts'
+import { parseData } from './data-tools.ts'
 
 const sw = self as unknown as ServiceWorkerGlobalScope
 
@@ -20,10 +21,10 @@ function isStale(cachedDate: Date, currentDate: Date) {
   )
 }
 
-function notifyAppAboutCacheReset() {
+function notifyAppAboutCacheReset(count: number) {
   sw.clients.matchAll().then((clients) => {
     clients.forEach((client) => {
-      const message: AppMessage = { type: 'cache-update' }
+      const message: AppMessage = { type: 'cache-update', payload: { count } }
       client.postMessage(message)
     })
   })
@@ -63,7 +64,7 @@ sw.addEventListener('message', async (event) => {
   const message: AppMessage = event.data
 
   // if (message.type === 'xxx') {
-  //   notifyAppAboutCacheReset()
+  //   notifyAppAboutCacheReset(123)
   // }
 
   if (message.type === 'push-me') {
@@ -90,12 +91,16 @@ sw.addEventListener('fetch', (event) => {
           const cachedDate = new Date(Number(await cachedTime.text()))
           const now = new Date()
 
-          if (isStale(cachedDate, now)) {
+          if (isStale(cachedDate, now) || 2 > 1) {
             console.log('Cache is stale, fetching new data...')
 
-            fetchAndCache(event.request, cache).then(() => {
-              console.log('Cache updated, app notified.')
-              notifyAppAboutCacheReset()
+            fetchAndCache(event.request, cache).then((response) => {
+              response.text().then((text) => {
+                const items = parseData(text)
+
+                console.log('Cache updated, app notified.')
+                notifyAppAboutCacheReset(items.length)
+              })
             })
           } else {
             console.log('Cache is still valid, returning cached data.')

@@ -11,10 +11,11 @@ export const useListenToCacheUpdate = () => {
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
       if (event.data && event.data.type === 'cache-update') {
+        const { count } = event.data.payload
         await queryClient
           .invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
           .then(() => {
-            enqueueSnackbar('Мущіна, дані оновленно!', {
+            enqueueSnackbar(`Мущіна, дані оновленно! [${count}]`, {
               TransitionComponent: Grow,
               variant: 'info',
               hideIconVariant: true,
