@@ -91,7 +91,7 @@ sw.addEventListener('fetch', (event) => {
           const cachedDate = new Date(Number(await cachedTime.text()))
           const now = new Date()
 
-          if (isStale(cachedDate, now) || 2 > 1) {
+          if (isStale(cachedDate, now)) {
             console.log('Cache is stale, fetching new data...')
 
             fetchAndCache(event.request, cache).then((response) => {
