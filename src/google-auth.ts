@@ -10,7 +10,7 @@ import { showError } from './alerts.tsx'
 import { getMinutesLeft } from './tools.tsx'
 
 const CLIENT_ID = getGoogleClientId()
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 
 export const loadGoogleApi = (): Promise<void> => {
   return new Promise<void>((resolve, reject) => {

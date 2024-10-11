@@ -8,7 +8,6 @@ import { useNotifyAboutChange } from '../hooks/use-notify-about-change.tsx'
 import { useListenToCacheUpdate } from '../hooks/use-listen-to-cache-update.ts'
 import { useVisibilityChangeReset } from '../hooks/use-visibility-change-reset.ts'
 import { useInitGoogle } from '../hooks/use-init-google.ts'
-import { Version } from '../components/version.tsx'
 
 const queryClient = new QueryClient()
 
@@ -35,7 +34,6 @@ const Component = () => {
         <Outlet />
         <Hooks />
       </QueryClientProvider>
-      <Version />
     </ThemeModeProvider>
   )
 }
