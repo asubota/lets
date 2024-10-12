@@ -8,9 +8,10 @@ export const Version: FC = () => {
       sx={{
         color: 'text.secondary',
         position: 'absolute',
-        left: '35px',
-        bottom: '8px',
-        fontSize: '10px',
+        left: '152px',
+        top: '94px',
+        fontSize: '9px',
+        rotate: '-44deg',
       }}
     >
       {import.meta.env.VITE_TEST_VAR}

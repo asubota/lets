@@ -18,7 +18,6 @@ import {
 import { useSearchActions } from '../../store/search.ts'
 import { useHistoryActions } from '../../store'
 import { Loader } from '../../components/loader.tsx'
-import { Version } from '../../components/version.tsx'
 
 const List2 = lazy(() => import('../../components/list.tsx'))
 
@@ -105,8 +104,6 @@ export const List: FC = () => {
 
       <LimitSearchModal list={list} />
       <TableSettingsModal />
-
-      <Version />
     </>
   )
 }
