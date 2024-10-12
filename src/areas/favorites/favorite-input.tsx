@@ -31,7 +31,9 @@ export const FavoriteInput: FC = () => {
 
     if (!sku.includes(':')) {
       const lowerSku = sku.toLowerCase()
-      const product = products.find((p) => p.sku.toLowerCase() === lowerSku)
+      const product = products.find(
+        (p) => p.sku.toLowerCase() === lowerSku && p.vendor !== 'base',
+      )
 
       if (product) {
         value.push(product.vendor)

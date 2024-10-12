@@ -51,7 +51,9 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
 
         if (vendor === DUMMY_VENDOR) {
           const lowerSku = sku.toLowerCase()
-          const product = products.find((p) => p.sku.toLowerCase() === lowerSku)
+          const product = products.find(
+            (p) => p.sku.toLowerCase() === lowerSku && p.vendor !== 'base',
+          )
 
           if (product) {
             missedProduct.vendor = product.vendor
