@@ -9,8 +9,8 @@ export const Version: FC = () => {
         color: 'text.secondary',
         position: 'absolute',
         left: '152px',
-        top: '94px',
-        fontSize: '9px',
+        top: '92px',
+        fontSize: '10px',
         rotate: '-44deg',
       }}
     >
