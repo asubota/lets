@@ -2,13 +2,19 @@ import { FavoriteProduct } from '../../types.ts'
 import { useGetFavorites } from '../../api.ts'
 import { useMemo } from 'react'
 import { useAllData } from '../../use-data.ts'
-import { compareByTime, getFavoriteId } from '../../tools.tsx'
+import {
+  compareByNoteAndTime,
+  compareByTime,
+  getFavoriteId,
+} from '../../tools.tsx'
 import { DUMMY_VENDOR } from '../../constants.ts'
 import { setProp } from '../../google-api.ts'
+import { useAppSort } from '../../store'
 
 export const useFavoriteItems = (): FavoriteProduct[] => {
   const { data: favoriteItems = [] } = useGetFavorites()
   const products = useAllData()
+  const sort = useAppSort()
 
   const byId = useMemo(
     () => new Map(favoriteItems.map((item) => [item.favoriteId, item])),
@@ -27,7 +33,11 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
       const favoriteId = getFavoriteId(item)
 
       if (byId.has(favoriteId)) {
-        result.push({ ...item, time: byId.get(favoriteId)?.time || 0 })
+        result.push({
+          ...item,
+          time: byId.get(favoriteId)?.time || 0,
+          note: byId.get(favoriteId)?.note,
+        })
         existingKeys.add(favoriteId)
       }
     })
@@ -47,6 +57,7 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
           stock: '0',
           missed: true,
           time: favoriteItem.time,
+          note: favoriteItem.note,
         }
 
         if (vendor === DUMMY_VENDOR) {
@@ -69,6 +80,7 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
       }
     })
 
-    return result.sort(compareByTime).reverse()
-  }, [byId, products, favoriteItems])
+    const sortFn = sort === 'date' ? compareByTime : compareByNoteAndTime
+    return result.sort(sortFn)
+  }, [byId, products, favoriteItems, sort])
 }
