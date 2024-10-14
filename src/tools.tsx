@@ -181,11 +181,36 @@ export function compareByTime(
   b: { time: number },
 ): number {
   if (a.time < b.time) {
-    return -1
-  }
-  if (a.time > b.time) {
     return 1
   }
+
+  if (a.time > b.time) {
+    return -1
+  }
+
+  return 0
+}
+
+export function compareByNoteAndTime(
+  a: { note?: string; time: number },
+  b: { note?: string; time: number },
+): number {
+  if (a.note === undefined && b.note !== undefined) {
+    return 1
+  }
+
+  if (a.note !== undefined && b.note === undefined) {
+    return -1
+  }
+
+  if (a.time > b.time) {
+    return -1
+  }
+
+  if (a.time < b.time) {
+    return 1
+  }
+
   return 0
 }
 

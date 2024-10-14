@@ -12,6 +12,7 @@ export interface Product {
 export interface FavoriteProduct extends Product {
   missed?: boolean
   time: number
+  note?: string
 }
 
 export type FavNotification = {

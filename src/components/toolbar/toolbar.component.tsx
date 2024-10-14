@@ -8,6 +8,7 @@ import { SwitchToTileView } from './components/switch-to-tile-view.tsx'
 import { TableColumnsViewer } from './components/table-columns-viewer.tsx'
 import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
+import { Sorting } from '../sorting.tsx'
 
 interface ToolbarProps {
   total: number
@@ -39,6 +40,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       </Box>
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
+        <Sorting />
         <PasteInSearchButton />
         <GoogleButton />
         <TableColumnsViewer />
