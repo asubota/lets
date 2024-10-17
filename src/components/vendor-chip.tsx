@@ -1,6 +1,6 @@
 import { Chip } from '@mui/material'
 import { FC } from 'react'
-import { useVendorColor } from '../store/colors.ts'
+import { useVendorColor } from '../hooks/use-vendor-color.ts'
 
 export const VendorChip: FC<{
   vendor: string
@@ -13,7 +13,7 @@ export const VendorChip: FC<{
     color: liveColor,
     borderColor: liveBorderColor,
     backgroundColor: liveBackgroundColor,
-  } = useVendorColor(vendor) || {}
+  } = useVendorColor(vendor)
 
   const colorValue = (source === 'live' ? liveColor : color) || 'secondary'
   const borderColorValue =
