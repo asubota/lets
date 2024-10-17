@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { CACHE_FAVORITE_KEY } from '../constants.ts'
+import { CACHE_COLORS_KEY, CACHE_FAVORITE_KEY } from '../constants.ts'
 
 export const useVisibilityChangeReset = () => {
   const queryClient = useQueryClient()
@@ -9,6 +9,7 @@ export const useVisibilityChangeReset = () => {
     const fn = async () => {
       if (document.visibilityState === 'visible') {
         await queryClient.invalidateQueries({ queryKey: [CACHE_FAVORITE_KEY] })
+        await queryClient.invalidateQueries({ queryKey: [CACHE_COLORS_KEY] })
       }
     }
 
