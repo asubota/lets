@@ -21,7 +21,7 @@ const getData = async (id: string): Promise<Product[]> => {
 const useData = () => {
   const id = getGoogleFileId()
   return useQuery<Product[]>({
-    staleTime: 1000 * 60 * 12, // 12 minutes
+    staleTime: 1000 * 60 * 10, // 10 minutes
     queryKey: [CACHE_BASE_KEY, id],
     queryFn: () => getData(id),
   })

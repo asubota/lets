@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
-type Color = { color: string; borderColor: string; backgroundColor: string }
+import { Color } from '../types.ts'
 
 interface StoreState {
   colors: Record<string, Color>

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -9,25 +9,24 @@ import {
 } from '@mui/material'
 import { CirclePicker, HuePicker, ColorChangeHandler } from 'react-color'
 import { useAllVendors, useIsLoading } from '../../use-data.ts'
-import {
-  useSetVendorColorsAction,
-  useVendorColors,
-} from '../../store/colors.ts'
 import { Modal } from '../../components/modal.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { useNavigate } from '@tanstack/react-router'
+import { useGetColors, useSetColors } from '../../api-colors.ts'
 
 export const ColorSettingsModal: FC = () => {
   const vendors = useAllVendors()
   const isLoading = useIsLoading()
   const [color, setColor] = useState('')
-  const setVendorColors = useSetVendorColorsAction()
-  const [activeVendor, setActiveVendor] = useState('')
+  const [activeVendor, setActiveVendor] = useState<string | null>(null)
   const navigate = useNavigate()
+  const { mutate } = useSetColors()
+  const savedColors = useGetColors()
+  const [colors, setColors] = useState(savedColors)
 
-  const c = useVendorColors()
-
-  const [colors, setColors] = useState(c)
+  useEffect(() => {
+    setColors(savedColors)
+  }, [savedColors])
 
   const handleSetColor: ColorChangeHandler = ({ hex }) => {
     if (!activeVendor) {
@@ -64,18 +63,19 @@ export const ColorSettingsModal: FC = () => {
   }
 
   const handleResetColor = () => {
-    setColors(({ [activeVendor]: _, ...value }) => value)
+    if (activeVendor) {
+      setColors(({ [activeVendor]: _, ...value }) => value)
+    }
   }
 
   const handleSave = () => {
-    setVendorColors(colors)
-    setActiveVendor('')
+    mutate(colors)
+    setActiveVendor(null)
     navigate({ to: '/' })
   }
 
   const handleClose = () => {
     setActiveVendor('')
-    setColors(c)
     setFill('both')
     navigate({ to: '/' })
   }

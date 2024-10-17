@@ -64,3 +64,11 @@ export type FavoriteItem = {
   time: number
   read: boolean
 }
+
+export type Color = {
+  color: string
+  borderColor: string
+  backgroundColor: string
+}
+
+export type VendorAndColors = { vendor: string } & Partial<Color>

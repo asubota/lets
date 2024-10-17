@@ -1,5 +1,6 @@
 export const CACHE_BASE_KEY = 'lets-bike-cache-products'
 export const CACHE_FAVORITE_KEY = 'lets-bike-cache-favorites'
+export const CACHE_COLORS_KEY = 'lets-bike-cache-colors'
 
 export const DUMMY_VENDOR = 'hand'
 
