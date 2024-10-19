@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { useShallow } from 'zustand/shallow'
 
 interface StoreState {
   items: string[]
@@ -40,4 +41,4 @@ const useStore = create<StoreState>()(
 
 export const useHistoryActions = () => useStore((state) => state.actions)
 export const useHistoryItems = () =>
-  useStore((state) => state.items.slice().reverse())
+  useStore(useShallow((state) => state.items.slice().reverse()))

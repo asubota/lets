@@ -28,7 +28,7 @@
     "swiper": "11.1.14",
     "tesseract.js": "5.1.1",
     "vite-plugin-svgr": "4.2.0",
-    "zustand": "4.5.5"
+    "zustand": "5.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "12.1.0",
