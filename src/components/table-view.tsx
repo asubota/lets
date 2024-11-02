@@ -140,7 +140,7 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
 
               {columns.includes('name') && (
                 <TableCell
-                  sx={{ whiteSpace: 'nowrap', pl: 1 }}
+                  sx={{ pl: 1 }}
                   onClick={async (e) => {
                     e.stopPropagation()
                     await copyContent(row.name)
