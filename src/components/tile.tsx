@@ -7,7 +7,6 @@ import { RippleText } from './ripple-text.tsx'
 import { PriceChip } from './price-chip.tsx'
 import { VendorChip } from './vendor-chip.tsx'
 import ImageIcon from '@mui/icons-material/Image'
-import LinkIcon from '@mui/icons-material/Link'
 import { HiddenInput } from './hidden-input.tsx'
 import { Stock } from './stock.tsx'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -32,7 +31,7 @@ export const Tile: FC<{
         return
       }
 
-      if (p.link || p.pics) {
+      if (p.pics) {
         setDetails(p)
       }
     }
@@ -130,18 +129,9 @@ export const Tile: FC<{
                   sx={{
                     color: 'secondary',
                     fontSize: 'small',
+                    cursor: 'pointer',
                   }}
                   data-no-export
-                  onClick={handleCardClick}
-                />
-              )}
-              {p.link && (
-                <LinkIcon
-                  data-no-export
-                  sx={{
-                    color: 'secondary',
-                    fontSize: 'small',
-                  }}
                   onClick={handleCardClick}
                 />
               )}

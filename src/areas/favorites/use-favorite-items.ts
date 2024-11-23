@@ -53,7 +53,6 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
           price: 0,
           p2: 0,
           pics: null,
-          link: null,
           stock: '0',
           missed: true,
           time: favoriteItem.time,

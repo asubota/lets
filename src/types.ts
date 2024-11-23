@@ -5,7 +5,6 @@ export interface Product {
   price: number
   p2: number | null
   stock: string | null
-  link: string | null
   pics: string[] | null
 }
 
