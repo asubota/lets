@@ -4,18 +4,12 @@ import {
   DialogTitle,
   Divider,
   IconButton,
-  Link,
 } from '@mui/material'
 import { FC, useEffect, useState } from 'react'
 import { Product } from '../types.ts'
 import { ImageSlider } from './image-slider.tsx'
-import LinkIcon from '@mui/icons-material/Link'
 import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
-
-const getHref = (link: string): string => {
-  return link.startsWith('http') ? link : `https://${link}`
-}
 
 const useNoScroll = () => {
   useEffect(() => {
@@ -59,33 +53,7 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           color: isFullScreen ? 'white' : 'text.primary',
         }}
       >
-        {details.link && (
-          <>
-            {!isFullScreen && (
-              <LinkIcon
-                sx={{
-                  fontSize: 'small',
-                  color: 'primary.main',
-                }}
-              />
-            )}
-            <Link
-              title={details.name}
-              href={getHref(details.link)}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                typography: 'subtitle2',
-                textDecoration: 'none',
-                color: isFullScreen ? 'white' : 'text.primary',
-              }}
-            >
-              {details.name}
-            </Link>
-          </>
-        )}
-
-        {!details.link && details.name}
+        {details.name}
 
         {details.pics && (
           <IconButton
