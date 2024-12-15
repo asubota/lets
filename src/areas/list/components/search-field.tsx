@@ -1,6 +1,6 @@
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import { Cancel, Search } from '@mui/icons-material'
-import { FC } from 'react'
+import { FC, KeyboardEventHandler } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import LoopIcon from '@mui/icons-material/Loop'
@@ -20,6 +20,12 @@ export const SearchField: FC<{
     onSubmit()
   }
 
+  const handleKeyUp: KeyboardEventHandler = (e) => {
+    if (e.key === 'Escape') {
+      reset({ input: '' })
+    }
+  }
+
   return (
     <Controller
       name="input"
@@ -35,6 +41,7 @@ export const SearchField: FC<{
             {...field}
             onFocus={onFocus}
             disabled={loading}
+            onKeyUp={handleKeyUp}
             slotProps={{
               input: {
                 endAdornment: (
