@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, KeyboardEventHandler } from 'react'
 import {
   Box,
   IconButton,
@@ -6,27 +6,27 @@ import {
   Portal,
   TextField,
 } from '@mui/material'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useFormContext } from 'react-hook-form'
 import { useToggleFavorite } from '../../api.ts'
 import { Cancel } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import { useAllData } from '../../use-data.ts'
 import { DUMMY_VENDOR } from '../../constants.ts'
 
-type FavoriteInputForm = {
+export type FavoriteInputForm = {
   sku: string
 }
 
 export const FavoriteInput: FC = () => {
   const products = useAllData()
-  const { watch, register, handleSubmit, reset } = useForm<FavoriteInputForm>({
-    defaultValues: {
-      sku: '',
-    },
-  })
+  const { watch, register, handleSubmit, reset } =
+    useFormContext<FavoriteInputForm>()
   const { mutate } = useToggleFavorite()
 
   const onSubmit: SubmitHandler<FavoriteInputForm> = ({ sku }) => {
+    if (sku.length === 0) {
+      return
+    }
     const value = [sku]
 
     if (!sku.includes(':')) {
@@ -47,6 +47,11 @@ export const FavoriteInput: FC = () => {
   }
 
   const value = watch('sku')
+  const handleKeyUp: KeyboardEventHandler = (e) => {
+    if (e.key === 'Escape') {
+      reset({ sku: '' })
+    }
+  }
 
   return (
     <Portal container={() => document.getElementById('app-bar-center')}>
@@ -57,6 +62,7 @@ export const FavoriteInput: FC = () => {
         fullWidth
         {...register('sku')}
         component="form"
+        onKeyUp={handleKeyUp}
         onSubmit={handleSubmit(onSubmit)}
         slotProps={{
           input: {
