@@ -8,7 +8,9 @@ import { Output } from './output.tsx'
 import { Blur } from './blur.tsx'
 import { ScanArea } from './scan-area.tsx'
 import { Cancel } from './cancel.tsx'
-import { Link } from '@tanstack/react-router'
+import { createLink } from '@tanstack/react-router'
+
+const LinkedButton = createLink(Button)
 
 export const Scanner: FC = () => {
   const [running, setRunning] = useState(false)
@@ -116,14 +118,13 @@ export const Scanner: FC = () => {
         <CameraAltIcon />
       </Button>
 
-      <Button
-        component={Link}
+      <LinkedButton
         to={'/'}
         search={output.length ? { s: output } : {}}
         variant="contained"
       >
         <SearchIcon />
-      </Button>
+      </LinkedButton>
     </Box>
   )
 
