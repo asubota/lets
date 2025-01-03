@@ -47,8 +47,8 @@ export const useAllVendors = () => {
 
 const filterBySearch = (item: Product, search: string): boolean => {
   return (
-    item['sku'].toLowerCase().includes(search) ||
-    item['name'].toLowerCase().includes(search)
+    item.sku.toLowerCase().includes(search) ||
+    item.name.toLowerCase().includes(search)
   )
 }
 
