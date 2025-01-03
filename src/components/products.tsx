@@ -12,25 +12,28 @@ import { Product } from '../types.ts'
 import { useSearchVendors } from '../store/search.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 
-const List: FC<{ list: Product[]; search: string }> = ({ list, search }) => {
+const Products: FC<{ products: Product[]; search: string }> = ({
+  products,
+  search,
+}) => {
   const view = useAppView()
-  const uniqueVendors = getUniqueVendors(list)
+  const uniqueVendors = getUniqueVendors(products)
   const searchVendors = useSearchVendors()
 
   const View = view === 'tile' ? TilesView : TableView
 
-  if (list.length === 0 && search.length === 0) {
+  if (products.length === 0 && search.length === 0) {
     return <Welcome />
   }
 
-  if (list.length === 0 && search.length > 0) {
+  if (products.length === 0 && search.length > 0) {
     return <NoResults />
   }
 
   const filteredList =
     searchVendors.length === 0
-      ? list
-      : list.filter((product) => searchVendors.includes(product.vendor))
+      ? products
+      : products.filter((product) => searchVendors.includes(product.vendor))
 
   return (
     <>
@@ -48,4 +51,4 @@ const List: FC<{ list: Product[]; search: string }> = ({ list, search }) => {
   )
 }
 
-export default List
+export default Products

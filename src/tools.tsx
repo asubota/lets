@@ -220,3 +220,10 @@ export const getMinutesLeft = (): number => {
 
   return Number(minutesLeft.toFixed(2))
 }
+
+export const filterBySearch = (item: Product, search: string): boolean => {
+  return (
+    item.sku.toLowerCase().includes(search) ||
+    item.name.toLowerCase().includes(search)
+  )
+}

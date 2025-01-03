@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Product } from './types.ts'
 import { useMemo } from 'react'
-import { getUniqueVendors } from './tools.tsx'
+import { filterBySearch, getUniqueVendors } from './tools.tsx'
 import { CACHE_BASE_KEY } from './constants.ts'
 import { getGoogleFileId } from './secrets.ts'
 import { parseData } from './data-tools.ts'
@@ -43,13 +43,6 @@ export const useAllVendors = () => {
   const { data = [] } = useData()
 
   return getUniqueVendors(data)
-}
-
-const filterBySearch = (item: Product, search: string): boolean => {
-  return (
-    item.sku.toLowerCase().includes(search) ||
-    item.name.toLowerCase().includes(search)
-  )
 }
 
 export const useSearch = (search: string): Product[] => {
