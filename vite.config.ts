@@ -25,6 +25,7 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom'],
           swiper: ['swiper'],
+          tesseract: ['tesseract.js'],
           html2canvas: ['html2canvas'],
           tanstack: ['@tanstack/react-router', '@tanstack/react-query'],
           mui: ['@mui/material'],
