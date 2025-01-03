@@ -66,8 +66,8 @@ export const FavoriteInput: FC = () => {
               size="small"
               fullWidth
               {...field}
-              component="form"
               onKeyUp={handleKeyUp}
+              component="form"
               onSubmit={handleSubmit(onSubmit)}
               slotProps={{
                 input: {

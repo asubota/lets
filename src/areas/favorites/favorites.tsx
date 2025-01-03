@@ -6,14 +6,9 @@ import { useFavoriteItems } from './use-favorite-items.ts'
 import { FavoriteInput, FavoriteInputForm } from './favorite-input.tsx'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Product } from '../../types.ts'
-const List2 = lazy(() => import('../../components/list.tsx'))
+import { filterBySearch } from '../../tools.tsx'
 
-const filterBySearch = (item: Product, search: string): boolean => {
-  return (
-    item.sku.toLowerCase().includes(search) ||
-    item.name.toLowerCase().includes(search)
-  )
-}
+const Products = lazy(() => import('../../components/products.tsx'))
 
 const useFavoritesSearch = (search: string, data: Product[]): Product[] => {
   const lowerCaseSearch = search.toLowerCase()
@@ -30,18 +25,20 @@ export const Favorites: FC = () => {
   const filtered = useFavoritesSearch(sku, list)
 
   return (
-    <FormProvider {...methods}>
-      <FavoriteInput />
+    <>
+      <FormProvider {...methods}>
+        <FavoriteInput />
+      </FormProvider>
 
       {isLoading ? (
         <Loader />
       ) : (
         <Suspense>
-          <List2 list={filtered} search="" />
+          <Products products={filtered} search="" />
         </Suspense>
       )}
 
       <Outlet />
-    </FormProvider>
+    </>
   )
 }

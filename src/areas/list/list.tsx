@@ -19,12 +19,12 @@ import { useSearchActions } from '../../store/search.ts'
 import { useHistoryActions } from '../../store'
 import { Loader } from '../../components/loader.tsx'
 
-const List2 = lazy(() => import('../../components/list.tsx'))
+const Products = lazy(() => import('../../components/products.tsx'))
 
 export const List: FC = () => {
   const methods = useForm<SearchForm>({ defaultValues: { input: '' } })
   const [search, setSearch] = useState('')
-  const list = useSearch(search)
+  const products = useSearch(search)
   const { addHistoryItem } = useHistoryActions()
   const { resetSearchVendors } = useSearchActions()
   const [showHistory, setShowHistory] = useState(false)
@@ -98,11 +98,11 @@ export const List: FC = () => {
         <Loader />
       ) : (
         <Suspense>
-          <List2 list={list} search={search} />
+          <Products products={products} search={search} />
         </Suspense>
       )}
 
-      <LimitSearchModal list={list} />
+      <LimitSearchModal list={products} />
       <TableSettingsModal />
     </>
   )
