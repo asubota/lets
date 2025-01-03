@@ -71,7 +71,7 @@ export const Tile: FC<{
       `,
         }}
       >
-        {iFavouriteRoute && (
+        {isFavorite && (
           <IconButton
             size="small"
             sx={{
@@ -142,7 +142,7 @@ export const Tile: FC<{
                 alignItems: 'center',
               }}
             >
-              {iFavouriteRoute && 'time' in p && <FavoriteTime time={p.time} />}
+              {isFavorite && 'time' in p && <FavoriteTime time={p.time} />}
               {iFavouriteRoute && <NotesButton favoriteId={getFavoriteId(p)} />}
               <FavoritesButton
                 isFavorite={isFavorite}
