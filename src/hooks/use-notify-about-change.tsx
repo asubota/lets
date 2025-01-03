@@ -1,10 +1,8 @@
 import { useEffect } from 'react'
 import { AppMessage, AppMessagePush, FavNotification } from '../types.ts'
-import { closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack'
-import { IconButton } from '@mui/material'
-import { Close } from '@mui/icons-material'
 import { NotificationSnackbar } from '../components/notification-snackbar.tsx'
 import { useGetNotifications } from './use-get-notifications.ts'
+import { toast } from 'react-toastify'
 
 const showNotification = () => {
   Notification.requestPermission().then((result) => {
@@ -31,20 +29,13 @@ const showNotification = () => {
   })
 }
 
-const action = (snackbarId: SnackbarKey) => (
-  <IconButton onClick={() => closeSnackbar(snackbarId)}>
-    <Close />
-  </IconButton>
-)
-
 const showAlert = (n: FavNotification) => {
-  enqueueSnackbar({
-    message: <NotificationSnackbar n={n} />,
-    persist: true,
-    variant: 'warning',
-    hideIconVariant: true,
-    preventDuplicate: true,
-    action,
+  toast.warn(<NotificationSnackbar n={n} />, {
+    position: 'bottom-left',
+    autoClose: false,
+    hideProgressBar: true,
+    theme: 'colored',
+    icon: false,
   })
 }
 
