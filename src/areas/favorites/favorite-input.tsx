@@ -6,7 +6,7 @@ import {
   Portal,
   TextField,
 } from '@mui/material'
-import { SubmitHandler, useFormContext } from 'react-hook-form'
+import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 import { useToggleFavorite } from '../../api.ts'
 import { Cancel } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
@@ -19,7 +19,7 @@ export type FavoriteInputForm = {
 
 export const FavoriteInput: FC = () => {
   const products = useAllData()
-  const { watch, register, handleSubmit, reset } =
+  const { watch, handleSubmit, reset, control } =
     useFormContext<FavoriteInputForm>()
   const { mutate } = useToggleFavorite()
 
@@ -55,42 +55,50 @@ export const FavoriteInput: FC = () => {
 
   return (
     <Portal container={() => document.getElementById('app-bar-center')}>
-      <TextField
-        sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
-        label="Add new Favorite"
-        size="small"
-        fullWidth
-        {...register('sku')}
-        component="form"
-        onKeyUp={handleKeyUp}
-        onSubmit={handleSubmit(onSubmit)}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment position="end" sx={{ marginRight: -2 }}>
-                <IconButton
-                  onClick={() => reset()}
-                  size="small"
-                  sx={{
-                    'color': 'text.secondary',
-                    'visibility': value ? 'visible' : 'hidden',
-                    '& svg': { width: '26px', height: '26px' },
-                  }}
-                >
-                  <Cancel />
-                </IconButton>
+      <Controller
+        name="sku"
+        control={control}
+        render={({ field }) => {
+          return (
+            <TextField
+              sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
+              label="Add new Favorite"
+              size="small"
+              fullWidth
+              {...field}
+              component="form"
+              onKeyUp={handleKeyUp}
+              onSubmit={handleSubmit(onSubmit)}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ marginRight: -2 }}>
+                      <IconButton
+                        onClick={() => reset()}
+                        size="small"
+                        sx={{
+                          'color': 'text.secondary',
+                          'visibility': value ? 'visible' : 'hidden',
+                          '& svg': { width: '26px', height: '26px' },
+                        }}
+                      >
+                        <Cancel />
+                      </IconButton>
 
-                <Box sx={{ backgroundColor: 'primary.main' }}>
-                  <IconButton
-                    type="submit"
-                    sx={{ color: 'primary.contrastText' }}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </Box>
-              </InputAdornment>
-            ),
-          },
+                      <Box sx={{ backgroundColor: 'primary.main' }}>
+                        <IconButton
+                          type="submit"
+                          sx={{ color: 'primary.contrastText' }}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </Box>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          )
         }}
       />
     </Portal>
