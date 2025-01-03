@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { AppMessage } from '../types.ts'
 import { useQueryClient } from '@tanstack/react-query'
 import { CACHE_BASE_KEY } from '../constants.ts'
-import { enqueueSnackbar } from 'notistack'
-import Grow from '@mui/material/Grow'
+import { toast } from 'react-toastify'
 
 export const useListenToCacheUpdate = () => {
   const queryClient = useQueryClient()
@@ -15,12 +14,13 @@ export const useListenToCacheUpdate = () => {
         await queryClient
           .invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
           .then(() => {
-            enqueueSnackbar(`Мущіна, дані оновленно! [${count}]`, {
-              TransitionComponent: Grow,
-              variant: 'info',
-              hideIconVariant: true,
-              preventDuplicate: true,
-              autoHideDuration: 2500,
+            toast.info(`Мущіна, дані оновленно! [${count}]`, {
+              icon: false,
+              autoClose: 2500,
+              theme: 'colored',
+              closeButton: false,
+              hideProgressBar: true,
+              position: 'bottom-left',
             })
           })
       }
