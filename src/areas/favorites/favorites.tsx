@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useMemo } from 'react'
+import { FC, lazy, Suspense } from 'react'
 import { useIsLoading } from '../../use-data.ts'
 import { Loader } from '../../components/loader.tsx'
 import { Outlet } from '@tanstack/react-router'
@@ -10,16 +10,15 @@ const List2 = lazy(() => import('../../components/list.tsx'))
 
 const filterBySearch = (item: Product, search: string): boolean => {
   return (
-    item['sku'].toLowerCase().includes(search) ||
-    item['name'].toLowerCase().includes(search)
+    item.sku.toLowerCase().includes(search) ||
+    item.name.toLowerCase().includes(search)
   )
 }
 
 const useFavoritesSearch = (search: string, data: Product[]): Product[] => {
-  return useMemo(() => {
-    const lowerCaseSearch = search.toLowerCase()
-    return data.filter((item) => filterBySearch(item, lowerCaseSearch))
-  }, [search, data])
+  const lowerCaseSearch = search.toLowerCase()
+
+  return data.filter((item) => filterBySearch(item, lowerCaseSearch))
 }
 
 export const Favorites: FC = () => {
