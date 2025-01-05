@@ -5,25 +5,12 @@ import {
   Divider,
   IconButton,
 } from '@mui/material'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { Product } from '../types.ts'
 import { ImageSlider } from './image-slider.tsx'
 import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
-
-const useNoScroll = () => {
-  useEffect(() => {
-    const root = document.getElementById('root')
-
-    document.body.classList.add('no-scroll')
-    root?.classList.add('no-root')
-
-    return () => {
-      document.body.classList.remove('no-scroll')
-      root?.classList.remove('no-root')
-    }
-  }, [])
-}
+import { useNoScroll } from '../hooks/use-no-scroll.ts'
 
 export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
   details,

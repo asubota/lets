@@ -9,12 +9,14 @@ import ImageIcon from '@mui/icons-material/Image'
 import { HiddenInput } from './hidden-input.tsx'
 import { Stock } from './stock.tsx'
 import SettingsIcon from '@mui/icons-material/Settings'
+import PercentIcon from '@mui/icons-material/Percent'
 import { TileSettings } from './tile-settings.tsx'
 import { FavoritesButton } from './favorites-button.tsx'
 import { NotesButton } from './notes-button.tsx'
 import { FavoriteTime } from './favorite-time.tsx'
 import { createLink } from '@tanstack/react-router'
 
+const LinkedButton = createLink(IconButton)
 const LinkedIcon = createLink(ImageIcon)
 
 export const Tile: FC<{
@@ -89,12 +91,22 @@ export const Tile: FC<{
         <RippleText text={getHighlightedText(p['name'], search)} />
       </Box>
 
-      <Chip
-        sx={{ gridArea: 'sku', justifySelf: 'flex-start' }}
-        label={getHighlightedText(p['sku'], search)}
-        size="small"
-        onClick={async () => await copyContent(p.sku)}
-      />
+      <Box sx={{ gridArea: 'sku', justifySelf: 'flex-start' }}>
+        <Chip
+          label={getHighlightedText(p['sku'], search)}
+          size="small"
+          onClick={async () => await copyContent(p.sku)}
+        />
+        {!iFavouriteRoute && (
+          <LinkedButton
+            to="/list/$id/percents"
+            params={{ id: getFavoriteId(p) }}
+            data-no-export
+          >
+            <PercentIcon sx={{ fontSize: 'small' }} />
+          </LinkedButton>
+        )}
+      </Box>
       {showSettings && <TileSettings favoriteId={getFavoriteId(p)} />}
 
       {!showSettings && (
