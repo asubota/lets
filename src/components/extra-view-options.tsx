@@ -4,7 +4,7 @@ import { IconButton, Stack, useTheme } from '@mui/material'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import HouseIcon from '@mui/icons-material/House'
+import InsightsIcon from '@mui/icons-material/Insights'
 
 import { ColorModeContext } from '../theme-mode-provider.tsx'
 import { createLink } from '@tanstack/react-router'
@@ -47,8 +47,8 @@ export const ExtraViewOptions: FC = () => {
         <PaletteIcon />
       </LinkedButton>
 
-      <LinkedButton sx={{ color: 'text.secondary' }} to="/">
-        <HouseIcon />
+      <LinkedButton sx={{ color: 'text.secondary' }} to="/stats">
+        <InsightsIcon />
       </LinkedButton>
     </Stack>
   )

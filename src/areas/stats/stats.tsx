@@ -4,12 +4,12 @@ import { Box, Button, CircularProgress } from '@mui/material'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { groupByVendor } from '../../tools.tsx'
 import Grid from '@mui/material/Grid2'
-import InsightsIcon from '@mui/icons-material/Insights'
+import HouseIcon from '@mui/icons-material/House'
 import { createLink } from '@tanstack/react-router'
 
 const LinkedButton = createLink(Button)
 
-export const Home: FC = () => {
+export const Stats: FC = () => {
   const allData = useAllData()
   const vendors = useAllVendors()
   const loading = useIsLoading()
@@ -44,7 +44,7 @@ export const Home: FC = () => {
           variant="contained"
           color="secondary"
         >
-          <InsightsIcon color="primary" />
+          <HouseIcon color="primary" />
         </LinkedButton>
       </Box>
 
@@ -67,7 +67,7 @@ export const Home: FC = () => {
 
       <Box sx={{ pl: 3, pr: 3 }}>
         <LinkedButton to="/list" fullWidth variant="contained">
-          <InsightsIcon color="secondary" />
+          <HouseIcon color="secondary" />
         </LinkedButton>
       </Box>
     </>
