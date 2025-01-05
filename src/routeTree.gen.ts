@@ -17,6 +17,7 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as LayoutListImport } from './routes/_layout/list'
 import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
+import { Route as LayoutListIdPercentsImport } from './routes/_layout/list.$id.percents'
 import { Route as LayoutListIdDetailsImport } from './routes/_layout/list.$id.details'
 import { Route as LayoutFavoritesFavoriteIdNotesImport } from './routes/_layout/favorites.$favoriteId.notes'
 
@@ -74,6 +75,12 @@ const LayoutFavoritesRoute = LayoutFavoritesImport.update({
   id: '/favorites',
   path: '/favorites',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutListIdPercentsRoute = LayoutListIdPercentsImport.update({
+  id: '/$id/percents',
+  path: '/$id/percents',
+  getParentRoute: () => LayoutListRoute,
 } as any)
 
 const LayoutListIdDetailsRoute = LayoutListIdDetailsImport.update({
@@ -163,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutListIdDetailsImport
       parentRoute: typeof LayoutListImport
     }
+    '/_layout/list/$id/percents': {
+      id: '/_layout/list/$id/percents'
+      path: '/$id/percents'
+      fullPath: '/list/$id/percents'
+      preLoaderRoute: typeof LayoutListIdPercentsImport
+      parentRoute: typeof LayoutListImport
+    }
   }
 }
 
@@ -182,10 +196,12 @@ const LayoutFavoritesRouteWithChildren = LayoutFavoritesRoute._addFileChildren(
 
 interface LayoutListRouteChildren {
   LayoutListIdDetailsRoute: typeof LayoutListIdDetailsRoute
+  LayoutListIdPercentsRoute: typeof LayoutListIdPercentsRoute
 }
 
 const LayoutListRouteChildren: LayoutListRouteChildren = {
   LayoutListIdDetailsRoute: LayoutListIdDetailsRoute,
+  LayoutListIdPercentsRoute: LayoutListIdPercentsRoute,
 }
 
 const LayoutListRouteWithChildren = LayoutListRoute._addFileChildren(
@@ -216,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/list': typeof LayoutListRouteWithChildren
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
   '/list/$id/details': typeof LayoutListIdDetailsRoute
+  '/list/$id/percents': typeof LayoutListIdPercentsRoute
 }
 
 export interface FileRoutesByTo {
@@ -229,6 +246,7 @@ export interface FileRoutesByTo {
   '/list': typeof LayoutListRouteWithChildren
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
   '/list/$id/details': typeof LayoutListIdDetailsRoute
+  '/list/$id/percents': typeof LayoutListIdPercentsRoute
 }
 
 export interface FileRoutesById {
@@ -243,6 +261,7 @@ export interface FileRoutesById {
   '/_layout/list': typeof LayoutListRouteWithChildren
   '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
   '/_layout/list/$id/details': typeof LayoutListIdDetailsRoute
+  '/_layout/list/$id/percents': typeof LayoutListIdPercentsRoute
 }
 
 export interface FileRouteTypes {
@@ -258,6 +277,7 @@ export interface FileRouteTypes {
     | '/list'
     | '/favorites/$favoriteId/notes'
     | '/list/$id/details'
+    | '/list/$id/percents'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -270,6 +290,7 @@ export interface FileRouteTypes {
     | '/list'
     | '/favorites/$favoriteId/notes'
     | '/list/$id/details'
+    | '/list/$id/percents'
   id:
     | '__root__'
     | '/'
@@ -282,6 +303,7 @@ export interface FileRouteTypes {
     | '/_layout/list'
     | '/_layout/favorites/$favoriteId/notes'
     | '/_layout/list/$id/details'
+    | '/_layout/list/$id/percents'
   fileRoutesById: FileRoutesById
 }
 
@@ -354,7 +376,8 @@ export const routeTree = rootRoute
       "filePath": "_layout/list.tsx",
       "parent": "/_layout",
       "children": [
-        "/_layout/list/$id/details"
+        "/_layout/list/$id/details",
+        "/_layout/list/$id/percents"
       ]
     },
     "/_layout/favorites/$favoriteId/notes": {
@@ -363,6 +386,10 @@ export const routeTree = rootRoute
     },
     "/_layout/list/$id/details": {
       "filePath": "_layout/list.$id.details.tsx",
+      "parent": "/_layout/list"
+    },
+    "/_layout/list/$id/percents": {
+      "filePath": "_layout/list.$id.percents.tsx",
       "parent": "/_layout/list"
     }
   }

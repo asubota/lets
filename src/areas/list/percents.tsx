@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import { DetailsPopup } from '../../components/details-popup.tsx'
 import { Navigate, useNavigate, useParams } from '@tanstack/react-router'
 import { useGetById } from './use-get-by-id.ts'
+import { PercentsPopup } from '../../components/percents-popup.tsx'
 
-export const Details: FC = () => {
-  const { id } = useParams({ from: '/_layout/list/$id/details' })
+export const Percents: FC = () => {
+  const { id } = useParams({ from: '/_layout/list/$id/percents' })
   const product = useGetById(id)
   const navigate = useNavigate()
 
@@ -13,6 +13,9 @@ export const Details: FC = () => {
   }
 
   return (
-    <DetailsPopup details={product} onClose={() => navigate({ to: '/list' })} />
+    <PercentsPopup
+      product={product}
+      onClose={() => navigate({ to: '/list' })}
+    />
   )
 }
