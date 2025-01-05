@@ -7,13 +7,15 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material'
-import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { createLink, useNavigate, useParams } from '@tanstack/react-router'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useGetPropFromFavorite, useSetPropOnFavorite } from '../../api.ts'
 
 type NoteForm = {
   note: string
 }
+
+const LinkedButton = createLink(Button)
 
 export const NotesDialog: FC = () => {
   const { favoriteId = '' } = useParams({ strict: false })
@@ -76,9 +78,9 @@ export const NotesDialog: FC = () => {
         <Button sx={{ mr: 'auto' }} size="small" onClick={handleDelete}>
           Delete
         </Button>
-        <Button component={Link} to="/favorites" size="small">
+        <LinkedButton to="/favorites" size="small">
           Cancel
-        </Button>
+        </LinkedButton>
         <Button type="submit" size="small">
           Save
         </Button>

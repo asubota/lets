@@ -5,7 +5,7 @@ type Search = {
   s?: string
 }
 
-export const Route = createFileRoute('/_layout/')({
+export const Route = createFileRoute('/_layout/list')({
   component: List,
   validateSearch: (search: Record<string, unknown>): Search => {
     return {

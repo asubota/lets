@@ -119,7 +119,7 @@ export const Scanner: FC = () => {
       </Button>
 
       <LinkedButton
-        to={'/'}
+        to={'/list'}
         search={output.length ? { s: output } : {}}
         variant="contained"
       >

@@ -10,7 +10,7 @@ export const Notifications: FC = () => {
   const notifications = useGetNotifications()
   const { mutate } = useSetPropOnFavorite()
   const navigate = useNavigate()
-  const handleClose = () => navigate({ to: '/' })
+  const handleClose = () => navigate({ to: '/list' })
 
   return (
     <Modal

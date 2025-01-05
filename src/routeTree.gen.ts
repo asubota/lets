@@ -14,7 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as IndexImport } from './routes/index'
+import { Route as LayoutListImport } from './routes/_layout/list'
 import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
 import { Route as LayoutFavoritesFavoriteIdNotesImport } from './routes/_layout/favorites.$favoriteId.notes'
 
@@ -49,9 +50,15 @@ const LayoutRoute = LayoutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutIndexRoute = LayoutIndexImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutListRoute = LayoutListImport.update({
+  id: '/list',
+  path: '/list',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -72,6 +79,13 @@ const LayoutFavoritesFavoriteIdNotesRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_layout': {
       id: '/_layout'
       path: ''
@@ -107,11 +121,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutFavoritesImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/': {
-      id: '/_layout/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof LayoutIndexImport
+    '/_layout/list': {
+      id: '/_layout/list'
+      path: '/list'
+      fullPath: '/list'
+      preLoaderRoute: typeof LayoutListImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/favorites/$favoriteId/notes': {
@@ -140,78 +154,87 @@ const LayoutFavoritesRouteWithChildren = LayoutFavoritesRoute._addFileChildren(
 
 interface LayoutRouteChildren {
   LayoutFavoritesRoute: typeof LayoutFavoritesRouteWithChildren
-  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutListRoute: typeof LayoutListRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutFavoritesRoute: LayoutFavoritesRouteWithChildren,
-  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutListRoute: LayoutListRoute,
 }
 
 const LayoutRouteWithChildren =
   LayoutRoute._addFileChildren(LayoutRouteChildren)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '': typeof LayoutRouteWithChildren
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
   '/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/': typeof LayoutIndexRoute
+  '/list': typeof LayoutListRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
 }
 
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '': typeof LayoutRouteWithChildren
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
   '/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/': typeof LayoutIndexRoute
+  '/list': typeof LayoutListRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
   '/_layout/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/_layout/': typeof LayoutIndexRoute
+  '/_layout/list': typeof LayoutListRoute
   '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | ''
     | '/colors'
     | '/notifications'
     | '/scanner'
     | '/favorites'
-    | '/'
+    | '/list'
     | '/favorites/$favoriteId/notes'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
+    | ''
     | '/colors'
     | '/notifications'
     | '/scanner'
     | '/favorites'
-    | '/'
+    | '/list'
     | '/favorites/$favoriteId/notes'
   id:
     | '__root__'
+    | '/'
     | '/_layout'
     | '/colors'
     | '/notifications'
     | '/scanner'
     | '/_layout/favorites'
-    | '/_layout/'
+    | '/_layout/list'
     | '/_layout/favorites/$favoriteId/notes'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   LayoutRoute: typeof LayoutRouteWithChildren
   ColorsLazyRoute: typeof ColorsLazyRoute
   NotificationsLazyRoute: typeof NotificationsLazyRoute
@@ -219,6 +242,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
   ColorsLazyRoute: ColorsLazyRoute,
   NotificationsLazyRoute: NotificationsLazyRoute,
@@ -235,17 +259,21 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/_layout",
         "/colors",
         "/notifications",
         "/scanner"
       ]
     },
+    "/": {
+      "filePath": "index.tsx"
+    },
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/favorites",
-        "/_layout/"
+        "/_layout/list"
       ]
     },
     "/colors": {
@@ -264,8 +292,8 @@ export const routeTree = rootRoute
         "/_layout/favorites/$favoriteId/notes"
       ]
     },
-    "/_layout/": {
-      "filePath": "_layout/index.tsx",
+    "/_layout/list": {
+      "filePath": "_layout/list.tsx",
       "parent": "/_layout"
     },
     "/_layout/favorites/$favoriteId/notes": {

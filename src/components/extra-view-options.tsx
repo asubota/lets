@@ -4,11 +4,14 @@ import { IconButton, Stack, useTheme } from '@mui/material'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import HouseIcon from '@mui/icons-material/House'
 
 import { ColorModeContext } from '../theme-mode-provider.tsx'
-import { Link } from '@tanstack/react-router'
+import { createLink } from '@tanstack/react-router'
 import { RedDot } from './red-dot.tsx'
 import { useGetNotifications } from '../hooks/use-get-notifications.ts'
+
+const LinkedButton = createLink(IconButton)
 
 export const ExtraViewOptions: FC = () => {
   const theme = useTheme()
@@ -24,14 +27,10 @@ export const ExtraViewOptions: FC = () => {
         bottom: '25px',
       }}
     >
-      <IconButton
-        component={Link}
-        sx={{ color: 'text.secondary' }}
-        to="/notifications"
-      >
+      <LinkedButton sx={{ color: 'text.secondary' }} to="/notifications">
         <NotificationsNoneIcon />
         {unread.length > 0 && <RedDot />}
-      </IconButton>
+      </LinkedButton>
 
       <IconButton
         onClick={colorMode.toggleColorMode}
@@ -44,13 +43,13 @@ export const ExtraViewOptions: FC = () => {
         )}
       </IconButton>
 
-      <IconButton
-        component={Link}
-        sx={{ color: 'text.secondary' }}
-        to="/colors"
-      >
+      <LinkedButton sx={{ color: 'text.secondary' }} to="/colors">
         <PaletteIcon />
-      </IconButton>
+      </LinkedButton>
+
+      <LinkedButton sx={{ color: 'text.secondary' }} to="/">
+        <HouseIcon />
+      </LinkedButton>
     </Stack>
   )
 }

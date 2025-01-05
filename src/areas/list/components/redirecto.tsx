@@ -7,12 +7,12 @@ export const Redirecto: FC<{
   setValue: UseFormSetValue<SearchForm>
   setSearch(value: string): void
 }> = ({ setValue, setSearch }) => {
-  const { s } = useSearch({ from: '/_layout/' })
+  const { s } = useSearch({ from: '/_layout/list' })
   const navigate = useNavigate()
 
   useEffect(() => {
     if (s?.length) {
-      navigate({ to: '/' }).then(() => {
+      navigate({ to: '/list' }).then(() => {
         setValue('input', s)
         setSearch(s)
       })
