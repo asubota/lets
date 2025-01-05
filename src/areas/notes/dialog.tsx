@@ -18,7 +18,9 @@ type NoteForm = {
 const LinkedButton = createLink(Button)
 
 export const NotesDialog: FC = () => {
-  const { favoriteId = '' } = useParams({ strict: false })
+  const { favoriteId } = useParams({
+    from: '/_layout/favorites/$favoriteId/notes',
+  })
   const navigate = useNavigate()
   const note = useGetPropFromFavorite(favoriteId, 'note')
   const { register, handleSubmit } = useForm<NoteForm>({

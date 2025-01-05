@@ -6,7 +6,4 @@ export const Route = createFileRoute('/')({
       to: '/list',
     })
   },
-  notFoundComponent: () => {
-    console.log('Not Found')
-  },
 })
