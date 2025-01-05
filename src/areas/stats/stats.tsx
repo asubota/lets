@@ -54,10 +54,10 @@ export const Stats: FC = () => {
             <Grid
               size={{ xs: 6, md: 4 }}
               key={vendor}
-              sx={{ p: 1, display: 'flex', justifyContent: 'center' }}
+              sx={{ p: 1, display: 'flex', justifyContent: 'flex-start' }}
             >
               <VendorChip source="live" vendor={vendor} />
-              <Box sx={{ pl: 2 }} component="span">
+              <Box sx={{ pl: 2, fontWeight: 'bold' }} component="span">
                 {countByVendor[vendor]}
               </Box>
             </Grid>
