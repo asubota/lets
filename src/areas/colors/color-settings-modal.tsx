@@ -71,13 +71,13 @@ export const ColorSettingsModal: FC = () => {
   const handleSave = () => {
     mutate(colors)
     setActiveVendor(null)
-    navigate({ to: '/' })
+    navigate({ to: '/list' })
   }
 
   const handleClose = () => {
     setActiveVendor('')
     setFill('both')
-    navigate({ to: '/' })
+    navigate({ to: '/list' })
   }
 
   const [fill, setFill] = useState<'color' | 'borderColor' | 'both' | 'bg'>(

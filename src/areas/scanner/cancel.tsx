@@ -1,13 +1,14 @@
-import { Link } from '@tanstack/react-router'
+import { createLink } from '@tanstack/react-router'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { IconButton } from '@mui/material'
 import { FC } from 'react'
 
+const LinkedButton = createLink(IconButton)
+
 export const Cancel: FC = () => {
   return (
-    <IconButton
-      component={Link}
-      to="/"
+    <LinkedButton
+      to="/list"
       sx={{
         zIndex: 1,
         position: 'absolute',
@@ -17,6 +18,6 @@ export const Cancel: FC = () => {
       }}
     >
       <ArrowBackIcon />
-    </IconButton>
+    </LinkedButton>
   )
 }
