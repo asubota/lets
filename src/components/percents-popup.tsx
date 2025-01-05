@@ -43,7 +43,7 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
 }) => {
   useNoScroll()
   const [discount, setDiscount] = useState(7)
-  const handleChange = (_, newValue: number | number[]) => {
+  const handleChange = (_: Event, newValue: number | number[]) => {
     setDiscount(newValue as number)
   }
   const discountValue = Math.round((product.price * discount) / 100)
