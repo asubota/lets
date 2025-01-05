@@ -18,6 +18,7 @@ import {
 import { useSearchActions } from '../../store/search.ts'
 import { useHistoryActions } from '../../store'
 import { Loader } from '../../components/loader.tsx'
+import { Outlet } from '@tanstack/react-router'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
@@ -104,6 +105,8 @@ export const List: FC = () => {
 
       <LimitSearchModal list={products} />
       <TableSettingsModal />
+
+      <Outlet />
     </>
   )
 }

@@ -17,6 +17,7 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as LayoutListImport } from './routes/_layout/list'
 import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
+import { Route as LayoutListIdDetailsImport } from './routes/_layout/list.$id.details'
 import { Route as LayoutFavoritesFavoriteIdNotesImport } from './routes/_layout/favorites.$favoriteId.notes'
 
 // Create Virtual Routes
@@ -73,6 +74,12 @@ const LayoutFavoritesRoute = LayoutFavoritesImport.update({
   id: '/favorites',
   path: '/favorites',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutListIdDetailsRoute = LayoutListIdDetailsImport.update({
+  id: '/$id/details',
+  path: '/$id/details',
+  getParentRoute: () => LayoutListRoute,
 } as any)
 
 const LayoutFavoritesFavoriteIdNotesRoute =
@@ -149,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesImport
       parentRoute: typeof LayoutFavoritesImport
     }
+    '/_layout/list/$id/details': {
+      id: '/_layout/list/$id/details'
+      path: '/$id/details'
+      fullPath: '/list/$id/details'
+      preLoaderRoute: typeof LayoutListIdDetailsImport
+      parentRoute: typeof LayoutListImport
+    }
   }
 }
 
@@ -166,14 +180,26 @@ const LayoutFavoritesRouteWithChildren = LayoutFavoritesRoute._addFileChildren(
   LayoutFavoritesRouteChildren,
 )
 
+interface LayoutListRouteChildren {
+  LayoutListIdDetailsRoute: typeof LayoutListIdDetailsRoute
+}
+
+const LayoutListRouteChildren: LayoutListRouteChildren = {
+  LayoutListIdDetailsRoute: LayoutListIdDetailsRoute,
+}
+
+const LayoutListRouteWithChildren = LayoutListRoute._addFileChildren(
+  LayoutListRouteChildren,
+)
+
 interface LayoutRouteChildren {
   LayoutFavoritesRoute: typeof LayoutFavoritesRouteWithChildren
-  LayoutListRoute: typeof LayoutListRoute
+  LayoutListRoute: typeof LayoutListRouteWithChildren
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutFavoritesRoute: LayoutFavoritesRouteWithChildren,
-  LayoutListRoute: LayoutListRoute,
+  LayoutListRoute: LayoutListRouteWithChildren,
 }
 
 const LayoutRouteWithChildren =
@@ -187,8 +213,9 @@ export interface FileRoutesByFullPath {
   '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
   '/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/list': typeof LayoutListRoute
+  '/list': typeof LayoutListRouteWithChildren
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
+  '/list/$id/details': typeof LayoutListIdDetailsRoute
 }
 
 export interface FileRoutesByTo {
@@ -199,8 +226,9 @@ export interface FileRoutesByTo {
   '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
   '/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/list': typeof LayoutListRoute
+  '/list': typeof LayoutListRouteWithChildren
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
+  '/list/$id/details': typeof LayoutListIdDetailsRoute
 }
 
 export interface FileRoutesById {
@@ -212,8 +240,9 @@ export interface FileRoutesById {
   '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
   '/_layout/favorites': typeof LayoutFavoritesRouteWithChildren
-  '/_layout/list': typeof LayoutListRoute
+  '/_layout/list': typeof LayoutListRouteWithChildren
   '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
+  '/_layout/list/$id/details': typeof LayoutListIdDetailsRoute
 }
 
 export interface FileRouteTypes {
@@ -228,6 +257,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/list'
     | '/favorites/$favoriteId/notes'
+    | '/list/$id/details'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -239,6 +269,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/list'
     | '/favorites/$favoriteId/notes'
+    | '/list/$id/details'
   id:
     | '__root__'
     | '/'
@@ -250,6 +281,7 @@ export interface FileRouteTypes {
     | '/_layout/favorites'
     | '/_layout/list'
     | '/_layout/favorites/$favoriteId/notes'
+    | '/_layout/list/$id/details'
   fileRoutesById: FileRoutesById
 }
 
@@ -320,11 +352,18 @@ export const routeTree = rootRoute
     },
     "/_layout/list": {
       "filePath": "_layout/list.tsx",
-      "parent": "/_layout"
+      "parent": "/_layout",
+      "children": [
+        "/_layout/list/$id/details"
+      ]
     },
     "/_layout/favorites/$favoriteId/notes": {
       "filePath": "_layout/favorites.$favoriteId.notes.tsx",
       "parent": "/_layout/favorites"
+    },
+    "/_layout/list/$id/details": {
+      "filePath": "_layout/list.$id.details.tsx",
+      "parent": "/_layout/list"
     }
   }
 }
