@@ -25,6 +25,7 @@ const Products: FC<ProductsProps> = ({
   hasGoogle,
   hasColumnsConfig,
   isFavoritePage,
+  hasCart,
 }) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(products)
@@ -46,6 +47,7 @@ const Products: FC<ProductsProps> = ({
   return (
     <>
       <Toolbar
+        hasCart={hasCart}
         hasPasteIn={hasPasteIn}
         hasFavoritesSorting={hasFavoritesSorting}
         hasGoogle={hasGoogle}
