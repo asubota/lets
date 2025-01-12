@@ -1,1 +1,0 @@
-import{s as o}from"./tanstack-Bgp09nNT.js";import{S as r}from"./index-DL5rS1u8.js";import"./html2canvas-BfYXEYrK.js";import"./react-_uqhELNW.js";import"./mui-BUaMWoLQ.js";import"./tesseract-efYOn2sj.js";import"./swiper-B72pzicN.js";const c=o("/scanner")({component:r});export{c as Route};
