@@ -1,10 +1,21 @@
 import { FC } from 'react'
 import { Modal } from '../../components/modal.tsx'
-import { useNavigate } from '@tanstack/react-router'
-import { Alert, Box, Stack, Switch, Typography } from '@mui/material'
+import { createLink, useNavigate } from '@tanstack/react-router'
+import {
+  Alert,
+  Box,
+  Button,
+  DialogActions,
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/material'
 import { Empty } from './empty.tsx'
 import { useGetNotifications } from '../../hooks/use-get-notifications.ts'
 import { useSetPropOnFavorite } from '../../api.ts'
+import HouseIcon from '@mui/icons-material/House'
+
+const LinkedButton = createLink(Button)
 
 export const Notifications: FC = () => {
   const notifications = useGetNotifications()
@@ -19,6 +30,23 @@ export const Notifications: FC = () => {
       onSave={handleClose}
       onClose={handleClose}
       hasSave={false}
+      actions={
+        <DialogActions
+          sx={{
+            p: 0,
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+          }}
+        >
+          <Box sx={{ p: 3, width: '100%' }}>
+            <LinkedButton to="/list" fullWidth variant="contained">
+              <HouseIcon color="secondary" />
+            </LinkedButton>
+          </Box>
+        </DialogActions>
+      }
     >
       {notifications.length === 0 && <Empty />}
       {notifications.length > 0 && (

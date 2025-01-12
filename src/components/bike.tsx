@@ -11,7 +11,7 @@ export const Bike: FC<{ type: 'safe' | 'broken' }> = ({ type }) => {
         width: '100%',
         maxWidth: '300px',
         position: 'absolute',
-        bottom: '185px',
+        bottom: '215px',
         left: '50%',
         transform: 'translate(-50%)',
       }}

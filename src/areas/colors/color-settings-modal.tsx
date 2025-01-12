@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  DialogActions,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
@@ -11,8 +12,11 @@ import { CirclePicker, HuePicker, ColorChangeHandler } from 'react-color'
 import { useAllVendors, useIsLoading } from '../../use-data.ts'
 import { Modal } from '../../components/modal.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
-import { useNavigate } from '@tanstack/react-router'
+import { createLink, useNavigate } from '@tanstack/react-router'
 import { useGetColors, useSetColors } from '../../api-colors.ts'
+import HouseIcon from '@mui/icons-material/House'
+
+const LinkedButton = createLink(Button)
 
 export const ColorSettingsModal: FC = () => {
   const vendors = useAllVendors()
@@ -91,7 +95,29 @@ export const ColorSettingsModal: FC = () => {
   }
 
   return (
-    <Modal open title="" onSave={handleSave} onClose={handleClose}>
+    <Modal
+      open
+      title=""
+      onSave={handleSave}
+      onClose={handleClose}
+      actions={
+        <DialogActions
+          sx={{
+            p: 0,
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+          }}
+        >
+          <Box sx={{ p: 3, width: '100%' }}>
+            <LinkedButton to="/list" fullWidth variant="contained">
+              <HouseIcon color="secondary" />
+            </LinkedButton>
+          </Box>
+        </DialogActions>
+      }
+    >
       <Box
         sx={{
           mt: '20px',

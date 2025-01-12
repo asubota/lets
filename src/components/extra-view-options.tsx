@@ -3,7 +3,7 @@ import PaletteIcon from '@mui/icons-material/Palette'
 import { IconButton, Stack, useTheme } from '@mui/material'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import InsightsIcon from '@mui/icons-material/Insights'
 
@@ -30,7 +30,7 @@ export const ExtraViewOptions: FC = () => {
         }}
       >
         <LinkedButton sx={{ color: 'text.secondary' }} to="/notifications">
-          <NotificationsNoneIcon />
+          <NotificationsIcon />
           {unread.length > 0 && <RedDot />}
         </LinkedButton>
 
@@ -62,7 +62,7 @@ export const ExtraViewOptions: FC = () => {
           bottom: '25px',
         }}
       >
-        <LinkedButton to="/cart">
+        <LinkedButton to="/cart" sx={{ color: 'text.secondary' }}>
           <ShoppingCartIcon />
         </LinkedButton>
       </Stack>
