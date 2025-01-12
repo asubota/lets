@@ -15,9 +15,20 @@ import { FavoritesButton } from './favorites-button.tsx'
 import { NotesButton } from './notes-button.tsx'
 import { FavoriteTime } from './favorite-time.tsx'
 import { createLink } from '@tanstack/react-router'
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import { toast } from 'react-toastify'
 
 const LinkedButton = createLink(IconButton)
 const LinkedIcon = createLink(ImageIcon)
+
+const handleBasket = (p: Product) => {
+  toast.success(`${p.name} додано в корзину!`, {
+    position: 'bottom-center',
+    hideProgressBar: true,
+    icon: false,
+    theme: 'colored',
+  })
+}
 
 export const Tile: FC<{
   p: Product | FavoriteProduct
@@ -91,20 +102,38 @@ export const Tile: FC<{
         <RippleText text={getHighlightedText(p['name'], search)} />
       </Box>
 
-      <Box sx={{ gridArea: 'sku', justifySelf: 'flex-start' }}>
+      <Box
+        sx={{
+          gridArea: 'sku',
+          justifySelf: 'flex-start',
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
         <Chip
           label={getHighlightedText(p['sku'], search)}
           size="small"
           onClick={async () => await copyContent(p.sku)}
         />
         {!isFavoritePage && (
-          <LinkedButton
-            to="/list/$id/percents"
-            params={{ id: getFavoriteId(p) }}
-            data-no-export
-          >
-            <PercentIcon sx={{ fontSize: 'small' }} />
-          </LinkedButton>
+          <>
+            <LinkedButton
+              to="/list/$id/percents"
+              params={{ id: getFavoriteId(p) }}
+              data-no-export
+            >
+              <PercentIcon sx={{ fontSize: 'small' }} />
+            </LinkedButton>
+
+            <IconButton
+              data-no-export
+              sx={{ ml: 'auto' }}
+              onClick={() => handleBasket(p)}
+            >
+              <AddShoppingCartIcon sx={{ fontSize: 'small' }} />
+            </IconButton>
+          </>
         )}
       </Box>
       {showSettings && <TileSettings favoriteId={getFavoriteId(p)} />}
