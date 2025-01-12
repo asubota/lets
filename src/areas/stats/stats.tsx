@@ -65,6 +65,13 @@ export const Stats: FC = () => {
         })}
       </Grid>
 
+      <Box sx={{ textAlign: 'center', m: 2, mt: 0 }}>
+        Total:{' '}
+        <Box sx={{ fontWeight: 'bold' }} component="span">
+          {allData.length}
+        </Box>
+      </Box>
+
       <Box sx={{ pl: 3, pr: 3 }}>
         <LinkedButton to="/list" fullWidth variant="contained">
           <HouseIcon color="secondary" />

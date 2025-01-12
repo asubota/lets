@@ -7,8 +7,8 @@ export const RedDot: FC = () => {
       sx={{
         backgroundColor: 'primary.main',
         borderRadius: '50%',
-        width: '5px',
-        height: '5px',
+        width: '6px',
+        height: '6px',
         position: 'absolute',
         right: '4px',
         top: '4px',

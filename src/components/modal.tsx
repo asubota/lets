@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, PropsWithChildren, ReactNode } from 'react'
 import {
   AppBar,
   Button,
@@ -20,14 +20,24 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} children={props.children} />
 })
 
-export const Modal: FC<{
+type ModalProps = PropsWithChildren<{
   open: boolean
   onClose(): void
   title: string
   onSave(): void
-  children: ReactNode
   hasSave?: boolean
-}> = ({ open, onClose, title, onSave, children, hasSave = true }) => {
+  actions?: ReactNode
+}>
+
+export const Modal: FC<ModalProps> = ({
+  open,
+  onClose,
+  title,
+  onSave,
+  children,
+  actions,
+  hasSave = true,
+}) => {
   return (
     <Dialog
       fullScreen
@@ -58,6 +68,7 @@ export const Modal: FC<{
       </AppBar>
 
       {children}
+      {actions}
     </Dialog>
   )
 }
