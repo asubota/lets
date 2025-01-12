@@ -5,11 +5,11 @@ export const ToolbarSeparator: FC = () => {
   return (
     <Box
       sx={{
-        borderRight: '1px solid',
-        borderColor: 'primary.main',
         height: '22px',
-        pl: '2px',
-        pr: '2px',
+        width: '1px',
+        backgroundColor: 'primary.main',
+        ml: '2px',
+        mr: '2px',
       }}
     />
   )

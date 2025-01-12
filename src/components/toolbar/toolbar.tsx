@@ -10,7 +10,14 @@ import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
 import { Sorting } from '../sorting.tsx'
 
-interface ToolbarProps {
+export interface SharedToolbarProps {
+  hasFavoritesSorting?: boolean
+  hasPasteIn?: boolean
+  hasGoogle?: boolean
+  hasColumnsConfig?: boolean
+}
+
+interface ToolbarProps extends SharedToolbarProps {
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
@@ -20,6 +27,10 @@ export const Toolbar: FC<ToolbarProps> = ({
   total,
   uniqueVendors,
   filteredSearch,
+  hasFavoritesSorting = false,
+  hasPasteIn = false,
+  hasGoogle = false,
+  hasColumnsConfig = false,
 }) => {
   return (
     <Box
@@ -40,10 +51,10 @@ export const Toolbar: FC<ToolbarProps> = ({
       </Box>
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
-        <Sorting />
-        <PasteInSearchButton />
-        <GoogleButton />
-        <TableColumnsViewer />
+        {hasFavoritesSorting && <Sorting />}
+        {hasPasteIn && <PasteInSearchButton />}
+        {hasGoogle && <GoogleButton />}
+        {hasColumnsConfig && <TableColumnsViewer />}
 
         <ButtonGroup sx={{ alignItems: 'center' }}>
           <SwitchToTableView />
