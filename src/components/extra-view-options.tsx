@@ -4,6 +4,7 @@ import { IconButton, Stack, useTheme } from '@mui/material'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import InsightsIcon from '@mui/icons-material/Insights'
 
 import { ColorModeContext } from '../theme-mode-provider.tsx'
@@ -19,37 +20,52 @@ export const ExtraViewOptions: FC = () => {
   const unread = useGetNotifications('unread')
 
   return (
-    <Stack
-      spacing={1}
-      sx={{
-        position: 'absolute',
-        right: '25px',
-        bottom: '25px',
-      }}
-    >
-      <LinkedButton sx={{ color: 'text.secondary' }} to="/notifications">
-        <NotificationsNoneIcon />
-        {unread.length > 0 && <RedDot />}
-      </LinkedButton>
-
-      <IconButton
-        onClick={colorMode.toggleColorMode}
-        sx={{ color: 'text.secondary' }}
+    <>
+      <Stack
+        spacing={1}
+        sx={{
+          position: 'absolute',
+          right: '25px',
+          bottom: '25px',
+        }}
       >
-        {theme.palette.mode === 'dark' ? (
-          <Brightness7Icon />
-        ) : (
-          <Brightness4Icon />
-        )}
-      </IconButton>
+        <LinkedButton sx={{ color: 'text.secondary' }} to="/notifications">
+          <NotificationsNoneIcon />
+          {unread.length > 0 && <RedDot />}
+        </LinkedButton>
 
-      <LinkedButton sx={{ color: 'text.secondary' }} to="/colors">
-        <PaletteIcon />
-      </LinkedButton>
+        <IconButton
+          onClick={colorMode.toggleColorMode}
+          sx={{ color: 'text.secondary' }}
+        >
+          {theme.palette.mode === 'dark' ? (
+            <Brightness7Icon />
+          ) : (
+            <Brightness4Icon />
+          )}
+        </IconButton>
 
-      <LinkedButton sx={{ color: 'text.secondary' }} to="/stats">
-        <InsightsIcon />
-      </LinkedButton>
-    </Stack>
+        <LinkedButton sx={{ color: 'text.secondary' }} to="/colors">
+          <PaletteIcon />
+        </LinkedButton>
+
+        <LinkedButton sx={{ color: 'text.secondary' }} to="/stats">
+          <InsightsIcon />
+        </LinkedButton>
+      </Stack>
+
+      <Stack
+        spacing={1}
+        sx={{
+          position: 'absolute',
+          right: '75px',
+          bottom: '25px',
+        }}
+      >
+        <LinkedButton to="/cart">
+          <ShoppingCartIcon />
+        </LinkedButton>
+      </Stack>
+    </>
   )
 }

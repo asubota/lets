@@ -9,12 +9,14 @@ import { TableColumnsViewer } from './components/table-columns-viewer.tsx'
 import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
 import { Sorting } from '../sorting.tsx'
+import { CartButton } from './cart-button.tsx'
 
 export interface SharedToolbarProps {
   hasFavoritesSorting?: boolean
   hasPasteIn?: boolean
   hasGoogle?: boolean
   hasColumnsConfig?: boolean
+  hasCart?: boolean
 }
 
 interface ToolbarProps extends SharedToolbarProps {
@@ -31,6 +33,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   hasPasteIn = false,
   hasGoogle = false,
   hasColumnsConfig = false,
+  hasCart = false,
 }) => {
   return (
     <Box
@@ -51,6 +54,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       </Box>
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
+        {hasCart && <CartButton />}
         {hasFavoritesSorting && <Sorting />}
         {hasPasteIn && <PasteInSearchButton />}
         {hasGoogle && <GoogleButton />}

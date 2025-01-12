@@ -105,6 +105,7 @@ export const List: FC = () => {
             hasPasteIn
             hasGoogle
             hasColumnsConfig
+            hasCart
           />
         </Suspense>
       )}
