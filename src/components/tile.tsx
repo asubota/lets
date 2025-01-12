@@ -23,9 +23,9 @@ export const Tile: FC<{
   p: Product | FavoriteProduct
   search: string
   isFavorite: boolean
-  iFavouriteRoute: boolean
+  isFavoritePage: boolean
   isChanged: boolean
-}> = ({ p, search, isFavorite, iFavouriteRoute, isChanged }) => {
+}> = ({ p, search, isFavorite, isFavoritePage, isChanged }) => {
   const [showSettings, setShowSettings] = useState(false)
 
   const handleToggleSettings: MouseEventHandler = (e) => {
@@ -97,7 +97,7 @@ export const Tile: FC<{
           size="small"
           onClick={async () => await copyContent(p.sku)}
         />
-        {!iFavouriteRoute && (
+        {!isFavoritePage && (
           <LinkedButton
             to="/list/$id/percents"
             params={{ id: getFavoriteId(p) }}
@@ -143,7 +143,7 @@ export const Tile: FC<{
             }}
           >
             {isFavorite && 'time' in p && <FavoriteTime time={p.time} />}
-            {iFavouriteRoute && <NotesButton favoriteId={getFavoriteId(p)} />}
+            {isFavoritePage && <NotesButton favoriteId={getFavoriteId(p)} />}
             <FavoritesButton
               isFavorite={isFavorite}
               favoriteId={getFavoriteId(p)}

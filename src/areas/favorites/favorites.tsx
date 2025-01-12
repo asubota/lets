@@ -36,7 +36,12 @@ export const Favorites: FC = () => {
         <Loader />
       ) : (
         <Suspense>
-          <Products products={filteredItems} search="" hasFavoritesSorting />
+          <Products
+            products={filteredItems}
+            search=""
+            hasFavoritesSorting
+            isFavoritePage
+          />
         </Suspense>
       )}
 

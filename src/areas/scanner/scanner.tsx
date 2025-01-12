@@ -96,7 +96,7 @@ export const Scanner: FC = () => {
       setOutput(text.trim())
       await worker.terminate()
     } catch (e) {
-      console.log('## e', e)
+      console.log(e)
     }
 
     setWorking(false)
