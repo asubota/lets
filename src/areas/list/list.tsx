@@ -99,7 +99,13 @@ export const List: FC = () => {
         <Loader />
       ) : (
         <Suspense>
-          <Products products={products} search={search} />
+          <Products
+            products={products}
+            search={search}
+            hasPasteIn
+            hasGoogle
+            hasColumnsConfig
+          />
         </Suspense>
       )}
 
