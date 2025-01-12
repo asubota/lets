@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { TilesView } from './tiles-view.tsx'
+import { SharedTilesViewProps, TilesView } from './tiles-view.tsx'
 import { TableView } from './table-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { NoResults } from './no-results.tsx'
@@ -12,7 +12,7 @@ import { useSearchVendors } from '../store/search.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
 
-interface ProductsProps extends SharedToolbarProps {
+interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   products: Product[]
   search: string
 }
@@ -24,12 +24,11 @@ const Products: FC<ProductsProps> = ({
   hasPasteIn,
   hasGoogle,
   hasColumnsConfig,
+  isFavoritePage,
 }) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(products)
   const searchVendors = useSearchVendors()
-
-  const View = view === 'tile' ? TilesView : TableView
 
   if (products.length === 0 && search.length === 0) {
     return <Welcome />
@@ -58,7 +57,15 @@ const Products: FC<ProductsProps> = ({
           searchVendors.length < uniqueVendors.length
         }
       />
-      <View list={filteredList} search={search} />
+      {view === 'tile' && (
+        <TilesView
+          list={filteredList}
+          search={search}
+          isFavoritePage={isFavoritePage}
+        />
+      )}
+      {view === 'table' && <TableView list={filteredList} search={search} />}
+
       <ScrollToTop />
     </>
   )

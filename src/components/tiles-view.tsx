@@ -2,17 +2,25 @@ import { Stack } from '@mui/material'
 import { FC } from 'react'
 import { Product } from '../types.ts'
 import { Tile } from './tile.tsx'
-import { useIsRoute } from '../hooks/use-is-route.hook.ts'
 import { useGetChangedProducts } from '../hooks/use-get-changed-products.hook.ts'
 import { getFavoriteId } from '../tools.tsx'
 import { useFavoriteIds } from '../api.ts'
 
-export const TilesView: FC<{ list: Product[]; search: string }> = ({
+export interface SharedTilesViewProps {
+  isFavoritePage?: boolean
+}
+
+interface TilesViewProps extends SharedTilesViewProps {
+  list: Product[]
+  search: string
+}
+
+export const TilesView: FC<TilesViewProps> = ({
   list,
   search,
+  isFavoritePage = false,
 }) => {
   const favoriteIds = useFavoriteIds()
-  const isFavouritesRoute = useIsRoute('/favorites')
   const changedProducts = useGetChangedProducts()
   const skus = changedProducts.map((p) => p.sku)
 
@@ -29,7 +37,7 @@ export const TilesView: FC<{ list: Product[]; search: string }> = ({
             search={search}
             isFavorite={favoriteIds.includes(favoriteId)}
             isChanged={skus.includes(p.sku)}
-            iFavouriteRoute={isFavouritesRoute}
+            isFavoritePage={isFavoritePage}
           />
         )
       })}
