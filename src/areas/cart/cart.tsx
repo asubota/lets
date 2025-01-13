@@ -68,22 +68,20 @@ export const Cart: FC = () => {
             <SwipeItem
               key={item.itemId}
               actions={
-                <>
-                  <IconButton
-                    onClick={() => {
-                      mutate({ itemId: item.itemId, action: 'remove' })
-                    }}
-                    sx={{
-                      backgroundColor: 'red',
-                      borderRadius: 0,
-                      width: '100%',
-                      minWidth: '80px',
-                      height: '100%',
-                    }}
-                  >
-                    <DeleteIcon sx={{ color: 'white' }} />
-                  </IconButton>
-                </>
+                <IconButton
+                  onClick={() => {
+                    mutate({ itemId: item.itemId, action: 'remove' })
+                  }}
+                  sx={{
+                    backgroundColor: 'red',
+                    borderRadius: 0,
+                    width: '100%',
+                    minWidth: '80px',
+                    height: '100%',
+                  }}
+                >
+                  <DeleteIcon sx={{ color: 'white' }} />
+                </IconButton>
               }
             >
               <CartItemView item={item} />

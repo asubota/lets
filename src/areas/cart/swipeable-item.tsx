@@ -42,12 +42,29 @@ export const SwipeItem: FC<SwipeableItemProps> = ({ children, actions }) => {
       {...swipeHandlers}
       ref={refPassthrough}
       sx={{
-        position: 'relative',
-        overflow: 'hidden',
-        mb: 2,
+        'position': 'relative',
+        'overflow': 'hidden',
+        'mb': 2,
+
+        '&:hover .top-actions': {
+          display: 'block',
+        },
       }}
     >
       <Box sx={{ flex: 1 }}>{children}</Box>
+
+      <Box
+        className="top-actions"
+        sx={{
+          display: 'none',
+          position: 'absolute',
+          right: 0,
+          top: 0,
+        }}
+      >
+        {actions}
+      </Box>
+
       <Box
         sx={{
           position: 'absolute',
