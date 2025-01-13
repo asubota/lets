@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Divider,
-  IconButton,
-} from '@mui/material'
+import { Box, Button, Container, Divider, IconButton } from '@mui/material'
 import { FC } from 'react'
 import { SwipeItem } from './swipeable-item.tsx'
 import { createLink } from '@tanstack/react-router'
@@ -14,17 +7,17 @@ import { CartItemView } from './cart-view-item.tsx'
 import { useAllData, useIsLoading } from '../../use-data.ts'
 import { findProduct } from '../../tools.tsx'
 import HouseIcon from '@mui/icons-material/House'
-import { useGetCart } from '../../cart-api.ts'
+import { useGetCart, useToggleInCart } from '../../cart-api.ts'
+import { EmptyCart } from './empty-cart.tsx'
+import { LoadingCart } from './loading-cart.tsx'
 
 const LinkedButton = createLink(Button)
 
 export const Cart: FC = () => {
+  const { mutate } = useToggleInCart()
   const loading = useIsLoading()
   const data = useAllData()
   const { data: cartItems = [], isLoading } = useGetCart()
-  const handleRemoveItem = (itemId: string) => {
-    console.log('remove it', itemId)
-  }
 
   const fullData = cartItems.map((item) => {
     return { ...item, product: findProduct(item.itemId, data) }
@@ -60,18 +53,11 @@ export const Cart: FC = () => {
   }, 0)
 
   if (isLoading || loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          height: '50vh',
-          alignItems: 'center',
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    )
+    return <LoadingCart />
+  }
+
+  if (!isLoading && cartItems.length === 0) {
+    return <EmptyCart />
   }
 
   return (
@@ -84,7 +70,9 @@ export const Cart: FC = () => {
               actions={
                 <>
                   <IconButton
-                    onClick={() => handleRemoveItem(item.itemId)}
+                    onClick={() => {
+                      mutate({ itemId: item.itemId, action: 'remove' })
+                    }}
                     sx={{
                       backgroundColor: 'red',
                       borderRadius: 0,
@@ -102,7 +90,6 @@ export const Cart: FC = () => {
             </SwipeItem>
           )
         })}
-
         <Divider />
         <Box sx={{ textAlign: 'center', mt: 2 }}>
           {totalDiscount > 0 && (
