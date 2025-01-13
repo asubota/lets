@@ -151,7 +151,7 @@ export const Tile: FC<{
           <PriceChip product={p} />
           <VendorChip vendor={p.vendor} />
 
-          {p.pics && (
+          {!isFavoritePage && p.pics && (
             <LinkedIcon
               to="/list/$id/details"
               params={{ id: getFavoriteId(p) }}

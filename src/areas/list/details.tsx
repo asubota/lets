@@ -8,7 +8,7 @@ export const Details: FC = () => {
   const product = useGetById(id)
   const navigate = useNavigate()
 
-  if (!product) {
+  if (!product || !product.pics) {
     return <Navigate to="/list" />
   }
 
