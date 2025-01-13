@@ -32,9 +32,15 @@ const Block: FC<{ label: string; value: number; red?: boolean }> = ({
       >
         {value}
       </Box>
-      uah
+      <Box component="span" sx={{ ml: '2px' }}>
+        грн
+      </Box>
     </Box>
   )
+}
+
+const valueLabelFormat = (value: number) => {
+  return `${value}%`
 }
 
 export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
@@ -93,6 +99,8 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
             value={discount}
             onChange={handleChange}
             color="secondary"
+            getAriaValueText={valueLabelFormat}
+            valueLabelFormat={valueLabelFormat}
             sx={{
               '& .MuiSlider-valueLabel': {
                 backgroundColor: 'primary.main',
@@ -119,7 +127,7 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
                     onClick={() => setDiscount(value)}
                     color={value === discount ? 'primary' : 'secondary'}
                   >
-                    {value}
+                    {value}%
                   </Button>
                 )
               })}

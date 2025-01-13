@@ -8,9 +8,9 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
   const [key, setKey] = useState<PriceKey>('full-price')
 
   const label: Record<PriceKey, string> = {
-    'full-price': `${product.price} uah`,
-    'base-price': `${product.p2 || '?'} uah`,
-    'earn': `+${product.p2 ? product.price - product.p2 : '?'} uah`,
+    'full-price': `${product.price} грн`,
+    'base-price': `${product.p2 || '?'} грн`,
+    'earn': `+${product.p2 ? product.price - product.p2 : '?'} грн`,
   }
 
   const props: Record<string, unknown> = {}

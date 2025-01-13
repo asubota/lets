@@ -27,7 +27,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
           <Box component="span" sx={{ fontWeight: 'bold' }}>
             {item.product?.price}
           </Box>{' '}
-          грн.
+          грн
         </Box>
       )}
 
@@ -40,7 +40,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
           >
             {priceWithDiscount}
           </Box>
-          грн.{' '}
+          грн{' '}
           <Box
             component="span"
             sx={{
@@ -50,7 +50,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
               ml: '6px',
             }}
           >
-            {fullPrice} грн.
+            {fullPrice} грн
           </Box>
           <Box
             component="span"
@@ -61,7 +61,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
               ml: 'auto',
             }}
           >
-            {((fullPrice * discount) / 100).toFixed(2)} грн.
+            {((fullPrice * discount) / 100).toFixed(2)} грн
           </Box>
         </Box>
       )}
