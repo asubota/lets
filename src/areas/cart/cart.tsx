@@ -23,31 +23,27 @@ export const Cart: FC = () => {
     return { ...item, product: findProduct(item.itemId, data) }
   })
 
-  const fullPrice = fullData
-    .reduce((acc, item) => {
-      const price = item.product?.price || 0
-      const quantity = parseInt(item.quantity, 10)
+  const fullPrice = fullData.reduce((acc, item) => {
+    const price = item.product?.price || 0
+    const quantity = parseInt(item.quantity, 10)
 
-      return acc + price * quantity
-    }, 0)
-    .toFixed(2)
+    return acc + price * quantity
+  }, 0)
 
-  const discountPrice = fullData
-    .reduce((acc, item) => {
-      const price = item.product?.price || 0
-      const quantity = parseInt(item.quantity, 10)
-      const discount = parseInt(item.discount, 10)
-      const discountedPrice = price - (price * discount) / 100
+  const discountPrice = fullData.reduce((acc, item) => {
+    const price = item.product?.price || 0
+    const quantity = parseInt(item.quantity, 10)
+    const discount = parseInt(item.discount, 10)
+    const discountedPrice = price - Math.ceil((price * discount) / 100)
 
-      return acc + discountedPrice * quantity
-    }, 0)
-    .toFixed(2)
+    return acc + discountedPrice * quantity
+  }, 0)
 
   const totalDiscount = fullData.reduce((acc, item) => {
     const price = item.product?.price || 0
     const quantity = parseInt(item.quantity, 10)
     const discount = parseInt(item.discount, 10)
-    const discountPrice = (price * discount) / 100
+    const discountPrice = Math.ceil((price * discount) / 100)
 
     return acc + discountPrice * quantity
   }, 0)
@@ -99,8 +95,9 @@ export const Cart: FC = () => {
                   sx={{ fontWeight: 'bold', color: 'primary.main' }}
                   component="span"
                 >
-                  {totalDiscount.toFixed(2)} грн
-                </Box>
+                  {totalDiscount}
+                </Box>{' '}
+                грн
               </Box>
             </>
           )}

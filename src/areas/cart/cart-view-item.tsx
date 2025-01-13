@@ -23,7 +23,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
 
       {priceWithDiscount === fullPrice && (
         <Box sx={{ pt: 1, pb: 1 }}>
-          ціна:{' '}
+          Ціна:{' '}
           <Box component="span" sx={{ fontWeight: 'bold' }}>
             {item.product?.price}
           </Box>{' '}
@@ -33,7 +33,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
 
       {priceWithDiscount !== fullPrice && (
         <Box sx={{ pt: 1, pb: 1, display: 'flex', alignItems: 'center' }}>
-          ціна:
+          Ціна:
           <Box
             component="span"
             sx={{ fontWeight: 'bold', ml: '2px', mr: '2px' }}
@@ -61,7 +61,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
               ml: 'auto',
             }}
           >
-            {((fullPrice * discount) / 100).toFixed(2)} грн
+            {Math.ceil((fullPrice * discount) / 100)} грн
           </Box>
         </Box>
       )}
@@ -75,7 +75,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <Box>кількість: {item.quantity}</Box>
+        <Box>Кількість: {item.quantity} шт</Box>
         <Box>
           <IconButton
             size="small"
@@ -113,7 +113,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <Box>знижка: {discount}</Box>
+        <Box>Знижка: {discount}%</Box>
         <Box>
           <IconButton
             size="small"
