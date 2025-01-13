@@ -15,20 +15,10 @@ import { FavoritesButton } from './favorites-button.tsx'
 import { NotesButton } from './notes-button.tsx'
 import { FavoriteTime } from './favorite-time.tsx'
 import { createLink } from '@tanstack/react-router'
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
-import { toast } from 'react-toastify'
+import { AddToCartButton } from './tile-add-to-cart.tsx'
 
 const LinkedButton = createLink(IconButton)
 const LinkedIcon = createLink(ImageIcon)
-
-const handleBasket = (p: Product) => {
-  toast.success(`${p.name} додано в корзину!`, {
-    position: 'bottom-center',
-    hideProgressBar: true,
-    icon: false,
-    theme: 'colored',
-  })
-}
 
 export const Tile: FC<{
   p: Product | FavoriteProduct
@@ -126,13 +116,7 @@ export const Tile: FC<{
               <PercentIcon sx={{ fontSize: 'small' }} />
             </LinkedButton>
 
-            <IconButton
-              data-no-export
-              sx={{ ml: 'auto' }}
-              onClick={() => handleBasket(p)}
-            >
-              <AddShoppingCartIcon sx={{ fontSize: '14px' }} />
-            </IconButton>
+            <AddToCartButton itemId={getFavoriteId(p)} name={p.name} />
           </>
         )}
       </Box>

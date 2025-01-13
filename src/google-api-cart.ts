@@ -63,9 +63,22 @@ export const removeFromCart = async (itemId: string) => {
 }
 
 export const addToCart = async (itemId: string) => {
-  const body = { values: [[itemId, '0', '1', '1']] }
-  const range = `${SHEET_NAME}!A1`
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`
+  const cart = await getCart()
+  const rowIndex = cart.findIndex((f) => f.itemId === itemId)
 
-  await send(url, { body: JSON.stringify(body), method: 'POST' })
+  if (rowIndex === -1) {
+    const body = { values: [[itemId, '0', '1', '1']] }
+    const range = `${SHEET_NAME}!A1`
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`
+
+    await send(url, { body: JSON.stringify(body), method: 'POST' })
+  } else {
+    const item = cart[rowIndex]
+    const quantity = parseInt(item.quantity, 10) + 1
+    const body = { values: [[quantity]] }
+    const range = `${SHEET_NAME}!${mapping['quantity']}${rowIndex + 2}`
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`
+
+    await send(url, { body: JSON.stringify(body), method: 'PUT' })
+  }
 }
