@@ -131,7 +131,7 @@ export const Tile: FC<{
               sx={{ ml: 'auto' }}
               onClick={() => handleBasket(p)}
             >
-              <AddShoppingCartIcon sx={{ fontSize: 'small' }} />
+              <AddShoppingCartIcon sx={{ fontSize: '14px' }} />
             </IconButton>
           </>
         )}

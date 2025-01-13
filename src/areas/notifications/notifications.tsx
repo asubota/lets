@@ -25,13 +25,15 @@ export const Notifications: FC = () => {
 
   const actionsSX =
     notifications.length < 5
-      ? {
+      ? ({
           position: 'absolute',
           bottom: '30px',
           left: 0,
           width: '100%',
-        }
-      : {}
+        } as const)
+      : ({
+          mb: '10px',
+        } as const)
 
   return (
     <Modal
