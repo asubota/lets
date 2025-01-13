@@ -105,7 +105,7 @@ export const ColorSettingsModal: FC = () => {
           sx={{
             p: 0,
             position: 'absolute',
-            bottom: 0,
+            bottom: '30px',
             left: 0,
             width: '100%',
           }}

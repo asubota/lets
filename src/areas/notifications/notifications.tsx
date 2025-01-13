@@ -23,6 +23,16 @@ export const Notifications: FC = () => {
   const navigate = useNavigate()
   const handleClose = () => navigate({ to: '/list' })
 
+  const actionsSX =
+    notifications.length < 5
+      ? {
+          position: 'absolute',
+          bottom: '30px',
+          left: 0,
+          width: '100%',
+        }
+      : {}
+
   return (
     <Modal
       open
@@ -34,10 +44,7 @@ export const Notifications: FC = () => {
         <DialogActions
           sx={{
             p: 0,
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '100%',
+            ...actionsSX,
           }}
         >
           <Box sx={{ p: 3, width: '100%' }}>
