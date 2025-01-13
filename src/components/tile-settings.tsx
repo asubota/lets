@@ -17,7 +17,7 @@ const sx = {
 
 const getInputProps = (text: string) => {
   return {
-    type: 'number',
+    type: 'tel',
     inputMode: 'numeric' as const,
     pattern: '[0-9]*',
     startAdornment: (
