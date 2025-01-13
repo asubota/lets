@@ -1,6 +1,6 @@
 import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
-import { getAccessToken } from './google-auth.ts'
 import { VendorAndColors } from './types.ts'
+import { send } from './google-api.ts'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
@@ -28,18 +28,6 @@ export const getAllColors = async (
       ...(backgroundColor && { backgroundColor }),
       ...(borderColor && { borderColor }),
     }))
-}
-
-const send = async (url: string, options: RequestInit) => {
-  const token = await getAccessToken()
-
-  await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    ...options,
-  })
 }
 
 export const setProp = async ({

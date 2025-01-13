@@ -1,9 +1,9 @@
 import { useAllData } from '../../use-data.ts'
 import { Product } from '../../types.ts'
+import { findProduct } from '../../tools.tsx'
 
 export const useGetById = (id: string): Product | undefined => {
   const data = useAllData()
 
-  const [sku, vendor] = id.split(':')
-  return data.find((p) => p.sku === sku && p.vendor === vendor)
+  return findProduct(id, data)
 }

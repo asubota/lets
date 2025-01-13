@@ -39,7 +39,7 @@ export const getAllFavorites = async (
   }))
 }
 
-const send = async (url: string, options: RequestInit) => {
+export const send = async (url: string, options: RequestInit) => {
   const token = await getAccessToken()
 
   await fetch(url, {

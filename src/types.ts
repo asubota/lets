@@ -71,3 +71,10 @@ export type Color = {
 }
 
 export type VendorAndColors = { vendor: string } & Partial<Color>
+
+export type CartItem = {
+  itemId: string
+  discount: string
+  quantity: string
+  cartId: string
+}
