@@ -95,9 +95,8 @@ export const Cart: FC = () => {
                   sx={{ fontWeight: 'bold', color: 'primary.main' }}
                   component="span"
                 >
-                  {totalDiscount}
-                </Box>{' '}
-                грн
+                  {totalDiscount} грн
+                </Box>
               </Box>
             </>
           )}

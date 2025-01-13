@@ -25,7 +25,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
         <Box sx={{ pt: 1, pb: 1 }}>
           Ціна:{' '}
           <Box component="span" sx={{ fontWeight: 'bold' }}>
-            {item.product?.price}
+            {fullPrice}
           </Box>{' '}
           грн
         </Box>
@@ -36,21 +36,27 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
           Ціна:
           <Box
             component="span"
-            sx={{ fontWeight: 'bold', ml: '2px', mr: '2px' }}
-          >
-            {priceWithDiscount}
-          </Box>
-          грн{' '}
-          <Box
-            component="span"
-            sx={{
-              textDecoration: 'line-through',
-              fontSize: '13px',
-              alignSelf: 'flex-end',
-              ml: '6px',
-            }}
+            sx={{ ml: '4px', fontSize: '14px', position: 'relative' }}
           >
             {fullPrice} грн
+            <Box
+              sx={{
+                position: 'absolute',
+                backgroundColor: 'red',
+                width: 'calc(100% + -10px)',
+                height: '2px',
+                transform: 'rotate(-18deg)',
+                left: '-8px',
+                bottom: '11px',
+                borderRadius: '2px',
+              }}
+            />
+          </Box>
+          <Box
+            component="span"
+            sx={{ fontWeight: 'bold', color: 'success.main', ml: '4px' }}
+          >
+            {priceWithDiscount.toFixed(2)} грн
           </Box>
           <Box
             component="span"
