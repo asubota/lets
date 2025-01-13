@@ -16,7 +16,10 @@ export const useGetCart = () => {
   return useQuery({
     staleTime: 1000 * 60 * 35, // 35 minutes
     queryKey: getQueryKey(),
-    queryFn: ({ signal }) => getCart(signal),
+    queryFn: ({ signal }) =>
+      getCart(signal).then((items) => {
+        return items.filter((item) => !!item.itemId)
+      }),
   })
 }
 
@@ -89,16 +92,19 @@ export const useToggleInCart = () => {
         })
       }
 
-      // if (isFavorite) {
-      //   queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) => [
-      //     ...(old || []),
-      //     { favoriteId, time: +new Date(), read: false },
-      //   ])
-      // } else {
-      //   queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) =>
-      //     old?.filter((item) => item.favoriteId !== favoriteId),
-      //   )
-      // }
+      if (action === 'add') {
+        queryClient.setQueryData<CartItem[]>(getQueryKey(), (old) => {
+          const exisingItem = old?.find((item) => item.itemId === itemId)
+          if (!exisingItem) {
+            return [
+              ...(old || []),
+              { itemId, quantity: '1', discount: '0', cartId: '1' },
+            ]
+          }
+
+          return old
+        })
+      }
 
       return { list }
     },
