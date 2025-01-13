@@ -7,6 +7,8 @@ interface SwipeableItemProps {
   actions: ReactNode
 }
 
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+
 export const SwipeItem: FC<SwipeableItemProps> = ({ children, actions }) => {
   const [swiped, setSwiped] = useState(false)
   const handleSwipeLeft = () => setSwiped(true)
@@ -53,17 +55,19 @@ export const SwipeItem: FC<SwipeableItemProps> = ({ children, actions }) => {
     >
       <Box sx={{ flex: 1 }}>{children}</Box>
 
-      <Box
-        className="top-actions"
-        sx={{
-          display: 'none',
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      >
-        {actions}
-      </Box>
+      {!isTouch && (
+        <Box
+          className="top-actions"
+          sx={{
+            display: 'none',
+            position: 'absolute',
+            right: 0,
+            top: 0,
+          }}
+        >
+          {actions}
+        </Box>
+      )}
 
       <Box
         sx={{
