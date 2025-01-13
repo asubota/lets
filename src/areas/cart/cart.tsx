@@ -92,20 +92,20 @@ export const Cart: FC = () => {
         <Box sx={{ textAlign: 'center', mt: 2 }}>
           {totalDiscount > 0 && (
             <>
-              <Box>Разом: {fullPrice} грн.</Box>
+              <Box>Разом: {fullPrice} грн</Box>
               <Box>
                 Знижка:{' '}
                 <Box
                   sx={{ fontWeight: 'bold', color: 'primary.main' }}
                   component="span"
                 >
-                  {totalDiscount.toFixed(2)} грн.
+                  {totalDiscount.toFixed(2)} грн
                 </Box>
               </Box>
             </>
           )}
 
-          <Box>До оплати: {discountPrice} грн.</Box>
+          <Box>До оплати: {discountPrice} грн</Box>
         </Box>
       </Container>
 
