@@ -17,6 +17,9 @@ const sx = {
 
 const getInputProps = (text: string) => {
   return {
+    type: 'number',
+    inputMode: 'numeric' as const,
+    pattern: '[0-9]*',
     startAdornment: (
       <InputAdornment
         sx={{
@@ -63,7 +66,6 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
         </IconButton>
       )}
       <TextField
-        type="number"
         size="small"
         key={minKey}
         defaultValue={min}
@@ -83,7 +85,6 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
         }}
       />
       <TextField
-        type="number"
         size="small"
         key={maxKey}
         defaultValue={max}
