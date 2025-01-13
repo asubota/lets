@@ -222,3 +222,11 @@ export const filterBySearch = (item: Product, search: string): boolean => {
     item.name.toLowerCase().includes(search)
   )
 }
+
+export const findProduct = (
+  itemId: string,
+  list: Product[],
+): Product | undefined => {
+  const [sku, vendor] = itemId.split(':')
+  return list.find((p) => p.sku === sku && p.vendor === vendor)
+}
