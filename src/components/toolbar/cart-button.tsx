@@ -24,8 +24,8 @@ export const CartButton: FC = () => {
           color: 'red',
           fontSize: '12px',
           position: 'absolute',
-          right: '-2px',
-          top: 0,
+          right: '-5px',
+          top: '-2px',
         }}
       >
         {count}
