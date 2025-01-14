@@ -39,7 +39,7 @@ export const Discount: FC<DiscountProps> = ({
   return (
     <>
       <Box sx={{ cursor: 'pointer' }} onClick={handleClick}>
-        Знижка: {discount}%
+        Знижка:
       </Box>
 
       <Popover
