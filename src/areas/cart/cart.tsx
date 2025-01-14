@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, IconButton } from '@mui/material'
+import { Button, Container, Divider, IconButton } from '@mui/material'
 import { FC } from 'react'
 import { SwipeItem } from './swipeable-item.tsx'
 import { createLink } from '@tanstack/react-router'
@@ -10,6 +10,7 @@ import HouseIcon from '@mui/icons-material/House'
 import { useGetCart, useToggleInCart } from '../../cart-api.ts'
 import { EmptyCart } from './empty-cart.tsx'
 import { LoadingCart } from './loading-cart.tsx'
+import { PriceSummary } from './price-summary.tsx'
 
 const LinkedButton = createLink(Button)
 
@@ -58,7 +59,7 @@ export const Cart: FC = () => {
 
   return (
     <>
-      <Container maxWidth="md" sx={{ pt: 2 }}>
+      <Container maxWidth="md" sx={{ pt: 2, position: 'relative' }}>
         {fullData.map((item) => {
           return (
             <SwipeItem
@@ -85,27 +86,14 @@ export const Cart: FC = () => {
           )
         })}
         <Divider />
-        <Box sx={{ textAlign: 'center', mt: 2 }}>
-          {totalDiscount > 0 && (
-            <>
-              <Box>Разом: {fullPrice} грн</Box>
-              <Box>
-                Знижка:{' '}
-                <Box
-                  sx={{ fontWeight: 'bold', color: 'primary.main' }}
-                  component="span"
-                >
-                  {totalDiscount} грн
-                </Box>
-              </Box>
-            </>
-          )}
-
-          <Box>До оплати: {discountPrice} грн</Box>
-        </Box>
+        <PriceSummary
+          fullPrice={fullPrice}
+          discountPrice={discountPrice}
+          totalDiscount={totalDiscount}
+        />
       </Container>
 
-      <Container maxWidth="md" sx={{ pt: 2 }}>
+      <Container maxWidth="md" sx={{ pt: 2, pb: 2 }}>
         <LinkedButton to="/list" fullWidth variant="contained">
           <HouseIcon color="secondary" />
         </LinkedButton>
