@@ -58,6 +58,9 @@ export const DiscountInput: FC<DiscountInputProps> = ({
         '& .MuiInput-root:before': {
           borderBottom: 'none',
         },
+        '& input': {
+          textAlign: 'right',
+        },
       }}
       slotProps={{
         input: {
@@ -70,8 +73,7 @@ export const DiscountInput: FC<DiscountInputProps> = ({
             </InputAdornment>
           ),
           sx: {
-            maxWidth: '50px',
-            textAlign: 'right',
+            maxWidth: '60px',
           },
         },
       }}

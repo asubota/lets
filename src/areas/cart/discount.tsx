@@ -84,28 +84,24 @@ export const Discount: FC<DiscountProps> = ({
           />
 
           <Typography variant="body2">Повна ціна: {fullPrice} грн</Typography>
-          {discountValue > 0 && (
-            <>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 'bold',
-                  color: 'success.main',
-                }}
-              >
-                Ціна зі знижкою: {priceWithDiscount.toFixed(2)} грн
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 'bold',
-                  color: 'primary.main',
-                }}
-              >
-                Знижка: {Math.ceil(discountValue)} грн
-              </Typography>
-            </>
-          )}
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 'bold',
+              color: 'success.main',
+            }}
+          >
+            Ціна зі знижкою: {priceWithDiscount.toFixed(2)} грн
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 'bold',
+              color: 'primary.main',
+            }}
+          >
+            Знижка: {Math.ceil(discountValue)} грн
+          </Typography>
         </Box>
       </Popover>
     </>
