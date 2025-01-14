@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useSetPropOnCart } from '../../cart-api.ts'
 import { Discount } from './discount.tsx'
+import { DiscountInput } from './discount-input.tsx'
 
 interface CartItemViewProps {
   item: CartItem & { product?: Product }
@@ -23,7 +24,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
       <Divider />
 
       {priceWithDiscount === fullPrice && (
-        <Box sx={{ pt: 1, pb: 1 }}>
+        <Box sx={{ pt: '4px', pb: '4px' }}>
           Ціна:{' '}
           <Box component="span" sx={{ fontWeight: 'bold' }}>
             {fullPrice}
@@ -33,7 +34,9 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
       )}
 
       {priceWithDiscount !== fullPrice && (
-        <Box sx={{ pt: 1, pb: 1, display: 'flex', alignItems: 'center' }}>
+        <Box
+          sx={{ pt: '4px', pb: '4px', display: 'flex', alignItems: 'center' }}
+        >
           Ціна:
           <Box
             component="span"
@@ -75,8 +78,30 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
 
       <Box
         sx={{
-          pt: 1,
-          pb: 1,
+          pt: '4px',
+          pb: '4px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Discount
+          key={`${item.itemId}:${discount}:left`}
+          discount={discount}
+          itemId={item.itemId}
+          fullPrice={fullPrice}
+        />
+        <DiscountInput
+          key={`${item.itemId}:${discount}:right`}
+          discount={discount}
+          itemId={item.itemId}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          pt: '4px',
+          pb: '4px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -104,48 +129,6 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
               mutate({
                 itemId: item.itemId,
                 quantity: String(quantity + 1),
-              })
-            }
-          >
-            <AddIcon />
-          </IconButton>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          pt: 1,
-          pb: 1,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Discount
-          discount={discount}
-          fullPrice={fullPrice}
-          itemId={item.itemId}
-        />
-        <Box>
-          <IconButton
-            size="small"
-            color="secondary"
-            disabled={discount === 0}
-            onClick={() =>
-              mutate({
-                itemId: item.itemId,
-                discount: String(discount - 1),
-              })
-            }
-          >
-            <RemoveIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            color="secondary"
-            onClick={() =>
-              mutate({
-                itemId: item.itemId,
-                discount: String(discount + 1),
               })
             }
           >
