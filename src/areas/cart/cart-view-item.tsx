@@ -4,6 +4,7 @@ import { CartItem, Product } from '../../types.ts'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useSetPropOnCart } from '../../cart-api.ts'
+import { Discount } from './discount.tsx'
 
 interface CartItemViewProps {
   item: CartItem & { product?: Product }
@@ -119,7 +120,11 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <Box>Знижка: {discount}%</Box>
+        <Discount
+          discount={discount}
+          fullPrice={fullPrice}
+          itemId={item.itemId}
+        />
         <Box>
           <IconButton
             size="small"

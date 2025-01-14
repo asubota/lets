@@ -32,16 +32,22 @@ const Block: FC<{ label: string; value: number; red?: boolean }> = ({
       >
         {value}
       </Box>
-      <Box component="span" sx={{ ml: '2px' }}>
+      <Box
+        component="span"
+        sx={{
+          ml: '2px',
+          ...(red && {
+            color: 'primary.main',
+          }),
+        }}
+      >
         грн
       </Box>
     </Box>
   )
 }
 
-const valueLabelFormat = (value: number) => {
-  return `${value}%`
-}
+const valueLabelFormat = (value: number) => `${value}%`
 
 export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
   product,
