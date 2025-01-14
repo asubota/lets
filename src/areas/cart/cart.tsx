@@ -58,7 +58,7 @@ export const Cart: FC = () => {
 
   return (
     <>
-      <Container sx={{ p: 3, maxWidth: '700px', margin: 'auto' }}>
+      <Container maxWidth="md" sx={{ pt: 2 }}>
         {fullData.map((item) => {
           return (
             <SwipeItem
@@ -105,11 +105,11 @@ export const Cart: FC = () => {
         </Box>
       </Container>
 
-      <Box sx={{ p: 3, maxWidth: '700px', margin: 'auto' }}>
+      <Container maxWidth="md" sx={{ pt: 2 }}>
         <LinkedButton to="/list" fullWidth variant="contained">
           <HouseIcon color="secondary" />
         </LinkedButton>
-      </Box>
+      </Container>
     </>
   )
 }
