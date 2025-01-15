@@ -19,7 +19,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
   const { mutate } = useSetPropOnCart()
 
   return (
-    <Card variant="elevation" sx={{ p: 1 }}>
+    <Card variant="elevation" sx={{ p: 1, pb: 0 }}>
       <Box sx={{ mb: 2 }}> {item.product?.name}</Box>
       <Divider />
 
