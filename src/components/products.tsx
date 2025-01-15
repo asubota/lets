@@ -47,6 +47,7 @@ const Products: FC<ProductsProps> = ({
   return (
     <>
       <Toolbar
+        search={search}
         hasCart={hasCart}
         hasPasteIn={hasPasteIn}
         hasFavoritesSorting={hasFavoritesSorting}
