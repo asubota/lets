@@ -7,7 +7,7 @@ import { useCartItemsCount } from '../../hooks/use-cart-items-count.ts'
 
 const LinkedIconButton = createLink(IconButton)
 
-export const CartButton: FC = () => {
+export const CartButton: FC<{ search: string }> = ({ search }) => {
   const count = useCartItemsCount()
 
   return (
@@ -15,6 +15,7 @@ export const CartButton: FC = () => {
       size="small"
       sx={{ color: 'text.secondary', mr: '14px' }}
       to="/cart"
+      search={{ s: search }}
     >
       <ShoppingCartIcon />
 

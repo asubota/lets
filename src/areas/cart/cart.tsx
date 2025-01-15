@@ -1,7 +1,7 @@
 import { Button, Container, Divider, IconButton } from '@mui/material'
 import { FC } from 'react'
 import { SwipeItem } from './swipeable-item.tsx'
-import { createLink } from '@tanstack/react-router'
+import { createLink, useSearch } from '@tanstack/react-router'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { CartItemView } from './cart-view-item.tsx'
 import { useAllData, useIsLoading } from '../../use-data.ts'
@@ -15,6 +15,8 @@ import { PriceSummary } from './price-summary.tsx'
 const LinkedButton = createLink(Button)
 
 export const Cart: FC = () => {
+  const { s } = useSearch({ from: '/cart' })
+
   const { mutate } = useToggleInCart()
   const loading = useIsLoading()
   const data = useAllData()
@@ -94,7 +96,7 @@ export const Cart: FC = () => {
       </Container>
 
       <Container maxWidth="md" sx={{ pt: 2, pb: 2 }}>
-        <LinkedButton to="/list" fullWidth variant="contained">
+        <LinkedButton to="/list" fullWidth variant="contained" search={{ s }}>
           <HouseIcon color="secondary" />
         </LinkedButton>
       </Container>

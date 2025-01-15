@@ -20,6 +20,7 @@ export interface SharedToolbarProps {
 }
 
 interface ToolbarProps extends SharedToolbarProps {
+  search: string
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
@@ -29,6 +30,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   total,
   uniqueVendors,
   filteredSearch,
+  search,
   hasFavoritesSorting = false,
   hasPasteIn = false,
   hasGoogle = false,
@@ -54,7 +56,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       </Box>
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
-        {hasCart && <CartButton />}
+        {hasCart && <CartButton search={search} />}
         {hasFavoritesSorting && <Sorting />}
         {hasPasteIn && <PasteInSearchButton />}
         {hasGoogle && <GoogleButton />}
