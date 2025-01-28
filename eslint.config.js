@@ -24,6 +24,7 @@ export default [
       },
       globals: {
         RequestInit: true,
+        NotificationOptions: true,
         ...globals.browser,
         ...globals.serviceworker,
       },
