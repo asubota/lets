@@ -8,11 +8,22 @@ import FormatColorTextIcon from '@mui/icons-material/FormatColorText'
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed'
 import { useState } from 'react'
 
-const allEffects = ['bnw', 'invert', 'glow', 'gradient'] as const
-type Effect = (typeof allEffects)[number]
+const effects = ['bnw', 'invert', 'glow', 'gradient'] as const
+const allEffects = new Set(effects)
+type Effect = (typeof effects)[number]
 
 export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
-  const [effects, setEffects] = useState<Effect[]>([])
+  const [effects, setEffects] = useState<Effect[]>(() => {
+    const currentDocumentClasses = new Set(document.body.classList)
+
+    const commonItems = new Set(
+      [...currentDocumentClasses].filter((item) =>
+        allEffects.has(item as Effect),
+      ),
+    )
+
+    return Array.from(commonItems) as Effect[]
+  })
 
   const handle = (_: unknown, newEffects: Effect[]) => {
     setEffects(newEffects)
