@@ -12,6 +12,7 @@ import { EmptyCart } from './empty-cart.tsx'
 import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
 import { CartItem, Product } from '../../types.ts'
+import { FloatingActions } from './floating-actions.tsx'
 
 const LinkedButton = createLink(Button)
 
@@ -113,6 +114,8 @@ export const Cart: FC = () => {
       </Container>
 
       <Container maxWidth="md" sx={{ pt: 2, pb: 2 }}>
+        <FloatingActions />
+
         <LinkedButton to="/list" fullWidth variant="contained" search={{ s }}>
           <HouseIcon color="secondary" />
         </LinkedButton>
