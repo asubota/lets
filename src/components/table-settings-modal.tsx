@@ -46,7 +46,7 @@ export const TableSettingsModal: FC = () => {
       open={showTableSettings}
       onClose={toggleSettings}
       title=""
-      onSave={() => void handleSubmit(onSubmit)()}
+      onSave={() => handleSubmit(onSubmit)()}
     >
       <Paper elevation={2} sx={{ p: 3, m: 3 }}>
         <Box

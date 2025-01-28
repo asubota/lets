@@ -83,7 +83,7 @@ export const LimitSearchModal: FC<{ list: Product[] }> = ({ list }) => {
       open={open}
       onClose={toggleLimitModal}
       title=""
-      onSave={() => void handleSubmit(onSubmit)()}
+      onSave={() => handleSubmit(onSubmit)()}
     >
       <Paper elevation={2} sx={{ p: 3, m: 3 }}>
         <Box
