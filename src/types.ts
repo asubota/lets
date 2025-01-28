@@ -37,7 +37,7 @@ export type AppMessagePush = {
   type: 'push-me'
   payload: {
     title: string
-    options: NotificationOptions
+    options: unknown
   }
 }
 

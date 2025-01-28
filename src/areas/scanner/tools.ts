@@ -13,7 +13,7 @@ export const getStream = async () => {
         facingMode: 'environment',
       },
     })
-  } catch (e) {
+  } catch {
     return await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {

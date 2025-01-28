@@ -55,7 +55,7 @@ export const getAccessToken = async (): Promise<string> => {
       setGoogleAuthToken(authResponse.access_token)
 
       return authResponse.access_token
-    } catch (error) {
+    } catch {
       showError('Треба авторизуватись!')
       removeGoogleAuthTokenAndExpiry()
     }
