@@ -39,24 +39,15 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
-
       ...reactPlugin.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
-
       ...sonarjs.configs.recommended.rules,
-      // ...sonarjs.configs.recommended,
 
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
-          args: 'all',
           argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
         },
       ],
     },
