@@ -11,8 +11,25 @@ import { useGetCart, useToggleInCart } from '../../cart-api.ts'
 import { EmptyCart } from './empty-cart.tsx'
 import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
+import { CartItem, Product } from '../../types.ts'
 
 const LinkedButton = createLink(Button)
+
+const priceSortFn = (
+  a: CartItem & { product?: Product },
+  b: CartItem & { product?: Product },
+) => {
+  const aPrice =
+    (a.product?.price || 0) *
+    Number(a.quantity) *
+    (1 - Number(a.discount) / 100)
+  const bPrice =
+    (b.product?.price || 0) *
+    Number(b.quantity) *
+    (1 - Number(b.discount) / 100)
+
+  return bPrice - aPrice
+}
 
 export const Cart: FC = () => {
   const { s } = useSearch({ from: '/cart' })
@@ -62,7 +79,7 @@ export const Cart: FC = () => {
   return (
     <>
       <Container maxWidth="md" sx={{ pt: 2, position: 'relative' }}>
-        {fullData.map((item) => {
+        {fullData.sort(priceSortFn).map((item) => {
           return (
             <SwipeItem
               key={item.itemId}

@@ -6,7 +6,7 @@ import {
   removeFromCart,
   setCartProp,
 } from './google-api-cart.ts'
-import { CartItem } from './types.ts'
+import { type CartItem } from './types.ts'
 
 const getQueryKey = (): [string] => {
   return [CACHE_CART_KEY]
