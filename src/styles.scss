@@ -4,6 +4,85 @@
   --toastify-color-success: #66bb6a;
 }
 
+.bnw {
+  filter: grayscale(100%);
+}
+
+.invert {
+  filter: invert(100%);
+}
+
+.glow {
+  text-shadow:
+    0 0 10px #45ac45,
+    0 0 20px #ff0000,
+    0 0 30px #5f00ff;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient {
+  div.bg {
+    background: linear-gradient(270deg, #25aa2d, #ff758c, #7effef);
+    background-size: 400% 400%;
+    animation: gradient 6s ease infinite;
+  }
+}
+
+.hover-effect:hover {
+  transform: scale(1.1) rotate(5deg);
+  transition: transform 0.3s ease;
+}
+
+.box-shadow {
+  box-shadow:
+    10px 10px 20px rgba(0, 0, 0, 0.5),
+    -10px -10px 20px rgba(255, 255, 255, 0.5);
+}
+
+.neon {
+  border: 2px solid #0ff;
+  box-shadow:
+    0 0 10px #0ff,
+    0 0 20px #0ff;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.typing {
+  font-family: monospace;
+  font-size: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 20ch;
+  border-right: 2px solid;
+  animation:
+    typing 4s steps(20) infinite,
+    blink 0.5s step-end infinite;
+}
+
 .rotate {
   animation: rotate 0.6s infinite linear;
 }
