@@ -1,1 +1,0 @@
-import{s as o}from"./tanstack-jm6MSW9M.js";import{N as t}from"./index-DxVLN5X2.js";import"./react-_uqhELNW.js";import"./mui-C3GIU0Fs.js";import"./html2canvas-BfYXEYrK.js";import"./tesseract-DOmqAGAa.js";import"./swiper-BQVCGc5u.js";const s=o("/notifications")({component:t});export{s as Route};
