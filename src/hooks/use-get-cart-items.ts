@@ -7,3 +7,13 @@ export const useGetCartItems = () => {
     return item.itemId
   })
 }
+
+export const useGetCurrentCartServiceItems = () => {
+  const { data = [] } = useGetCart()
+
+  return data
+    .filter((item) => {
+      return !!item.itemId && item.itemId.includes('$__')
+    })
+    .map((item) => item.itemId)
+}

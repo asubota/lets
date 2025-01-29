@@ -16,6 +16,9 @@ import PersonIcon from '@mui/icons-material/Person'
 import DownloadIcon from '@mui/icons-material/Download'
 import { SpeedDialProps } from '@mui/material/SpeedDial/SpeedDial'
 import { handleTakeCartScreenshot } from '../../tools.tsx'
+import { createLink } from '@tanstack/react-router'
+
+const LinkedFab = createLink(Fab)
 
 export function FloatingActions({
   direction,
@@ -79,9 +82,9 @@ export function FloatingActions({
           />
         </SpeedDial>
 
-        <Fab color="secondary" size="small">
+        <LinkedFab color="secondary" size="small" to="/cart/service">
           <BuildIcon fontSize="small" />
-        </Fab>
+        </LinkedFab>
       </Box>
     </>
   )
