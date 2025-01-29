@@ -33,6 +33,12 @@ export const useAllData = () => {
   return data
 }
 
+export const usePopularServices = () => {
+  const { data = [] } = useData()
+
+  return data.filter((item) => item.sku.startsWith('$__'))
+}
+
 export const useIsLoading = () => {
   const { isFetching } = useData()
 

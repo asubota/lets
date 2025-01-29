@@ -50,6 +50,32 @@ export const setCartProp = async (
   }
 }
 
+export const setCartServices = async (itemIds: string[]) => {
+  const cart = await getCart()
+
+  const ranges: string[] = []
+  cart.forEach((cartItem, rowIndex) => {
+    if (cartItem.itemId !== undefined && cartItem.itemId.includes('$__')) {
+      ranges.push(`${SHEET_NAME}!A${rowIndex + 2}:F${rowIndex + 2}`)
+    }
+  })
+
+  if (ranges.length) {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values:batchClear?key=${API_KEY}`
+    await send(url, {
+      method: 'POST',
+      body: JSON.stringify({ ranges }),
+    })
+  }
+
+  const values = itemIds.map((itemId) => [itemId, '0', '1', '1'])
+  const body = { values }
+  const range = `${SHEET_NAME}!A1`
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`
+
+  await send(url, { body: JSON.stringify(body), method: 'POST' })
+}
+
 export const removeFromCart = async (itemId: string) => {
   const cart = await getCart()
   const rowIndex = cart.findIndex((f) => f.itemId === itemId)

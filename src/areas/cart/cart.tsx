@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import { FC } from 'react'
 import { SwipeItem } from './swipeable-item.tsx'
-import { createLink, useSearch } from '@tanstack/react-router'
+import { createLink, Outlet, useSearch } from '@tanstack/react-router'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { CartItemView } from './cart-view-item.tsx'
 import { useAllData, useIsLoading } from '../../use-data.ts'
@@ -89,104 +89,110 @@ export const Cart: FC = () => {
   }
 
   return (
-    <Container
-      sx={{ display: 'flex', flexDirection: 'row', pt: 2, pb: 2 }}
-      maxWidth={false}
-    >
-      <Box sx={{ flexGrow: 1, flexShrink: 0 }}>
-        {wideScreen && (
-          <Box sx={{ minWidth: w, position: 'sticky', top: '16px' }}>
-            <FloatingActions direction={'down'} wide={true} />
-          </Box>
-        )}
-      </Box>
+    <>
+      <Outlet />
 
       <Container
-        id="cart"
-        maxWidth="md"
-        sx={{
-          position: 'relative',
-          flexGrow: 0,
-          flexShrink: 0,
-        }}
+        sx={{ display: 'flex', flexDirection: 'row', pt: 2, pb: 2 }}
+        maxWidth={false}
       >
-        {fullData.sort(priceSortFn).map((item) => {
-          return (
-            <SwipeItem
-              key={item.itemId}
-              actions={
-                <IconButton
-                  onClick={() => {
-                    mutate({ itemId: item.itemId, action: 'remove' })
-                  }}
-                  sx={{
-                    backgroundColor: 'red',
-                    borderRadius: 0,
-                    width: '100%',
-                    minWidth: '80px',
-                    height: '100%',
-                  }}
-                >
-                  <DeleteIcon sx={{ color: 'white' }} />
-                </IconButton>
-              }
-            >
-              <CartItemView item={item} />
-            </SwipeItem>
-          )
-        })}
+        <Box sx={{ flexGrow: 1, flexShrink: 0 }}>
+          {wideScreen && (
+            <Box sx={{ minWidth: w, position: 'sticky', top: '16px' }}>
+              <FloatingActions direction={'down'} wide={true} />
+            </Box>
+          )}
+        </Box>
 
-        {!wideScreen && <Divider sx={{ mb: 2 }} />}
-        {!wideScreen && <FloatingActions direction={'right'} wide={false} />}
-        {!wideScreen && (
-          <Box sx={{ textAlign: 'center' }}>
-            <PriceSummary
-              fullPrice={fullPrice}
-              discountPrice={discountPrice}
-              totalDiscount={totalDiscount}
-            />
-          </Box>
-        )}
-
-        <LinkedButton
-          data-no-export
-          to="/list"
-          fullWidth
-          variant="contained"
-          search={{ s }}
+        <Container
+          id="cart"
+          maxWidth="md"
           sx={{
-            mt: 2,
-            position: 'static',
+            position: 'relative',
+            flexGrow: 0,
+            flexShrink: 0,
+            pl: 0,
+            pr: 0,
           }}
         >
-          <HouseIcon color="secondary" />
-        </LinkedButton>
-      </Container>
+          {fullData.sort(priceSortFn).map((item) => {
+            return (
+              <SwipeItem
+                key={item.itemId}
+                actions={
+                  <IconButton
+                    onClick={() => {
+                      mutate({ itemId: item.itemId, action: 'remove' })
+                    }}
+                    sx={{
+                      backgroundColor: 'red',
+                      borderRadius: 0,
+                      width: '100%',
+                      minWidth: '80px',
+                      height: '100%',
+                    }}
+                  >
+                    <DeleteIcon sx={{ color: 'white' }} />
+                  </IconButton>
+                }
+              >
+                <CartItemView item={item} />
+              </SwipeItem>
+            )
+          })}
 
-      <Box sx={{ flexGrow: 1, flexShrink: 0, display: 'flex' }}>
-        {wideScreen && (
-          <Paper
-            elevation={8}
+          {!wideScreen && <Divider sx={{ mb: 2 }} />}
+          {!wideScreen && <FloatingActions direction={'right'} wide={false} />}
+          {!wideScreen && (
+            <Box sx={{ textAlign: 'center' }}>
+              <PriceSummary
+                fullPrice={fullPrice}
+                discountPrice={discountPrice}
+                totalDiscount={totalDiscount}
+              />
+            </Box>
+          )}
+
+          <LinkedButton
+            data-no-export
+            to="/list"
+            fullWidth
+            variant="contained"
+            search={{ s }}
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              minWidth: w,
-              position: 'sticky',
-              alignSelf: 'flex-start',
-              top: '16px',
-              textAlign: 'left',
-              borderRadius: '4px',
-              p: 2,
+              mt: 2,
+              position: 'static',
             }}
           >
-            <PriceSummary
-              fullPrice={fullPrice}
-              discountPrice={discountPrice}
-              totalDiscount={totalDiscount}
-            />
-          </Paper>
-        )}
-      </Box>
-    </Container>
+            <HouseIcon color="secondary" />
+          </LinkedButton>
+        </Container>
+
+        <Box sx={{ flexGrow: 1, flexShrink: 0, display: 'flex' }}>
+          {wideScreen && (
+            <Paper
+              elevation={8}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minWidth: w,
+                position: 'sticky',
+                alignSelf: 'flex-start',
+                top: '16px',
+                textAlign: 'left',
+                borderRadius: '4px',
+                p: 2,
+              }}
+            >
+              <PriceSummary
+                fullPrice={fullPrice}
+                discountPrice={discountPrice}
+                totalDiscount={totalDiscount}
+              />
+            </Paper>
+          )}
+        </Box>
+      </Container>
+    </>
   )
 }

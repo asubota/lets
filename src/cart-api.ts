@@ -5,6 +5,7 @@ import {
   getCart,
   removeFromCart,
   setCartProp,
+  setCartServices,
 } from './google-api-cart.ts'
 import { type CartItem } from './types.ts'
 
@@ -64,6 +65,48 @@ export const useSetPropOnCart = () => {
       if (quantity !== undefined) {
         await setCartProp(itemId, 'quantity', quantity)
       }
+    },
+  })
+}
+
+export const useSetServicesForCart = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation<
+    void,
+    unknown,
+    { itemIds: string[] },
+    { list: CartItem[] }
+  >({
+    async onSettled() {
+      return await queryClient.invalidateQueries({
+        queryKey: [CACHE_CART_KEY],
+      })
+    },
+    onMutate: async ({ itemIds }) => {
+      await queryClient.cancelQueries({ queryKey: getQueryKey() })
+      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
+
+      queryClient.setQueryData<CartItem[]>(getQueryKey(), (old) => {
+        const onlyProductItems =
+          old?.filter((item) => !item.itemId.includes('$__')) || []
+        const onlyServiceItems = itemIds.map((id) => ({
+          itemId: id,
+          quantity: '1',
+          discount: '0',
+          cartId: '1',
+        }))
+
+        return [...onlyProductItems, ...onlyServiceItems]
+      })
+
+      return { list }
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData([getQueryKey()], context?.list)
+    },
+    mutationFn: ({ itemIds }) => {
+      return setCartServices(itemIds)
     },
   })
 }
