@@ -1,10 +1,10 @@
 import {
   Backdrop,
-  Box,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
   Fab,
+  Box,
 } from '@mui/material'
 
 import HdrStrongIcon from '@mui/icons-material/HdrStrong'
@@ -24,24 +24,26 @@ export function FloatingActions() {
     <>
       <Backdrop open={open} />
 
-      <Box sx={{ transform: 'translateZ(0px)' }}>
-        <Fab
-          color="secondary"
-          size="small"
-          sx={{ position: 'absolute', bottom: 16, right: 0 }}
-        >
-          <BuildIcon fontSize="small" />
-        </Fab>
-
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          transform: 'translate3d(0, 20px, 0)',
+          position: 'absolute',
+          left: '16px',
+          right: '16px',
+        }}
+      >
         <SpeedDial
           onClose={handleClose}
           onOpen={handleOpen}
           open={open}
           ariaLabel="Extra options"
-          sx={{ position: 'absolute', bottom: 16, left: 0 }}
           icon={<SpeedDialIcon icon={<HdrStrongIcon fontSize="small" />} />}
           direction="right"
           FabProps={{ size: 'small' }}
+          sx={{ '& .MuiSpeedDialAction-fab': { bgcolor: '#fff' } }}
         >
           <SpeedDialAction
             icon={<ClearIcon color="primary" />}
@@ -60,6 +62,10 @@ export function FloatingActions() {
             tooltipTitle="Деталі клієнта"
           />
         </SpeedDial>
+
+        <Fab color="secondary" size="small">
+          <BuildIcon fontSize="small" />
+        </Fab>
       </Box>
     </>
   )

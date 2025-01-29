@@ -79,7 +79,7 @@ export const Cart: FC = () => {
 
   return (
     <>
-      <Container maxWidth="md" sx={{ pt: 2, position: 'relative' }}>
+      <Container maxWidth="md" sx={{ pt: 2, pb: 2, position: 'relative' }}>
         {fullData.sort(priceSortFn).map((item) => {
           return (
             <SwipeItem
@@ -106,17 +106,25 @@ export const Cart: FC = () => {
           )
         })}
         <Divider />
+
+        <FloatingActions />
+
         <PriceSummary
           fullPrice={fullPrice}
           discountPrice={discountPrice}
           totalDiscount={totalDiscount}
         />
-      </Container>
 
-      <Container maxWidth="md" sx={{ pt: 2, pb: 2 }}>
-        <FloatingActions />
-
-        <LinkedButton to="/list" fullWidth variant="contained" search={{ s }}>
+        <LinkedButton
+          to="/list"
+          fullWidth
+          variant="contained"
+          search={{ s }}
+          sx={{
+            mt: 2,
+            position: 'static',
+          }}
+        >
           <HouseIcon color="secondary" />
         </LinkedButton>
       </Container>
