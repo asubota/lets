@@ -15,6 +15,7 @@ import BuildIcon from '@mui/icons-material/Build'
 import PersonIcon from '@mui/icons-material/Person'
 import DownloadIcon from '@mui/icons-material/Download'
 import { SpeedDialProps } from '@mui/material/SpeedDial/SpeedDial'
+import { handleTakeCartScreenshot } from '../../tools.tsx'
 
 export function FloatingActions({
   direction,
@@ -29,9 +30,10 @@ export function FloatingActions({
 
   return (
     <>
-      <Backdrop open={open} />
+      <Backdrop open={open} data-no-export />
 
       <Box
+        data-no-export
         sx={{
           display: 'flex',
 
@@ -65,6 +67,7 @@ export function FloatingActions({
           <SpeedDialAction
             icon={<DownloadIcon color="primary" />}
             tooltipTitle="Ескорт ;)"
+            onClick={handleTakeCartScreenshot}
           />
           <SpeedDialAction
             icon={<AddIcon color="primary" />}

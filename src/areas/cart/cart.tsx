@@ -102,6 +102,7 @@ export const Cart: FC = () => {
       </Box>
 
       <Container
+        id="cart"
         maxWidth="md"
         sx={{
           position: 'relative',
@@ -148,6 +149,7 @@ export const Cart: FC = () => {
         )}
 
         <LinkedButton
+          data-no-export
           to="/list"
           fullWidth
           variant="contained"
