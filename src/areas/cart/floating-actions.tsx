@@ -43,10 +43,10 @@ export function FloatingActions({
           ...(!wide && {
             justifyContent: 'space-between',
             alignItems: 'center',
-            transform: 'translate3d(0, 20px, 0)',
+            transform: 'translate3d(0, -45px, 0)',
             position: 'absolute',
-            left: '16px',
-            right: '16px',
+            left: '24px',
+            right: '24px',
           }),
           ...(wide && {
             justifyContent: 'flex-end',

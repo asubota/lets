@@ -93,7 +93,14 @@ export const Cart: FC = () => {
       <Outlet />
 
       <Container
-        sx={{ display: 'flex', flexDirection: 'row', pt: 2, pb: 2 }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          pt: 2,
+          pb: 2,
+          pl: 0,
+          pr: 0,
+        }}
         maxWidth={false}
       >
         <Box sx={{ flexGrow: 1, flexShrink: 0 }}>
@@ -111,8 +118,6 @@ export const Cart: FC = () => {
             position: 'relative',
             flexGrow: 0,
             flexShrink: 0,
-            pl: 0,
-            pr: 0,
           }}
         >
           {fullData.sort(priceSortFn).map((item) => {
@@ -141,8 +146,8 @@ export const Cart: FC = () => {
             )
           })}
 
-          {!wideScreen && <Divider sx={{ mb: 2 }} />}
-          {!wideScreen && <FloatingActions direction={'right'} wide={false} />}
+          {!wideScreen && <Divider sx={{ mb: 3 }} />}
+
           {!wideScreen && (
             <Box sx={{ textAlign: 'center' }}>
               <PriceSummary
@@ -153,6 +158,7 @@ export const Cart: FC = () => {
             </Box>
           )}
 
+          {!wideScreen && <FloatingActions direction={'right'} wide={false} />}
           <LinkedButton
             data-no-export
             to="/list"
