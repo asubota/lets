@@ -108,7 +108,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
         }}
       >
         <Box>Кількість: {item.quantity} шт</Box>
-        <Box>
+        <Box data-no-export>
           <IconButton
             size="small"
             color="secondary"

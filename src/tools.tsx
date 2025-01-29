@@ -72,6 +72,34 @@ export async function copyContent(text: string) {
   }
 }
 
+export const handleTakeCartScreenshot = async () => {
+  const el = document.getElementById('cart')
+
+  if (!el) {
+    return
+  }
+
+  const canvas = await html2canvas(el, {
+    ignoreElements(element) {
+      return element.hasAttribute('data-no-export')
+    },
+    onclone(doc: Document, element: HTMLElement) {
+      const root = doc.getElementById('root') as Element
+      element.style.backgroundImage = window
+        .getComputedStyle(root)
+        .getPropertyValue('background-image')
+      element.style.width = '400px'
+      element.style.padding = '6px'
+    },
+  })
+  const imgData = canvas.toDataURL('image/png', 1.0)
+  const link = document.createElement('a')
+
+  link.href = imgData
+  link.download = 'screenshot.png'
+  link.click()
+}
+
 export const handleTakeScreenshot = async () => {
   const el = document.getElementById('tiles-view')
 
