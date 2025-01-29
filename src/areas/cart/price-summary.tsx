@@ -13,23 +13,7 @@ export const PriceSummary: FC<PriceSummaryProps> = ({
   totalDiscount,
 }) => {
   return (
-    <Box
-      sx={{
-        'textAlign': 'center',
-        'mt': 2,
-
-        '@media (min-width: 1270px)': {
-          textAlign: 'left',
-          position: 'absolute',
-          top: 0,
-          right: '8px',
-          transform: 'translateX(100%)',
-          backgroundColor: 'secondary.main',
-          borderRadius: '4px',
-          p: 1,
-        },
-      }}
-    >
+    <>
       {totalDiscount > 0 && (
         <>
           <Box>Разом: {fullPrice} грн</Box>
@@ -46,6 +30,6 @@ export const PriceSummary: FC<PriceSummaryProps> = ({
       )}
 
       <Box>До оплати: {discountPrice} грн</Box>
-    </Box>
+    </>
   )
 }

@@ -14,8 +14,15 @@ import { useState } from 'react'
 import BuildIcon from '@mui/icons-material/Build'
 import PersonIcon from '@mui/icons-material/Person'
 import DownloadIcon from '@mui/icons-material/Download'
+import { SpeedDialProps } from '@mui/material/SpeedDial/SpeedDial'
 
-export function FloatingActions() {
+export function FloatingActions({
+  direction,
+  wide,
+}: {
+  wide: boolean
+  direction: SpeedDialProps['direction']
+}) {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -27,12 +34,18 @@ export function FloatingActions() {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          transform: 'translate3d(0, 20px, 0)',
-          position: 'absolute',
-          left: '16px',
-          right: '16px',
+
+          ...(!wide && {
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            transform: 'translate3d(0, 20px, 0)',
+            position: 'absolute',
+            left: '16px',
+            right: '16px',
+          }),
+          ...(wide && {
+            justifyContent: 'flex-end',
+          }),
         }}
       >
         <SpeedDial
@@ -41,7 +54,7 @@ export function FloatingActions() {
           open={open}
           ariaLabel="Extra options"
           icon={<SpeedDialIcon icon={<HdrStrongIcon fontSize="small" />} />}
-          direction="right"
+          direction={direction}
           FabProps={{ size: 'small' }}
           sx={{ '& .MuiSpeedDialAction-fab': { bgcolor: '#fff' } }}
         >

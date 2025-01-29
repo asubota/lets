@@ -1,4 +1,11 @@
-import { Button, Container, Divider, IconButton } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  IconButton,
+  Paper,
+} from '@mui/material'
 import { FC } from 'react'
 import { SwipeItem } from './swipeable-item.tsx'
 import { createLink, useSearch } from '@tanstack/react-router'
@@ -13,6 +20,7 @@ import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
 import { CartItem, Product } from '../../types.ts'
 import { FloatingActions } from './floating-actions.tsx'
+import { useMediaQuery } from '../../hooks/use-media-query.ts'
 
 const LinkedButton = createLink(Button)
 
@@ -32,7 +40,10 @@ const priceSortFn = (
   return bPrice - aPrice
 }
 
+const w = '190px'
+
 export const Cart: FC = () => {
+  const wideScreen = useMediaQuery('(min-width: 1340px)')
   const { s } = useSearch({ from: '/cart' })
 
   const { mutate } = useToggleInCart()
@@ -78,8 +89,26 @@ export const Cart: FC = () => {
   }
 
   return (
-    <>
-      <Container maxWidth="md" sx={{ pt: 2, pb: 2, position: 'relative' }}>
+    <Container
+      sx={{ display: 'flex', flexDirection: 'row', pt: 2, pb: 2 }}
+      maxWidth={false}
+    >
+      <Box sx={{ flexGrow: 1, flexShrink: 0 }}>
+        {wideScreen && (
+          <Box sx={{ minWidth: w, position: 'sticky', top: '16px' }}>
+            <FloatingActions direction={'down'} wide={true} />
+          </Box>
+        )}
+      </Box>
+
+      <Container
+        maxWidth="md"
+        sx={{
+          position: 'relative',
+          flexGrow: 0,
+          flexShrink: 0,
+        }}
+      >
         {fullData.sort(priceSortFn).map((item) => {
           return (
             <SwipeItem
@@ -105,15 +134,18 @@ export const Cart: FC = () => {
             </SwipeItem>
           )
         })}
-        <Divider />
 
-        <FloatingActions />
-
-        <PriceSummary
-          fullPrice={fullPrice}
-          discountPrice={discountPrice}
-          totalDiscount={totalDiscount}
-        />
+        {!wideScreen && <Divider sx={{ mb: 2 }} />}
+        {!wideScreen && <FloatingActions direction={'right'} wide={false} />}
+        {!wideScreen && (
+          <Box sx={{ textAlign: 'center' }}>
+            <PriceSummary
+              fullPrice={fullPrice}
+              discountPrice={discountPrice}
+              totalDiscount={totalDiscount}
+            />
+          </Box>
+        )}
 
         <LinkedButton
           to="/list"
@@ -128,6 +160,31 @@ export const Cart: FC = () => {
           <HouseIcon color="secondary" />
         </LinkedButton>
       </Container>
-    </>
+
+      <Box sx={{ flexGrow: 1, flexShrink: 0, display: 'flex' }}>
+        {wideScreen && (
+          <Paper
+            elevation={8}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              minWidth: w,
+              position: 'sticky',
+              alignSelf: 'flex-start',
+              top: '16px',
+              textAlign: 'left',
+              borderRadius: '4px',
+              p: 2,
+            }}
+          >
+            <PriceSummary
+              fullPrice={fullPrice}
+              discountPrice={discountPrice}
+              totalDiscount={totalDiscount}
+            />
+          </Paper>
+        )}
+      </Box>
+    </Container>
   )
 }
