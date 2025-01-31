@@ -1,19 +1,10 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  IconButton,
-  Paper,
-} from '@mui/material'
-import { SwipeItem } from './swipeable-item.tsx'
+import { Box, Button, Container, Divider, Paper } from '@mui/material'
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import { createLink, Outlet, useSearch } from '@tanstack/react-router'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { CartItemView } from './cart-view-item.tsx'
+import ConstructionIcon from '@mui/icons-material/Construction'
 import { useAllData, useIsLoading } from '../../use-data.ts'
 import { findProduct } from '../../tools.tsx'
 import HouseIcon from '@mui/icons-material/House'
-import { useToggleInCart } from '../../cart-api.ts'
 import { EmptyCart } from './empty-cart.tsx'
 import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
@@ -21,6 +12,11 @@ import { CartItem, Product } from '../../types.ts'
 import { FloatingActions } from './floating-actions.tsx'
 import { useMediaQuery } from '../../hooks/use-media-query.ts'
 import { useCartItems } from '../../hooks/use-cart-items.ts'
+import {
+  POPULAR_SERViCE_PREFIX,
+  REGULAR_SERViCE_PREFIX,
+} from '../../constants.ts'
+import { CartItemRow } from './cart-item-row.tsx'
 
 const LinkedButton = createLink(Button)
 
@@ -42,10 +38,25 @@ const priceSortFn = (
 
 const w = '190px'
 
+function splitCart(items: CartItem[]) {
+  return items.reduce(
+    (acc, item) => {
+      const key =
+        item.itemId.startsWith(REGULAR_SERViCE_PREFIX) ||
+        item.itemId.startsWith(POPULAR_SERViCE_PREFIX)
+          ? 'services'
+          : 'products'
+      acc[key].push(item)
+      return acc
+    },
+    { services: [] as CartItem[], products: [] as CartItem[] },
+  )
+}
+
 export const Cart = () => {
   const wideScreen = useMediaQuery('(min-width: 1340px)')
   const { s } = useSearch({ from: '/cart' })
-  const { mutate } = useToggleInCart()
+
   const loading = useIsLoading()
   const data = useAllData()
   const cartItems = useCartItems()
@@ -53,6 +64,8 @@ export const Cart = () => {
   const fullData = cartItems.map((item) => {
     return { ...item, product: findProduct(item.itemId, data) }
   })
+
+  const { services, products } = splitCart(fullData)
 
   if (loading) {
     return <LoadingCart />
@@ -94,30 +107,26 @@ export const Cart = () => {
             flexShrink: 0,
           }}
         >
-          {fullData.sort(priceSortFn).map((item) => {
-            return (
-              <SwipeItem
-                key={item.itemId}
-                actions={
-                  <IconButton
-                    onClick={() => {
-                      mutate({ itemId: item.itemId, action: 'remove' })
-                    }}
-                    sx={{
-                      backgroundColor: 'red',
-                      borderRadius: 0,
-                      width: '100%',
-                      minWidth: '80px',
-                      height: '100%',
-                    }}
-                  >
-                    <DeleteIcon sx={{ color: 'white' }} />
-                  </IconButton>
-                }
-              >
-                <CartItemView item={item} />
-              </SwipeItem>
-            )
+          <Divider>
+            <DirectionsBikeIcon
+              sx={{ color: 'secondary.dark' }}
+              fontSize="small"
+            />
+          </Divider>
+
+          {products.sort(priceSortFn).map((item) => {
+            return <CartItemRow item={item} key={item.itemId} />
+          })}
+
+          <Divider>
+            <ConstructionIcon
+              sx={{ color: 'secondary.light' }}
+              fontSize="small"
+            />
+          </Divider>
+
+          {services.sort(priceSortFn).map((item) => {
+            return <CartItemRow item={item} key={item.itemId} />
           })}
 
           {!wideScreen && <Divider sx={{ mb: 3 }} />}
