@@ -1,11 +1,11 @@
 import { Box } from '@mui/material'
 import { findProduct } from '../../tools.tsx'
-import { useGetCart } from '../../cart-api.ts'
 import { useAllData } from '../../use-data.ts'
+import { useCartItems } from '../../hooks/use-cart-items.ts'
 
 export const PriceSummary = () => {
   const data = useAllData()
-  const { data: cartItems = [] } = useGetCart()
+  const cartItems = useCartItems()
   const fullData = cartItems.map((item) => {
     return { ...item, product: findProduct(item.itemId, data) }
   })

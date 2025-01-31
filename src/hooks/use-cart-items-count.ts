@@ -1,5 +1,5 @@
-import { useGetCartItems } from './use-get-cart-items.ts'
+import { useCartItems } from './use-cart-items.ts'
 
 export const useCartItemsCount = () => {
-  return useGetCartItems().length
+  return useCartItems().length
 }

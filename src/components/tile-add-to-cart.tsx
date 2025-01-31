@@ -3,7 +3,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import { IconButton } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useToggleInCart } from '../cart-api.ts'
-import { useGetCartItems } from '../hooks/use-get-cart-items.ts'
+import { useCartItemsIds } from '../hooks/use-cart-items-ids.ts'
 
 interface AddToCartButtonProps {
   itemId: string
@@ -11,7 +11,7 @@ interface AddToCartButtonProps {
 }
 
 export const AddToCartButton: FC<AddToCartButtonProps> = ({ itemId, name }) => {
-  const cartItemsIds = useGetCartItems()
+  const cartItemsIds = useCartItemsIds()
   const { mutate } = useToggleInCart()
 
   const handleBasket = () => {

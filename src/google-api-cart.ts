@@ -1,6 +1,7 @@
 import { CartItem } from './types.ts'
 import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
 import { send } from './google-api.ts'
+import { POPULAR_SERViCE_PREFIX } from './constants.ts'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
@@ -50,12 +51,15 @@ export const setCartProp = async (
   }
 }
 
-export const setCartServices = async (itemIds: string[]) => {
+export const setCartPopularServices = async (itemIds: string[]) => {
   const cart = await getCart()
 
   const ranges: string[] = []
   cart.forEach((cartItem, rowIndex) => {
-    if (cartItem.itemId !== undefined && cartItem.itemId.includes('$__')) {
+    if (
+      cartItem.itemId !== undefined &&
+      cartItem.itemId.startsWith(POPULAR_SERViCE_PREFIX)
+    ) {
       ranges.push(`${SHEET_NAME}!A${rowIndex + 2}:F${rowIndex + 2}`)
     }
   })
