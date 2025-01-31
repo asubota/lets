@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { Box, Button, Container } from '@mui/material'
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
 import HouseIcon from '@mui/icons-material/House'
@@ -6,7 +5,7 @@ import { createLink } from '@tanstack/react-router'
 
 const LinkedButton = createLink(Button)
 
-export const EmptyCart: FC = () => {
+export const EmptyCart = () => {
   return (
     <Container
       maxWidth="sm"
