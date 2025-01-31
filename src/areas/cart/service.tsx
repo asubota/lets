@@ -15,8 +15,8 @@ import { useState } from 'react'
 import ConstructionIcon from '@mui/icons-material/Construction'
 import { getFavoriteId } from '../../tools.tsx'
 import { Product } from '../../types.ts'
-import { useSetServicesForCart } from '../../cart-api.ts'
-import { useGetCurrentCartServiceItems } from '../../hooks/use-get-cart-items.ts'
+import { useSetPopularServicesForCart } from '../../cart-api.ts'
+import { useCartPopularServiceIds } from '../../hooks/use-cart-popular-service-ids.ts'
 
 function isSameSet(setA: Set<string>, setB: Set<string>) {
   if (setA.size !== setB.size) return false
@@ -31,9 +31,9 @@ function isSameSet(setA: Set<string>, setB: Set<string>) {
 const sortByPrice = (a: Product, b: Product) => b.price - a.price
 
 export const Service = () => {
-  const { mutate } = useSetServicesForCart()
-  const currentServiceItems = useGetCurrentCartServiceItems()
-  const [checked, setChecked] = useState<string[]>(currentServiceItems)
+  const { mutate } = useSetPopularServicesForCart()
+  const currentServiceItemIds = useCartPopularServiceIds()
+  const [checked, setChecked] = useState<string[]>(currentServiceItemIds)
   const allPopularServices = usePopularServices()
   const navigate = useNavigate()
 
@@ -46,7 +46,7 @@ export const Service = () => {
   }
 
   const handleClose = () => {
-    if (!isSameSet(new Set(checked), new Set(currentServiceItems))) {
+    if (!isSameSet(new Set(checked), new Set(currentServiceItemIds))) {
       mutate({ itemIds: checked })
     }
 

@@ -13,13 +13,14 @@ import { CartItemView } from './cart-view-item.tsx'
 import { useAllData, useIsLoading } from '../../use-data.ts'
 import { findProduct } from '../../tools.tsx'
 import HouseIcon from '@mui/icons-material/House'
-import { useGetCart, useToggleInCart } from '../../cart-api.ts'
+import { useToggleInCart } from '../../cart-api.ts'
 import { EmptyCart } from './empty-cart.tsx'
 import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
 import { CartItem, Product } from '../../types.ts'
 import { FloatingActions } from './floating-actions.tsx'
 import { useMediaQuery } from '../../hooks/use-media-query.ts'
+import { useCartItems } from '../../hooks/use-cart-items.ts'
 
 const LinkedButton = createLink(Button)
 
@@ -44,21 +45,20 @@ const w = '190px'
 export const Cart = () => {
   const wideScreen = useMediaQuery('(min-width: 1340px)')
   const { s } = useSearch({ from: '/cart' })
-
   const { mutate } = useToggleInCart()
   const loading = useIsLoading()
   const data = useAllData()
-  const { data: cartItems = [], isLoading } = useGetCart()
+  const cartItems = useCartItems()
 
   const fullData = cartItems.map((item) => {
     return { ...item, product: findProduct(item.itemId, data) }
   })
 
-  if (isLoading || loading) {
+  if (loading) {
     return <LoadingCart />
   }
 
-  if (!isLoading && cartItems.length === 0) {
+  if (cartItems.length === 0) {
     return <EmptyCart />
   }
 

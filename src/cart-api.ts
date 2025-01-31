@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CACHE_CART_KEY } from './constants.ts'
+import { CACHE_CART_KEY, POPULAR_SERViCE_PREFIX } from './constants.ts'
 import {
   addToCart,
   getCart,
   removeFromCart,
   setCartProp,
-  setCartServices,
+  setCartPopularServices,
 } from './google-api-cart.ts'
 import { type CartItem } from './types.ts'
 
@@ -69,7 +69,7 @@ export const useSetPropOnCart = () => {
   })
 }
 
-export const useSetServicesForCart = () => {
+export const useSetPopularServicesForCart = () => {
   const queryClient = useQueryClient()
 
   return useMutation<
@@ -87,17 +87,18 @@ export const useSetServicesForCart = () => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
       const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
 
-      queryClient.setQueryData<CartItem[]>(getQueryKey(), (old) => {
-        const onlyProductItems =
-          old?.filter((item) => !item.itemId.includes('$__')) || []
-        const onlyServiceItems = itemIds.map((id) => ({
+      queryClient.setQueryData<CartItem[]>(getQueryKey(), (old = []) => {
+        const noPopularServiceItems = old.filter(
+          (item) => !item.itemId.startsWith(POPULAR_SERViCE_PREFIX),
+        )
+        const popularServiceItems = itemIds.map((id) => ({
           itemId: id,
           quantity: '1',
           discount: '0',
           cartId: '1',
         }))
 
-        return [...onlyProductItems, ...onlyServiceItems]
+        return [...noPopularServiceItems, ...popularServiceItems]
       })
 
       return { list }
@@ -106,7 +107,7 @@ export const useSetServicesForCart = () => {
       queryClient.setQueryData([getQueryKey()], context?.list)
     },
     mutationFn: ({ itemIds }) => {
-      return setCartServices(itemIds)
+      return setCartPopularServices(itemIds)
     },
   })
 }
