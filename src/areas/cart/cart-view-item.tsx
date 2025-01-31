@@ -20,7 +20,7 @@ export const CartItemView: FC<CartItemViewProps> = ({ item }) => {
 
   return (
     <Card variant="elevation" sx={{ p: 1, pb: 0 }}>
-      <Box sx={{ mb: 2 }}> {item.product?.name}</Box>
+      <Box sx={{ mb: '6px' }}> {item.product?.name}</Box>
       <Divider />
 
       {priceWithDiscount === fullPrice && (
