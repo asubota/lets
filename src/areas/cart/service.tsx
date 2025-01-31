@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -15,6 +14,7 @@ import { usePopularServices } from '../../use-data.ts'
 import { useState } from 'react'
 import ConstructionIcon from '@mui/icons-material/Construction'
 import { getFavoriteId } from '../../tools.tsx'
+import { Product } from '../../types.ts'
 import { useSetServicesForCart } from '../../cart-api.ts'
 import { useGetCurrentCartServiceItems } from '../../hooks/use-get-cart-items.ts'
 
@@ -27,6 +27,8 @@ function isSameSet(setA: Set<string>, setB: Set<string>) {
 
   return true
 }
+
+const sortByPrice = (a: Product, b: Product) => b.price - a.price
 
 export const Service = () => {
   const { mutate } = useSetServicesForCart()
@@ -56,28 +58,24 @@ export const Service = () => {
       <DialogTitle>{'Шо по сєрвісу ?'}</DialogTitle>
       <DialogContent>
         <List sx={{ bgcolor: 'background.paper', pt: 0, pb: 0 }}>
-          {allPopularServices.map((value) => {
-            const labelId = `checkbox-list-label-${getFavoriteId(value)}`
+          {allPopularServices.sort(sortByPrice).map((product) => {
+            const labelId = `checkbox-list-label-${getFavoriteId(product)}`
 
             return (
               <ListItem
-                key={value.sku}
-                secondaryAction={
-                  <IconButton edge="end">
-                    <ConstructionIcon />
-                  </IconButton>
-                }
+                key={product.sku}
+                secondaryAction={<ConstructionIcon />}
                 disablePadding
               >
                 <ListItemButton
                   role={undefined}
-                  onClick={handleToggle(getFavoriteId(value))}
+                  onClick={handleToggle(getFavoriteId(product))}
                   dense
                 >
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
-                      checked={checked.includes(getFavoriteId(value))}
+                      checked={checked.includes(getFavoriteId(product))}
                       tabIndex={-1}
                       disableRipple
                       inputProps={{ 'aria-labelledby': labelId }}
@@ -85,8 +83,11 @@ export const Service = () => {
                   </ListItemIcon>
                   <ListItemText
                     id={labelId}
-                    primary={value.name}
-                    secondary={`${value.price} грн`}
+                    primary={product.name}
+                    secondary={`${product.price} грн`}
+                    slotProps={{
+                      secondary: { color: 'secondary' },
+                    }}
                   />
                 </ListItemButton>
               </ListItem>
