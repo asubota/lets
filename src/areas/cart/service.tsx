@@ -57,14 +57,28 @@ export const Service = () => {
     <Dialog open onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>{'Шо по сєрвісу ?'}</DialogTitle>
       <DialogContent>
-        <List sx={{ bgcolor: 'background.paper', pt: 0, pb: 0 }}>
+        <List
+          sx={(theme) => {
+            return {
+              pt: 0,
+              pb: 0,
+              backgroundColor:
+                theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+            }
+          }}
+        >
           {allPopularServices.sort(sortByPrice).map((product) => {
             const labelId = `checkbox-list-label-${getFavoriteId(product)}`
 
             return (
               <ListItem
                 key={product.sku}
-                secondaryAction={<ConstructionIcon />}
+                secondaryAction={
+                  <ConstructionIcon
+                    fontSize="small"
+                    sx={{ color: 'secondary.light' }}
+                  />
+                }
                 disablePadding
               >
                 <ListItemButton
@@ -86,7 +100,7 @@ export const Service = () => {
                     primary={product.name}
                     secondary={`${product.price} грн`}
                     slotProps={{
-                      secondary: { color: 'secondary' },
+                      secondary: { color: 'secondary.light' },
                     }}
                   />
                 </ListItemButton>
