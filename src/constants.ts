@@ -12,3 +12,6 @@ export const GOOGLE_API_KEY_KEY = 'lets-bike-google-api-key'
 export const GOOGLE_CLIENT_ID_KEY = 'lets-bike-google-client-id'
 export const GOOGLE_DATABASE_SPREADSHEET_ID = 'lets-bike-google-sheet-id'
 export const GOOGLE_PRODUCTS_FILE_ID = 'lets-bike-google-file-id'
+
+export const POPULAR_SERViCE_PREFIX = '$$__'
+export const REGULAR_SERViCE_PREFIX = '$__'

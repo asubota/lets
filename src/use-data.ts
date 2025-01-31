@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Product } from './types.ts'
 import { useMemo } from 'react'
 import { filterBySearch, getUniqueVendors } from './tools.tsx'
-import { CACHE_BASE_KEY } from './constants.ts'
+import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants.ts'
 import { getGoogleFileId } from './secrets.ts'
 import { parseData } from './data-tools.ts'
 
@@ -33,10 +33,14 @@ export const useAllData = () => {
   return data
 }
 
+const filterPopular = (item: Product): boolean => {
+  return item.sku.startsWith(POPULAR_SERViCE_PREFIX)
+}
+
 export const usePopularServices = () => {
   const { data = [] } = useData()
 
-  return data.filter((item) => item.sku.startsWith('$__'))
+  return data.filter(filterPopular)
 }
 
 export const useIsLoading = () => {
