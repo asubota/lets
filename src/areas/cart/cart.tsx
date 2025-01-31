@@ -107,27 +107,35 @@ export const Cart = () => {
             flexShrink: 0,
           }}
         >
-          <Divider>
-            <DirectionsBikeIcon
-              sx={{ color: 'secondary.dark' }}
-              fontSize="small"
-            />
-          </Divider>
+          {products.length > 0 && (
+            <>
+              <Divider>
+                <DirectionsBikeIcon
+                  sx={{ color: 'secondary.dark' }}
+                  fontSize="small"
+                />
+              </Divider>
 
-          {products.sort(priceSortFn).map((item) => {
-            return <CartItemRow item={item} key={item.itemId} />
-          })}
+              {products.sort(priceSortFn).map((item) => {
+                return <CartItemRow item={item} key={item.itemId} />
+              })}
+            </>
+          )}
 
-          <Divider>
-            <ConstructionIcon
-              sx={{ color: 'secondary.light' }}
-              fontSize="small"
-            />
-          </Divider>
+          {services.length > 0 && (
+            <>
+              <Divider>
+                <ConstructionIcon
+                  sx={{ color: 'secondary.light' }}
+                  fontSize="small"
+                />
+              </Divider>
 
-          {services.sort(priceSortFn).map((item) => {
-            return <CartItemRow item={item} key={item.itemId} />
-          })}
+              {services.sort(priceSortFn).map((item) => {
+                return <CartItemRow item={item} key={item.itemId} />
+              })}
+            </>
+          )}
 
           {!wideScreen && <Divider sx={{ mb: 3 }} />}
 
