@@ -6,7 +6,6 @@ import {
   IconButton,
   Paper,
 } from '@mui/material'
-import { FC } from 'react'
 import { SwipeItem } from './swipeable-item.tsx'
 import { createLink, Outlet, useSearch } from '@tanstack/react-router'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -42,7 +41,7 @@ const priceSortFn = (
 
 const w = '190px'
 
-export const Cart: FC = () => {
+export const Cart = () => {
   const wideScreen = useMediaQuery('(min-width: 1340px)')
   const { s } = useSearch({ from: '/cart' })
 
@@ -54,31 +53,6 @@ export const Cart: FC = () => {
   const fullData = cartItems.map((item) => {
     return { ...item, product: findProduct(item.itemId, data) }
   })
-
-  const fullPrice = fullData.reduce((acc, item) => {
-    const price = item.product?.price || 0
-    const quantity = parseInt(item.quantity, 10)
-
-    return acc + price * quantity
-  }, 0)
-
-  const discountPrice = fullData.reduce((acc, item) => {
-    const price = item.product?.price || 0
-    const quantity = parseInt(item.quantity, 10)
-    const discount = parseInt(item.discount, 10)
-    const discountedPrice = price - Math.ceil((price * discount) / 100)
-
-    return acc + discountedPrice * quantity
-  }, 0)
-
-  const totalDiscount = fullData.reduce((acc, item) => {
-    const price = item.product?.price || 0
-    const quantity = parseInt(item.quantity, 10)
-    const discount = parseInt(item.discount, 10)
-    const discountPrice = Math.ceil((price * discount) / 100)
-
-    return acc + discountPrice * quantity
-  }, 0)
 
   if (isLoading || loading) {
     return <LoadingCart />
@@ -93,6 +67,7 @@ export const Cart: FC = () => {
       <Outlet />
 
       <Container
+        maxWidth={false}
         sx={{
           display: 'flex',
           flexDirection: 'row',
@@ -101,7 +76,6 @@ export const Cart: FC = () => {
           pl: 0,
           pr: 0,
         }}
-        maxWidth={false}
       >
         <Box sx={{ flexGrow: 1, flexShrink: 0 }}>
           {wideScreen && (
@@ -150,11 +124,7 @@ export const Cart: FC = () => {
 
           {!wideScreen && (
             <Box sx={{ textAlign: 'center' }}>
-              <PriceSummary
-                fullPrice={fullPrice}
-                discountPrice={discountPrice}
-                totalDiscount={totalDiscount}
-              />
+              <PriceSummary />
             </Box>
           )}
 
@@ -190,11 +160,7 @@ export const Cart: FC = () => {
                 p: 2,
               }}
             >
-              <PriceSummary
-                fullPrice={fullPrice}
-                discountPrice={discountPrice}
-                totalDiscount={totalDiscount}
-              />
+              <PriceSummary />
             </Paper>
           )}
         </Box>
