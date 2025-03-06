@@ -30,7 +30,19 @@ export const getAllColors = async (
     }))
 }
 
-export const setProp = async ({
+export const removeColor = async ({ vendor }: VendorAndColors) => {
+  const colors = await getAllColors()
+  const rowIndex = colors.findIndex((f) => f.vendor === vendor)
+
+  if (rowIndex !== -1) {
+    const range = `${SHEET_NAME}!A${rowIndex + 2}:F${rowIndex + 2}`
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}:clear?key=${API_KEY}`
+
+    await send(url, { method: 'POST' })
+  }
+}
+
+export const setColor = async ({
   vendor,
   color,
   borderColor,

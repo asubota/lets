@@ -1,36 +1,38 @@
-import { FC, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Button,
-  CircularProgress,
   DialogActions,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material'
 import { CirclePicker, HuePicker, ColorChangeHandler } from 'react-color'
-import { useAllVendors, useIsLoading } from '../../use-data.ts'
 import { Modal } from '../../components/modal.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { createLink, useNavigate } from '@tanstack/react-router'
-import { useGetColors, useSetColors } from '../../api-colors.ts'
+import { useSetColors } from '../../api-colors.ts'
 import HouseIcon from '@mui/icons-material/House'
+import { Color } from '../../types.ts'
 
 const LinkedButton = createLink(Button)
 
-export const ColorSettingsModal: FC = () => {
-  const vendors = useAllVendors()
-  const isLoading = useIsLoading()
+export const ColorSettingsModal = ({
+  vendors,
+  colors: currentColors,
+}: {
+  vendors: string[]
+  colors: Record<string, Color>
+}) => {
+  const navigate = useNavigate()
+  const { mutateAsync } = useSetColors()
+  const [colors, setColors] = useState(currentColors)
+
   const [color, setColor] = useState('')
   const [activeVendor, setActiveVendor] = useState<string | null>(null)
-  const navigate = useNavigate()
-  const { mutate } = useSetColors()
-  const savedColors = useGetColors()
-  const [colors, setColors] = useState(savedColors)
-
-  useEffect(() => {
-    setColors(savedColors)
-  }, [savedColors])
+  const [fill, setFill] = useState<'color' | 'borderColor' | 'both' | 'bg'>(
+    'both',
+  )
 
   const handleSetColor: ColorChangeHandler = ({ hex }) => {
     if (!activeVendor) {
@@ -57,8 +59,8 @@ export const ColorSettingsModal: FC = () => {
         break
     }
 
-    setColors((value) => ({ ...value, [activeVendor]: data }))
     setColor(hex)
+    setColors((value) => ({ ...value, [activeVendor]: data }))
   }
 
   const handleVendorChange = (vendor: string) => {
@@ -72,21 +74,12 @@ export const ColorSettingsModal: FC = () => {
     }
   }
 
-  const handleSave = () => {
-    mutate(colors)
-    setActiveVendor(null)
-    navigate({ to: '/list' })
+  const handleSave = async () => {
+    await mutateAsync({ currentColors, colors })
+    await navigate({ to: '/list' })
   }
 
-  const handleClose = () => {
-    setActiveVendor('')
-    setFill('both')
-    navigate({ to: '/list' })
-  }
-
-  const [fill, setFill] = useState<'color' | 'borderColor' | 'both' | 'bg'>(
-    'both',
-  )
+  const handleClose = () => navigate({ to: '/list' })
 
   const handleFillChange = (_: unknown, nextView: typeof fill) => {
     if (nextView !== null) {
@@ -182,43 +175,35 @@ export const ColorSettingsModal: FC = () => {
         </ToggleButtonGroup>
       </Box>
 
-      {isLoading && (
-        <Box sx={{ mt: '20px', display: 'flex', justifyContent: 'center' }}>
-          <CircularProgress color="primary" />
-        </Box>
-      )}
-
-      {!isLoading && (
-        <Box
-          sx={{
-            gap: '10px',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            flexWrap: 'wrap',
-            mt: '40px',
-            maxWidth: '300px',
-            alignSelf: 'center',
-          }}
-        >
-          {vendors.map((vendor) => {
-            return (
-              <Box
-                key={vendor}
-                onClick={() => handleVendorChange(vendor)}
-                sx={{ cursor: 'pointer' }}
-              >
-                <VendorChip
-                  source="preview"
-                  vendor={vendor}
-                  color={colors[vendor]?.color}
-                  borderColor={colors[vendor]?.borderColor}
-                  backgroundColor={colors[vendor]?.backgroundColor}
-                />
-              </Box>
-            )
-          })}
-        </Box>
-      )}
+      <Box
+        sx={{
+          gap: '10px',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          flexWrap: 'wrap',
+          mt: '40px',
+          maxWidth: '300px',
+          alignSelf: 'center',
+        }}
+      >
+        {vendors.map((vendor) => {
+          return (
+            <Box
+              key={vendor}
+              onClick={() => handleVendorChange(vendor)}
+              sx={{ cursor: 'pointer' }}
+            >
+              <VendorChip
+                source="preview"
+                vendor={vendor}
+                color={colors[vendor]?.color}
+                borderColor={colors[vendor]?.borderColor}
+                backgroundColor={colors[vendor]?.backgroundColor}
+              />
+            </Box>
+          )
+        })}
+      </Box>
     </Modal>
   )
 }
