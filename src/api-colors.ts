@@ -82,7 +82,7 @@ export const useSetColors = () => {
   >({
     async onSettled() {
       return await queryClient.invalidateQueries({
-        queryKey: [CACHE_COLORS_KEY],
+        queryKey: getQueryKey(),
       })
     },
     mutationFn: async ({ currentColors, colors }) => {

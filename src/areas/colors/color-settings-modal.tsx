@@ -25,7 +25,7 @@ export const ColorSettingsModal = ({
   colors: Record<string, Color>
 }) => {
   const navigate = useNavigate()
-  const { mutateAsync } = useSetColors()
+  const { mutate } = useSetColors()
   const [colors, setColors] = useState(currentColors)
 
   const [color, setColor] = useState('')
@@ -74,9 +74,9 @@ export const ColorSettingsModal = ({
     }
   }
 
-  const handleSave = async () => {
-    await mutateAsync({ currentColors, colors })
-    await navigate({ to: '/list' })
+  const handleSave = () => {
+    mutate({ currentColors, colors })
+    return navigate({ to: '/list' })
   }
 
   const handleClose = () => navigate({ to: '/list' })
