@@ -43,7 +43,7 @@ export const Modal: FC<ModalProps> = ({
       fullScreen
       open={open}
       onClose={onClose}
-      TransitionComponent={Transition}
+      slots={{ transition: Transition }}
     >
       <AppBar sx={{ position: 'relative' }}>
         <Toolbar>
