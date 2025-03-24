@@ -5,10 +5,12 @@ interface StoreState {
   view: 'tile' | 'table'
   theme: 'dark' | 'light'
   sort: 'date' | 'note'
+  lbToken: string
   actions: {
     setView(this: void, view: StoreState['view']): void
     setTheme(this: void, theme: StoreState['theme']): void
     setSort(this: void, sort: StoreState['sort']): void
+    setLBToken(this: void, sort: StoreState['lbToken']): void
   }
 }
 
@@ -18,10 +20,12 @@ const useStore = create<StoreState>()(
       view: 'tile',
       theme: 'light',
       sort: 'date',
+      lbToken: '',
       actions: {
         setSort: (sort) => set(() => ({ sort })),
         setView: (view) => set(() => ({ view })),
         setTheme: (theme) => set({ theme }),
+        setLBToken: (lbToken) => set({ lbToken }),
       },
     }),
     {
@@ -39,3 +43,4 @@ export const useAppActions = () => useStore((state) => state.actions)
 export const useAppView = () => useStore((state) => state.view)
 export const useAppTheme = () => useStore((state) => state.theme)
 export const useAppSort = () => useStore((state) => state.sort)
+export const useLBToken = () => useStore((state) => state.lbToken)

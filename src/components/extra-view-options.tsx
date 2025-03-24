@@ -6,6 +6,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import InsightsIcon from '@mui/icons-material/Insights'
+import EmailIcon from '@mui/icons-material/Email';
 
 import { ColorModeContext } from '../theme-mode-provider.tsx'
 import { createLink } from '@tanstack/react-router'
@@ -64,6 +65,10 @@ export const ExtraViewOptions: FC = () => {
           bottom: '25px',
         }}
       >
+        <LinkedIconButton to="/orders" sx={{ color: 'text.secondary' }}>
+          <EmailIcon />
+        </LinkedIconButton>
+
         <LinkedIconButton to="/cart" sx={{ color: 'text.secondary' }}>
           <ShoppingCartIcon />
           <Box

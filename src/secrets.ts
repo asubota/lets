@@ -4,7 +4,7 @@ import {
   GOOGLE_AUTH_TOKEN_KEY_EXPIRES_AT,
   GOOGLE_CLIENT_ID_KEY,
   GOOGLE_DATABASE_SPREADSHEET_ID,
-  GOOGLE_PRODUCTS_FILE_ID,
+  GOOGLE_PRODUCTS_FILE_ID, LB_API_PWD_KEY, LB_API_USER_KEY,
 } from './constants.ts'
 
 export const removeGoogleAuthTokenAndExpiry = () => {
@@ -42,4 +42,21 @@ export const getGoogleSpreadSheetId = () => {
 
 export const getGoogleFileId = () => {
   return localStorage.getItem(GOOGLE_PRODUCTS_FILE_ID) || ''
+}
+
+
+export const setApiUser = (value: string) => {
+  return localStorage.setItem(LB_API_USER_KEY, value)
+}
+
+export const getApiUser = () => {
+  return localStorage.getItem(LB_API_USER_KEY) || ''
+}
+
+export const setApiPwd = (value: string) => {
+  return localStorage.setItem(LB_API_PWD_KEY, value)
+}
+
+export const getApiPwd = () => {
+  return localStorage.getItem(LB_API_PWD_KEY) || ''
 }
