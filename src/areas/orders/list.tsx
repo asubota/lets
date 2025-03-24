@@ -1,23 +1,16 @@
-import { Box, Button, TextField } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import HouseIcon from '@mui/icons-material/House'
 import { createLink } from '@tanstack/react-router'
 import { setApiPwd, setApiUser } from '../../secrets.ts'
-import { useOrders } from '../../lb-api.ts'
-
 const LinkedButton = createLink(Button)
+import SmsFailedIcon from '@mui/icons-material/SmsFailed'
 
 // const user = getApiUser()
 // const pwd = getApiPwd()
 
-const test = true
+const test = false
 
 export const Orders = () => {
-  // const noData = !user || !pwd
-
-  const data = useOrders()
-
-  console.log(data)
-
   return (
     <>
       <Box sx={{ pl: 3, pr: 3, pt: 3 }}>
@@ -29,6 +22,22 @@ export const Orders = () => {
         >
           <HouseIcon color="primary" />
         </LinkedButton>
+
+        <Box
+          sx={{
+            p: 4,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            rowGap: '40px',
+          }}
+        >
+          <SmsFailedIcon sx={{ fontSize: '44px', color: '#e4bb1e' }} />
+          <Typography variant="h5" component="div">
+            <b>horoshop</b> має кастрований обмежений API
+          </Typography>
+        </Box>
       </Box>
       {test && (
         <Box sx={{ p: 3 }}>

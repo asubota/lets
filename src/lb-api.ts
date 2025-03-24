@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { getApiPwd, getApiUser } from './secrets'
-import { useLBToken } from './store/app.ts'
+import { useLBToken } from './store'
 
 const BASE_URL = 'https://letsbike.com.ua'
 
@@ -9,6 +9,7 @@ const headers = {
 }
 
 const AUTH_URL = `${BASE_URL}/api/auth/`
+const ORDERS_URL = `${BASE_URL}/api/orders/get/`
 
 export async function getToken(): Promise<string | undefined> {
   try {
@@ -17,10 +18,15 @@ export async function getToken(): Promise<string | undefined> {
       password: getApiPwd(),
     }
 
+    const headers = {
+      'Content-Type': 'application/json',
+    }
     const response = await fetch(AUTH_URL, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
+      mode: 'cors',
+      credentials: 'include', // Try
     })
 
     if (!response.ok) {
@@ -42,7 +48,8 @@ type Order = {
   id: string
   status: string
 }
-export async function getOrders(token: string): Promise<Order[] | undefined> {
+
+async function getOrders(token: string): Promise<Order[] | undefined> {
   try {
     const payload = {
       token,
@@ -50,7 +57,7 @@ export async function getOrders(token: string): Promise<Order[] | undefined> {
       limit: 2,
     }
 
-    const response = await fetch(AUTH_URL, {
+    const response = await fetch(ORDERS_URL, {
       method: 'POST',
       headers,
       body: JSON.stringify(payload),
