@@ -73,7 +73,15 @@ export const Stats: FC = () => {
           {allData.length}
         </Box>
         {meta.created && (
-          <Typography component="div" variant="body2" color="secondary">
+          <Typography
+            component="div"
+            variant="body2"
+            sx={{
+              color: (theme) => theme.palette.text.secondary,
+              fontSize: '12px',
+              fontStyle: 'italic',
+            }}
+          >
             {meta.created}
           </Typography>
         )}
