@@ -1,11 +1,12 @@
 import { FC } from 'react'
 import { useAllData, useAllVendors, useIsLoading } from '../../use-data.ts'
-import { Box, Button, CircularProgress } from '@mui/material'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { groupByVendor } from '../../tools.tsx'
 import Grid from '@mui/material/Grid2'
 import HouseIcon from '@mui/icons-material/House'
 import { createLink } from '@tanstack/react-router'
+import { useMeta } from '../../store'
 
 const LinkedButton = createLink(Button)
 
@@ -13,6 +14,7 @@ export const Stats: FC = () => {
   const allData = useAllData()
   const vendors = useAllVendors()
   const loading = useIsLoading()
+  const meta = useMeta()
 
   if (loading) {
     return (
@@ -70,6 +72,11 @@ export const Stats: FC = () => {
         <Box sx={{ fontWeight: 'bold' }} component="span">
           {allData.length}
         </Box>
+        {meta.created && (
+          <Typography component="div" variant="body2" color="secondary">
+            {meta.created}
+          </Typography>
+        )}
       </Box>
 
       <Box sx={{ pl: 3, pr: 3 }}>
