@@ -15,6 +15,3 @@ export const GOOGLE_PRODUCTS_FILE_ID = 'lets-bike-google-file-id'
 
 export const POPULAR_SERViCE_PREFIX = '$$__'
 export const REGULAR_SERViCE_PREFIX = '$__'
-
-export const LB_API_USER_KEY = 'lets-bike-api-user'
-export const LB_API_PWD_KEY = 'lets-bike-api-pwd'

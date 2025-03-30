@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
+import { ExtraViewOptions } from './extra-view-options.tsx'
 
 export const NoResults = () => {
   return (
@@ -29,6 +30,7 @@ export const NoResults = () => {
       </Typography>
       <Bike type="broken" />
       <Logo />
+      <ExtraViewOptions />
     </Box>
   )
 }
