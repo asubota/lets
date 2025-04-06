@@ -51,6 +51,7 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
           vendor,
           name: '-',
           price: 0,
+          price_old: 0,
           p2: 0,
           pics: null,
           stock: '0',
