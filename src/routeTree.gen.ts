@@ -21,6 +21,7 @@ import { Route as LayoutListImport } from './routes/_layout/list'
 import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
 import { Route as LayoutListIdPercentsImport } from './routes/_layout/list.$id.percents'
 import { Route as LayoutListIdDetailsImport } from './routes/_layout/list.$id.details'
+import { Route as LayoutFavoritesIdDetailsImport } from './routes/_layout/favorites.$id.details'
 import { Route as LayoutFavoritesFavoriteIdNotesImport } from './routes/_layout/favorites.$favoriteId.notes'
 
 // Create Virtual Routes
@@ -101,6 +102,12 @@ const LayoutListIdDetailsRoute = LayoutListIdDetailsImport.update({
   id: '/$id/details',
   path: '/$id/details',
   getParentRoute: () => LayoutListRoute,
+} as any)
+
+const LayoutFavoritesIdDetailsRoute = LayoutFavoritesIdDetailsImport.update({
+  id: '/$id/details',
+  path: '/$id/details',
+  getParentRoute: () => LayoutFavoritesRoute,
 } as any)
 
 const LayoutFavoritesFavoriteIdNotesRoute =
@@ -191,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesImport
       parentRoute: typeof LayoutFavoritesImport
     }
+    '/_layout/favorites/$id/details': {
+      id: '/_layout/favorites/$id/details'
+      path: '/$id/details'
+      fullPath: '/favorites/$id/details'
+      preLoaderRoute: typeof LayoutFavoritesIdDetailsImport
+      parentRoute: typeof LayoutFavoritesImport
+    }
     '/_layout/list/$id/details': {
       id: '/_layout/list/$id/details'
       path: '/$id/details'
@@ -212,10 +226,12 @@ declare module '@tanstack/react-router' {
 
 interface LayoutFavoritesRouteChildren {
   LayoutFavoritesFavoriteIdNotesRoute: typeof LayoutFavoritesFavoriteIdNotesRoute
+  LayoutFavoritesIdDetailsRoute: typeof LayoutFavoritesIdDetailsRoute
 }
 
 const LayoutFavoritesRouteChildren: LayoutFavoritesRouteChildren = {
   LayoutFavoritesFavoriteIdNotesRoute: LayoutFavoritesFavoriteIdNotesRoute,
+  LayoutFavoritesIdDetailsRoute: LayoutFavoritesIdDetailsRoute,
 }
 
 const LayoutFavoritesRouteWithChildren = LayoutFavoritesRoute._addFileChildren(
@@ -271,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
+  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsRoute
   '/list/$id/details': typeof LayoutListIdDetailsRoute
   '/list/$id/percents': typeof LayoutListIdPercentsRoute
 }
@@ -287,6 +304,7 @@ export interface FileRoutesByTo {
   '/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
+  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsRoute
   '/list/$id/details': typeof LayoutListIdDetailsRoute
   '/list/$id/percents': typeof LayoutListIdPercentsRoute
 }
@@ -304,6 +322,7 @@ export interface FileRoutesById {
   '/_layout/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
   '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
+  '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsRoute
   '/_layout/list/$id/details': typeof LayoutListIdDetailsRoute
   '/_layout/list/$id/percents': typeof LayoutListIdPercentsRoute
 }
@@ -322,6 +341,7 @@ export interface FileRouteTypes {
     | '/list'
     | '/cart/service'
     | '/favorites/$favoriteId/notes'
+    | '/favorites/$id/details'
     | '/list/$id/details'
     | '/list/$id/percents'
   fileRoutesByTo: FileRoutesByTo
@@ -337,6 +357,7 @@ export interface FileRouteTypes {
     | '/list'
     | '/cart/service'
     | '/favorites/$favoriteId/notes'
+    | '/favorites/$id/details'
     | '/list/$id/details'
     | '/list/$id/percents'
   id:
@@ -352,6 +373,7 @@ export interface FileRouteTypes {
     | '/_layout/list'
     | '/cart/service'
     | '/_layout/favorites/$favoriteId/notes'
+    | '/_layout/favorites/$id/details'
     | '/_layout/list/$id/details'
     | '/_layout/list/$id/percents'
   fileRoutesById: FileRoutesById
@@ -428,7 +450,8 @@ export const routeTree = rootRoute
       "filePath": "_layout/favorites.tsx",
       "parent": "/_layout",
       "children": [
-        "/_layout/favorites/$favoriteId/notes"
+        "/_layout/favorites/$favoriteId/notes",
+        "/_layout/favorites/$id/details"
       ]
     },
     "/_layout/list": {
@@ -445,6 +468,10 @@ export const routeTree = rootRoute
     },
     "/_layout/favorites/$favoriteId/notes": {
       "filePath": "_layout/favorites.$favoriteId.notes.tsx",
+      "parent": "/_layout/favorites"
+    },
+    "/_layout/favorites/$id/details": {
+      "filePath": "_layout/favorites.$id.details.tsx",
       "parent": "/_layout/favorites"
     },
     "/_layout/list/$id/details": {

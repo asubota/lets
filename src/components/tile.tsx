@@ -39,19 +39,14 @@ export const Tile: FC<{
       className="product-tile"
       variant="outlined"
       sx={{
-        ...('missed' in p &&
-          p.missed && {
-            backgroundColor: '#ea2b060f',
-          }),
+        ...('missed' in p && p.missed && { backgroundColor: '#ea2b060f' }),
         'p': 1,
         'pb': '2px',
         'position': 'relative',
         'display': 'grid',
         'rowGap': '12px',
         'columnGap': '4px',
-        '&:has(input:checked)': {
-          borderColor: 'text.secondary',
-        },
+        '&:has(input:checked)': { borderColor: 'text.secondary' },
         'gridTemplateColumns': '1fr',
         'gridTemplateRows': 'auto auto auto',
         'gridTemplateAreas': ` 
@@ -135,9 +130,11 @@ export const Tile: FC<{
           <PriceChip product={p} />
           <VendorChip vendor={p.vendor} />
 
-          {!isFavoritePage && p.pics && (
+          {p.pics && (
             <LinkedIcon
-              to="/list/$id/details"
+              to={
+                isFavoritePage ? `/favorites/$id/details` : `/list/$id/details`
+              }
               params={{ id: getFavoriteId(p) }}
               sx={{
                 color: 'secondary',
