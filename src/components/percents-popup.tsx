@@ -62,7 +62,7 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
   const priceWithDiscount = Math.round(product.price - discountValue)
 
   return (
-    <Dialog open={true} onClose={onClose} PaperProps={{}} fullWidth>
+    <Dialog open={true} onClose={onClose} fullWidth>
       <DialogTitle
         typography="subtitle2"
         sx={{
