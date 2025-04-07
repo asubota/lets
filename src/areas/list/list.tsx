@@ -19,6 +19,7 @@ import { useSearchActions } from '../../store/search.ts'
 import { useHistoryActions } from '../../store'
 import { Loader } from '../../components/loader.tsx'
 import { Outlet } from '@tanstack/react-router'
+import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
@@ -114,6 +115,8 @@ export const List: FC = () => {
       <TableSettingsModal />
 
       <Outlet />
+
+      <ExtraViewOptions />
     </>
   )
 }

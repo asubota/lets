@@ -1,7 +1,6 @@
 import { Box, CircularProgress } from '@mui/material'
 import { Bike } from './bike.tsx'
 import { Logo } from './logo.tsx'
-import { ExtraViewOptions } from './extra-view-options.tsx'
 
 export const Loader = () => {
   return (
@@ -12,8 +11,6 @@ export const Loader = () => {
 
       <Bike type="safe" />
       <Logo />
-
-      <ExtraViewOptions />
     </Box>
   )
 }
