@@ -53,6 +53,9 @@ export type AppMessage =
       payload: { count: number }
     }
   | {
+      type: 'reset-cache'
+    }
+  | {
       type: 'xxx'
     }
 

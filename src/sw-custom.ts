@@ -1,6 +1,8 @@
 import { AppMessage, NotificationData } from './types.ts'
 import { parseData } from './data-tools.ts'
 
+const CACHE_NAME = 'lets-bike-api'
+
 const sw = self as unknown as ServiceWorkerGlobalScope
 
 async function fetchAndCache(request: FetchEvent['request'], cache: Cache) {
@@ -67,6 +69,14 @@ sw.addEventListener('message', async (event) => {
   //   notifyAppAboutCacheReset(123)
   // }
 
+  if (message.type === 'reset-cache') {
+    caches.delete(CACHE_NAME).then((success) => {
+      if (success) {
+        console.log(`[SW] ${CACHE_NAME} cleared`)
+      }
+    })
+  }
+
   if (message.type === 'push-me') {
     await sw.registration.showNotification(
       message.payload.title,
@@ -81,7 +91,7 @@ sw.addEventListener('fetch', (event) => {
   } = event
 
   if (method === 'GET' && url.includes('docs.google.com')) {
-    const response = sw.caches.open('lets-bike-api').then(async (cache) => {
+    const response = sw.caches.open(CACHE_NAME).then(async (cache) => {
       const cachedResponse = await cache.match(event.request)
 
       if (cachedResponse) {
