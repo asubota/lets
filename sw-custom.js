@@ -76,10 +76,13 @@ sw.addEventListener('notificationclick', (event) => {
 });
 sw.addEventListener('message', async (event) => {
     const message = event.data;
+    // if (message.type === 'xxx') {
+    //   notifyAppAboutCacheReset(123)
+    // }
     if (message.type === 'reset-cache') {
         caches.delete(CACHE_NAME).then((success) => {
             if (success) {
-                console.log('[SW] google-api-cache cleared');
+                console.log(`[SW] ${CACHE_NAME} cleared`);
             }
         });
     }
