@@ -13,6 +13,7 @@ import { RedDot } from './red-dot.tsx'
 import { useGetNotifications } from '../hooks/use-get-notifications.ts'
 import { useCartItemsCount } from '../hooks/use-cart-items-count.ts'
 import { PasteInSearchButton } from './toolbar/paste-in-search-button.tsx'
+import { ResetCacheButton } from './reset-cache-button.tsx'
 
 const LinkedIconButton = createLink(IconButton)
 
@@ -65,7 +66,9 @@ export const ExtraViewOptions: FC = () => {
           bottom: '25px',
         }}
       >
-        <PasteInSearchButton />
+        <ResetCacheButton />
+
+        <PasteInSearchButton size="medium" />
 
         <LinkedIconButton to="/cart" sx={{ color: 'text.secondary' }}>
           <ShoppingCartIcon />
