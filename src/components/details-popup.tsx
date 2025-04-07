@@ -21,11 +21,11 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
 
   return (
     <Dialog
-      open={true}
+      open
       onClose={onClose}
       fullScreen={isFullScreen}
-      PaperProps={{
-        sx: { ...(isFullScreen && { backgroundColor: '#000' }) },
+      slotProps={{
+        paper: { sx: { ...(isFullScreen && { backgroundColor: '#000' }) } },
       }}
     >
       <DialogTitle

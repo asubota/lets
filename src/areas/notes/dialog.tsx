@@ -55,13 +55,15 @@ export const NotesDialog: FC = () => {
           alignItems: 'flex-start',
         },
       }}
-      PaperProps={{
-        sx: {
-          width: '100vw',
-          maxWidth: '600px',
+      slotProps={{
+        paper: {
+          sx: {
+            width: '100vw',
+            maxWidth: '600px',
+          },
+          component: 'form',
+          onSubmit: handleSubmit(onSubmit),
         },
-        component: 'form',
-        onSubmit: handleSubmit(onSubmit),
       }}
     >
       <DialogTitle fontSize="medium">Нотатки</DialogTitle>
