@@ -29,6 +29,7 @@ const parseData = (text) => {
     });
 };
 
+const CACHE_NAME = 'lets-bike-api';
 const sw = self;
 async function fetchAndCache(request, cache) {
     const networkResponse = await fetch(request);
@@ -75,9 +76,13 @@ sw.addEventListener('notificationclick', (event) => {
 });
 sw.addEventListener('message', async (event) => {
     const message = event.data;
-    // if (message.type === 'xxx') {
-    //   notifyAppAboutCacheReset(123)
-    // }
+    if (message.type === 'reset-cache') {
+        caches.delete(CACHE_NAME).then((success) => {
+            if (success) {
+                console.log('[SW] google-api-cache cleared');
+            }
+        });
+    }
     if (message.type === 'push-me') {
         await sw.registration.showNotification(message.payload.title, message.payload.options);
     }
@@ -85,7 +90,7 @@ sw.addEventListener('message', async (event) => {
 sw.addEventListener('fetch', (event) => {
     const { request: { url, method }, } = event;
     if (method === 'GET' && url.includes('docs.google.com')) {
-        const response = sw.caches.open('lets-bike-api').then(async (cache) => {
+        const response = sw.caches.open(CACHE_NAME).then(async (cache) => {
             const cachedResponse = await cache.match(event.request);
             if (cachedResponse) {
                 const cachedTime = await cache.match(`${event.request.url}-time`);
