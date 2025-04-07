@@ -5,6 +5,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import sonarjs from 'eslint-plugin-sonarjs'
+import reactCompiler from 'eslint-plugin-react-compiler'
 
 export default [
   {
@@ -35,6 +36,7 @@ export default [
       'react': reactPlugin,
       'react-hooks': reactHooksPlugin,
       sonarjs,
+      'react-compiler': reactCompiler,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -43,6 +45,7 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       ...sonarjs.configs.recommended.rules,
 
+      'react-compiler/react-compiler': 'error',
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',

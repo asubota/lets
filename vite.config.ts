@@ -10,6 +10,8 @@ const base = '/lets/'
 
 const swFile = 'sw-custom.ts'
 
+const ReactCompilerConfig = {}
+
 export default defineConfig({
   base,
   css: {
@@ -35,7 +37,11 @@ export default defineConfig({
   },
   plugins: [
     TanStackRouterVite({ target: 'react' }),
-    react(),
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler', ReactCompilerConfig]],
+      },
+    }),
     svgr(),
     basicSsl(),
     VitePWA({

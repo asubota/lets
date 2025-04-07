@@ -14,10 +14,9 @@ export const ResetCacheButton = () => {
 
     queryClient.invalidateQueries({ queryKey: [CACHE_BASE_KEY] }).then(() => {
       navigator.serviceWorker.ready.then(() => {
+        const message = { type: 'reset-cache' }
         if (navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({
-            type: 'reset-cache',
-          })
+          navigator.serviceWorker.controller.postMessage(message)
         }
       })
     })
