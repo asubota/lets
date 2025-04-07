@@ -5,6 +5,7 @@ import {
   SpeedDialIcon,
   Fab,
   Box,
+  type SpeedDialProps,
 } from '@mui/material'
 
 import HdrStrongIcon from '@mui/icons-material/HdrStrong'
@@ -14,7 +15,6 @@ import { useState } from 'react'
 import BuildIcon from '@mui/icons-material/Build'
 import PersonIcon from '@mui/icons-material/Person'
 import DownloadIcon from '@mui/icons-material/Download'
-import { SpeedDialProps } from '@mui/material/SpeedDial/SpeedDial'
 import { handleTakeCartScreenshot } from '../../tools.tsx'
 import { createLink } from '@tanstack/react-router'
 
@@ -65,20 +65,20 @@ export function FloatingActions({
         >
           <SpeedDialAction
             icon={<ClearIcon color="primary" />}
-            tooltipTitle="Видалити корзину"
+            slotProps={{ tooltip: { title: 'Видалити корзину' } }}
           />
           <SpeedDialAction
             icon={<DownloadIcon color="primary" />}
-            tooltipTitle="Ескорт ;)"
+            slotProps={{ tooltip: { title: 'Ескорт ;)' } }}
             onClick={handleTakeCartScreenshot}
           />
           <SpeedDialAction
             icon={<AddIcon color="primary" />}
-            tooltipTitle="Нова корзина"
+            slotProps={{ tooltip: { title: 'Нова корзина' } }}
           />
           <SpeedDialAction
             icon={<PersonIcon color="primary" />}
-            tooltipTitle="Деталі клієнта"
+            slotProps={{ tooltip: { title: 'Деталі клієнта' } }}
           />
         </SpeedDial>
 

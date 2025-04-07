@@ -34,8 +34,8 @@ export default defineConfig({
     },
   },
   plugins: [
+    TanStackRouterVite({ target: 'react' }),
     react(),
-    TanStackRouterVite(),
     svgr(),
     basicSsl(),
     VitePWA({
@@ -111,6 +111,9 @@ export default defineConfig({
     }),
     CompileTsServiceWorker(),
   ],
+  resolve: {
+    conditions: ['mui-modern', 'module', 'browser', 'development|production'],
+  },
   server: {
     port: 8000,
   },
