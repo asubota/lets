@@ -53,7 +53,8 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
             <Box
               component="span"
               sx={{
-                color: 'white',
+                color: (theme) =>
+                  theme.palette.mode === 'dark' ? 'white' : 'black',
                 fontSize: '12px',
               }}
             >
