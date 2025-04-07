@@ -1,10 +1,9 @@
 import { FC, ReactNode } from 'react'
 import { Fade, Paper, Popper } from '@mui/material'
-import { PopperOwnProps } from '@mui/material/Popper/BasePopper.types'
 
 interface FadePopperProps {
   open: boolean
-  anchorEl: PopperOwnProps['anchorEl']
+  anchorEl: Element | null
   children: ReactNode
   timeout?: number
 }
