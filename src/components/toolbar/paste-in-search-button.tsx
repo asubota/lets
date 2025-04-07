@@ -1,9 +1,12 @@
-import { FC } from 'react'
-import { IconButton } from '@mui/material'
+import { IconButton, type IconButtonOwnProps } from '@mui/material'
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch'
 import { useNavigate } from '@tanstack/react-router'
 
-export const PasteInSearchButton: FC = () => {
+export const PasteInSearchButton = ({
+  size,
+}: {
+  size: IconButtonOwnProps['size']
+}) => {
   const navigate = useNavigate()
 
   const handleClick = async () => {
@@ -13,7 +16,7 @@ export const PasteInSearchButton: FC = () => {
 
   return (
     <IconButton
-      size="small"
+      size={size}
       sx={{ color: 'text.secondary', mr: '14px' }}
       onClick={handleClick}
     >

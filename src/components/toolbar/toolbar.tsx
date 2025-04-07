@@ -58,7 +58,7 @@ export const Toolbar: FC<ToolbarProps> = ({
       <Box sx={{ ml: 'auto', display: 'flex' }}>
         {hasCart && <CartButton search={search} />}
         {hasFavoritesSorting && <Sorting />}
-        {hasPasteIn && <PasteInSearchButton />}
+        {hasPasteIn && <PasteInSearchButton size="small" />}
         {hasGoogle && <GoogleButton />}
         {hasColumnsConfig && <TableColumnsViewer />}
 
