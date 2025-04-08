@@ -18,11 +18,6 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as CartServiceImport } from './routes/cart.service'
 import { Route as LayoutListImport } from './routes/_layout/list'
-import { Route as LayoutFavoritesImport } from './routes/_layout/favorites'
-import { Route as LayoutListIdPercentsImport } from './routes/_layout/list.$id.percents'
-import { Route as LayoutListIdDetailsImport } from './routes/_layout/list.$id.details'
-import { Route as LayoutFavoritesIdDetailsImport } from './routes/_layout/favorites.$id.details'
-import { Route as LayoutFavoritesFavoriteIdNotesImport } from './routes/_layout/favorites.$favoriteId.notes'
 
 // Create Virtual Routes
 
@@ -30,6 +25,19 @@ const StatsLazyImport = createFileRoute('/stats')()
 const ScannerLazyImport = createFileRoute('/scanner')()
 const NotificationsLazyImport = createFileRoute('/notifications')()
 const ColorsLazyImport = createFileRoute('/colors')()
+const LayoutFavoritesLazyImport = createFileRoute('/_layout/favorites')()
+const LayoutListIdPercentsLazyImport = createFileRoute(
+  '/_layout/list/$id/percents',
+)()
+const LayoutListIdDetailsLazyImport = createFileRoute(
+  '/_layout/list/$id/details',
+)()
+const LayoutFavoritesIdDetailsLazyImport = createFileRoute(
+  '/_layout/favorites/$id/details',
+)()
+const LayoutFavoritesFavoriteIdNotesLazyImport = createFileRoute(
+  '/_layout/favorites/$favoriteId/notes',
+)()
 
 // Create/Update Routes
 
@@ -61,7 +69,7 @@ const CartRoute = CartImport.update({
   id: '/cart',
   path: '/cart',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/cart.lazy').then((d) => d.Route))
 
 const LayoutRoute = LayoutImport.update({
   id: '/_layout',
@@ -74,6 +82,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LayoutFavoritesLazyRoute = LayoutFavoritesLazyImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => LayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_layout/favorites.lazy').then((d) => d.Route),
+)
+
 const CartServiceRoute = CartServiceImport.update({
   id: '/service',
   path: '/service',
@@ -84,38 +100,43 @@ const LayoutListRoute = LayoutListImport.update({
   id: '/list',
   path: '/list',
   getParentRoute: () => LayoutRoute,
-} as any)
+} as any).lazy(() => import('./routes/_layout/list.lazy').then((d) => d.Route))
 
-const LayoutFavoritesRoute = LayoutFavoritesImport.update({
-  id: '/favorites',
-  path: '/favorites',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutListIdPercentsRoute = LayoutListIdPercentsImport.update({
+const LayoutListIdPercentsLazyRoute = LayoutListIdPercentsLazyImport.update({
   id: '/$id/percents',
   path: '/$id/percents',
   getParentRoute: () => LayoutListRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_layout/list.$id.percents.lazy').then((d) => d.Route),
+)
 
-const LayoutListIdDetailsRoute = LayoutListIdDetailsImport.update({
+const LayoutListIdDetailsLazyRoute = LayoutListIdDetailsLazyImport.update({
   id: '/$id/details',
   path: '/$id/details',
   getParentRoute: () => LayoutListRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_layout/list.$id.details.lazy').then((d) => d.Route),
+)
 
-const LayoutFavoritesIdDetailsRoute = LayoutFavoritesIdDetailsImport.update({
-  id: '/$id/details',
-  path: '/$id/details',
-  getParentRoute: () => LayoutFavoritesRoute,
-} as any)
+const LayoutFavoritesIdDetailsLazyRoute =
+  LayoutFavoritesIdDetailsLazyImport.update({
+    id: '/$id/details',
+    path: '/$id/details',
+    getParentRoute: () => LayoutFavoritesLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/favorites.$id.details.lazy').then((d) => d.Route),
+  )
 
-const LayoutFavoritesFavoriteIdNotesRoute =
-  LayoutFavoritesFavoriteIdNotesImport.update({
+const LayoutFavoritesFavoriteIdNotesLazyRoute =
+  LayoutFavoritesFavoriteIdNotesLazyImport.update({
     id: '/$favoriteId/notes',
     path: '/$favoriteId/notes',
-    getParentRoute: () => LayoutFavoritesRoute,
-  } as any)
+    getParentRoute: () => LayoutFavoritesLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/favorites.$favoriteId.notes.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -170,13 +191,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/favorites': {
-      id: '/_layout/favorites'
-      path: '/favorites'
-      fullPath: '/favorites'
-      preLoaderRoute: typeof LayoutFavoritesImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/list': {
       id: '/_layout/list'
       path: '/list'
@@ -191,32 +205,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CartServiceImport
       parentRoute: typeof CartImport
     }
+    '/_layout/favorites': {
+      id: '/_layout/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof LayoutFavoritesLazyImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/favorites/$favoriteId/notes': {
       id: '/_layout/favorites/$favoriteId/notes'
       path: '/$favoriteId/notes'
       fullPath: '/favorites/$favoriteId/notes'
-      preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesImport
-      parentRoute: typeof LayoutFavoritesImport
+      preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesLazyImport
+      parentRoute: typeof LayoutFavoritesLazyImport
     }
     '/_layout/favorites/$id/details': {
       id: '/_layout/favorites/$id/details'
       path: '/$id/details'
       fullPath: '/favorites/$id/details'
-      preLoaderRoute: typeof LayoutFavoritesIdDetailsImport
-      parentRoute: typeof LayoutFavoritesImport
+      preLoaderRoute: typeof LayoutFavoritesIdDetailsLazyImport
+      parentRoute: typeof LayoutFavoritesLazyImport
     }
     '/_layout/list/$id/details': {
       id: '/_layout/list/$id/details'
       path: '/$id/details'
       fullPath: '/list/$id/details'
-      preLoaderRoute: typeof LayoutListIdDetailsImport
+      preLoaderRoute: typeof LayoutListIdDetailsLazyImport
       parentRoute: typeof LayoutListImport
     }
     '/_layout/list/$id/percents': {
       id: '/_layout/list/$id/percents'
       path: '/$id/percents'
       fullPath: '/list/$id/percents'
-      preLoaderRoute: typeof LayoutListIdPercentsImport
+      preLoaderRoute: typeof LayoutListIdPercentsLazyImport
       parentRoute: typeof LayoutListImport
     }
   }
@@ -224,42 +245,42 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface LayoutFavoritesRouteChildren {
-  LayoutFavoritesFavoriteIdNotesRoute: typeof LayoutFavoritesFavoriteIdNotesRoute
-  LayoutFavoritesIdDetailsRoute: typeof LayoutFavoritesIdDetailsRoute
-}
-
-const LayoutFavoritesRouteChildren: LayoutFavoritesRouteChildren = {
-  LayoutFavoritesFavoriteIdNotesRoute: LayoutFavoritesFavoriteIdNotesRoute,
-  LayoutFavoritesIdDetailsRoute: LayoutFavoritesIdDetailsRoute,
-}
-
-const LayoutFavoritesRouteWithChildren = LayoutFavoritesRoute._addFileChildren(
-  LayoutFavoritesRouteChildren,
-)
-
 interface LayoutListRouteChildren {
-  LayoutListIdDetailsRoute: typeof LayoutListIdDetailsRoute
-  LayoutListIdPercentsRoute: typeof LayoutListIdPercentsRoute
+  LayoutListIdDetailsLazyRoute: typeof LayoutListIdDetailsLazyRoute
+  LayoutListIdPercentsLazyRoute: typeof LayoutListIdPercentsLazyRoute
 }
 
 const LayoutListRouteChildren: LayoutListRouteChildren = {
-  LayoutListIdDetailsRoute: LayoutListIdDetailsRoute,
-  LayoutListIdPercentsRoute: LayoutListIdPercentsRoute,
+  LayoutListIdDetailsLazyRoute: LayoutListIdDetailsLazyRoute,
+  LayoutListIdPercentsLazyRoute: LayoutListIdPercentsLazyRoute,
 }
 
 const LayoutListRouteWithChildren = LayoutListRoute._addFileChildren(
   LayoutListRouteChildren,
 )
 
+interface LayoutFavoritesLazyRouteChildren {
+  LayoutFavoritesFavoriteIdNotesLazyRoute: typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  LayoutFavoritesIdDetailsLazyRoute: typeof LayoutFavoritesIdDetailsLazyRoute
+}
+
+const LayoutFavoritesLazyRouteChildren: LayoutFavoritesLazyRouteChildren = {
+  LayoutFavoritesFavoriteIdNotesLazyRoute:
+    LayoutFavoritesFavoriteIdNotesLazyRoute,
+  LayoutFavoritesIdDetailsLazyRoute: LayoutFavoritesIdDetailsLazyRoute,
+}
+
+const LayoutFavoritesLazyRouteWithChildren =
+  LayoutFavoritesLazyRoute._addFileChildren(LayoutFavoritesLazyRouteChildren)
+
 interface LayoutRouteChildren {
-  LayoutFavoritesRoute: typeof LayoutFavoritesRouteWithChildren
   LayoutListRoute: typeof LayoutListRouteWithChildren
+  LayoutFavoritesLazyRoute: typeof LayoutFavoritesLazyRouteWithChildren
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutFavoritesRoute: LayoutFavoritesRouteWithChildren,
   LayoutListRoute: LayoutListRouteWithChildren,
+  LayoutFavoritesLazyRoute: LayoutFavoritesLazyRouteWithChildren,
 }
 
 const LayoutRouteWithChildren =
@@ -283,13 +304,13 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
-  '/favorites': typeof LayoutFavoritesRouteWithChildren
   '/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
-  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
-  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsRoute
-  '/list/$id/details': typeof LayoutListIdDetailsRoute
-  '/list/$id/percents': typeof LayoutListIdPercentsRoute
+  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
+  '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
+  '/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -300,13 +321,13 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
-  '/favorites': typeof LayoutFavoritesRouteWithChildren
   '/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
-  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
-  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsRoute
-  '/list/$id/details': typeof LayoutListIdDetailsRoute
-  '/list/$id/percents': typeof LayoutListIdPercentsRoute
+  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
+  '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
+  '/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
 }
 
 export interface FileRoutesById {
@@ -318,13 +339,13 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
-  '/_layout/favorites': typeof LayoutFavoritesRouteWithChildren
   '/_layout/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
-  '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesRoute
-  '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsRoute
-  '/_layout/list/$id/details': typeof LayoutListIdDetailsRoute
-  '/_layout/list/$id/percents': typeof LayoutListIdPercentsRoute
+  '/_layout/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
+  '/_layout/list/$id/details': typeof LayoutListIdDetailsLazyRoute
+  '/_layout/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -337,9 +358,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/scanner'
     | '/stats'
-    | '/favorites'
     | '/list'
     | '/cart/service'
+    | '/favorites'
     | '/favorites/$favoriteId/notes'
     | '/favorites/$id/details'
     | '/list/$id/details'
@@ -353,9 +374,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/scanner'
     | '/stats'
-    | '/favorites'
     | '/list'
     | '/cart/service'
+    | '/favorites'
     | '/favorites/$favoriteId/notes'
     | '/favorites/$id/details'
     | '/list/$id/details'
@@ -369,9 +390,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/scanner'
     | '/stats'
-    | '/_layout/favorites'
     | '/_layout/list'
     | '/cart/service'
+    | '/_layout/favorites'
     | '/_layout/favorites/$favoriteId/notes'
     | '/_layout/favorites/$id/details'
     | '/_layout/list/$id/details'
@@ -424,8 +445,8 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
-        "/_layout/favorites",
-        "/_layout/list"
+        "/_layout/list",
+        "/_layout/favorites"
       ]
     },
     "/cart": {
@@ -446,14 +467,6 @@ export const routeTree = rootRoute
     "/stats": {
       "filePath": "stats.lazy.tsx"
     },
-    "/_layout/favorites": {
-      "filePath": "_layout/favorites.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/favorites/$favoriteId/notes",
-        "/_layout/favorites/$id/details"
-      ]
-    },
     "/_layout/list": {
       "filePath": "_layout/list.tsx",
       "parent": "/_layout",
@@ -466,20 +479,28 @@ export const routeTree = rootRoute
       "filePath": "cart.service.tsx",
       "parent": "/cart"
     },
+    "/_layout/favorites": {
+      "filePath": "_layout/favorites.lazy.tsx",
+      "parent": "/_layout",
+      "children": [
+        "/_layout/favorites/$favoriteId/notes",
+        "/_layout/favorites/$id/details"
+      ]
+    },
     "/_layout/favorites/$favoriteId/notes": {
-      "filePath": "_layout/favorites.$favoriteId.notes.tsx",
+      "filePath": "_layout/favorites.$favoriteId.notes.lazy.tsx",
       "parent": "/_layout/favorites"
     },
     "/_layout/favorites/$id/details": {
-      "filePath": "_layout/favorites.$id.details.tsx",
+      "filePath": "_layout/favorites.$id.details.lazy.tsx",
       "parent": "/_layout/favorites"
     },
     "/_layout/list/$id/details": {
-      "filePath": "_layout/list.$id.details.tsx",
+      "filePath": "_layout/list.$id.details.lazy.tsx",
       "parent": "/_layout/list"
     },
     "/_layout/list/$id/percents": {
-      "filePath": "_layout/list.$id.percents.tsx",
+      "filePath": "_layout/list.$id.percents.lazy.tsx",
       "parent": "/_layout/list"
     }
   }
