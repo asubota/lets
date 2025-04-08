@@ -84,9 +84,7 @@ sw.addEventListener('message', async (event) => {
         caches.delete(CACHE_NAME).then((success) => {
             if (success) {
                 const message = { type: 'cache-reset-done' };
-                debugger;
                 notifyApp(message);
-                debugger;
                 console.log(`[SW] ${CACHE_NAME} cleared`);
             }
         });
