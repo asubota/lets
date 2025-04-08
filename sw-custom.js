@@ -42,13 +42,14 @@ function isStale(cachedDate, currentDate) {
     const cachedHour = cachedDate.getHours();
     return (currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour);
 }
-function notifyAppAboutCacheReset(count) {
+function notifyApp(message) {
     sw.clients.matchAll().then((clients) => {
-        clients.forEach((client) => {
-            const message = { type: 'cache-update', payload: { count } };
-            client.postMessage(message);
-        });
+        clients.forEach((client) => client.postMessage(message));
     });
+}
+function notifyAppAboutCacheReset(count) {
+    const message = { type: 'cache-updated', payload: { count } };
+    notifyApp(message);
 }
 sw.addEventListener('notificationclick', (event) => {
     const data = event.notification.data;
@@ -79,9 +80,13 @@ sw.addEventListener('message', async (event) => {
     // if (message.type === 'xxx') {
     //   notifyAppAboutCacheReset(123)
     // }
-    if (message.type === 'reset-cache') {
+    if (message.type === 'cache-reset-request') {
         caches.delete(CACHE_NAME).then((success) => {
             if (success) {
+                const message = { type: 'cache-reset-done' };
+                debugger;
+                notifyApp(message);
+                debugger;
                 console.log(`[SW] ${CACHE_NAME} cleared`);
             }
         });
