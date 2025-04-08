@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { Details } from '../../areas/list/details.tsx'
 
-export const Route = createFileRoute('/_layout/favorites/$id/details')({
+export const Route = createLazyFileRoute('/_layout/favorites/$id/details')({
   component: RouteComponent,
 })
 
