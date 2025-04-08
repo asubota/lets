@@ -9,7 +9,7 @@ export const useListenToCacheUpdate = () => {
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
-      if (event.data && event.data.type === 'cache-update') {
+      if (event.data && event.data.type === 'cache-updated') {
         const { count } = event.data.payload
         await queryClient
           .invalidateQueries({ queryKey: [CACHE_BASE_KEY] })

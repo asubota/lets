@@ -23,13 +23,15 @@ function isStale(cachedDate: Date, currentDate: Date) {
   )
 }
 
-function notifyAppAboutCacheReset(count: number) {
+function notifyApp(message: AppMessage) {
   sw.clients.matchAll().then((clients) => {
-    clients.forEach((client) => {
-      const message: AppMessage = { type: 'cache-update', payload: { count } }
-      client.postMessage(message)
-    })
+    clients.forEach((client) => client.postMessage(message))
   })
+}
+
+function notifyAppAboutCacheReset(count: number) {
+  const message = { type: 'cache-updated', payload: { count } } as const
+  notifyApp(message)
 }
 
 sw.addEventListener('notificationclick', (event) => {
@@ -69,9 +71,11 @@ sw.addEventListener('message', async (event) => {
   //   notifyAppAboutCacheReset(123)
   // }
 
-  if (message.type === 'reset-cache') {
+  if (message.type === 'cache-reset-request') {
     caches.delete(CACHE_NAME).then((success) => {
       if (success) {
+        const message = { type: 'cache-reset-done' } as const
+        notifyApp(message)
         console.log(`[SW] ${CACHE_NAME} cleared`)
       }
     })

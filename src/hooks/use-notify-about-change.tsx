@@ -10,7 +10,7 @@ const showNotification = () => {
       navigator.serviceWorker.ready.then(() => {
         if (navigator.serviceWorker.controller) {
           const message: AppMessagePush = {
-            type: 'push-me' as const,
+            type: 'push-me',
             payload: {
               title: 'Мущіна, там щось оновилось...',
               options: {
@@ -44,7 +44,7 @@ export const useNotifyAboutChange = () => {
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
-      if (event.data && event.data.type === 'cache-update') {
+      if (event.data && event.data.type === 'cache-updated') {
         notifications.forEach(showAlert)
 
         if (notifications.length > 0) {
