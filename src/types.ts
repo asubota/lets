@@ -49,11 +49,14 @@ export type AppMessage =
       payload: NotificationData
     }
   | {
-      type: 'cache-update'
+      type: 'cache-updated'
       payload: { count: number }
     }
   | {
-      type: 'reset-cache'
+      type: 'cache-reset-request'
+    }
+  | {
+      type: 'cache-reset-done'
     }
   | {
       type: 'xxx'
