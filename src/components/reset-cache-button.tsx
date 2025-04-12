@@ -38,7 +38,11 @@ export const ResetCacheButton = () => {
   }, [queryClient])
 
   return (
-    <IconButton onClick={handleClick}>
+    <IconButton
+      onClick={handleClick}
+      sx={{ color: 'text.secondary' }}
+      disabled={rotating}
+    >
       <CachedIcon className={rotating ? 'rotate' : ''} />
     </IconButton>
   )
