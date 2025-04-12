@@ -15,7 +15,7 @@ interface TilesViewProps extends SharedTilesViewProps {
   search: string
 }
 
-export const TilesView: FC<TilesViewProps> = ({
+const TilesView: FC<TilesViewProps> = ({
   list,
   search,
   isFavoritePage = false,
@@ -44,3 +44,5 @@ export const TilesView: FC<TilesViewProps> = ({
     </Stack>
   )
 }
+
+export default TilesView

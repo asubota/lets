@@ -35,7 +35,7 @@ function getComparator(order: Order): (a: Product, b: Product) => number {
     : (a, b) => -descendingComparator(a, b)
 }
 
-export const TableView: FC<{ list: Product[]; search: string }> = ({
+const TableView: FC<{ list: Product[]; search: string }> = ({
   list,
   search,
 }) => {
@@ -168,3 +168,5 @@ export const TableView: FC<{ list: Product[]; search: string }> = ({
     </TableContainer>
   )
 }
+
+export default TableView

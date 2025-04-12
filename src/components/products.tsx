@@ -1,7 +1,6 @@
-import { FC } from 'react'
+import { FC, lazy, Suspense } from 'react'
 
-import { SharedTilesViewProps, TilesView } from './tiles-view.tsx'
-import { TableView } from './table-view.tsx'
+import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { NoResults } from './no-results.tsx'
 
@@ -10,7 +9,10 @@ import { getUniqueVendors } from '../tools.tsx'
 import { Product } from '../types.ts'
 import { useSearchVendors } from '../store/search.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
-import { SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
+import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
+
+const TableView = lazy(() => import('./table-view.tsx'))
+const TilesView = lazy(() => import('./tiles-view.tsx'))
 
 interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   products: Product[]
@@ -61,13 +63,19 @@ const Products: FC<ProductsProps> = ({
         }
       />
       {view === 'tile' && (
-        <TilesView
-          list={filteredList}
-          search={search}
-          isFavoritePage={isFavoritePage}
-        />
+        <Suspense>
+          <TilesView
+            list={filteredList}
+            search={search}
+            isFavoritePage={isFavoritePage}
+          />
+        </Suspense>
       )}
-      {view === 'table' && <TableView list={filteredList} search={search} />}
+      {view === 'table' && (
+        <Suspense>
+          <TableView list={filteredList} search={search} />
+        </Suspense>
+      )}
 
       <ScrollToTop />
     </>
