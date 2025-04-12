@@ -116,7 +116,7 @@ export const List: FC = () => {
 
       <Outlet />
 
-      <ExtraViewOptions />
+      {products.length === 0 && <ExtraViewOptions />}
     </>
   )
 }
