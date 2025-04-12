@@ -9,6 +9,7 @@ import { useListenToCacheUpdate } from '../hooks/use-listen-to-cache-update.ts'
 import { useVisibilityChangeReset } from '../hooks/use-visibility-change-reset.ts'
 import { useInitGoogle } from '../hooks/use-init-google.ts'
 import { ToastContainer } from 'react-toastify'
+import { useReloadOnChunkLoadFail } from '../hooks/use-reload-on-chunk-load-fail.ts'
 
 const queryClient = new QueryClient()
 
@@ -17,6 +18,7 @@ const Hooks = () => {
   useListenToCacheUpdate()
   useVisibilityChangeReset()
   useInitGoogle()
+  useReloadOnChunkLoadFail()
 
   return null
 }
