@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen.ts'
 import { AppMessage } from './types.ts'
@@ -11,7 +11,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-export const App: FC = () => {
+export const App = () => {
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
       if (event.data && event.data.type === 'navigate') {

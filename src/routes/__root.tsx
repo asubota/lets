@@ -1,6 +1,7 @@
 import { createRootRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { ThemeModeProvider } from '../theme-mode-provider.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { CssBaseline } from '@mui/material'
 import { useNotifyAboutChange } from '../hooks/use-notify-about-change.tsx'
@@ -25,6 +26,7 @@ const Component = () => {
     <ThemeModeProvider>
       <ToastContainer />
       <QueryClientProvider client={queryClient}>
+        <TanStackRouterDevtools />
         <ReactQueryDevtools
           initialIsOpen={false}
           buttonPosition="bottom-left"
