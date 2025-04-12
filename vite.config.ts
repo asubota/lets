@@ -53,6 +53,9 @@ export default defineConfig({
         navigateFallbackAllowlist: [new RegExp('^/lets/')],
       },
       workbox: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
         importScripts: [swFile.replace('.ts', '.js')],
         navigateFallbackAllowlist: [new RegExp('^/lets/')],
         runtimeCaching: [
