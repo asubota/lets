@@ -15,9 +15,13 @@ const SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 export const loadGoogleApi = (): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     function start() {
-      gapi.auth2
-        .init({ client_id: CLIENT_ID, scope: SCOPES })
-        .then(() => resolve(), reject)
+      try {
+        gapi.auth2
+          .init({ client_id: CLIENT_ID, scope: SCOPES })
+          .then(() => resolve(), reject)
+      } catch (e) {
+        reject(e)
+      }
     }
 
     gapi.load('auth2', start)
