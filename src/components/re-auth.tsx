@@ -7,6 +7,10 @@ import { getMinutesLeft } from '../tools.tsx'
 export const ReAuth: FC = () => {
   const authInstance = gapi.auth2.getAuthInstance()
 
+  if (!authInstance) {
+    return <Alert severity="info">Налаштування відсутні</Alert>
+  }
+
   if (getMinutesLeft() <= 1 && !authInstance.isSignedIn.get()) {
     return (
       <Alert

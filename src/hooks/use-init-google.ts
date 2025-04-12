@@ -9,6 +9,11 @@ export const useInitGoogle = () => {
     loadGoogleApi()
       .then(initGoogleAuth)
       .catch((e) => {
+        if (e.message.includes('required parameter')) {
+          showError('Налаштування відсутні!')
+          removeGoogleAuthTokenAndExpiry()
+        }
+
         if (e.error === 'popup_blocked_by_browser' && getMinutesLeft() <= 1) {
           showError('Треба авторизуватись!')
           removeGoogleAuthTokenAndExpiry()
