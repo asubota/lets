@@ -10,6 +10,7 @@ import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
 import { Sorting } from '../sorting.tsx'
 import { CartButton } from './cart-button.tsx'
+import { SwitchToInfoView } from './components/switch-to-info-view.tsx'
 
 export interface SharedToolbarProps {
   hasFavoritesSorting?: boolean
@@ -66,6 +67,8 @@ export const Toolbar: FC<ToolbarProps> = ({
           <SwitchToTableView />
           <ToolbarSeparator />
           <SwitchToTileView />
+          <ToolbarSeparator />
+          <SwitchToInfoView />
         </ButtonGroup>
       </Box>
     </Box>
