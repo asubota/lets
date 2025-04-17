@@ -13,6 +13,7 @@ import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
 
 const TableView = lazy(() => import('./table-view.tsx'))
 const TilesView = lazy(() => import('./tiles-view.tsx'))
+const InfoView = lazy(() => import('./info-view.tsx'))
 
 interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   products: Product[]
@@ -74,6 +75,11 @@ const Products: FC<ProductsProps> = ({
       {view === 'table' && (
         <Suspense>
           <TableView list={filteredList} search={search} />
+        </Suspense>
+      )}
+      {view === 'info' && (
+        <Suspense>
+          <InfoView list={filteredList} />
         </Suspense>
       )}
 

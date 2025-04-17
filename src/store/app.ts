@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface StoreState {
-  view: 'tile' | 'table'
+  view: 'tile' | 'table' | 'info'
   theme: 'dark' | 'light'
   sort: 'date' | 'note'
   meta: Record<string, string>
