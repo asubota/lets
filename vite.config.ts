@@ -24,8 +24,7 @@ const domains = [
 ]
 
 const escapedDomains = domains.map((d) => d.replace(/\./g, '\\.'))
-const imageRegexString = `(?:${escapedDomains.join('|')}).+(?:webp|png|jpe?g)$`
-
+const imageRegexString = `https?.+(?:${escapedDomains.join('|')}).+(?:webp|png|jpe?g)$`
 const imageRegex = new RegExp(imageRegexString, 'i')
 
 export default defineConfig({
