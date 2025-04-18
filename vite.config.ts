@@ -11,6 +11,7 @@ const swFile = 'sw-custom.ts'
 const ReactCompilerConfig = {}
 
 const domains = [
+  'velogo',
   'paul-lange-ukraine',
   'b2b.veloportal',
   'obod.com',
@@ -23,7 +24,8 @@ const domains = [
 ]
 
 const escapedDomains = domains.map((d) => d.replace(/\./g, '\\.'))
-const imageRegexString = `^https?://(?:${escapedDomains.join('|')})/.*\\.(webp|png|jpe?g)$`
+const imageRegexString = `(?:${escapedDomains.join('|')}).+(?:webp|png|jpe?g)$`
+
 const imageRegex = new RegExp(imageRegexString, 'i')
 
 export default defineConfig({
@@ -111,9 +113,9 @@ export default defineConfig({
             urlPattern: imageRegex,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'velogo-images-cache',
+              cacheName: 'images-cache',
               expiration: {
-                maxEntries: 250,
+                maxEntries: 300,
                 maxAgeSeconds: 60 * 60 * 24 * 31, // cache for 31 days
               },
               cacheableResponse: { statuses: [0, 200] },
