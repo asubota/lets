@@ -31,8 +31,8 @@ export const Info: FC<{
     >
       <Box
         sx={{
-          width: 120,
-          height: 120,
+          width: 125,
+          height: 125,
           borderRadius: 1,
           overflow: 'hidden',
           flexShrink: 0,
@@ -75,17 +75,30 @@ export const Info: FC<{
           {p.name}
         </Typography>
 
-        <Typography
-          variant="caption"
-          color="text.secondary"
+        <Box
           sx={{
             mt: 'auto',
-            alignSelf: 'flex-end',
-            fontSize: 12,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          {p.sku}
-        </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: 12, color: 'text.primary' }}
+          >
+            {p.price} грн
+          </Typography>
+
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: 12 }}
+          >
+            {p.sku}
+          </Typography>
+        </Box>
       </Box>
     </Card>
   )
