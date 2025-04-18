@@ -7,18 +7,30 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin'
 
 const base = '/lets/'
-
 const swFile = 'sw-custom.ts'
-
 const ReactCompilerConfig = {}
+
+const domains = [
+  'paul-lange-ukraine',
+  'b2b.veloportal',
+  'obod.com',
+  'kopylbros',
+  'b2b.velotrade',
+  'adm-import',
+  'sporttop',
+  'veloplaneta',
+  'sport-device',
+]
+
+const escapedDomains = domains.map((d) => d.replace(/\./g, '\\.'))
+const imageRegexString = `^https?://(?:${escapedDomains.join('|')})/.*\\.(webp|png|jpe?g)$`
+const imageRegex = new RegExp(imageRegexString, 'i')
 
 export default defineConfig({
   base,
   css: {
     preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler',
-      },
+      scss: { api: 'modern-compiler' },
     },
   },
   build: {
@@ -68,9 +80,7 @@ export default defineConfig({
                 maxEntries: 8,
                 maxAgeSeconds: 60 * 60 * 24 * 21, // <== 21 days
               },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
+              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
@@ -82,9 +92,7 @@ export default defineConfig({
                 maxEntries: 8,
                 maxAgeSeconds: 60 * 60 * 24 * 300, // <== 300 days
               },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
+              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
@@ -96,9 +104,19 @@ export default defineConfig({
                 maxEntries: 8,
                 maxAgeSeconds: 60 * 60 * 24 * 300, // <== 300 days
               },
-              cacheableResponse: {
-                statuses: [0, 200],
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: imageRegex,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'velogo-images-cache',
+              expiration: {
+                maxEntries: 250,
+                maxAgeSeconds: 60 * 60 * 24 * 31, // cache for 31 days
               },
+              cacheableResponse: { statuses: [0, 200] },
             },
           },
         ],
