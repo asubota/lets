@@ -2,24 +2,36 @@ import { FC, useState } from 'react'
 import { FavoriteProduct, Product } from '../types.ts'
 import { Box, Card, CircularProgress, Typography } from '@mui/material'
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography'
-import { copyContent } from '../tools.tsx'
+import { copyContent, getFavoriteId } from '../tools.tsx'
 import { RippleText } from './ripple-text.tsx'
+import { useSwipeable } from 'react-swipeable'
+import { createLink } from '@tanstack/react-router'
+
+const LinkedImg = createLink('img')
 
 export const Info: FC<{
   p: Product | FavoriteProduct
 }> = ({ p }) => {
   const [imgIndex, setImgIndex] = useState(0)
   const [loading, setLoading] = useState(true)
-
   const pics = p.pics ?? []
   const currentImg = pics[imgIndex] ?? ''
 
-  const handleImgClick = () => {
-    if (pics.length > 1) {
-      setImgIndex((prev) => (prev + 1) % pics.length)
-      setLoading(true)
-    }
-  }
+  const swipeHandlers = useSwipeable({
+    trackMouse: true,
+    onSwipedLeft: () => {
+      if (pics.length > 1) {
+        setImgIndex((prev) => (prev + 1) % pics.length)
+        setLoading(true)
+      }
+    },
+    onSwipedRight: () => {
+      if (pics.length > 1) {
+        setImgIndex((prev) => (prev - 1 + pics.length) % pics.length)
+        setLoading(true)
+      }
+    },
+  })
 
   const showFallback = !currentImg
   return (
@@ -43,12 +55,15 @@ export const Info: FC<{
           alignItems: 'center',
           justifyContent: 'center',
           cursor: pics.length > 1 ? 'pointer' : 'default',
+          touchAction: 'pan-y',
         }}
-        onClick={handleImgClick}
+        {...swipeHandlers}
       >
         {loading && !showFallback && <CircularProgress size={20} />}
         {!showFallback ? (
-          <img
+          <LinkedImg
+            to="/list/$id/details"
+            params={{ id: getFavoriteId(p) }}
             src={currentImg}
             alt={p.name}
             style={{
