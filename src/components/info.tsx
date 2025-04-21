@@ -2,6 +2,8 @@ import { FC, useState } from 'react'
 import { FavoriteProduct, Product } from '../types.ts'
 import { Box, Card, CircularProgress, Typography } from '@mui/material'
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography'
+import { copyContent } from '../tools.tsx'
+import { RippleText } from './ripple-text.tsx'
 
 export const Info: FC<{
   p: Product | FavoriteProduct
@@ -71,8 +73,12 @@ export const Info: FC<{
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
           }}
+          onClick={async (e) => {
+            e.stopPropagation()
+            await copyContent(p.name)
+          }}
         >
-          {p.name}
+          <RippleText text={p.name} />
         </Typography>
 
         <Box
@@ -95,8 +101,12 @@ export const Info: FC<{
             variant="caption"
             color="text.secondary"
             sx={{ fontSize: 12 }}
+            onClick={async (e) => {
+              e.stopPropagation()
+              await copyContent(p.sku)
+            }}
           >
-            {p.sku}
+            <RippleText text={p.sku} />
           </Typography>
         </Box>
       </Box>
