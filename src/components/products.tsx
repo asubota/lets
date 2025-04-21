@@ -10,6 +10,7 @@ import { Product } from '../types.ts'
 import { useSearchVendors } from '../store/search.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
+import { ProductsSkeleton } from './products-skeleton.tsx'
 
 const TableView = lazy(() => import('./table-view.tsx'))
 const TilesView = lazy(() => import('./tiles-view.tsx'))
@@ -64,7 +65,7 @@ const Products: FC<ProductsProps> = ({
         }
       />
       {view === 'tile' && (
-        <Suspense>
+        <Suspense fallback={<ProductsSkeleton />}>
           <TilesView
             list={filteredList}
             search={search}
@@ -73,12 +74,12 @@ const Products: FC<ProductsProps> = ({
         </Suspense>
       )}
       {view === 'table' && (
-        <Suspense>
+        <Suspense fallback={<ProductsSkeleton />}>
           <TableView list={filteredList} search={search} />
         </Suspense>
       )}
       {view === 'info' && (
-        <Suspense>
+        <Suspense fallback={<ProductsSkeleton />}>
           <InfoView list={filteredList} />
         </Suspense>
       )}

@@ -7,6 +7,7 @@ import { FavoriteInput, FavoriteInputForm } from './favorite-input.tsx'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FavoriteProduct } from '../../types.ts'
 import { filterBySearch } from '../../tools.tsx'
+import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
@@ -35,7 +36,7 @@ export const Favorites: FC = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Suspense>
+        <Suspense fallback={<ProductsSkeleton />}>
           <Products
             products={filteredItems}
             search=""
