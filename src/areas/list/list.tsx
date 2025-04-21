@@ -20,6 +20,7 @@ import { useHistoryActions } from '../../store'
 import { Loader } from '../../components/loader.tsx'
 import { Outlet } from '@tanstack/react-router'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
+import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
@@ -99,7 +100,7 @@ export const List: FC = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Suspense>
+        <Suspense fallback={<ProductsSkeleton />}>
           <Products
             products={products}
             search={search}
