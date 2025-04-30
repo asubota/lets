@@ -7,13 +7,8 @@ import { getGoogleFileId } from './secrets.ts'
 import { parseData } from './data-tools.ts'
 import { useAppActions } from './store'
 
-const negate =
-  <T>(fn: (arg: T) => boolean) =>
-  (arg: T) =>
-    !fn(arg)
-
 const isMeta = (p: Product) => p.sku === '__meta__'
-const isNotMeta = negate(isMeta)
+const isNotMeta = (p: Product) => p.sku !== '__meta__'
 
 const getData = async (
   id: string,

@@ -2,13 +2,14 @@ import { Plugin } from 'vite'
 import { InputOptions, OutputOptions, rollup } from 'rollup'
 import rollupPluginTypescript from '@rollup/plugin-typescript'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import terser from '@rollup/plugin-terser'
 
 const swFile = 'sw-custom.ts'
 
 async function compileServiceWorker() {
   const inputOptions: InputOptions = {
     input: `src/${swFile}`,
-    plugins: [rollupPluginTypescript({}), nodeResolve()],
+    plugins: [rollupPluginTypescript({}), nodeResolve(), terser()],
   }
 
   const outputOptions: OutputOptions = {
