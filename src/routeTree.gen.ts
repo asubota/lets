@@ -25,6 +25,7 @@ const StatsLazyImport = createFileRoute('/stats')()
 const ScannerLazyImport = createFileRoute('/scanner')()
 const NotificationsLazyImport = createFileRoute('/notifications')()
 const ColorsLazyImport = createFileRoute('/colors')()
+const CheckEngineLazyImport = createFileRoute('/check-engine')()
 const LayoutFavoritesLazyImport = createFileRoute('/_layout/favorites')()
 const LayoutListIdPercentsLazyImport = createFileRoute(
   '/_layout/list/$id/percents',
@@ -64,6 +65,12 @@ const ColorsLazyRoute = ColorsLazyImport.update({
   path: '/colors',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/colors.lazy').then((d) => d.Route))
+
+const CheckEngineLazyRoute = CheckEngineLazyImport.update({
+  id: '/check-engine',
+  path: '/check-engine',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/check-engine.lazy').then((d) => d.Route))
 
 const CartRoute = CartImport.update({
   id: '/cart',
@@ -161,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartImport
+      parentRoute: typeof rootRoute
+    }
+    '/check-engine': {
+      id: '/check-engine'
+      path: '/check-engine'
+      fullPath: '/check-engine'
+      preLoaderRoute: typeof CheckEngineLazyImport
       parentRoute: typeof rootRoute
     }
     '/colors': {
@@ -300,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof LayoutRouteWithChildren
   '/cart': typeof CartRouteWithChildren
+  '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
@@ -317,6 +332,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof LayoutRouteWithChildren
   '/cart': typeof CartRouteWithChildren
+  '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
@@ -335,6 +351,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/cart': typeof CartRouteWithChildren
+  '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/scanner': typeof ScannerLazyRoute
@@ -354,6 +371,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/cart'
+    | '/check-engine'
     | '/colors'
     | '/notifications'
     | '/scanner'
@@ -370,6 +388,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/cart'
+    | '/check-engine'
     | '/colors'
     | '/notifications'
     | '/scanner'
@@ -386,6 +405,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_layout'
     | '/cart'
+    | '/check-engine'
     | '/colors'
     | '/notifications'
     | '/scanner'
@@ -404,6 +424,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutRoute: typeof LayoutRouteWithChildren
   CartRoute: typeof CartRouteWithChildren
+  CheckEngineLazyRoute: typeof CheckEngineLazyRoute
   ColorsLazyRoute: typeof ColorsLazyRoute
   NotificationsLazyRoute: typeof NotificationsLazyRoute
   ScannerLazyRoute: typeof ScannerLazyRoute
@@ -414,6 +435,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
   CartRoute: CartRouteWithChildren,
+  CheckEngineLazyRoute: CheckEngineLazyRoute,
   ColorsLazyRoute: ColorsLazyRoute,
   NotificationsLazyRoute: NotificationsLazyRoute,
   ScannerLazyRoute: ScannerLazyRoute,
@@ -433,6 +455,7 @@ export const routeTree = rootRoute
         "/",
         "/_layout",
         "/cart",
+        "/check-engine",
         "/colors",
         "/notifications",
         "/scanner",
@@ -454,6 +477,9 @@ export const routeTree = rootRoute
       "children": [
         "/cart/service"
       ]
+    },
+    "/check-engine": {
+      "filePath": "check-engine.lazy.tsx"
     },
     "/colors": {
       "filePath": "colors.lazy.tsx"
