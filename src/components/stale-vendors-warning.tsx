@@ -10,7 +10,17 @@ function CheckEngineIcon() {
     <Linked
       to="/check-engine"
       className="sizing"
-      sx={{ fontSize: '180px', cursor: 'pointer' }}
+      sx={{
+        fontSize: {
+          xs: '90px',
+          sm: '120px',
+          md: '150px',
+          lg: '180px',
+          xl: '210px',
+        },
+
+        cursor: 'pointer',
+      }}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1024.000000 1024.000000"
       preserveAspectRatio="xMidYMid meet"

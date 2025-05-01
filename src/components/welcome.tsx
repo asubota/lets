@@ -16,26 +16,16 @@ export const Welcome = () => {
   return (
     <Box>
       <Typography
-        variant="h3"
-        gutterBottom
-        sx={{
-          textAlign: 'center',
-          color: 'text.secondary',
-          mt: 4,
-        }}
+        variant="h4"
+        sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}
       >
-        <Box onClick={handleThing}>Вітаю!</Box>
+        <span onClick={handleThing}>Вітаю!</span>
       </Typography>
       <Typography
-        variant="h4"
-        gutterBottom
-        sx={{
-          textAlign: 'center',
-          color: 'text.secondary',
-          mt: 4,
-        }}
+        variant="h5"
+        sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}
       >
-        <Box sx={{ mt: 4, mb: 1 }}>Вам щось підказати?</Box>
+        <Box sx={{ mb: 1 }}>Вам щось підказати?</Box>
         <Box>Проконсультувати?</Box>
       </Typography>
 

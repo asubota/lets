@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react'
+import { useContext } from 'react'
 import PaletteIcon from '@mui/icons-material/Palette'
 import { Box, IconButton, Stack, useTheme } from '@mui/material'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
@@ -17,7 +17,7 @@ import { ResetCacheButton } from './reset-cache-button.tsx'
 
 const LinkedIconButton = createLink(IconButton)
 
-export const ExtraViewOptions: FC = () => {
+export const ExtraViewOptions = () => {
   const count = useCartItemsCount()
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
@@ -80,6 +80,7 @@ export const ExtraViewOptions: FC = () => {
               position: 'absolute',
               right: '-5px',
               top: '-2px',
+              fontWeight: 'bold',
             }}
           >
             {count}
