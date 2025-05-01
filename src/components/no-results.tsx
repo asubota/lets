@@ -1,32 +1,30 @@
 import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
+import ConstructionIcon from '@mui/icons-material/Construction'
 
 export const NoResults = () => {
   return (
     <Box>
       <Typography
-        variant="h3"
-        gutterBottom
-        sx={{
-          textAlign: 'center',
-          color: 'text.secondary',
-          mt: 4,
-        }}
+        variant="h4"
+        sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}
       >
         <Box>Наразі,</Box>
       </Typography>
       <Typography
-        variant="h4"
-        gutterBottom
-        sx={{
-          textAlign: 'center',
-          color: 'text.secondary',
-          mt: 4,
-        }}
+        variant="h5"
+        sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}
       >
-        <Box sx={{ mt: 4 }}>всі механіки зайняті</Box>
+        <Box>всі механіки зайняті</Box>
       </Typography>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <ConstructionIcon
+          sx={{ mt: 2, fontSize: '90px', color: 'text.secondary' }}
+        />
+      </Box>
+
       <Bike type="broken" />
       <Logo />
     </Box>

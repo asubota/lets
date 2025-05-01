@@ -1,10 +1,9 @@
-import { FC } from 'react'
 import { Alert } from '@mui/material'
 import { initGoogleAuth } from '../google-auth.ts'
 import { gapi } from 'gapi-script'
 import { getMinutesLeft } from '../tools.tsx'
 
-export const ReAuth: FC = () => {
+export const ReAuth = () => {
   const authInstance = gapi.auth2.getAuthInstance()
 
   if (!authInstance) {
@@ -17,11 +16,12 @@ export const ReAuth: FC = () => {
         severity="warning"
         variant="outlined"
         sx={{
-          mt: '60px',
           cursor: 'pointer',
           maxWidth: '280px',
+          mt: 4,
           ml: 'auto',
           mr: 'auto',
+          mb: 1,
         }}
         onClick={initGoogleAuth}
       >

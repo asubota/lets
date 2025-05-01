@@ -1,4 +1,5 @@
 import { Box, Button, Container, Divider, Paper } from '@mui/material'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import { createLink, Outlet, useSearch } from '@tanstack/react-router'
 import ConstructionIcon from '@mui/icons-material/Construction'
@@ -10,7 +11,6 @@ import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
 import { CartItem, Product } from '../../types.ts'
 import { FloatingActions } from './floating-actions.tsx'
-import { useMediaQuery } from '../../hooks/use-media-query.ts'
 import { useCartItems } from '../../hooks/use-cart-items.ts'
 import {
   POPULAR_SERViCE_PREFIX,

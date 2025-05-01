@@ -35,7 +35,7 @@ export const Stats = () => {
 
   return (
     <TopBottomHome>
-      <Grid container spacing={2} sx={{ p: 3 }}>
+      <Grid container spacing={2} sx={{ pl: 3, pr: 3 }}>
         {vendors.sort().map((vendor) => {
           return (
             <Grid
@@ -52,9 +52,9 @@ export const Stats = () => {
         })}
       </Grid>
 
-      <Divider sx={{ ml: 3, mr: 3 }} />
+      <Divider sx={{ ml: 3, mr: 3, mt: 1.5, mb: 1.5 }} />
 
-      <Box sx={{ textAlign: 'center', m: 2, mt: 3 }}>
+      <Box sx={{ textAlign: 'center' }}>
         Total:{' '}
         <Box sx={{ fontWeight: 'bold' }} component="span">
           {allData.length}
