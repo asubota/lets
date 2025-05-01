@@ -5,14 +5,14 @@ import { filterBySearch, getUniqueVendors } from './tools.tsx'
 import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants.ts'
 import { getGoogleFileId } from './secrets.ts'
 import { parseData } from './data-tools.ts'
-import { useAppActions } from './store'
+import { type Meta, useAppActions } from './store'
 
 const isMeta = (p: Product) => p.sku === '__meta__'
 const isNotMeta = (p: Product) => p.sku !== '__meta__'
 
 const getData = async (
   id: string,
-  setMeta: (data: Record<string, string>) => void,
+  setMeta: (data: Meta) => void,
 ): Promise<Product[]> => {
   if (id.length === 0) {
     return []

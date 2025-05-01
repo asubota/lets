@@ -1,16 +1,30 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+type MetaVendor = {
+  load: number
+  load_str: string
+  parse: number
+  parse_str: string
+  stale: boolean
+  vendor: string
+}
+
+export type Meta = {
+  created: string
+  vendors: MetaVendor[]
+}
+
 interface StoreState {
   view: 'tile' | 'table' | 'info'
   theme: 'dark' | 'light'
   sort: 'date' | 'note'
-  meta: Record<string, string>
+  meta: Meta
   actions: {
     setView(this: void, view: StoreState['view']): void
     setTheme(this: void, theme: StoreState['theme']): void
     setSort(this: void, sort: StoreState['sort']): void
-    setMeta(this: void, sort: StoreState['meta']): void
+    setMeta(this: void, meta: StoreState['meta']): void
   }
 }
 
@@ -20,7 +34,7 @@ const useStore = create<StoreState>()(
       view: 'tile',
       theme: 'light',
       sort: 'date',
-      meta: {},
+      meta: { vendors: [], created: '' },
       actions: {
         setSort: (sort) => set(() => ({ sort })),
         setView: (view) => set(() => ({ view })),
@@ -44,3 +58,7 @@ export const useAppView = () => useStore((state) => state.view)
 export const useAppTheme = () => useStore((state) => state.theme)
 export const useAppSort = () => useStore((state) => state.sort)
 export const useMeta = () => useStore((state) => state.meta)
+export const useStaleVendors = (): MetaVendor[] => {
+  const { vendors } = useMeta()
+  return vendors.filter((v) => v.stale)
+}

@@ -1,20 +1,16 @@
-import { FC } from 'react'
 import { useAllData, useAllVendors, useIsLoading } from '../../use-data.ts'
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography, Divider } from '@mui/material'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { groupByVendor } from '../../tools.tsx'
 import { Grid } from '@mui/material'
-import HouseIcon from '@mui/icons-material/House'
-import { createLink } from '@tanstack/react-router'
 import { useMeta } from '../../store'
+import { TopBottomHome } from '../../components/top-botton-home.tsx'
 
-const LinkedButton = createLink(Button)
-
-export const Stats: FC = () => {
+export const Stats = () => {
   const allData = useAllData()
   const vendors = useAllVendors()
   const loading = useIsLoading()
-  const meta = useMeta()
+  const { created } = useMeta()
 
   if (loading) {
     return (
@@ -38,18 +34,7 @@ export const Stats: FC = () => {
   const countByVendor = groupByVendor(allData)
 
   return (
-    <>
-      <Box sx={{ pl: 3, pr: 3, pt: 3 }}>
-        <LinkedButton
-          to="/list"
-          fullWidth
-          variant="contained"
-          color="secondary"
-        >
-          <HouseIcon color="primary" />
-        </LinkedButton>
-      </Box>
-
+    <TopBottomHome>
       <Grid container spacing={2} sx={{ p: 3 }}>
         {vendors.sort().map((vendor) => {
           return (
@@ -67,12 +52,14 @@ export const Stats: FC = () => {
         })}
       </Grid>
 
-      <Box sx={{ textAlign: 'center', m: 2, mt: 0 }}>
+      <Divider sx={{ ml: 3, mr: 3 }} />
+
+      <Box sx={{ textAlign: 'center', m: 2, mt: 3 }}>
         Total:{' '}
         <Box sx={{ fontWeight: 'bold' }} component="span">
           {allData.length}
         </Box>
-        {meta.created && (
+        {created && (
           <Typography
             component="div"
             variant="body2"
@@ -82,16 +69,10 @@ export const Stats: FC = () => {
               fontStyle: 'italic',
             }}
           >
-            {meta.created}
+            {created}
           </Typography>
         )}
       </Box>
-
-      <Box sx={{ pl: 3, pr: 3 }}>
-        <LinkedButton to="/list" fullWidth variant="contained">
-          <HouseIcon color="secondary" />
-        </LinkedButton>
-      </Box>
-    </>
+    </TopBottomHome>
   )
 }
