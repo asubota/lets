@@ -5,7 +5,7 @@ import { useMeta } from '../store'
 
 export const StaleVendors = () => {
  const {vendors} = useMeta()
- const staleList = vendors.filter(v => v.stale)
+ const staleList = (vendors as unknown as any[]).filter((v:any) => v.stale)
 
  if (staleList.length ===0) {
      return null
@@ -14,7 +14,7 @@ export const StaleVendors = () => {
   return (
   <Box sx={{ px: { xs: 2, md: 4 } }}>
     <Stack spacing={0.5}>
-      {staleList.map(v => (
+      {staleList.map((v:any) => (
         <Alert
           severity="error"
           key={v.vendor}
