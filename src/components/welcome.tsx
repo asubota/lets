@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { Logo } from './logo.tsx'
 import { Bike } from './bike.tsx'
 import { ReAuth } from './re-auth.tsx'
+import { StaleVendors } from './stale-vendors.tsx'
 
 export const Welcome = () => {
   const handleThing = () => {
@@ -40,6 +41,7 @@ export const Welcome = () => {
 
       <ReAuth />
       <Bike type="safe" />
+      <StaleVendors />
       <Logo />
     </Box>
   )
