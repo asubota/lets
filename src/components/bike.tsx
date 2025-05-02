@@ -37,20 +37,28 @@ export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
   return (
     <Box
       sx={{
-        width: '100%',
-        maxWidth: '300px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'absolute',
-        bottom: '215px',
-        left: '50%',
-        transform: 'translate(-50%)',
+        bottom: '200px',
+        justifySelf: 'anchor-center',
+        flexDirection: 'column',
       }}
     >
       {type === 'safe' && <Version />}
-      {type === 'safe' && <SafeBike />}
+      {type === 'safe' && <Box component={SafeBike} sx={{ width: '270px' }} />}
       {type === 'broken' && (
         <>
-          <BrokenBike />
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: '20px' }}>
+          <Box component={BrokenBike} sx={{ width: '270px' }} />
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              position: 'absolute',
+              top: '-50px',
+            }}
+          >
             <ToggleButtonGroup value={effects} onChange={handle} size="small">
               <ToggleButton value="bnw">
                 <WbSunnyIcon fontSize="small" />

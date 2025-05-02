@@ -47,6 +47,7 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       ...sonarjs.configs.recommended.rules,
 
+      'react/jsx-no-useless-fragment': 'warn',
       'react-compiler/react-compiler': 'error',
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-unused-vars': [
