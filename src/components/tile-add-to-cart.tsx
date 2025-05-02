@@ -1,7 +1,9 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import { IconButton } from '@mui/material'
 import { toast } from 'react-toastify'
+
 import { useToggleInCart } from '../cart-api.ts'
 import { useCartItemsIds } from '../hooks/use-cart-items-ids.ts'
 

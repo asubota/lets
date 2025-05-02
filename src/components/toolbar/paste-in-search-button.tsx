@@ -1,5 +1,5 @@
-import { IconButton, type IconButtonOwnProps } from '@mui/material'
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch'
+import { IconButton, type IconButtonOwnProps } from '@mui/material'
 import { useNavigate } from '@tanstack/react-router'
 
 export const PasteInSearchButton = ({

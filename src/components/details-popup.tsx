@@ -1,3 +1,7 @@
+import { type FC, useState } from 'react'
+
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
+import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import {
   Dialog,
   DialogContent,
@@ -5,11 +9,9 @@ import {
   Divider,
   IconButton,
 } from '@mui/material'
-import { FC, useState } from 'react'
-import { Product } from '../types.ts'
+
+import { type Product } from '../types.ts'
 import { ImageSlider } from './image-slider.tsx'
-import OpenInFullIcon from '@mui/icons-material/OpenInFull'
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
 import { useNoScroll } from '../hooks/use-no-scroll.ts'
 
 export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({

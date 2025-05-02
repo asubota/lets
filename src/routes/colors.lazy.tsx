@@ -1,9 +1,10 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
-import { ColorSettingsModal } from '../areas'
-import { useAllVendors, useIsLoading } from '../use-data.ts'
 import { Box, CircularProgress } from '@mui/material'
-import { Modal } from '../components/modal.tsx'
+import { createLazyFileRoute } from '@tanstack/react-router'
+
 import { useGetColors } from '../api-colors.ts'
+import { ColorSettingsModal } from '../areas'
+import { Modal } from '../components/modal.tsx'
+import { useAllVendors, useIsLoading } from '../use-data.ts'
 
 export const Route = createLazyFileRoute('/colors')({
   component: RouteComponent,

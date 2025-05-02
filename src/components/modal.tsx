@@ -1,4 +1,6 @@
-import React, { FC, PropsWithChildren, ReactNode } from 'react'
+import React, { type FC, type PropsWithChildren, type ReactNode } from 'react'
+
+import CloseIcon from '@mui/icons-material/Close'
 import {
   AppBar,
   Button,
@@ -8,8 +10,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import { TransitionProps } from '@mui/material/transitions'
+import { type TransitionProps } from '@mui/material/transitions'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

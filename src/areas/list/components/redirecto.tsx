@@ -1,7 +1,9 @@
-import { FC, useEffect } from 'react'
-import { UseFormSetValue } from 'react-hook-form'
-import { SearchForm } from '../../../types.ts'
+import { type FC, useEffect } from 'react'
+
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { type UseFormSetValue } from 'react-hook-form'
+
+import { type SearchForm } from '../../../types.ts'
 
 export const Redirecto: FC<{
   setValue: UseFormSetValue<SearchForm>

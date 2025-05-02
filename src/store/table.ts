@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Product } from '../types.ts'
+
+import { type Product } from '../types.ts'
 
 interface StoreState {
   columns: (keyof Product)[]

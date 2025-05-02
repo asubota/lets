@@ -1,15 +1,16 @@
-import { FavoriteProduct } from '../../types.ts'
-import { useGetFavorites } from '../../api.ts'
 import { useMemo } from 'react'
-import { useAllData } from '../../use-data.ts'
+
+import { useGetFavorites } from '../../api.ts'
+import { DUMMY_VENDOR } from '../../constants.ts'
+import { setProp } from '../../google-api.ts'
+import { useAppSort } from '../../store'
 import {
   compareByNoteAndTime,
   compareByTime,
   getFavoriteId,
 } from '../../tools.tsx'
-import { DUMMY_VENDOR } from '../../constants.ts'
-import { setProp } from '../../google-api.ts'
-import { useAppSort } from '../../store'
+import { type FavoriteProduct } from '../../types.ts'
+import { useAllData } from '../../use-data.ts'
 
 export const useFavoriteItems = (): FavoriteProduct[] => {
   const { data: favoriteItems = [] } = useGetFavorites()

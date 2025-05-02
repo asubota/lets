@@ -1,6 +1,7 @@
 import { Box, Alert, Stack, AlertTitle, Typography } from '@mui/material'
-import { useStaleVendors } from '../../store'
+
 import { VendorChip } from '../../components/vendor-chip.tsx'
+import { useStaleVendors } from '../../store'
 
 export const StaleVendorsList = () => {
   const staleVendors = useStaleVendors()

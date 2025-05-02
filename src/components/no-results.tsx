@@ -1,7 +1,8 @@
-import { Box, Typography } from '@mui/material'
-import { Logo } from './logo.tsx'
-import { Bike } from './bike.tsx'
 import ConstructionIcon from '@mui/icons-material/Construction'
+import { Box, Typography } from '@mui/material'
+
+import { Bike } from './bike.tsx'
+import { Logo } from './logo.tsx'
 
 export const NoResults = () => {
   return (

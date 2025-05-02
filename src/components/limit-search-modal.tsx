@@ -1,6 +1,5 @@
-import { Modal } from './modal.tsx'
-import { FC } from 'react'
-import { useSearchActions, useShowLimitModal } from '../store/search.ts'
+import { type FC } from 'react'
+
 import {
   Box,
   Checkbox,
@@ -12,10 +11,14 @@ import {
   Switch,
   Typography,
 } from '@mui/material'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Product } from '../types.ts'
-import { getUniqueVendors, groupByVendor } from '../tools.tsx'
 import { clsx } from 'clsx'
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
+
+import { Modal } from './modal.tsx'
+import { useSearchActions, useShowLimitModal } from '../store/search.ts'
+import { getUniqueVendors, groupByVendor } from '../tools.tsx'
+import { type Product } from '../types.ts'
+
 
 const StyledSwitch = styled(Switch)(({ theme }) => ({
   '&.intermediate .MuiSwitch-track': {

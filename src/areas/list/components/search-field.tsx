@@ -1,12 +1,13 @@
-import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
+import { type FC, type KeyboardEventHandler } from 'react'
+
 import { Cancel, Search } from '@mui/icons-material'
-import { FC, KeyboardEventHandler } from 'react'
+import LoopIcon from '@mui/icons-material/Loop'
+import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
+import { clsx } from 'clsx'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import LoopIcon from '@mui/icons-material/Loop'
-import { clsx } from 'clsx'
+import { type SearchForm } from '../../../types.ts'
 import { useIsLoading } from '../../../use-data.ts'
-import { SearchForm } from '../../../types.ts'
 
 export const SearchField: FC<{
   onSubmit(): void

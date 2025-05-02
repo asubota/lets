@@ -1,6 +1,6 @@
-import { FC } from 'react'
-import { Modal } from '../../components/modal.tsx'
-import { createLink, useNavigate } from '@tanstack/react-router'
+import { type FC } from 'react'
+
+import HouseIcon from '@mui/icons-material/House'
 import {
   Alert,
   Box,
@@ -10,10 +10,13 @@ import {
   Switch,
   Typography,
 } from '@mui/material'
+import { createLink, useNavigate } from '@tanstack/react-router'
+
 import { Empty } from './empty.tsx'
-import { useGetNotifications } from '../../hooks/use-get-notifications.ts'
 import { useSetPropOnFavorite } from '../../api.ts'
-import HouseIcon from '@mui/icons-material/House'
+import { Modal } from '../../components/modal.tsx'
+import { useGetNotifications } from '../../hooks/use-get-notifications.ts'
+
 
 const LinkedButton = createLink(Button)
 

@@ -1,7 +1,8 @@
 import { Box } from '@mui/material'
-import { useStaleVendors } from '../store'
 import SvgIcon from '@mui/material/SvgIcon'
 import { createLink } from '@tanstack/react-router'
+
+import { useStaleVendors } from '../store'
 
 const Linked = createLink(SvgIcon)
 

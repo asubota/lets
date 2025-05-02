@@ -1,7 +1,9 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import { Box, Paper } from '@mui/material'
-import { CropArea } from './types.ts'
+
 import { height } from './constants.ts'
+import { type CropArea } from './types.ts'
 
 export const Output: FC<{ cropArea: CropArea; output: string }> = ({
   cropArea,

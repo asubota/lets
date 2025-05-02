@@ -1,5 +1,6 @@
+import { type FC, type ReactNode, useId } from 'react'
+
 import { Box } from '@mui/material'
-import { FC, ReactNode, useId } from 'react'
 
 export const HiddenInput: FC<{ children: ReactNode }> = ({ children }) => {
   const id = useId()

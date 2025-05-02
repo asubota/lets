@@ -1,13 +1,15 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
+import { Box, FormControlLabel, FormGroup, Paper, Switch } from '@mui/material'
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
+
 import { Modal } from './modal.tsx'
 import {
   useShowTableSettings,
   useTableActions,
   useTableColumns,
 } from '../store'
-import { Box, FormControlLabel, FormGroup, Paper, Switch } from '@mui/material'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Product } from '../types.ts'
+import { type Product } from '../types.ts'
 
 type FormData = {
   [key in keyof Product]: boolean

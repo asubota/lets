@@ -1,4 +1,6 @@
 import { gapi } from 'gapi-script'
+
+import { showError } from './alerts.tsx'
 import {
   getGoogleAuthToken,
   getGoogleClientId,
@@ -6,7 +8,6 @@ import {
   setGoogleAuthToken,
   setGoogleAuthTokenExpiration,
 } from './secrets.ts'
-import { showError } from './alerts.tsx'
 import { getMinutesLeft } from './tools.tsx'
 
 const CLIENT_ID = getGoogleClientId()

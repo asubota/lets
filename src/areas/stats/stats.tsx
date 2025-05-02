@@ -1,10 +1,11 @@
-import { useAllData, useAllVendors, useIsLoading } from '../../use-data.ts'
 import { Box, CircularProgress, Typography, Divider } from '@mui/material'
-import { VendorChip } from '../../components/vendor-chip.tsx'
-import { groupByVendor } from '../../tools.tsx'
 import { Grid } from '@mui/material'
-import { useMeta } from '../../store'
+
 import { TopBottomHome } from '../../components/top-botton-home.tsx'
+import { VendorChip } from '../../components/vendor-chip.tsx'
+import { useMeta } from '../../store'
+import { groupByVendor } from '../../tools.tsx'
+import { useAllData, useAllVendors, useIsLoading } from '../../use-data.ts'
 
 export const Stats = () => {
   const allData = useAllData()

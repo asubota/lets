@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
+
 import { createRouter, RouterProvider } from '@tanstack/react-router'
+
 import { routeTree } from './routeTree.gen.ts'
-import { AppMessage } from './types.ts'
+import { type AppMessage } from './types.ts'
 
 const router = createRouter({ routeTree })
 

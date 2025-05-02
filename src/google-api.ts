@@ -1,6 +1,6 @@
-import { FavoriteItem } from './types.ts'
-import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
 import { getAccessToken } from './google-auth.ts'
+import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
+import { type FavoriteItem } from './types.ts'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()

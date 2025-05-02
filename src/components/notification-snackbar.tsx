@@ -1,7 +1,9 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import { Box, Typography } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
-import { FavNotification } from '../types.ts'
+
+import { type FavNotification } from '../types.ts'
 
 const LinkedBox = createLink(Box)
 

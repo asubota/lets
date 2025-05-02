@@ -1,14 +1,17 @@
-import { FC, useEffect, useRef, useState } from 'react'
-import { Alert, Box, Button, CircularProgress } from '@mui/material'
+import { type FC, useEffect, useRef, useState } from 'react'
+
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import SearchIcon from '@mui/icons-material/Search'
-import { height, width } from './constants.ts'
-import { getCropArea, getStream, getWorker } from './tools.ts'
-import { Output } from './output.tsx'
-import { Blur } from './blur.tsx'
-import { ScanArea } from './scan-area.tsx'
-import { Cancel } from './cancel.tsx'
+import { Alert, Box, Button, CircularProgress } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
+
+import { Blur } from './blur.tsx'
+import { Cancel } from './cancel.tsx'
+import { height, width } from './constants.ts'
+import { Output } from './output.tsx'
+import { ScanArea } from './scan-area.tsx'
+import { getCropArea, getStream, getWorker } from './tools.ts'
+
 
 const LinkedButton = createLink(Button)
 

@@ -1,11 +1,14 @@
-import { FC, useState } from 'react'
-import { FavoriteProduct, Product } from '../types.ts'
-import { Box, Card, CircularProgress, Typography } from '@mui/material'
+import { type FC, useState } from 'react'
+
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography'
-import { copyContent, getFavoriteId } from '../tools.tsx'
-import { RippleText } from './ripple-text.tsx'
-import { useSwipeable } from 'react-swipeable'
+import { Box, Card, CircularProgress, Typography } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
+import { useSwipeable } from 'react-swipeable'
+
+import { copyContent, getFavoriteId } from '../tools.tsx'
+import { type FavoriteProduct, type Product } from '../types.ts'
+import { RippleText } from './ripple-text.tsx'
+
 
 const LinkedImg = createLink('img')
 

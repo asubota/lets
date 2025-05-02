@@ -1,9 +1,10 @@
-import { IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { IconButton } from '@mui/material'
+
 import { CartItemView } from './cart-view-item.tsx'
 import { SwipeItem } from './swipeable-item.tsx'
-import { type CartItem } from '../../types.ts'
 import { useToggleInCart } from '../../cart-api.ts'
+import { type CartItem } from '../../types.ts'
 
 interface CartItemProps {
   item: CartItem

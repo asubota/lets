@@ -1,9 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+
 import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin'
 
 const base = '/lets/'

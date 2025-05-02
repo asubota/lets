@@ -1,6 +1,8 @@
-import { FC } from 'react'
-import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
+import { type FC } from 'react'
+
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
+
 import { useGetPropFromFavorite, useSetPropOnFavorite } from '../api.ts'
 
 const sx = {

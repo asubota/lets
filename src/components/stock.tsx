@@ -1,6 +1,7 @@
-import { Typography, Chip } from '@mui/material'
+import { type FC } from 'react'
+
 import CheckIcon from '@mui/icons-material/Check'
-import { FC } from 'react'
+import { Typography, Chip } from '@mui/material'
 
 export const Stock: FC<{ stock: string | null; bordered?: boolean }> = ({
   stock,

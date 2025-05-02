@@ -1,26 +1,28 @@
-import { FC, lazy, Suspense, useState } from 'react'
+import { type FC, lazy, Suspense, useState } from 'react'
+
 import { ClickAwayListener, Portal } from '@mui/material'
-import { useIsLoading, useSearch } from '../../use-data.ts'
-import { LimitSearchModal, TableSettingsModal } from '../../components'
+import { Outlet } from '@tanstack/react-router'
 import {
   Controller,
   FormProvider,
-  SubmitHandler,
+  type SubmitHandler,
   useForm,
 } from 'react-hook-form'
-import { SearchForm } from '../../types.ts'
+
 import {
   Redirecto,
   SearchField,
   SearchHistory,
   SearchSuggestions,
 } from './components'
-import { useSearchActions } from '../../store/search.ts'
-import { useHistoryActions } from '../../store'
-import { Loader } from '../../components/loader.tsx'
-import { Outlet } from '@tanstack/react-router'
+import { LimitSearchModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
+import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
+import { useHistoryActions } from '../../store'
+import { useSearchActions } from '../../store/search.ts'
+import { type SearchForm } from '../../types.ts'
+import { useIsLoading, useSearch } from '../../use-data.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 

@@ -1,12 +1,14 @@
+import { useState } from 'react'
+
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed'
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText'
+import InvertColorsIcon from '@mui/icons-material/InvertColors'
+import WbSunnyIcon from '@mui/icons-material/WbSunny'
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
+
 import SafeBike from './bike.svg?react'
 import BrokenBike from './broken-bike.svg?react'
 import { Version } from './version.tsx'
-import WbSunnyIcon from '@mui/icons-material/WbSunny'
-import InvertColorsIcon from '@mui/icons-material/InvertColors'
-import FormatColorTextIcon from '@mui/icons-material/FormatColorText'
-import DynamicFeedIcon from '@mui/icons-material/DynamicFeed'
-import { useState } from 'react'
 
 const effects = ['bnw', 'invert', 'glow', 'gradient'] as const
 const allEffects = new Set(effects)

@@ -1,6 +1,8 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import { Box } from '@mui/material'
-import { CropArea } from './types.ts'
+
+import { type CropArea } from './types.ts'
 
 export const Blur: FC<{ cropArea: CropArea }> = ({ cropArea }) => {
   return (

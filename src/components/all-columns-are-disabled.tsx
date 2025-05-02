@@ -1,6 +1,8 @@
-import { FC } from 'react'
-import { useTableActions } from '../store'
+import { type FC } from 'react'
+
 import { Box, Typography } from '@mui/material'
+
+import { useTableActions } from '../store'
 
 export const AllColumnsAreDisabled: FC = () => {
   const { toggleSettings } = useTableActions()

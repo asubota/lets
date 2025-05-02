@@ -1,4 +1,4 @@
-import { Product } from './types.ts'
+import { type Product } from './types.ts'
 
 interface Column {
   id: string

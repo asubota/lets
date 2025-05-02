@@ -1,8 +1,9 @@
 import { Typography } from '@mui/material'
-import { FavNotification, Product } from './types.ts'
 import html2canvas from 'html2canvas'
-import { MinMax } from './hooks/use-get-min-max-by-sku.ts'
+
+import { type MinMax } from './hooks/use-get-min-max-by-sku.ts'
 import { getGoogleAuthTokenExpiration } from './secrets.ts'
+import { type FavNotification, type Product } from './types.ts'
 
 const escapeRegExp = (value = ''): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

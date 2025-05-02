@@ -1,7 +1,8 @@
-import { useAllData } from '../use-data.ts'
 import { useMemo } from 'react'
+
+import { useAllData } from '../use-data.ts'
 import { useGetMinMaxBySku } from './use-get-min-max-by-sku.ts'
-import { Product } from '../types.ts'
+import { type Product } from '../types.ts'
 
 export const useGetChangedProducts = (): Product[] => {
   const data = useAllData()

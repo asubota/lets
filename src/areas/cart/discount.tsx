@@ -1,5 +1,7 @@
-import { FC, MouseEventHandler, useState } from 'react'
+import { type FC, type MouseEventHandler, useState } from 'react'
+
 import { Box, Popover, Slider, Typography } from '@mui/material'
+
 import { useSetPropOnCart } from '../../cart-api.ts'
 
 interface DiscountProps {

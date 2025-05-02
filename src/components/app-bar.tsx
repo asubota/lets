@@ -1,12 +1,14 @@
-import { FC } from 'react'
-import { Box, IconButton } from '@mui/material'
-import VisibilityIcon from '@mui/icons-material/Visibility'
+import { type FC } from 'react'
+
 import StarIcon from '@mui/icons-material/Star'
-import { useIsLoading } from '../use-data.ts'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import { Box, IconButton } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
-import { useIsRoute } from '../hooks/use-is-route.hook.ts'
+
+import { useIsLoading } from '../use-data.ts'
 import { RedDot } from './red-dot.tsx'
 import { useGetNotifications } from '../hooks/use-get-notifications.ts'
+import { useIsRoute } from '../hooks/use-is-route.hook.ts'
 
 const LinkedButton = createLink(IconButton)
 

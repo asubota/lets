@@ -1,7 +1,8 @@
 import { Box } from '@mui/material'
+
+import { useCartItems } from '../../hooks/use-cart-items.ts'
 import { findProduct } from '../../tools.tsx'
 import { useAllData } from '../../use-data.ts'
-import { useCartItems } from '../../hooks/use-cart-items.ts'
 
 export const PriceSummary = () => {
   const data = useAllData()

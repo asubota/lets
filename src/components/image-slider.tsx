@@ -1,8 +1,11 @@
-import { FC, useState } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Thumbs, Navigation } from 'swiper/modules'
-import type { Swiper as SwiperClass } from 'swiper/types'
+import { type FC, useState } from 'react'
+
 import { Box } from '@mui/material'
+import { Pagination, Thumbs, Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+import type { Swiper as SwiperClass } from 'swiper/types'
+
 
 import 'swiper/scss'
 import 'swiper/scss/pagination'
