@@ -1,7 +1,9 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import { InputAdornment, TextField, Typography } from '@mui/material'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+
 import { useSetPropOnCart } from '../../cart-api.ts'
-import { SubmitHandler, useForm } from 'react-hook-form'
 
 interface DiscountInputProps {
   discount: number

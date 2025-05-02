@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
+
 import { Details } from '../../areas/list/details.tsx'
 
 export const Route = createLazyFileRoute('/_layout/favorites/$id/details')({

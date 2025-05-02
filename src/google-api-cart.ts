@@ -1,7 +1,7 @@
-import { CartItem } from './types.ts'
-import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
-import { send } from './google-api.ts'
 import { POPULAR_SERViCE_PREFIX } from './constants.ts'
+import { send } from './google-api.ts'
+import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
+import { type CartItem } from './types.ts'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()

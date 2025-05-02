@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
-import { AppMessage } from '../types.ts'
+
 import { useQueryClient } from '@tanstack/react-query'
-import { CACHE_BASE_KEY } from '../constants.ts'
 import { toast } from 'react-toastify'
+
+import { CACHE_BASE_KEY } from '../constants.ts'
+import { type AppMessage } from '../types.ts'
 
 export const useListenToCacheUpdate = () => {
   const queryClient = useQueryClient()

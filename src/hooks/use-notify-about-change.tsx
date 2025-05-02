@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
-import { AppMessage, AppMessagePush, FavNotification } from '../types.ts'
-import { NotificationSnackbar } from '../components/notification-snackbar.tsx'
-import { useGetNotifications } from './use-get-notifications.ts'
+
 import { toast } from 'react-toastify'
+
+import { NotificationSnackbar } from '../components/notification-snackbar.tsx'
+import { type AppMessage, type AppMessagePush, type FavNotification } from '../types.ts'
+import { useGetNotifications } from './use-get-notifications.ts'
+
 
 const showNotification = () => {
   Notification.requestPermission().then((result) => {

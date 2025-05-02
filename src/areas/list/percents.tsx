@@ -1,5 +1,7 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import { Navigate, useNavigate, useParams } from '@tanstack/react-router'
+
 import { useGetById } from './use-get-by-id.ts'
 import { PercentsPopup } from '../../components/percents-popup.tsx'
 

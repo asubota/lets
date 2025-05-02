@@ -1,7 +1,9 @@
-import { createLink } from '@tanstack/react-router'
+import { type FC } from 'react'
+
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { IconButton } from '@mui/material'
-import { FC } from 'react'
+import { createLink } from '@tanstack/react-router'
+
 
 const LinkedButton = createLink(IconButton)
 

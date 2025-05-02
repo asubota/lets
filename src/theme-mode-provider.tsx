@@ -1,5 +1,7 @@
-import { createContext, FC, ReactNode, useEffect, useMemo } from 'react'
+import { createContext, type FC, type ReactNode, useEffect, useMemo } from 'react'
+
 import { createTheme, ThemeProvider } from '@mui/material'
+
 import { useAppActions, useAppTheme } from './store'
 
 export const ColorModeContext = createContext({ toggleColorMode: () => {} })

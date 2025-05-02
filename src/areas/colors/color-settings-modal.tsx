@@ -1,4 +1,6 @@
 import { useState } from 'react'
+
+import HouseIcon from '@mui/icons-material/House'
 import {
   Box,
   Button,
@@ -7,13 +9,13 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material'
-import { CirclePicker, HuePicker, ColorChangeHandler } from 'react-color'
+import { createLink, useNavigate } from '@tanstack/react-router'
+import { CirclePicker, HuePicker, type ColorChangeHandler } from 'react-color'
+
+import { useSetColors } from '../../api-colors.ts'
 import { Modal } from '../../components/modal.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
-import { createLink, useNavigate } from '@tanstack/react-router'
-import { useSetColors } from '../../api-colors.ts'
-import HouseIcon from '@mui/icons-material/House'
-import { Color } from '../../types.ts'
+import { type Color } from '../../types.ts'
 
 const LinkedButton = createLink(Button)
 

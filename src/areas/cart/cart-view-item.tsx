@@ -1,11 +1,13 @@
-import { FC } from 'react'
-import { Box, Card, Divider, IconButton } from '@mui/material'
-import { CartItem, Product } from '../../types.ts'
+import { type FC } from 'react'
+
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { useSetPropOnCart } from '../../cart-api.ts'
-import { Discount } from './discount.tsx'
+import { Box, Card, Divider, IconButton } from '@mui/material'
+
 import { DiscountInput } from './discount-input.tsx'
+import { Discount } from './discount.tsx'
+import { useSetPropOnCart } from '../../cart-api.ts'
+import { type CartItem, type Product } from '../../types.ts'
 
 interface CartItemViewProps {
   item: CartItem & { product?: Product }

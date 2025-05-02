@@ -1,6 +1,8 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import ReorderIcon from '@mui/icons-material/Reorder'
 import { IconButton } from '@mui/material'
+
 import { useAppActions, useAppView } from '../../../store'
 
 export const SwitchToTableView: FC = () => {

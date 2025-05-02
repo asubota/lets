@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material'
-import { Logo } from './logo.tsx'
+
 import { Bike } from './bike.tsx'
+import { Logo } from './logo.tsx'
 import { ReAuth } from './re-auth.tsx'
 import { StaleVendorsWarning } from './stale-vendors-warning.tsx'
 

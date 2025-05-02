@@ -1,6 +1,6 @@
-import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
-import { VendorAndColors } from './types.ts'
 import { send } from './google-api.ts'
+import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
+import { type VendorAndColors } from './types.ts'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()

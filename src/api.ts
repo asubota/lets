@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
 import { CACHE_FAVORITE_KEY } from './constants.ts'
 import {
   addFavorite,
@@ -6,7 +7,7 @@ import {
   removeFavorite,
   setProp,
 } from './google-api.ts'
-import { FavoriteItem } from './types.ts'
+import { type FavoriteItem } from './types.ts'
 
 const getQueryKey = (): [string] => {
   return [CACHE_FAVORITE_KEY]

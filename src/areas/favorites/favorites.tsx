@@ -1,13 +1,15 @@
-import { FC, lazy, Suspense } from 'react'
-import { useIsLoading } from '../../use-data.ts'
-import { Loader } from '../../components/loader.tsx'
+import { type FC, lazy, Suspense } from 'react'
+
 import { Outlet } from '@tanstack/react-router'
-import { useFavoriteItems } from './use-favorite-items.ts'
-import { FavoriteInput, FavoriteInputForm } from './favorite-input.tsx'
 import { FormProvider, useForm } from 'react-hook-form'
-import { FavoriteProduct } from '../../types.ts'
-import { filterBySearch } from '../../tools.tsx'
+
+import { FavoriteInput, type FavoriteInputForm } from './favorite-input.tsx'
+import { useFavoriteItems } from './use-favorite-items.ts'
+import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
+import { filterBySearch } from '../../tools.tsx'
+import { type FavoriteProduct } from '../../types.ts'
+import { useIsLoading } from '../../use-data.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 

@@ -1,10 +1,12 @@
+import { type FC } from 'react'
+
 import { Stack } from '@mui/material'
-import { FC } from 'react'
-import { Product } from '../types.ts'
+
+import { type Product } from '../types.ts'
 import { Tile } from './tile.tsx'
+import { useFavoriteIds } from '../api.ts'
 import { useGetChangedProducts } from '../hooks/use-get-changed-products.hook.ts'
 import { getFavoriteId } from '../tools.tsx'
-import { useFavoriteIds } from '../api.ts'
 
 export interface SharedTilesViewProps {
   isFavoritePage?: boolean

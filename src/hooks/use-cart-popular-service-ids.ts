@@ -1,6 +1,6 @@
 import { useCartItems } from './use-cart-items.ts'
 import { POPULAR_SERViCE_PREFIX } from '../constants.ts'
-import { CartItem } from '../types.ts'
+import { type CartItem } from '../types.ts'
 
 const filterPopular = (item: CartItem): boolean => {
   return !!item.itemId && item.itemId.startsWith(POPULAR_SERViCE_PREFIX)

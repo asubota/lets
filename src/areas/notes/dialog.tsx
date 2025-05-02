@@ -1,4 +1,5 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import {
   Button,
   Dialog,
@@ -8,7 +9,8 @@ import {
   TextField,
 } from '@mui/material'
 import { createLink, useNavigate, useParams } from '@tanstack/react-router'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+
 import { useGetPropFromFavorite, useSetPropOnFavorite } from '../../api.ts'
 
 type NoteForm = {

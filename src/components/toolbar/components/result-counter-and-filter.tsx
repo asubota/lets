@@ -1,8 +1,10 @@
-import { FC } from 'react'
-import { Box, IconButton, Typography } from '@mui/material'
+import { type FC } from 'react'
+
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot'
-import { RedDot } from '../../red-dot.tsx'
+import { Box, IconButton, Typography } from '@mui/material'
+
 import { useSearchActions } from '../../../store/search.ts'
+import { RedDot } from '../../red-dot.tsx'
 
 interface ResultCounterAndFilterProps {
   total: number

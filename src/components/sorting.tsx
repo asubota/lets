@@ -1,7 +1,9 @@
-import { IconButton } from '@mui/material'
-import { FC } from 'react'
+import { type FC } from 'react'
+
 import DateRangeIcon from '@mui/icons-material/DateRange'
 import NotesIcon from '@mui/icons-material/Notes'
+import { IconButton } from '@mui/material'
+
 import { useAppActions, useAppSort } from '../store'
 
 export const Sorting: FC = () => {

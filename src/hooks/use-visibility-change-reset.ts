@@ -1,5 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
+
+import { useQueryClient } from '@tanstack/react-query'
+
 import {
   CACHE_CART_KEY,
   CACHE_COLORS_KEY,

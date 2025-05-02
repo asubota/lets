@@ -1,3 +1,6 @@
+import { useState } from 'react'
+
+import ConstructionIcon from '@mui/icons-material/Construction'
 import {
   Checkbox,
   Dialog,
@@ -10,13 +13,12 @@ import {
   ListItemText,
 } from '@mui/material'
 import { useNavigate } from '@tanstack/react-router'
-import { usePopularServices } from '../../use-data.ts'
-import { useState } from 'react'
-import ConstructionIcon from '@mui/icons-material/Construction'
-import { getFavoriteId } from '../../tools.tsx'
-import { Product } from '../../types.ts'
+
 import { useSetPopularServicesForCart } from '../../cart-api.ts'
 import { useCartPopularServiceIds } from '../../hooks/use-cart-popular-service-ids.ts'
+import { getFavoriteId } from '../../tools.tsx'
+import { type Product } from '../../types.ts'
+import { usePopularServices } from '../../use-data.ts'
 
 function isSameSet(setA: Set<string>, setB: Set<string>) {
   if (setA.size !== setB.size) return false

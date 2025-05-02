@@ -1,5 +1,6 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Container } from '@mui/material'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+
 import { AppBar } from '../components/app-bar.tsx'
 
 const RouteComponent = () => {

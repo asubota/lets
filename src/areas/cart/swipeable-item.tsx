@@ -1,4 +1,5 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { type FC, type ReactNode, useEffect, useRef, useState } from 'react'
+
 import { Box } from '@mui/material'
 import { useSwipeable } from 'react-swipeable'
 

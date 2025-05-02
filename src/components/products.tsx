@@ -1,16 +1,15 @@
-import { FC, lazy, Suspense } from 'react'
+import { type FC, lazy, Suspense } from 'react'
 
+import { NoResults } from './no-results.tsx'
+import { ProductsSkeleton } from './products-skeleton.tsx'
 import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
-import { NoResults } from './no-results.tsx'
-
 import { useAppView } from '../store'
-import { getUniqueVendors } from '../tools.tsx'
-import { Product } from '../types.ts'
 import { useSearchVendors } from '../store/search.ts'
+import { getUniqueVendors } from '../tools.tsx'
+import { type Product } from '../types.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
-import { ProductsSkeleton } from './products-skeleton.tsx'
 
 const TableView = lazy(() => import('./table-view.tsx'))
 const TilesView = lazy(() => import('./tiles-view.tsx'))

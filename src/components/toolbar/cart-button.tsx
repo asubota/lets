@@ -1,8 +1,9 @@
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import { type FC } from 'react'
 
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { Box, IconButton } from '@mui/material'
-import { FC } from 'react'
 import { createLink } from '@tanstack/react-router'
+
 import { useCartItemsCount } from '../../hooks/use-cart-items-count.ts'
 
 const LinkedIconButton = createLink(IconButton)

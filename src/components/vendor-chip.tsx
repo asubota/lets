@@ -1,5 +1,7 @@
+import { type FC } from 'react'
+
 import { Chip } from '@mui/material'
-import { FC } from 'react'
+
 import { useVendorColor } from '../hooks/use-vendor-color.ts'
 
 export const VendorChip: FC<{

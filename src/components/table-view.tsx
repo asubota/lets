@@ -1,4 +1,5 @@
-import { FC, useState } from 'react'
+import { type FC, useState } from 'react'
+
 import {
   Paper,
   Table,
@@ -9,13 +10,14 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material'
-import { Product } from '../types.ts'
-import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
+
 import { useTableColumns } from '../store'
+import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
+import { type Product } from '../types.ts'
+import { AllColumnsAreDisabled } from './all-columns-are-disabled.tsx'
+import { RippleText } from './ripple-text.tsx'
 import { Stock } from './stock'
 import { VendorChip } from './vendor-chip.tsx'
-import { RippleText } from './ripple-text.tsx'
-import { AllColumnsAreDisabled } from './all-columns-are-disabled.tsx'
 
 type Order = 'asc' | 'desc' | undefined
 

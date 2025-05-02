@@ -1,5 +1,5 @@
-import { AppMessage, NotificationData } from './types.ts'
 import { parseData } from './data-tools.ts'
+import { type AppMessage, type NotificationData } from './types.ts'
 
 const CACHE_NAME = 'lets-bike-api'
 

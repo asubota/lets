@@ -1,3 +1,5 @@
+import { type FC, useState } from 'react'
+
 import {
   Box,
   Button,
@@ -7,9 +9,9 @@ import {
   DialogTitle,
   Slider,
 } from '@mui/material'
-import { FC, useState } from 'react'
-import { Product } from '../types.ts'
+
 import { useNoScroll } from '../hooks/use-no-scroll.ts'
+import { type Product } from '../types.ts'
 
 const discounts = [3, 5, 7, 10, 12, 15]
 

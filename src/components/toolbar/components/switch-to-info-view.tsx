@@ -1,5 +1,6 @@
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline'
 import { IconButton } from '@mui/material'
+
 import { useAppActions, useAppView } from '../../../store'
 
 export const SwitchToInfoView = () => {

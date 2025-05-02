@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material'
-import { Product } from '../types.ts'
+
+import { type Product } from '../types.ts'
 import { Info } from './info.tsx'
 import { getFavoriteId } from '../tools.tsx'
 

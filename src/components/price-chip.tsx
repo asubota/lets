@@ -1,6 +1,8 @@
-import { FC, useState } from 'react'
+import { type FC, useState } from 'react'
+
 import { Chip, Box } from '@mui/material'
-import { Product } from '../types.ts'
+
+import { type Product } from '../types.ts'
 
 type PriceKey = '-' | 'p2' | 'price' | 'price_old'
 

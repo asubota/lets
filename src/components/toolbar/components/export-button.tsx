@@ -1,8 +1,10 @@
-import { FC } from 'react'
-import { IconButton } from '@mui/material'
-import { handleTakeScreenshot } from '../../../tools.tsx'
+import { type FC } from 'react'
+
 import IosShareIcon from '@mui/icons-material/IosShare'
+import { IconButton } from '@mui/material'
+
 import { useAppView } from '../../../store'
+import { handleTakeScreenshot } from '../../../tools.tsx'
 
 export const ExportButton: FC = () => {
   const view = useAppView()

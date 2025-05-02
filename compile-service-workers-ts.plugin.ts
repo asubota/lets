@@ -1,8 +1,8 @@
-import { Plugin } from 'vite'
-import { InputOptions, OutputOptions, rollup } from 'rollup'
-import rollupPluginTypescript from '@rollup/plugin-typescript'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
+import rollupPluginTypescript from '@rollup/plugin-typescript'
+import { type InputOptions, type OutputOptions, rollup } from 'rollup'
+import { type Plugin } from 'vite'
 
 const swFile = 'sw-custom.ts'
 

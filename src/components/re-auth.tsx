@@ -1,6 +1,7 @@
 import { Alert } from '@mui/material'
-import { initGoogleAuth } from '../google-auth.ts'
 import { gapi } from 'gapi-script'
+
+import { initGoogleAuth } from '../google-auth.ts'
 import { getMinutesLeft } from '../tools.tsx'
 
 export const ReAuth = () => {

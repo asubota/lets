@@ -1,4 +1,5 @@
 import { createWorker } from 'tesseract.js'
+
 import { height, width } from './constants.ts'
 
 export const getWorker = async () => {

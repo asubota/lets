@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from 'react'
-import { Fab, Zoom } from '@mui/material'
+import { type FC, useEffect, useState } from 'react'
 
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { Fab, Zoom } from '@mui/material'
+
 
 export const ScrollToTop: FC = () => {
   const [showFab, setShowFab] = useState(false)

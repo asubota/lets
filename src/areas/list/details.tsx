@@ -1,6 +1,7 @@
-import { DetailsPopup } from '../../components/details-popup.tsx'
 import { Navigate } from '@tanstack/react-router'
+
 import { useGetById } from './use-get-by-id.ts'
+import { DetailsPopup } from '../../components/details-popup.tsx'
 
 interface DetailsProps {
   id: string

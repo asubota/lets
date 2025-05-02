@@ -1,7 +1,9 @@
-import { FC } from 'react'
+import { type FC } from 'react'
+
+import EditNoteIcon from '@mui/icons-material/EditNote'
 import { IconButton } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
-import EditNoteIcon from '@mui/icons-material/EditNote'
+
 import { useGetPropFromFavorite } from '../api.ts'
 
 const LinkedIconButton = createLink(IconButton)

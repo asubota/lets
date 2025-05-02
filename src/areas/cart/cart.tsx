@@ -1,22 +1,24 @@
+import ConstructionIcon from '@mui/icons-material/Construction'
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
+import HouseIcon from '@mui/icons-material/House'
 import { Box, Button, Container, Divider, Paper } from '@mui/material'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import { createLink, Outlet, useSearch } from '@tanstack/react-router'
-import ConstructionIcon from '@mui/icons-material/Construction'
-import { useAllData, useIsLoading } from '../../use-data.ts'
-import { findProduct } from '../../tools.tsx'
-import HouseIcon from '@mui/icons-material/House'
+
+import { CartItemRow } from './cart-item-row.tsx'
 import { EmptyCart } from './empty-cart.tsx'
+import { FloatingActions } from './floating-actions.tsx'
 import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
-import { CartItem, Product } from '../../types.ts'
-import { FloatingActions } from './floating-actions.tsx'
-import { useCartItems } from '../../hooks/use-cart-items.ts'
 import {
   POPULAR_SERViCE_PREFIX,
   REGULAR_SERViCE_PREFIX,
 } from '../../constants.ts'
-import { CartItemRow } from './cart-item-row.tsx'
+import { useCartItems } from '../../hooks/use-cart-items.ts'
+import { findProduct } from '../../tools.tsx'
+import { type CartItem, type Product } from '../../types.ts'
+import { useAllData, useIsLoading } from '../../use-data.ts'
+
 
 const LinkedButton = createLink(Button)
 

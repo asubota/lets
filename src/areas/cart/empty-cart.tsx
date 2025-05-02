@@ -1,6 +1,6 @@
-import { Box, Button, Container } from '@mui/material'
-import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
 import HouseIcon from '@mui/icons-material/House'
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
+import { Box, Button, Container } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
 
 const LinkedButton = createLink(Button)

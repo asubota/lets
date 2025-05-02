@@ -1,4 +1,7 @@
-import { FC, KeyboardEventHandler } from 'react'
+import { type FC, type KeyboardEventHandler } from 'react'
+
+import { Cancel } from '@mui/icons-material'
+import AddIcon from '@mui/icons-material/Add'
 import {
   Box,
   IconButton,
@@ -6,12 +9,11 @@ import {
   Portal,
   TextField,
 } from '@mui/material'
-import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
+import { Controller, type SubmitHandler, useFormContext } from 'react-hook-form'
+
 import { useToggleFavorite } from '../../api.ts'
-import { Cancel } from '@mui/icons-material'
-import AddIcon from '@mui/icons-material/Add'
-import { useAllData } from '../../use-data.ts'
 import { DUMMY_VENDOR } from '../../constants.ts'
+import { useAllData } from '../../use-data.ts'
 
 export type FavoriteInputForm = {
   sku: string

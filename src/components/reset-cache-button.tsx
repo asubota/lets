@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react'
+
 import CachedIcon from '@mui/icons-material/Cached'
 import { IconButton } from '@mui/material'
-import { useEffect, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+
 import { CACHE_BASE_KEY } from '../constants.ts'
-import { AppMessage } from '../types.ts'
+import { type AppMessage } from '../types.ts'
 
 export const ResetCacheButton = () => {
   const [rotating, setRotating] = useState(false)

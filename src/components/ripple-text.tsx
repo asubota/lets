@@ -1,4 +1,5 @@
-import { FC, ReactNode } from 'react'
+import { type FC, type ReactNode } from 'react'
+
 import { ButtonBase } from '@mui/material'
 
 export const RippleText: FC<{ text: ReactNode }> = ({ text }) => {

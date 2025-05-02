@@ -1,6 +1,7 @@
-import { IconButton } from '@mui/material'
+import { type FC } from 'react'
+
 import GoogleIcon from '@mui/icons-material/Google'
-import { FC } from 'react'
+import { IconButton } from '@mui/material'
 
 const handleGoogle = async () => {
   const text = await navigator.clipboard.readText()

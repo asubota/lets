@@ -6,6 +6,7 @@ import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import sonarjs from 'eslint-plugin-sonarjs'
 import reactCompiler from 'eslint-plugin-react-compiler'
+import importPlugin from 'eslint-plugin-import'
 
 export default [
   {
@@ -37,6 +38,7 @@ export default [
       'react-hooks': reactHooksPlugin,
       sonarjs,
       'react-compiler': reactCompiler,
+      'import': importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -51,6 +53,36 @@ export default [
         'warn',
         {
           argsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        { fixStyle: 'inline-type-imports' },
+      ],
+      'import/order': [
+        'error',
+        {
+          'groups': [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index'],
+            'object',
+            'type',
+          ],
+          'pathGroups': [
+            {
+              pattern: 'react',
+              group: 'external',
+              position: 'before',
+            },
+          ],
+          'pathGroupsExcludedImportTypes': ['react'],
+          'alphabetize': {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+          'newlines-between': 'always',
         },
       ],
     },
