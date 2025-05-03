@@ -13,6 +13,8 @@ import { createLink, useNavigate } from '@tanstack/react-router'
 import { Empty } from './empty.tsx'
 import { useSetPropOnFavorite } from '../../api.ts'
 import { Modal } from '../../components/modal.tsx'
+import { Stock } from '../../components/stock.tsx'
+import { VendorChip } from '../../components/vendor-chip.tsx'
 import { useGetNotifications } from '../../hooks/use-get-notifications.ts'
 
 const LinkedButton = createLink(Button)
@@ -60,13 +62,13 @@ export const Notifications = () => {
       {notifications.length === 0 && <Empty />}
       {notifications.length > 0 && (
         <Stack
-          sx={{ p: 4, width: '100vw', maxWidth: '600px', margin: '0 auto' }}
+          sx={{ p: 3, width: '100vw', maxWidth: '600px', margin: '0 auto' }}
           spacing={2}
         >
           {notifications.map((n) => {
             return (
               <Alert
-                key={n.body}
+                key={n.favoriteId}
                 sx={{
                   '.MuiAlert-action': {
                     p: 0,
@@ -100,6 +102,18 @@ export const Notifications = () => {
                   sx={{ color: 'text.primary' }}
                 >
                   {n.body}
+                </Box>
+
+                <Box
+                  sx={{
+                    mt: 0.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  <VendorChip source="live" vendor={n.product.vendor} />
+                  <Stock stock={n.product.stock} bordered />
                 </Box>
               </Alert>
             )
