@@ -22,7 +22,6 @@ import { Route as LayoutListImport } from './routes/_layout/list'
 // Create Virtual Routes
 
 const StatsLazyImport = createFileRoute('/stats')()
-const ScannerLazyImport = createFileRoute('/scanner')()
 const NotificationsLazyImport = createFileRoute('/notifications')()
 const ColorsLazyImport = createFileRoute('/colors')()
 const CheckEngineLazyImport = createFileRoute('/check-engine')()
@@ -47,12 +46,6 @@ const StatsLazyRoute = StatsLazyImport.update({
   path: '/stats',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/stats.lazy').then((d) => d.Route))
-
-const ScannerLazyRoute = ScannerLazyImport.update({
-  id: '/scanner',
-  path: '/scanner',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/scanner.lazy').then((d) => d.Route))
 
 const NotificationsLazyRoute = NotificationsLazyImport.update({
   id: '/notifications',
@@ -191,13 +184,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/scanner': {
-      id: '/scanner'
-      path: '/scanner'
-      fullPath: '/scanner'
-      preLoaderRoute: typeof ScannerLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/stats': {
       id: '/stats'
       path: '/stats'
@@ -317,7 +303,6 @@ export interface FileRoutesByFullPath {
   '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
-  '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
@@ -335,7 +320,6 @@ export interface FileRoutesByTo {
   '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
-  '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
@@ -354,7 +338,6 @@ export interface FileRoutesById {
   '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
   '/notifications': typeof NotificationsLazyRoute
-  '/scanner': typeof ScannerLazyRoute
   '/stats': typeof StatsLazyRoute
   '/_layout/list': typeof LayoutListRouteWithChildren
   '/cart/service': typeof CartServiceRoute
@@ -374,7 +357,6 @@ export interface FileRouteTypes {
     | '/check-engine'
     | '/colors'
     | '/notifications'
-    | '/scanner'
     | '/stats'
     | '/list'
     | '/cart/service'
@@ -391,7 +373,6 @@ export interface FileRouteTypes {
     | '/check-engine'
     | '/colors'
     | '/notifications'
-    | '/scanner'
     | '/stats'
     | '/list'
     | '/cart/service'
@@ -408,7 +389,6 @@ export interface FileRouteTypes {
     | '/check-engine'
     | '/colors'
     | '/notifications'
-    | '/scanner'
     | '/stats'
     | '/_layout/list'
     | '/cart/service'
@@ -427,7 +407,6 @@ export interface RootRouteChildren {
   CheckEngineLazyRoute: typeof CheckEngineLazyRoute
   ColorsLazyRoute: typeof ColorsLazyRoute
   NotificationsLazyRoute: typeof NotificationsLazyRoute
-  ScannerLazyRoute: typeof ScannerLazyRoute
   StatsLazyRoute: typeof StatsLazyRoute
 }
 
@@ -438,7 +417,6 @@ const rootRouteChildren: RootRouteChildren = {
   CheckEngineLazyRoute: CheckEngineLazyRoute,
   ColorsLazyRoute: ColorsLazyRoute,
   NotificationsLazyRoute: NotificationsLazyRoute,
-  ScannerLazyRoute: ScannerLazyRoute,
   StatsLazyRoute: StatsLazyRoute,
 }
 
@@ -458,7 +436,6 @@ export const routeTree = rootRoute
         "/check-engine",
         "/colors",
         "/notifications",
-        "/scanner",
         "/stats"
       ]
     },
@@ -486,9 +463,6 @@ export const routeTree = rootRoute
     },
     "/notifications": {
       "filePath": "notifications.lazy.tsx"
-    },
-    "/scanner": {
-      "filePath": "scanner.lazy.tsx"
     },
     "/stats": {
       "filePath": "stats.lazy.tsx"

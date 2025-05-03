@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import StarIcon from '@mui/icons-material/Star'
-import VisibilityIcon from '@mui/icons-material/Visibility'
 import { Box, IconButton } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
 
@@ -35,8 +35,9 @@ export const AppBar: FC = () => {
       <Box className="app-bar-center" id="app-bar-center" />
 
       <Box className="app-bar-right">
-        <LinkedButton to="/scanner" sx={{ color: 'text.secondary' }}>
-          <VisibilityIcon />
+        <LinkedButton to="/notifications" sx={{ color: 'text.secondary' }}>
+          <NotificationsIcon />
+          {unread.length > 0 && <RedDot />}
         </LinkedButton>
       </Box>
     </Box>
