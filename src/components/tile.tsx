@@ -84,7 +84,7 @@ export const Tile: FC<{
           textAlign: 'left',
           wordBreak: 'break-word',
         }}
-        onClick={async () => await copyContent(p.name)}
+        onClick={() => copyContent(p.name)}
       >
         <RippleText text={getHighlightedText(p['name'], search)} />
       </Box>
@@ -101,7 +101,7 @@ export const Tile: FC<{
         <Chip
           label={getHighlightedText(p['sku'], search)}
           size="small"
-          onClick={async () => await copyContent(p.sku)}
+          onClick={() => copyContent(p.sku)}
         />
         {!isFavoritePage && (
           <>
