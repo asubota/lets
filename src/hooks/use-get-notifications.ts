@@ -8,7 +8,6 @@ export const useGetNotifications = (
 ): FavNotification[] => {
   const minmax = useGetMinMaxBySku()
   const products = useGetChangedProducts()
-
   const notifications = getNotifications(products, minmax)
 
   if (type === 'unread') {

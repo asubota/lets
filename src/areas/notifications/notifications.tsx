@@ -1,5 +1,3 @@
-import { type FC } from 'react'
-
 import HouseIcon from '@mui/icons-material/House'
 import {
   Alert,
@@ -17,10 +15,9 @@ import { useSetPropOnFavorite } from '../../api.ts'
 import { Modal } from '../../components/modal.tsx'
 import { useGetNotifications } from '../../hooks/use-get-notifications.ts'
 
-
 const LinkedButton = createLink(Button)
 
-export const Notifications: FC = () => {
+export const Notifications = () => {
   const notifications = useGetNotifications()
   const { mutate } = useSetPropOnFavorite()
   const navigate = useNavigate()
