@@ -149,6 +149,7 @@ export const getNotifications = (
   minmax: MinMax,
 ): FavNotification[] => {
   return products
+    .filter((p) => p.vendor !== 'base')
     .map((p) => {
       const stock = parseInt(p.stock || '', 10)
       const min = minmax[p.sku].min
