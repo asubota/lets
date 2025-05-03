@@ -9,7 +9,7 @@ export const useGetMinMaxBySku = (): MinMax => {
   const { data = [] } = useGetFavorites()
 
   return data
-    .filter((item) => item.min || item.max)
+    .filter((item) => item.min !== undefined || item.max !== undefined)
     .reduce((acc, item) => {
       const sku = item.favoriteId.split(':')[0]
       return {
