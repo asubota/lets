@@ -41,8 +41,7 @@ export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        bottom: '200px',
-        justifySelf: 'anchor-center',
+        bottom: '200px',ml:3,
         flexDirection: 'column',
       }}
     >
