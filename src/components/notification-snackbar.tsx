@@ -16,7 +16,7 @@ export const NotificationSnackbar: FC<{ n: FavNotification }> = ({ n }) => {
         textDecoration: 'none',
       }}
       to="/"
-      search={{ s: n.sku }}
+      search={{ s: n.product.sku }}
     >
       <Box component={Typography} variant="body2">
         {n.title}
