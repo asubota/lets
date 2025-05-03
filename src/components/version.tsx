@@ -8,8 +8,9 @@ export const Version = () => {
         color: 'text.secondary',
         position: 'absolute',
         fontSize: '10px',
+        fontWeight: 'bold',
         rotate: '-44deg',
-        transform: 'translate(15px, 13px)',
+        transform: 'translate(15px, 0)',
       }}
     >
       {import.meta.env.VITE_TEST_VAR}
