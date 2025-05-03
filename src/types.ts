@@ -18,11 +18,11 @@ export interface FavoriteProduct extends Product {
 export type FavNotification = {
   title: string
   body: string
-  sku: string
   favoriteId: string
   min?: number
   max?: number
   read?: boolean
+  product: Product
 }
 
 export interface SearchForm {

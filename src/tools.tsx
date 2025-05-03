@@ -164,7 +164,7 @@ export const getNotifications = (
           min,
           max,
           read,
-          sku: p.sku,
+          product: p,
           favoriteId: getFavoriteId(p),
         }
 
@@ -178,7 +178,7 @@ export const getNotifications = (
           min,
           max,
           read,
-          sku: p.sku,
+          product: p,
           favoriteId: getFavoriteId(p),
         }
 
