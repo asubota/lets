@@ -15,7 +15,7 @@ export const Welcome = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ userSelect: 'none' }}>
       <Typography
         variant="h4"
         sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}

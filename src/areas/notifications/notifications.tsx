@@ -68,7 +68,7 @@ export const Notifications = () => {
           {notifications.map((n) => {
             return (
               <Alert
-                key={n.favoriteId}
+                key={`${n.favoriteId}:${n.body}`}
                 sx={{
                   '.MuiAlert-action': {
                     p: 0,
