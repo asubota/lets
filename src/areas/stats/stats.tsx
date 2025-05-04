@@ -37,7 +37,7 @@ export const Stats = () => {
 
   return (
     <TopBottomHome>
-      <Grid container spacing={2} sx={{ pl: 3, pr: 3 }}>
+      <Grid container columnSpacing={2} rowSpacing={1.5} sx={{ pl: 3, pr: 3 }}>
         {vendors.sort().map((vendor) => {
           return (
             <Grid
