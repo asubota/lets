@@ -54,7 +54,7 @@ export const Stats = () => {
         })}
       </Grid>
 
-      <Divider sx={{ ml: 3, mr: 3, mt: 1.5, mb: 1.5 }} />
+      <Divider sx={{ ml: 3, mr: 3, mt: 1, mb: 1 }} />
 
       <Box sx={{ textAlign: 'center' }}>
         Total:{' '}
