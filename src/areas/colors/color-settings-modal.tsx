@@ -96,20 +96,10 @@ export const ColorSettingsModal = ({
       onSave={handleSave}
       onClose={handleClose}
       actions={
-        <DialogActions
-          sx={{
-            p: 0,
-            position: 'absolute',
-            bottom: '30px',
-            left: 0,
-            width: '100%',
-          }}
-        >
-          <Box sx={{ p: 3, width: '100%' }}>
-            <LinkedButton to="/list" fullWidth variant="contained">
-              <HouseIcon color="secondary" />
-            </LinkedButton>
-          </Box>
+        <DialogActions sx={{ p: 3, pt: 2, width: '100%' }}>
+          <LinkedButton to="/list" fullWidth variant="contained">
+            <HouseIcon color="secondary" />
+          </LinkedButton>
         </DialogActions>
       }
     >
@@ -120,6 +110,7 @@ export const ColorSettingsModal = ({
           flexDirection: 'column',
           alignItems: 'center',
           gap: '20px',
+          flexGrow: 1,
         }}
       >
         <HuePicker color={color} onChange={handleSetColor} />
