@@ -25,18 +25,6 @@ export const Notifications = () => {
   const navigate = useNavigate()
   const handleClose = () => navigate({ to: '/list' })
 
-  const actionsSX =
-    notifications.length < 5
-      ? ({
-          position: 'absolute',
-          bottom: '30px',
-          left: 0,
-          width: '100%',
-        } as const)
-      : ({
-          mb: '10px',
-        } as const)
-
   return (
     <Modal
       open
@@ -45,24 +33,22 @@ export const Notifications = () => {
       onClose={handleClose}
       hasSave={false}
       actions={
-        <DialogActions
-          sx={{
-            p: 0,
-            ...actionsSX,
-          }}
-        >
-          <Box sx={{ p: 3, width: '100%' }}>
-            <LinkedButton to="/list" fullWidth variant="contained">
-              <HouseIcon color="secondary" />
-            </LinkedButton>
-          </Box>
+        <DialogActions sx={{ p: 3, pt: 2, width: '100%' }}>
+          <LinkedButton to="/list" fullWidth variant="contained">
+            <HouseIcon color="secondary" />
+          </LinkedButton>
         </DialogActions>
       }
     >
       {notifications.length === 0 && <Empty />}
       {notifications.length > 0 && (
         <Stack
-          sx={{ p: 3, width: '100vw', maxWidth: '600px', margin: '0 auto' }}
+          sx={{
+            p: 3,
+            pb: 0,
+            margin: '0 auto',
+            flexGrow: 1,
+          }}
           spacing={2}
         >
           {notifications.map((n) => {
