@@ -18,7 +18,7 @@ export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
       {type === 'safe' && (
         <Box
           component={motion.div}
-          whileHover={{ scale: 1.05, rotate: 1.6 }}
+          whileHover={{ scale: 1.1, rotate: 1.8 }}
           whileTap={{ scale: 1.2, rotate: 1.9 }}
           transition={{
             type: 'spring',
