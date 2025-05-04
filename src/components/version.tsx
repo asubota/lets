@@ -7,10 +7,10 @@ export const Version = () => {
       sx={{
         color: 'text.secondary',
         position: 'absolute',
-        fontSize: '10px',
+        fontSize: '11px',
         fontWeight: 'bold',
         rotate: '-44deg',
-        transform: 'translate(15px, 0)',
+        transform: 'translate(15px, 11px)',
       }}
     >
       {import.meta.env.VITE_TEST_VAR}

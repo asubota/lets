@@ -8,9 +8,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { Box, IconButton, Stack, useTheme } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
 
-import { ColorModeContext } from '../theme-mode-provider.tsx'
-import { ResetCacheButton } from './reset-cache-button.tsx'
 import { useCartItemsCount } from '../hooks/use-cart-items-count.ts'
+import { ColorModeContext } from '../theme-mode-provider.tsx'
 import { PasteInSearchButton } from './toolbar/paste-in-search-button.tsx'
 
 const LinkedIconButton = createLink(IconButton)
@@ -58,8 +57,6 @@ export const ExtraViewOptions = () => {
           bottom: '25px',
         }}
       >
-        <ResetCacheButton />
-
         <PasteInSearchButton size="medium" />
 
         <LinkedIconButton to="/cart" sx={{ color: 'text.secondary' }}>
