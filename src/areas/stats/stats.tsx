@@ -1,6 +1,7 @@
 import { Box, CircularProgress, Typography, Divider } from '@mui/material'
 import { Grid } from '@mui/material'
 
+import { ResetCacheButton } from '../../components/reset-cache-button.tsx'
 import { TopBottomHome } from '../../components/top-botton-home.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { useMeta } from '../../store'
@@ -73,6 +74,7 @@ export const Stats = () => {
             {created}
           </Typography>
         )}
+        <ResetCacheButton />
       </Box>
     </TopBottomHome>
   )

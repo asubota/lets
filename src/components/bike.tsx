@@ -11,46 +11,32 @@ export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
       sx={{
         position: 'absolute',
         bottom: '200px',
-
-        ...(type === 'broken' && {
-          transform: 'translate(-50%)',
-          left: '50%',
-        }),
+        transform: 'translate(-50%)',
+        left: '50%',
       }}
     >
       {type === 'safe' && (
         <Box
           component={motion.div}
-          initial={{ x: -10, scaleX: 1 }}
-          animate={{ x: '100vw', scaleX: 1 }}
+          whileHover={{ scale: 1.05, rotate: 1.6 }}
+          whileTap={{ scale: 1.05, rotate: 1.6 }}
           transition={{
-            x: {
-              duration: 10,
-              ease: 'linear',
-              repeat: Infinity,
-              repeatType: 'reverse',
-            },
-            scaleX: {
-              duration: 0,
-              repeat: Infinity,
-              repeatType: 'reverse',
-              ease: 'linear',
-            },
+            type: 'spring',
+            stiffness: 200,
+            damping: 10,
+          }}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'fit-content',
+            transformOrigin: 'center',
+            cursor: 'pointer',
+            touchAction: 'manipulation',
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 'fit-content',
-              gap: 1,
-              transformOrigin: 'center',
-            }}
-          >
-            <Version />
-            <Box component={SafeBike} sx={{ width: '230px' }} />
-          </Box>
+          <Version />
+          <Box component={SafeBike} sx={{ width: '230px' }} />
         </Box>
       )}
 
