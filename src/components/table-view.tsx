@@ -1,6 +1,7 @@
 import { type FC, useState } from 'react'
 
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -18,6 +19,7 @@ import { AllColumnsAreDisabled } from './all-columns-are-disabled.tsx'
 import { RippleText } from './ripple-text.tsx'
 import { Stock } from './stock'
 import { VendorChip } from './vendor-chip.tsx'
+import { useInfiniteScroll } from '../hooks/use-infinite-scroll.ts'
 
 type Order = 'asc' | 'desc' | undefined
 
@@ -37,10 +39,7 @@ function getComparator(order: Order): (a: Product, b: Product) => number {
     : (a, b) => -descendingComparator(a, b)
 }
 
-const TableView: FC<{ list: Product[]; search: string }> = ({
-  list,
-  search,
-}) => {
+const TableView: FC<{ list: Product[]; search: string }> = ({ list, search }) => {
   const [order, setOrder] = useState<Order>(undefined)
   const columns = useTableColumns()
 
@@ -58,20 +57,20 @@ const TableView: FC<{ list: Product[]; search: string }> = ({
     })
   }
 
+  const sortedList = order ? list.slice().sort(getComparator(order)) : list
+
+  const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(sortedList)
+
   if (!columns.length) {
     return <AllColumnsAreDisabled />
   }
-
-  const sortedList = order ? list.slice().sort(getComparator(order)) : list
 
   return (
     <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
           <TableRow>
-            {columns.includes('sku') && (
-              <TableCell sx={{ pl: 1 }}>Артикул</TableCell>
-            )}
+            {columns.includes('sku') && <TableCell sx={{ pl: 1 }}>Артикул</TableCell>}
             {columns.includes('stock') && (
               <TableCell
                 sx={{
@@ -87,9 +86,7 @@ const TableView: FC<{ list: Product[]; search: string }> = ({
                 К-ть
               </TableCell>
             )}
-            {columns.includes('name') && (
-              <TableCell sx={{ pl: 1 }}>Назва</TableCell>
-            )}
+            {columns.includes('name') && <TableCell sx={{ pl: 1 }}>Назва</TableCell>}
             {columns.includes('vendor') && (
               <TableCell sx={{ pr: 1 }} align="right">
                 Продавець
@@ -115,7 +112,7 @@ const TableView: FC<{ list: Product[]; search: string }> = ({
         </TableHead>
 
         <TableBody className="t-body">
-          {sortedList.map((row) => (
+          {visibleList.map((row) => (
             <TableRow
               key={getFavoriteId(row)}
               sx={{
@@ -167,6 +164,8 @@ const TableView: FC<{ list: Product[]; search: string }> = ({
           ))}
         </TableBody>
       </Table>
+
+      {hasMore && <Box ref={loadMoreRef} sx={{ p: 1 }} />}
     </TableContainer>
   )
 }

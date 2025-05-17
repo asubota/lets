@@ -1,7 +1,8 @@
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 
 import { type Product } from '../types.ts'
 import { Info } from './info.tsx'
+import { useInfiniteScroll } from '../hooks/use-infinite-scroll.ts'
 import { getFavoriteId } from '../tools.tsx'
 
 interface InfoViewProps {
@@ -9,14 +10,18 @@ interface InfoViewProps {
 }
 
 const InfoView = ({ list }: InfoViewProps) => {
+  const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(list)
+
   return (
     <Stack direction="column" spacing={1} id="tiles-view">
-      {list.map((p) => {
+      {visibleList.map((p) => {
         const favoriteId = getFavoriteId(p)
         const key = `${favoriteId}:${p.price}`
 
         return <Info key={key} p={p} />
       })}
+
+      {hasMore && <Box ref={loadMoreRef} sx={{ p: 1 }} />}
     </Stack>
   )
 }

@@ -1,11 +1,12 @@
 import { type FC } from 'react'
 
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 
 import { type Product } from '../types.ts'
 import { Tile } from './tile.tsx'
 import { useFavoriteIds } from '../api.ts'
 import { useGetChangedProducts } from '../hooks/use-get-changed-products.hook.ts'
+import { useInfiniteScroll } from '../hooks/use-infinite-scroll.ts'
 import { getFavoriteId } from '../tools.tsx'
 
 export interface SharedTilesViewProps {
@@ -17,18 +18,15 @@ interface TilesViewProps extends SharedTilesViewProps {
   search: string
 }
 
-const TilesView: FC<TilesViewProps> = ({
-  list,
-  search,
-  isFavoritePage = false,
-}) => {
+const TilesView: FC<TilesViewProps> = ({ list, search, isFavoritePage = false }) => {
   const favoriteIds = useFavoriteIds()
   const changedProducts = useGetChangedProducts()
   const skus = changedProducts.map((p) => p.sku)
+  const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(list)
 
   return (
     <Stack direction="column" spacing={1} id="tiles-view">
-      {list.map((p) => {
+      {visibleList.map((p) => {
         const favoriteId = getFavoriteId(p)
         const key = `${favoriteId}:${p.price}`
 
@@ -43,6 +41,8 @@ const TilesView: FC<TilesViewProps> = ({
           />
         )
       })}
+
+      {hasMore && <Box ref={loadMoreRef} sx={{ p: 1 }} />}
     </Stack>
   )
 }
