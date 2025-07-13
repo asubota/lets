@@ -2,9 +2,10 @@ import { type FC, lazy, Suspense } from 'react'
 
 import { NoResults } from './no-results.tsx'
 import { ProductsSkeleton } from './products-skeleton.tsx'
+import { RangeSearch } from './range-search.tsx'
 import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
-import { useAppView } from '../store'
+import { useAppView, useSearchOptions } from '../store'
 import { useSearchVendors } from '../store/search.ts'
 import { getUniqueVendors } from '../tools.tsx'
 import { type Product } from '../types.ts'
@@ -20,6 +21,22 @@ interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   search: string
 }
 
+const getMinMax = (items: Product[]): [number, number] => {
+  if (items.length === 0) {
+    return [0, 0]
+  }
+
+  let min = items[0].price
+  let max = items[0].price
+
+  for (const product of items) {
+    if (product.price < min) min = product.price
+    if (product.price > max) max = product.price
+  }
+
+  return [min, max]
+}
+
 const Products: FC<ProductsProps> = ({
   products,
   search,
@@ -28,11 +45,11 @@ const Products: FC<ProductsProps> = ({
   hasGoogle,
   hasColumnsConfig,
   isFavoritePage,
-  hasCart,
 }) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(products)
   const searchVendors = useSearchVendors()
+  const { show, priceMin, priceMax } = useSearchOptions()
 
   if (products.length === 0 && search.length === 0) {
     return <Welcome />
@@ -47,39 +64,39 @@ const Products: FC<ProductsProps> = ({
       ? products
       : products.filter((product) => searchVendors.includes(product.vendor))
 
+  const [min, max] = getMinMax(filteredList)
+
+  const filteredByPrice = show
+    ? filteredList.filter((p) => p.price >= priceMin && p.price <= priceMax)
+    : filteredList
+
   return (
     <>
       <Toolbar
-        search={search}
-        hasCart={hasCart}
         hasPasteIn={hasPasteIn}
         hasFavoritesSorting={hasFavoritesSorting}
         hasGoogle={hasGoogle}
         hasColumnsConfig={hasColumnsConfig}
-        total={filteredList.length}
+        total={filteredByPrice.length}
         uniqueVendors={uniqueVendors}
-        filteredSearch={
-          searchVendors.length > 0 &&
-          searchVendors.length < uniqueVendors.length
-        }
+        filteredSearch={searchVendors.length > 0 && searchVendors.length < uniqueVendors.length}
       />
+
+      {show && <RangeSearch min={min} max={max} />}
+
       {view === 'tile' && (
         <Suspense fallback={<ProductsSkeleton />}>
-          <TilesView
-            list={filteredList}
-            search={search}
-            isFavoritePage={isFavoritePage}
-          />
+          <TilesView list={filteredByPrice} search={search} isFavoritePage={isFavoritePage} />
         </Suspense>
       )}
       {view === 'table' && (
         <Suspense fallback={<ProductsSkeleton />}>
-          <TableView list={filteredList} search={search} />
+          <TableView list={filteredByPrice} search={search} />
         </Suspense>
       )}
       {view === 'info' && (
         <Suspense fallback={<ProductsSkeleton />}>
-          <InfoView list={filteredList} />
+          <InfoView list={filteredByPrice} />
         </Suspense>
       )}
 
