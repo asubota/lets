@@ -2,19 +2,9 @@ import { type FC, lazy, Suspense, useState } from 'react'
 
 import { ClickAwayListener, Portal } from '@mui/material'
 import { Outlet } from '@tanstack/react-router'
-import {
-  Controller,
-  FormProvider,
-  type SubmitHandler,
-  useForm,
-} from 'react-hook-form'
+import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hook-form'
 
-import {
-  Redirecto,
-  SearchField,
-  SearchHistory,
-  SearchSuggestions,
-} from './components'
+import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
 import { LimitSearchModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 import { Loader } from '../../components/loader.tsx'
@@ -81,9 +71,7 @@ export const List: FC = () => {
 
                       <SearchSuggestions
                         search={value}
-                        open={
-                          showAhead && value.length >= 3 && search !== value
-                        }
+                        open={showAhead && value.length >= 3 && search !== value}
                         setValue={(v: string) => {
                           hideHints()
                           onChange(v)
@@ -103,14 +91,7 @@ export const List: FC = () => {
         <Loader />
       ) : (
         <Suspense fallback={<ProductsSkeleton />}>
-          <Products
-            products={products}
-            search={search}
-            hasPasteIn
-            hasGoogle
-            hasColumnsConfig
-            hasCart
-          />
+          <Products products={products} search={search} hasPasteIn hasGoogle hasColumnsConfig />
         </Suspense>
       )}
 
