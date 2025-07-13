@@ -12,7 +12,7 @@ export const Sorting: FC = () => {
   const handleSortChange = () => setSort(sort === 'note' ? 'date' : 'note')
 
   return (
-    <IconButton size="small" sx={{ mr: 2 }} onClick={handleSortChange}>
+    <IconButton size="small" onClick={handleSortChange}>
       {sort === 'date' && (
         <>
           <DateRangeIcon sx={{ color: 'text.primary' }} />

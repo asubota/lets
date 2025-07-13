@@ -10,11 +10,7 @@ const handleGoogle = async () => {
 
 export const GoogleButton: FC = () => {
   return (
-    <IconButton
-      size="small"
-      sx={{ color: 'text.secondary', mr: '14px' }}
-      onClick={handleGoogle}
-    >
+    <IconButton size="small" sx={{ color: 'text.secondary' }} onClick={handleGoogle}>
       <GoogleIcon />
     </IconButton>
   )

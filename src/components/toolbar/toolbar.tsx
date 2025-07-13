@@ -1,11 +1,9 @@
-import { type FC } from 'react'
-
-import { Box, ButtonGroup } from '@mui/material'
+import { Box, ButtonGroup, Stack } from '@mui/material'
 
 import { Sorting } from '../sorting.tsx'
-import { CartButton } from './cart-button.tsx'
 import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
+import { SearchOptions } from './components/search-options.tsx'
 import { SwitchToInfoView } from './components/switch-to-info-view.tsx'
 import { SwitchToTableView } from './components/switch-to-table-view.tsx'
 import { SwitchToTileView } from './components/switch-to-tile-view.tsx'
@@ -19,27 +17,23 @@ export interface SharedToolbarProps {
   hasPasteIn?: boolean
   hasGoogle?: boolean
   hasColumnsConfig?: boolean
-  hasCart?: boolean
 }
 
 interface ToolbarProps extends SharedToolbarProps {
-  search: string
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
 }
 
-export const Toolbar: FC<ToolbarProps> = ({
+export const Toolbar = ({
   total,
   uniqueVendors,
   filteredSearch,
-  search,
   hasFavoritesSorting = false,
   hasPasteIn = false,
   hasGoogle = false,
   hasColumnsConfig = false,
-  hasCart = false,
-}) => {
+}: ToolbarProps) => {
   return (
     <Box
       sx={{
@@ -59,11 +53,13 @@ export const Toolbar: FC<ToolbarProps> = ({
       </Box>
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
-        {hasCart && <CartButton search={search} />}
-        {hasFavoritesSorting && <Sorting />}
-        {hasPasteIn && <PasteInSearchButton size="small" />}
-        {hasGoogle && <GoogleButton />}
-        {hasColumnsConfig && <TableColumnsViewer />}
+        <Stack direction="row" gap={1}>
+          <SearchOptions />
+          {hasFavoritesSorting && <Sorting />}
+          {hasPasteIn && <PasteInSearchButton size="small" />}
+          {hasGoogle && <GoogleButton />}
+          {hasColumnsConfig && <TableColumnsViewer />}
+        </Stack>
 
         <ButtonGroup sx={{ alignItems: 'center' }}>
           <SwitchToTableView />

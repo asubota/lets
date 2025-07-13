@@ -13,7 +13,7 @@ const InfoView = ({ list }: InfoViewProps) => {
   const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(list)
 
   return (
-    <Stack direction="column" spacing={1} id="tiles-view">
+    <Stack direction="column" spacing={1}>
       {visibleList.map((p) => {
         const favoriteId = getFavoriteId(p)
         const key = `${favoriteId}:${p.price}`
