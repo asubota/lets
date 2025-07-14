@@ -5,8 +5,7 @@ import { type MinMax } from './hooks/use-get-min-max-by-sku.ts'
 import { getGoogleAuthTokenExpiration } from './secrets.ts'
 import { type FavNotification, type Product } from './types.ts'
 
-const escapeRegExp = (value = ''): string =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+const escapeRegExp = (value = ''): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 interface HighlightOptions {
   match?: Record<string, string | Record<string, string>>
@@ -38,9 +37,7 @@ export function getHighlightedText(
         <Typography
           component="span"
           key={i}
-          {...(part.toLowerCase() === highlight.toLowerCase()
-            ? options.match
-            : options.noMatch)}
+          {...(part.toLowerCase() === highlight.toLowerCase() ? options.match : options.noMatch)}
         >
           {part}
         </Typography>
@@ -86,9 +83,7 @@ export const handleTakeCartScreenshot = async () => {
     },
     onclone(doc: Document, element: HTMLElement) {
       const root = doc.getElementById('root') as Element
-      element.style.backgroundImage = window
-        .getComputedStyle(root)
-        .getPropertyValue('background-image')
+      element.style.backgroundImage = window.getComputedStyle(root).getPropertyValue('background-image')
       element.style.width = '400px'
       element.style.padding = '6px'
     },
@@ -123,11 +118,9 @@ export const handleTakeScreenshot = async () => {
         })
       }
 
-      element
-        .querySelectorAll<HTMLDivElement>('.product-tile')
-        .forEach((el) => {
-          el.style.borderColor = 'rgba(0, 0, 0, 0.12)'
-        })
+      element.querySelectorAll<HTMLDivElement>('.product-tile').forEach((el) => {
+        el.style.borderColor = 'rgba(0, 0, 0, 0.12)'
+      })
 
       element.style.padding = '6px'
     },
@@ -140,14 +133,9 @@ export const handleTakeScreenshot = async () => {
   link.click()
 }
 
-const isNotification = (
-  item: Record<string, unknown> | undefined,
-): item is FavNotification => !!item
+const isNotification = (item: Record<string, unknown> | undefined): item is FavNotification => !!item
 
-export const getNotifications = (
-  products: Product[],
-  minmax: MinMax,
-): FavNotification[] => {
+export const getNotifications = (products: Product[], minmax: MinMax): FavNotification[] => {
   return products
     .filter((p) => p.vendor !== 'base')
     .map((p) => {
@@ -201,10 +189,7 @@ export const formatDate = (date: Date): string => {
   return `${day}.${month}`
 }
 
-export function compareByTime(
-  a: { time: number },
-  b: { time: number },
-): number {
+export function compareByTime(a: { time: number }, b: { time: number }): number {
   if (a.time < b.time) {
     return 1
   }
@@ -216,10 +201,7 @@ export function compareByTime(
   return 0
 }
 
-export function compareByNoteAndTime(
-  a: { note?: string; time: number },
-  b: { note?: string; time: number },
-): number {
+export function compareByNoteAndTime(a: { note?: string; time: number }, b: { note?: string; time: number }): number {
   if (a.note === undefined && b.note !== undefined) {
     return 1
   }
@@ -247,16 +229,31 @@ export const getMinutesLeft = (): number => {
 }
 
 export const filterBySearch = (item: Product, search: string): boolean => {
-  return (
-    item.sku.toLowerCase().includes(search) ||
-    item.name.toLowerCase().includes(search)
-  )
+  return item.sku.toLowerCase().includes(search) || item.name.toLowerCase().includes(search)
 }
 
-export const findProduct = (
-  itemId: string,
-  list: Product[],
-): Product | undefined => {
+export const findProduct = (itemId: string, list: Product[]): Product | undefined => {
   const [sku, vendor] = itemId.split(':')
   return list.find((p) => p.sku === sku && p.vendor === vendor)
+}
+
+export const getPriceMinMax = (items: Product[]): [number, number] => {
+  if (items.length === 0) {
+    return [0, 0]
+  }
+
+  let min = items[0].price
+  let max = items[0].price
+
+  for (const product of items) {
+    if (product.price < min) {
+      min = product.price
+    }
+
+    if (product.price > max) {
+      max = product.price
+    }
+  }
+
+  return [min, max]
 }

@@ -1,5 +1,8 @@
 import { type FC, lazy, Suspense } from 'react'
 
+import { Box } from '@mui/material'
+import { AnimatePresence, motion } from 'framer-motion'
+
 import { NoResults } from './no-results.tsx'
 import { ProductsSkeleton } from './products-skeleton.tsx'
 import { RangeSearch } from './range-search.tsx'
@@ -7,7 +10,7 @@ import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { useAppView, useSearchOptions } from '../store'
 import { useSearchVendors } from '../store/search.ts'
-import { getUniqueVendors } from '../tools.tsx'
+import { getPriceMinMax, getUniqueVendors } from '../tools.tsx'
 import { type Product } from '../types.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
@@ -19,22 +22,6 @@ const InfoView = lazy(() => import('./info-view.tsx'))
 interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   products: Product[]
   search: string
-}
-
-const getMinMax = (items: Product[]): [number, number] => {
-  if (items.length === 0) {
-    return [0, 0]
-  }
-
-  let min = items[0].price
-  let max = items[0].price
-
-  for (const product of items) {
-    if (product.price < min) min = product.price
-    if (product.price > max) max = product.price
-  }
-
-  return [min, max]
 }
 
 const Products: FC<ProductsProps> = ({
@@ -60,19 +47,17 @@ const Products: FC<ProductsProps> = ({
   }
 
   const filteredList =
-    searchVendors.length === 0
-      ? products
-      : products.filter((product) => searchVendors.includes(product.vendor))
+    searchVendors.length === 0 ? products : products.filter((product) => searchVendors.includes(product.vendor))
 
-  const [min, max] = getMinMax(filteredList)
+  const [min, max] = getPriceMinMax(filteredList)
 
-  const filteredByPrice = show
-    ? filteredList.filter((p) => p.price >= priceMin && p.price <= priceMax)
-    : filteredList
+  const filteredByPrice = show ? filteredList.filter((p) => p.price >= priceMin && p.price <= priceMax) : filteredList
 
   return (
     <>
       <Toolbar
+        min={min}
+        max={max}
         hasPasteIn={hasPasteIn}
         hasFavoritesSorting={hasFavoritesSorting}
         hasGoogle={hasGoogle}
@@ -82,7 +67,20 @@ const Products: FC<ProductsProps> = ({
         filteredSearch={searchVendors.length > 0 && searchVendors.length < uniqueVendors.length}
       />
 
-      {show && <RangeSearch min={min} max={max} />}
+      <AnimatePresence>
+        {show && (
+          <Box
+            component={motion.div}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            sx={{ overflow: 'hidden' }}
+          >
+            <RangeSearch />
+          </Box>
+        )}
+      </AnimatePresence>
 
       {view === 'tile' && (
         <Suspense fallback={<ProductsSkeleton />}>

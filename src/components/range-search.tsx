@@ -1,93 +1,80 @@
-import { type ChangeEvent, useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Slider, TextField } from '@mui/material'
 
 import { useAppActions, useSearchOptions } from '../store'
 
-export const RangeSearch = ({ min, max }: { min: number; max: number }) => {
+export const RangeSearch = () => {
   const { priceMin, priceMax, rangeMin, rangeMax } = useSearchOptions()
   const { setSearchOptions } = useAppActions()
-
-  const [localMin, setLocalMin] = useState(min)
-  const [localMax, setLocalMax] = useState(max)
-
-  const handleLocalChange = (key: 'min' | 'max') => (e: ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value)
-    if (key === 'min') {
-      setLocalMin(val)
-    } else {
-      setLocalMax(val)
-    }
-  }
-
-  const handleBlur = () => {
-    let min = Math.min(localMin, localMax)
-    let max = Math.max(localMin, localMax)
-
-    const updates = {
-      priceMin: min,
-      priceMax: max,
-    }
-
-    setSearchOptions(updates)
-  }
+  const [localValue, setLocalValue] = useState<[number, number]>([priceMin, priceMax])
 
   const handleSliderChange = (_: unknown, newValue: number | number[]) => {
-    const [newMin, newMax] = newValue as [number, number]
-    setSearchOptions({
-      priceMin: newMin,
-      priceMax: newMax,
-    })
+    setLocalValue(newValue as [number, number])
   }
-
-  useEffect(() => {
-    setLocalMin(min)
-    setLocalMax(max)
-    setSearchOptions({
-      rangeMin: min,
-      rangeMax: max,
-      priceMin: min,
-      priceMax: max,
-    })
-  }, [min, max, setSearchOptions])
+  const handleSliderChangeCommitted = (_: unknown, newValue: number | number[]) => {
+    const [priceMin, priceMax] = newValue as [number, number]
+    setSearchOptions({ priceMin, priceMax })
+  }
 
   return (
     <Box
       sx={{
-        mt: 1,
         width: '100%',
-        maxWidth: 500,
-        px: 2,
-        boxSizing: 'border-box',
+        maxWidth: 600,
         mx: 'auto',
-        pt: 3,
-        mb: 1,
+        my: 1,
+        border: '1px solid',
+        borderRadius: 1,
+        borderColor: 'text.secondary',
+        pb: 1,
+        pt: 4,
+        px: 3,
       }}
     >
-      <Slider
-        valueLabelDisplay="on"
-        size="small"
-        value={[priceMin, priceMax]}
-        onChange={handleSliderChange}
-        min={rangeMin}
-        max={rangeMax}
-      />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1 }}>
+      <Box sx={{ mx: 1 }}>
+        <Slider
+          valueLabelDisplay="on"
+          size="small"
+          value={localValue}
+          onChange={handleSliderChange}
+          onChangeCommitted={handleSliderChangeCommitted}
+          min={rangeMin}
+          max={rangeMax}
+          sx={{
+            '& .MuiSlider-valueLabel': { backgroundColor: 'primary.main' },
+            '& .MuiSlider-valueLabelLabel': {
+              fontWeight: 'bold',
+              fontSize: '14px',
+            },
+          }}
+        />
+      </Box>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 3 }}>
         <TextField
           label="Min"
-          type="number"
-          value={localMin}
-          onChange={handleLocalChange('min')}
-          onBlur={handleBlur}
           size="small"
+          defaultValue={rangeMin}
+          onBlur={(e) => {
+            const value = Number(e.target.value.replace(/\D/g, '') || rangeMin)
+            const newPriceMin = Math.max(priceMin, value)
+
+            setSearchOptions({ rangeMin: value, priceMin: newPriceMin })
+            setLocalValue(([min, max]) => [Math.max(newPriceMin, min), max])
+          }}
         />
         <TextField
           label="Max"
-          type="number"
-          value={localMax}
-          onChange={handleLocalChange('max')}
-          onBlur={handleBlur}
           size="small"
+          defaultValue={rangeMax}
+          onBlur={(e) => {
+            const value = Number(e.target.value.replace(/\D/g, '') || rangeMax)
+            const newPriceMax = Math.min(priceMax, value)
+
+            setSearchOptions({ rangeMax: value, priceMax: newPriceMax })
+            setLocalValue(([min, max]) => [min, Math.min(newPriceMax, max)])
+          }}
         />
       </Box>
     </Box>
