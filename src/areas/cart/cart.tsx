@@ -10,30 +10,17 @@ import { EmptyCart } from './empty-cart.tsx'
 import { FloatingActions } from './floating-actions.tsx'
 import { LoadingCart } from './loading-cart.tsx'
 import { PriceSummary } from './price-summary.tsx'
-import {
-  POPULAR_SERViCE_PREFIX,
-  REGULAR_SERViCE_PREFIX,
-} from '../../constants.ts'
+import { POPULAR_SERViCE_PREFIX, REGULAR_SERViCE_PREFIX } from '../../constants.ts'
 import { useCartItems } from '../../hooks/use-cart-items.ts'
 import { findProduct } from '../../tools.tsx'
 import { type CartItem, type Product } from '../../types.ts'
 import { useAllData, useIsLoading } from '../../use-data.ts'
 
-
 const LinkedButton = createLink(Button)
 
-const priceSortFn = (
-  a: CartItem & { product?: Product },
-  b: CartItem & { product?: Product },
-) => {
-  const aPrice =
-    (a.product?.price || 0) *
-    Number(a.quantity) *
-    (1 - Number(a.discount) / 100)
-  const bPrice =
-    (b.product?.price || 0) *
-    Number(b.quantity) *
-    (1 - Number(b.discount) / 100)
+const priceSortFn = (a: CartItem & { product?: Product }, b: CartItem & { product?: Product }) => {
+  const aPrice = (a.product?.price || 0) * Number(a.quantity) * (1 - Number(a.discount) / 100)
+  const bPrice = (b.product?.price || 0) * Number(b.quantity) * (1 - Number(b.discount) / 100)
 
   return bPrice - aPrice
 }
@@ -44,8 +31,7 @@ function splitCart(items: CartItem[]) {
   return items.reduce(
     (acc, item) => {
       const key =
-        item.itemId.startsWith(REGULAR_SERViCE_PREFIX) ||
-        item.itemId.startsWith(POPULAR_SERViCE_PREFIX)
+        item.itemId.startsWith(REGULAR_SERViCE_PREFIX) || item.itemId.startsWith(POPULAR_SERViCE_PREFIX)
           ? 'services'
           : 'products'
       acc[key].push(item)
@@ -112,10 +98,7 @@ export const Cart = () => {
           {products.length > 0 && (
             <>
               <Divider>
-                <DirectionsBikeIcon
-                  sx={{ color: 'secondary.dark' }}
-                  fontSize="small"
-                />
+                <DirectionsBikeIcon sx={{ color: 'secondary.dark' }} fontSize="small" />
               </Divider>
 
               {products.sort(priceSortFn).map((item) => {
@@ -127,10 +110,7 @@ export const Cart = () => {
           {services.length > 0 && (
             <>
               <Divider>
-                <ConstructionIcon
-                  sx={{ color: 'secondary.light' }}
-                  fontSize="small"
-                />
+                <ConstructionIcon sx={{ color: 'secondary.light' }} fontSize="small" />
               </Divider>
 
               {services.sort(priceSortFn).map((item) => {

@@ -16,7 +16,6 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as CartImport } from './routes/cart'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as IndexImport } from './routes/index'
-import { Route as CartServiceImport } from './routes/cart.service'
 import { Route as LayoutListImport } from './routes/_layout/list'
 
 // Create Virtual Routes
@@ -25,6 +24,7 @@ const StatsLazyImport = createFileRoute('/stats')()
 const NotificationsLazyImport = createFileRoute('/notifications')()
 const ColorsLazyImport = createFileRoute('/colors')()
 const CheckEngineLazyImport = createFileRoute('/check-engine')()
+const CartServiceLazyImport = createFileRoute('/cart/service')()
 const LayoutFavoritesLazyImport = createFileRoute('/_layout/favorites')()
 const LayoutListIdPercentsLazyImport = createFileRoute(
   '/_layout/list/$id/percents',
@@ -82,6 +82,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const CartServiceLazyRoute = CartServiceLazyImport.update({
+  id: '/service',
+  path: '/service',
+  getParentRoute: () => CartRoute,
+} as any).lazy(() => import('./routes/cart.service.lazy').then((d) => d.Route))
+
 const LayoutFavoritesLazyRoute = LayoutFavoritesLazyImport.update({
   id: '/favorites',
   path: '/favorites',
@@ -89,12 +95,6 @@ const LayoutFavoritesLazyRoute = LayoutFavoritesLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_layout/favorites.lazy').then((d) => d.Route),
 )
-
-const CartServiceRoute = CartServiceImport.update({
-  id: '/service',
-  path: '/service',
-  getParentRoute: () => CartRoute,
-} as any)
 
 const LayoutListRoute = LayoutListImport.update({
   id: '/list',
@@ -198,19 +198,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutListImport
       parentRoute: typeof LayoutImport
     }
-    '/cart/service': {
-      id: '/cart/service'
-      path: '/service'
-      fullPath: '/cart/service'
-      preLoaderRoute: typeof CartServiceImport
-      parentRoute: typeof CartImport
-    }
     '/_layout/favorites': {
       id: '/_layout/favorites'
       path: '/favorites'
       fullPath: '/favorites'
       preLoaderRoute: typeof LayoutFavoritesLazyImport
       parentRoute: typeof LayoutImport
+    }
+    '/cart/service': {
+      id: '/cart/service'
+      path: '/service'
+      fullPath: '/cart/service'
+      preLoaderRoute: typeof CartServiceLazyImport
+      parentRoute: typeof CartImport
     }
     '/_layout/favorites/$favoriteId/notes': {
       id: '/_layout/favorites/$favoriteId/notes'
@@ -287,11 +287,11 @@ const LayoutRouteWithChildren =
   LayoutRoute._addFileChildren(LayoutRouteChildren)
 
 interface CartRouteChildren {
-  CartServiceRoute: typeof CartServiceRoute
+  CartServiceLazyRoute: typeof CartServiceLazyRoute
 }
 
 const CartRouteChildren: CartRouteChildren = {
-  CartServiceRoute: CartServiceRoute,
+  CartServiceLazyRoute: CartServiceLazyRoute,
 }
 
 const CartRouteWithChildren = CartRoute._addFileChildren(CartRouteChildren)
@@ -305,8 +305,8 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
-  '/cart/service': typeof CartServiceRoute
   '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/cart/service': typeof CartServiceLazyRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
   '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
@@ -322,8 +322,8 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
-  '/cart/service': typeof CartServiceRoute
   '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/cart/service': typeof CartServiceLazyRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
   '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
@@ -340,8 +340,8 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/_layout/list': typeof LayoutListRouteWithChildren
-  '/cart/service': typeof CartServiceRoute
   '/_layout/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/cart/service': typeof CartServiceLazyRoute
   '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
   '/_layout/list/$id/details': typeof LayoutListIdDetailsLazyRoute
@@ -359,8 +359,8 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/stats'
     | '/list'
-    | '/cart/service'
     | '/favorites'
+    | '/cart/service'
     | '/favorites/$favoriteId/notes'
     | '/favorites/$id/details'
     | '/list/$id/details'
@@ -375,8 +375,8 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/stats'
     | '/list'
-    | '/cart/service'
     | '/favorites'
+    | '/cart/service'
     | '/favorites/$favoriteId/notes'
     | '/favorites/$id/details'
     | '/list/$id/details'
@@ -391,8 +391,8 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/stats'
     | '/_layout/list'
-    | '/cart/service'
     | '/_layout/favorites'
+    | '/cart/service'
     | '/_layout/favorites/$favoriteId/notes'
     | '/_layout/favorites/$id/details'
     | '/_layout/list/$id/details'
@@ -475,10 +475,6 @@ export const routeTree = rootRoute
         "/_layout/list/$id/percents"
       ]
     },
-    "/cart/service": {
-      "filePath": "cart.service.tsx",
-      "parent": "/cart"
-    },
     "/_layout/favorites": {
       "filePath": "_layout/favorites.lazy.tsx",
       "parent": "/_layout",
@@ -486,6 +482,10 @@ export const routeTree = rootRoute
         "/_layout/favorites/$favoriteId/notes",
         "/_layout/favorites/$id/details"
       ]
+    },
+    "/cart/service": {
+      "filePath": "cart.service.lazy.tsx",
+      "parent": "/cart"
     },
     "/_layout/favorites/$favoriteId/notes": {
       "filePath": "_layout/favorites.$favoriteId.notes.lazy.tsx",
