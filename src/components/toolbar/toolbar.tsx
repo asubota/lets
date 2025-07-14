@@ -23,12 +23,16 @@ interface ToolbarProps extends SharedToolbarProps {
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
+  min: number
+  max: number
 }
 
 export const Toolbar = ({
   total,
   uniqueVendors,
   filteredSearch,
+  min,
+  max,
   hasFavoritesSorting = false,
   hasPasteIn = false,
   hasGoogle = false,
@@ -54,7 +58,7 @@ export const Toolbar = ({
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
         <Stack direction="row" gap={1}>
-          <SearchOptions />
+          <SearchOptions min={min} max={max} />
           {hasFavoritesSorting && <Sorting />}
           {hasPasteIn && <PasteInSearchButton size="small" />}
           {hasGoogle && <GoogleButton />}
