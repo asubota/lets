@@ -1,5 +1,6 @@
 import { type FC, lazy, Suspense } from 'react'
 
+import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'
 import { Box } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -81,6 +82,19 @@ const Products: FC<ProductsProps> = ({
           </Box>
         )}
       </AnimatePresence>
+
+      {filteredByPrice.length === 0 && (
+        <Box
+          sx={{
+            color: 'text.secondary',
+            typography: 'h4',
+            textAlign: 'center',
+            mt: 6,
+          }}
+        >
+          <DoNotDisturbAltIcon sx={{ fontSize: '140px', color: 'text.secondary' }} />
+        </Box>
+      )}
 
       {view === 'tile' && (
         <Suspense fallback={<ProductsSkeleton />}>
