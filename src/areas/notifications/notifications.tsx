@@ -1,13 +1,5 @@
 import HouseIcon from '@mui/icons-material/House'
-import {
-  Alert,
-  Box,
-  Button,
-  DialogActions,
-  Stack,
-  Switch,
-  Typography,
-} from '@mui/material'
+import { Alert, Box, Button, DialogActions, Stack, Switch, Typography } from '@mui/material'
 import { createLink, useNavigate } from '@tanstack/react-router'
 
 import { Empty } from './empty.tsx'
@@ -40,7 +32,12 @@ export const Notifications = () => {
         </DialogActions>
       }
     >
-      {notifications.length === 0 && <Empty />}
+      {notifications.length === 0 && (
+        <>
+          <Empty />
+          <Box sx={{ flexGrow: 1 }} />
+        </>
+      )}
       {notifications.length > 0 && (
         <Stack
           sx={{
@@ -74,19 +71,11 @@ export const Notifications = () => {
                   />
                 }
               >
-                <Box
-                  component={Typography}
-                  variant="body2"
-                  sx={{ color: 'text.primary' }}
-                >
+                <Box component={Typography} variant="body2" sx={{ color: 'text.primary' }}>
                   {n.title}
                 </Box>
 
-                <Box
-                  component={Typography}
-                  variant="caption"
-                  sx={{ color: 'text.primary' }}
-                >
+                <Box component={Typography} variant="caption" sx={{ color: 'text.primary' }}>
                   {n.body}
                 </Box>
 
