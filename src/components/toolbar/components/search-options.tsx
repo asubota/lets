@@ -26,6 +26,10 @@ export const SearchOptions = ({ min, max }: SearchOptionsProps) => {
     return () => setSearchOptions({ show: false, rangeMax: 0, rangeMin: 0, priceMin: 0, priceMax: 0 })
   }, [setSearchOptions])
 
+  if (min === max) {
+    return null
+  }
+
   return (
     <IconButton size="small" sx={{ color: 'text.secondary' }} onClick={handleClick}>
       <ManageSearchIcon />
