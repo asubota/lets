@@ -10,125 +10,107 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as LayoutListRouteImport } from './routes/_layout/list'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as CartImport } from './routes/cart'
-import { Route as LayoutImport } from './routes/_layout'
-import { Route as IndexImport } from './routes/index'
-import { Route as LayoutListImport } from './routes/_layout/list'
-
-// Create Virtual Routes
-
-const StatsLazyImport = createFileRoute('/stats')()
-const NotificationsLazyImport = createFileRoute('/notifications')()
-const ColorsLazyImport = createFileRoute('/colors')()
-const CheckEngineLazyImport = createFileRoute('/check-engine')()
-const CartServiceLazyImport = createFileRoute('/cart/service')()
-const LayoutFavoritesLazyImport = createFileRoute('/_layout/favorites')()
-const LayoutListIdPercentsLazyImport = createFileRoute(
+const StatsLazyRouteImport = createFileRoute('/stats')()
+const NotificationsLazyRouteImport = createFileRoute('/notifications')()
+const ColorsLazyRouteImport = createFileRoute('/colors')()
+const CheckEngineLazyRouteImport = createFileRoute('/check-engine')()
+const CartServiceLazyRouteImport = createFileRoute('/cart/service')()
+const LayoutFavoritesLazyRouteImport = createFileRoute('/_layout/favorites')()
+const LayoutListIdPercentsLazyRouteImport = createFileRoute(
   '/_layout/list/$id/percents',
 )()
-const LayoutListIdDetailsLazyImport = createFileRoute(
+const LayoutListIdDetailsLazyRouteImport = createFileRoute(
   '/_layout/list/$id/details',
 )()
-const LayoutFavoritesIdDetailsLazyImport = createFileRoute(
+const LayoutFavoritesIdDetailsLazyRouteImport = createFileRoute(
   '/_layout/favorites/$id/details',
 )()
-const LayoutFavoritesFavoriteIdNotesLazyImport = createFileRoute(
+const LayoutFavoritesFavoriteIdNotesLazyRouteImport = createFileRoute(
   '/_layout/favorites/$favoriteId/notes',
 )()
 
-// Create/Update Routes
-
-const StatsLazyRoute = StatsLazyImport.update({
+const StatsLazyRoute = StatsLazyRouteImport.update({
   id: '/stats',
   path: '/stats',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/stats.lazy').then((d) => d.Route))
-
-const NotificationsLazyRoute = NotificationsLazyImport.update({
+const NotificationsLazyRoute = NotificationsLazyRouteImport.update({
   id: '/notifications',
   path: '/notifications',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
-
-const ColorsLazyRoute = ColorsLazyImport.update({
+const ColorsLazyRoute = ColorsLazyRouteImport.update({
   id: '/colors',
   path: '/colors',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/colors.lazy').then((d) => d.Route))
-
-const CheckEngineLazyRoute = CheckEngineLazyImport.update({
+const CheckEngineLazyRoute = CheckEngineLazyRouteImport.update({
   id: '/check-engine',
   path: '/check-engine',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/check-engine.lazy').then((d) => d.Route))
-
-const CartRoute = CartImport.update({
+const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/cart.lazy').then((d) => d.Route))
-
-const LayoutRoute = LayoutImport.update({
+const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const CartServiceLazyRoute = CartServiceLazyImport.update({
+const CartServiceLazyRoute = CartServiceLazyRouteImport.update({
   id: '/service',
   path: '/service',
   getParentRoute: () => CartRoute,
 } as any).lazy(() => import('./routes/cart.service.lazy').then((d) => d.Route))
-
-const LayoutFavoritesLazyRoute = LayoutFavoritesLazyImport.update({
+const LayoutFavoritesLazyRoute = LayoutFavoritesLazyRouteImport.update({
   id: '/favorites',
   path: '/favorites',
   getParentRoute: () => LayoutRoute,
 } as any).lazy(() =>
   import('./routes/_layout/favorites.lazy').then((d) => d.Route),
 )
-
-const LayoutListRoute = LayoutListImport.update({
+const LayoutListRoute = LayoutListRouteImport.update({
   id: '/list',
   path: '/list',
   getParentRoute: () => LayoutRoute,
 } as any).lazy(() => import('./routes/_layout/list.lazy').then((d) => d.Route))
-
-const LayoutListIdPercentsLazyRoute = LayoutListIdPercentsLazyImport.update({
-  id: '/$id/percents',
-  path: '/$id/percents',
-  getParentRoute: () => LayoutListRoute,
-} as any).lazy(() =>
-  import('./routes/_layout/list.$id.percents.lazy').then((d) => d.Route),
-)
-
-const LayoutListIdDetailsLazyRoute = LayoutListIdDetailsLazyImport.update({
+const LayoutListIdPercentsLazyRoute =
+  LayoutListIdPercentsLazyRouteImport.update({
+    id: '/$id/percents',
+    path: '/$id/percents',
+    getParentRoute: () => LayoutListRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/list.$id.percents.lazy').then((d) => d.Route),
+  )
+const LayoutListIdDetailsLazyRoute = LayoutListIdDetailsLazyRouteImport.update({
   id: '/$id/details',
   path: '/$id/details',
   getParentRoute: () => LayoutListRoute,
 } as any).lazy(() =>
   import('./routes/_layout/list.$id.details.lazy').then((d) => d.Route),
 )
-
 const LayoutFavoritesIdDetailsLazyRoute =
-  LayoutFavoritesIdDetailsLazyImport.update({
+  LayoutFavoritesIdDetailsLazyRouteImport.update({
     id: '/$id/details',
     path: '/$id/details',
     getParentRoute: () => LayoutFavoritesLazyRoute,
   } as any).lazy(() =>
     import('./routes/_layout/favorites.$id.details.lazy').then((d) => d.Route),
   )
-
 const LayoutFavoritesFavoriteIdNotesLazyRoute =
-  LayoutFavoritesFavoriteIdNotesLazyImport.update({
+  LayoutFavoritesFavoriteIdNotesLazyRouteImport.update({
     id: '/$favoriteId/notes',
     path: '/$favoriteId/notes',
     getParentRoute: () => LayoutFavoritesLazyRoute,
@@ -138,112 +120,214 @@ const LayoutFavoritesFavoriteIdNotesLazyRoute =
     ),
   )
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/cart': typeof CartRouteWithChildren
+  '/check-engine': typeof CheckEngineLazyRoute
+  '/colors': typeof ColorsLazyRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/stats': typeof StatsLazyRoute
+  '/list': typeof LayoutListRouteWithChildren
+  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/cart/service': typeof CartServiceLazyRoute
+  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
+  '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
+  '/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/cart': typeof CartRouteWithChildren
+  '/check-engine': typeof CheckEngineLazyRoute
+  '/colors': typeof ColorsLazyRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/stats': typeof StatsLazyRoute
+  '/list': typeof LayoutListRouteWithChildren
+  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/cart/service': typeof CartServiceLazyRoute
+  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
+  '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
+  '/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_layout': typeof LayoutRouteWithChildren
+  '/cart': typeof CartRouteWithChildren
+  '/check-engine': typeof CheckEngineLazyRoute
+  '/colors': typeof ColorsLazyRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/stats': typeof StatsLazyRoute
+  '/_layout/list': typeof LayoutListRouteWithChildren
+  '/_layout/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/cart/service': typeof CartServiceLazyRoute
+  '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
+  '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
+  '/_layout/list/$id/details': typeof LayoutListIdDetailsLazyRoute
+  '/_layout/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/cart'
+    | '/check-engine'
+    | '/colors'
+    | '/notifications'
+    | '/stats'
+    | '/list'
+    | '/favorites'
+    | '/cart/service'
+    | '/favorites/$favoriteId/notes'
+    | '/favorites/$id/details'
+    | '/list/$id/details'
+    | '/list/$id/percents'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/cart'
+    | '/check-engine'
+    | '/colors'
+    | '/notifications'
+    | '/stats'
+    | '/list'
+    | '/favorites'
+    | '/cart/service'
+    | '/favorites/$favoriteId/notes'
+    | '/favorites/$id/details'
+    | '/list/$id/details'
+    | '/list/$id/percents'
+  id:
+    | '__root__'
+    | '/'
+    | '/_layout'
+    | '/cart'
+    | '/check-engine'
+    | '/colors'
+    | '/notifications'
+    | '/stats'
+    | '/_layout/list'
+    | '/_layout/favorites'
+    | '/cart/service'
+    | '/_layout/favorites/$favoriteId/notes'
+    | '/_layout/favorites/$id/details'
+    | '/_layout/list/$id/details'
+    | '/_layout/list/$id/percents'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
+  CartRoute: typeof CartRouteWithChildren
+  CheckEngineLazyRoute: typeof CheckEngineLazyRoute
+  ColorsLazyRoute: typeof ColorsLazyRoute
+  NotificationsLazyRoute: typeof NotificationsLazyRoute
+  StatsLazyRoute: typeof StatsLazyRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartImport
-      parentRoute: typeof rootRoute
-    }
-    '/check-engine': {
-      id: '/check-engine'
-      path: '/check-engine'
-      fullPath: '/check-engine'
-      preLoaderRoute: typeof CheckEngineLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/colors': {
-      id: '/colors'
-      path: '/colors'
-      fullPath: '/colors'
-      preLoaderRoute: typeof ColorsLazyImport
-      parentRoute: typeof rootRoute
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsLazyRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/notifications': {
       id: '/notifications'
       path: '/notifications'
       fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof NotificationsLazyRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/stats': {
-      id: '/stats'
-      path: '/stats'
-      fullPath: '/stats'
-      preLoaderRoute: typeof StatsLazyImport
-      parentRoute: typeof rootRoute
+    '/colors': {
+      id: '/colors'
+      path: '/colors'
+      fullPath: '/colors'
+      preLoaderRoute: typeof ColorsLazyRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_layout/list': {
-      id: '/_layout/list'
-      path: '/list'
-      fullPath: '/list'
-      preLoaderRoute: typeof LayoutListImport
-      parentRoute: typeof LayoutImport
+    '/check-engine': {
+      id: '/check-engine'
+      path: '/check-engine'
+      fullPath: '/check-engine'
+      preLoaderRoute: typeof CheckEngineLazyRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_layout/favorites': {
-      id: '/_layout/favorites'
-      path: '/favorites'
-      fullPath: '/favorites'
-      preLoaderRoute: typeof LayoutFavoritesLazyImport
-      parentRoute: typeof LayoutImport
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/cart/service': {
       id: '/cart/service'
       path: '/service'
       fullPath: '/cart/service'
-      preLoaderRoute: typeof CartServiceLazyImport
-      parentRoute: typeof CartImport
+      preLoaderRoute: typeof CartServiceLazyRouteImport
+      parentRoute: typeof CartRoute
     }
-    '/_layout/favorites/$favoriteId/notes': {
-      id: '/_layout/favorites/$favoriteId/notes'
-      path: '/$favoriteId/notes'
-      fullPath: '/favorites/$favoriteId/notes'
-      preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesLazyImport
-      parentRoute: typeof LayoutFavoritesLazyImport
+    '/_layout/favorites': {
+      id: '/_layout/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof LayoutFavoritesLazyRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/_layout/favorites/$id/details': {
-      id: '/_layout/favorites/$id/details'
-      path: '/$id/details'
-      fullPath: '/favorites/$id/details'
-      preLoaderRoute: typeof LayoutFavoritesIdDetailsLazyImport
-      parentRoute: typeof LayoutFavoritesLazyImport
-    }
-    '/_layout/list/$id/details': {
-      id: '/_layout/list/$id/details'
-      path: '/$id/details'
-      fullPath: '/list/$id/details'
-      preLoaderRoute: typeof LayoutListIdDetailsLazyImport
-      parentRoute: typeof LayoutListImport
+    '/_layout/list': {
+      id: '/_layout/list'
+      path: '/list'
+      fullPath: '/list'
+      preLoaderRoute: typeof LayoutListRouteImport
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/list/$id/percents': {
       id: '/_layout/list/$id/percents'
       path: '/$id/percents'
       fullPath: '/list/$id/percents'
-      preLoaderRoute: typeof LayoutListIdPercentsLazyImport
-      parentRoute: typeof LayoutListImport
+      preLoaderRoute: typeof LayoutListIdPercentsLazyRouteImport
+      parentRoute: typeof LayoutListRoute
+    }
+    '/_layout/list/$id/details': {
+      id: '/_layout/list/$id/details'
+      path: '/$id/details'
+      fullPath: '/list/$id/details'
+      preLoaderRoute: typeof LayoutListIdDetailsLazyRouteImport
+      parentRoute: typeof LayoutListRoute
+    }
+    '/_layout/favorites/$id/details': {
+      id: '/_layout/favorites/$id/details'
+      path: '/$id/details'
+      fullPath: '/favorites/$id/details'
+      preLoaderRoute: typeof LayoutFavoritesIdDetailsLazyRouteImport
+      parentRoute: typeof LayoutFavoritesLazyRoute
+    }
+    '/_layout/favorites/$favoriteId/notes': {
+      id: '/_layout/favorites/$favoriteId/notes'
+      path: '/$favoriteId/notes'
+      fullPath: '/favorites/$favoriteId/notes'
+      preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesLazyRouteImport
+      parentRoute: typeof LayoutFavoritesLazyRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface LayoutListRouteChildren {
   LayoutListIdDetailsLazyRoute: typeof LayoutListIdDetailsLazyRoute
@@ -296,120 +380,6 @@ const CartRouteChildren: CartRouteChildren = {
 
 const CartRouteWithChildren = CartRoute._addFileChildren(CartRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/cart': typeof CartRouteWithChildren
-  '/check-engine': typeof CheckEngineLazyRoute
-  '/colors': typeof ColorsLazyRoute
-  '/notifications': typeof NotificationsLazyRoute
-  '/stats': typeof StatsLazyRoute
-  '/list': typeof LayoutListRouteWithChildren
-  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
-  '/cart/service': typeof CartServiceLazyRoute
-  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
-  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
-  '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
-  '/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/cart': typeof CartRouteWithChildren
-  '/check-engine': typeof CheckEngineLazyRoute
-  '/colors': typeof ColorsLazyRoute
-  '/notifications': typeof NotificationsLazyRoute
-  '/stats': typeof StatsLazyRoute
-  '/list': typeof LayoutListRouteWithChildren
-  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
-  '/cart/service': typeof CartServiceLazyRoute
-  '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
-  '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
-  '/list/$id/details': typeof LayoutListIdDetailsLazyRoute
-  '/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_layout': typeof LayoutRouteWithChildren
-  '/cart': typeof CartRouteWithChildren
-  '/check-engine': typeof CheckEngineLazyRoute
-  '/colors': typeof ColorsLazyRoute
-  '/notifications': typeof NotificationsLazyRoute
-  '/stats': typeof StatsLazyRoute
-  '/_layout/list': typeof LayoutListRouteWithChildren
-  '/_layout/favorites': typeof LayoutFavoritesLazyRouteWithChildren
-  '/cart/service': typeof CartServiceLazyRoute
-  '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
-  '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
-  '/_layout/list/$id/details': typeof LayoutListIdDetailsLazyRoute
-  '/_layout/list/$id/percents': typeof LayoutListIdPercentsLazyRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/cart'
-    | '/check-engine'
-    | '/colors'
-    | '/notifications'
-    | '/stats'
-    | '/list'
-    | '/favorites'
-    | '/cart/service'
-    | '/favorites/$favoriteId/notes'
-    | '/favorites/$id/details'
-    | '/list/$id/details'
-    | '/list/$id/percents'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/cart'
-    | '/check-engine'
-    | '/colors'
-    | '/notifications'
-    | '/stats'
-    | '/list'
-    | '/favorites'
-    | '/cart/service'
-    | '/favorites/$favoriteId/notes'
-    | '/favorites/$id/details'
-    | '/list/$id/details'
-    | '/list/$id/percents'
-  id:
-    | '__root__'
-    | '/'
-    | '/_layout'
-    | '/cart'
-    | '/check-engine'
-    | '/colors'
-    | '/notifications'
-    | '/stats'
-    | '/_layout/list'
-    | '/_layout/favorites'
-    | '/cart/service'
-    | '/_layout/favorites/$favoriteId/notes'
-    | '/_layout/favorites/$id/details'
-    | '/_layout/list/$id/details'
-    | '/_layout/list/$id/percents'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LayoutRoute: typeof LayoutRouteWithChildren
-  CartRoute: typeof CartRouteWithChildren
-  CheckEngineLazyRoute: typeof CheckEngineLazyRoute
-  ColorsLazyRoute: typeof ColorsLazyRoute
-  NotificationsLazyRoute: typeof NotificationsLazyRoute
-  StatsLazyRoute: typeof StatsLazyRoute
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
@@ -419,90 +389,6 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsLazyRoute: NotificationsLazyRoute,
   StatsLazyRoute: StatsLazyRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_layout",
-        "/cart",
-        "/check-engine",
-        "/colors",
-        "/notifications",
-        "/stats"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_layout": {
-      "filePath": "_layout.tsx",
-      "children": [
-        "/_layout/list",
-        "/_layout/favorites"
-      ]
-    },
-    "/cart": {
-      "filePath": "cart.tsx",
-      "children": [
-        "/cart/service"
-      ]
-    },
-    "/check-engine": {
-      "filePath": "check-engine.lazy.tsx"
-    },
-    "/colors": {
-      "filePath": "colors.lazy.tsx"
-    },
-    "/notifications": {
-      "filePath": "notifications.lazy.tsx"
-    },
-    "/stats": {
-      "filePath": "stats.lazy.tsx"
-    },
-    "/_layout/list": {
-      "filePath": "_layout/list.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/list/$id/details",
-        "/_layout/list/$id/percents"
-      ]
-    },
-    "/_layout/favorites": {
-      "filePath": "_layout/favorites.lazy.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/favorites/$favoriteId/notes",
-        "/_layout/favorites/$id/details"
-      ]
-    },
-    "/cart/service": {
-      "filePath": "cart.service.lazy.tsx",
-      "parent": "/cart"
-    },
-    "/_layout/favorites/$favoriteId/notes": {
-      "filePath": "_layout/favorites.$favoriteId.notes.lazy.tsx",
-      "parent": "/_layout/favorites"
-    },
-    "/_layout/favorites/$id/details": {
-      "filePath": "_layout/favorites.$id.details.lazy.tsx",
-      "parent": "/_layout/favorites"
-    },
-    "/_layout/list/$id/details": {
-      "filePath": "_layout/list.$id.details.lazy.tsx",
-      "parent": "/_layout/list"
-    },
-    "/_layout/list/$id/percents": {
-      "filePath": "_layout/list.$id.percents.lazy.tsx",
-      "parent": "/_layout/list"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
