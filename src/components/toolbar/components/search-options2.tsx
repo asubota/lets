@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import ManageSearchIcon from '@mui/icons-material/ManageSearch'
+import SavedSearchIcon from '@mui/icons-material/SavedSearch'
 import { IconButton } from '@mui/material'
 
 import { useAppActions, useSearchOptions } from '../../../store'
@@ -10,20 +10,20 @@ interface SearchOptionsProps {
   max: number
 }
 
-export const SearchOptions = ({ min, max }: SearchOptionsProps) => {
-  const { show } = useSearchOptions()
+export const SearchOptions2 = ({ min, max }: SearchOptionsProps) => {
+  const { show2 } = useSearchOptions()
   const { setSearchOptions } = useAppActions()
 
   const handleClick = () => {
-    if (show) {
+    if (show2) {
       setSearchOptions({ show: false, show2: false, rangeMax: 0, rangeMin: 0, priceMin: 0, priceMax: 0 })
     } else {
-      setSearchOptions({ show: true, show2: false, priceMin: min, priceMax: max, rangeMin: min, rangeMax: max })
+      setSearchOptions({ show: false, show2: true, priceMin: min, priceMax: max, rangeMin: min, rangeMax: max })
     }
   }
 
   useEffect(() => {
-    return () => setSearchOptions({ show: false, rangeMax: 0, rangeMin: 0, priceMin: 0, priceMax: 0 })
+    return () => setSearchOptions({ show: false, show2: false, rangeMax: 0, rangeMin: 0, priceMin: 0, priceMax: 0 })
   }, [setSearchOptions])
 
   if (min === max) {
@@ -32,7 +32,7 @@ export const SearchOptions = ({ min, max }: SearchOptionsProps) => {
 
   return (
     <IconButton size="small" sx={{ color: 'text.secondary' }} onClick={handleClick}>
-      <ManageSearchIcon />
+      <SavedSearchIcon />
     </IconButton>
   )
 }

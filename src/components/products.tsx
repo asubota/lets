@@ -13,6 +13,7 @@ import { useAppView, useSearchOptions } from '../store'
 import { useSearchVendors } from '../store/search.ts'
 import { getPriceMinMax, getUniqueVendors } from '../tools.tsx'
 import { type Product } from '../types.ts'
+import { RangeSearch2 } from './range-search2.tsx'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
 
@@ -37,7 +38,7 @@ const Products: FC<ProductsProps> = ({
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(products)
   const searchVendors = useSearchVendors()
-  const { show, priceMin, priceMax } = useSearchOptions()
+  const { show, show2, priceMin, priceMax } = useSearchOptions()
 
   if (products.length === 0 && search.length === 0) {
     return <Welcome />
@@ -52,7 +53,8 @@ const Products: FC<ProductsProps> = ({
 
   const [min, max] = getPriceMinMax(filteredList)
 
-  const filteredByPrice = show ? filteredList.filter((p) => p.price >= priceMin && p.price <= priceMax) : filteredList
+  const filteredByPrice =
+    show || show2 ? filteredList.filter((p) => p.price >= priceMin && p.price <= priceMax) : filteredList
 
   return (
     <>
@@ -79,6 +81,21 @@ const Products: FC<ProductsProps> = ({
             sx={{ overflow: 'hidden' }}
           >
             <RangeSearch />
+          </Box>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {show2 && (
+          <Box
+            component={motion.div}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            sx={{ overflow: 'hidden' }}
+          >
+            <RangeSearch2 />
           </Box>
         )}
       </AnimatePresence>

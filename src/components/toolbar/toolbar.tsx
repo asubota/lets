@@ -4,6 +4,7 @@ import { Sorting } from '../sorting.tsx'
 import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
 import { SearchOptions } from './components/search-options.tsx'
+import { SearchOptions2 } from './components/search-options2.tsx'
 import { SwitchToInfoView } from './components/switch-to-info-view.tsx'
 import { SwitchToTableView } from './components/switch-to-table-view.tsx'
 import { SwitchToTileView } from './components/switch-to-tile-view.tsx'
@@ -47,17 +48,14 @@ export const Toolbar = ({
       }}
     >
       <Box sx={{ mr: 'auto', display: 'flex' }}>
-        <ResultCounterAndFilter
-          filteredSearch={filteredSearch}
-          total={total}
-          uniqueVendors={uniqueVendors}
-        />
+        <ResultCounterAndFilter filteredSearch={filteredSearch} total={total} uniqueVendors={uniqueVendors} />
 
         <ExportButton />
       </Box>
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
         <Stack direction="row" gap={1}>
+          <SearchOptions2 min={min} max={max} />
           <SearchOptions min={min} max={max} />
           {hasFavoritesSorting && <Sorting />}
           {hasPasteIn && <PasteInSearchButton size="small" />}

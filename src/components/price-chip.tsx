@@ -34,18 +34,15 @@ const getNextKey = (key: PriceKey, hasSale: boolean): PriceKey => {
 
 export const PriceChip: FC<{ product: Product }> = ({ product }) => {
   const [key, setKey] = useState<PriceKey>('price')
-  const hasSale =
-    !!product.price_old && Number(product.price_old) !== product.price
+  const hasSale = !!product.price_old && Number(product.price_old) !== product.price
 
-  const discount = product.price_old
-    ? ((1 - product.price / product.price_old) * 100).toFixed(0)
-    : 0
+  const discount = product.price_old ? ((1 - product.price / product.price_old) * 100).toFixed(0) : 0
   const diff = product.price_old ? product.price_old - product.price : 0
 
   const getLabel = (key: PriceKey) => {
     switch (key) {
       case 'price':
-        return `${product.price} грн`
+        return `${product.price.toLocaleString()} грн`
       case 'p2':
         return `${product.p2 || '?'} грн`
       case 'price_old':
@@ -55,8 +52,7 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
             <Box
               component="span"
               sx={{
-                color: (theme) =>
-                  theme.palette.mode === 'dark' ? 'white' : 'black',
+                color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black'),
                 fontSize: '12px',
               }}
             >
