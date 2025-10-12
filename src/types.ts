@@ -1,3 +1,5 @@
+export type IndexedProduct = Product & { __tokens: string[] }
+
 export interface Product {
   sku: string
   name: string

@@ -14,34 +14,36 @@ interface HighlightOptions {
 
 export function getHighlightedText(
   text: string | null,
-  highlight: string,
+  highlight: string | string[],
   options: HighlightOptions = {
     match: {
-      sx: {
-        color: 'primary.main',
-        fontWeight: 'bold',
-      },
+      sx: { color: 'primary.main', fontWeight: 'bold' },
     },
     noMatch: {},
   },
 ) {
-  if (text === null) {
+  if (text === null) return text
+
+  const tokens = Array.isArray(highlight) ? highlight.filter(Boolean) : highlight.trim().split(/\s+/)
+
+  if (tokens.length === 0) {
     return text
   }
 
-  const parts = text.split(new RegExp(`(${escapeRegExp(highlight)})`, 'gi'))
+  const regex = new RegExp(`(${tokens.map(escapeRegExp).join('|')})`, 'gi')
+
+  const parts = text.split(regex)
 
   return (
     <>
-      {parts.map((part, i) => (
-        <Typography
-          component="span"
-          key={i}
-          {...(part.toLowerCase() === highlight.toLowerCase() ? options.match : options.noMatch)}
-        >
-          {part}
-        </Typography>
-      ))}
+      {parts.map((part, i) => {
+        const isMatch = tokens.some((t) => part.toLowerCase() === t.toLowerCase())
+        return (
+          <Typography component="span" key={i} {...(isMatch ? options.match : options.noMatch)}>
+            {part}
+          </Typography>
+        )
+      })}
     </>
   )
 }
