@@ -3,8 +3,8 @@ import { type FC } from 'react'
 import { List, ListItem, ListItemText } from '@mui/material'
 
 import { FadePopper } from '../../../components/fade-popper.tsx'
+import { useSearch } from '../../../search-tools.ts'
 import { getHighlightedText } from '../../../tools.tsx'
-import { useSearch } from '../../../use-data.ts'
 
 interface SearchSuggestionsProps {
   open: boolean
@@ -12,11 +12,7 @@ interface SearchSuggestionsProps {
   setValue(value: string): void
 }
 
-export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
-  search,
-  setValue,
-  open,
-}) => {
+export const SearchSuggestions: FC<SearchSuggestionsProps> = ({ search, setValue, open }) => {
   const list = useSearch(search).slice(0, 12)
   const anchorEl = document.querySelector('.app-bar')
 
@@ -32,12 +28,7 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({
         }}
       >
         {list.map((p) => (
-          <ListItem
-            divider
-            key={p.sku + p.vendor}
-            sx={{ pt: 0, pb: 0 }}
-            onClick={() => setValue(p.sku)}
-          >
+          <ListItem divider key={p.sku + p.vendor} sx={{ pt: 0, pb: 0 }} onClick={() => setValue(p.sku)}>
             <ListItemText
               sx={{
                 display: 'flex',

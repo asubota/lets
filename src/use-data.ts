@@ -1,21 +1,17 @@
-import { useMemo } from 'react'
-
 import { useQuery } from '@tanstack/react-query'
 
 import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants.ts'
 import { parseData } from './data-tools.ts'
+import { buildItemTokens } from './search-tools.ts'
 import { getGoogleFileId } from './secrets.ts'
 import { type Meta, useAppActions } from './store'
-import { filterBySearch, getUniqueVendors } from './tools.tsx'
-import { type Product } from './types.ts'
+import { getUniqueVendors } from './tools.tsx'
+import { type IndexedProduct, type Product } from './types.ts'
 
 const isMeta = (p: Product) => p.sku === '__meta__'
 const isNotMeta = (p: Product) => p.sku !== '__meta__'
 
-const getData = async (
-  id: string,
-  setMeta: (data: Meta) => void,
-): Promise<Product[]> => {
+const getData = async (id: string, setMeta: (data: Meta) => void): Promise<IndexedProduct[]> => {
   if (id.length === 0) {
     return []
   }
@@ -34,13 +30,15 @@ const getData = async (
     }
   }
 
-  return products.filter(isNotMeta)
+  return products.filter(isNotMeta).map((p: Product) => {
+    return { ...p, __tokens: buildItemTokens(p) }
+  })
 }
 
-const useData = () => {
+export const useData = () => {
   const id = getGoogleFileId()
   const { setMeta } = useAppActions()
-  return useQuery<Product[]>({
+  return useQuery<IndexedProduct[]>({
     staleTime: 1000 * 60 * 10, // 10 minutes
     queryKey: [CACHE_BASE_KEY, id],
     queryFn: () => getData(id, setMeta),
@@ -73,17 +71,4 @@ export const useAllVendors = () => {
   const { data = [] } = useData()
 
   return getUniqueVendors(data)
-}
-
-export const useSearch = (search: string): Product[] => {
-  const { data = [] } = useData()
-
-  return useMemo(() => {
-    if (search.length < 3) {
-      return []
-    }
-
-    const lowerCaseSearch = search.toLowerCase()
-    return data.filter((item) => filterBySearch(item, lowerCaseSearch))
-  }, [search, data])
 }

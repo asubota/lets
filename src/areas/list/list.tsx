@@ -9,10 +9,11 @@ import { LimitSearchModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
+import { useSearch } from '../../search-tools.ts'
 import { useHistoryActions } from '../../store'
 import { useSearchActions } from '../../store/search.ts'
 import { type SearchForm } from '../../types.ts'
-import { useIsLoading, useSearch } from '../../use-data.ts'
+import { useIsLoading } from '../../use-data.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
