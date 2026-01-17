@@ -10,7 +10,8 @@ export const VendorChip: FC<{
   color?: string
   borderColor?: string
   backgroundColor?: string
-}> = ({ vendor, color, borderColor, backgroundColor, source = 'live' }) => {
+  onClick?: (vendor: string) => void
+}> = ({ vendor, color, borderColor, backgroundColor, source = 'live', onClick }) => {
   const {
     color: liveColor,
     borderColor: liveBorderColor,
@@ -18,10 +19,14 @@ export const VendorChip: FC<{
   } = useVendorColor(vendor)
 
   const colorValue = (source === 'live' ? liveColor : color) || 'secondary'
-  const borderColorValue =
-    (source === 'live' ? liveBorderColor : borderColor) || 'secondary.main'
-  const backgroundColorValue =
-    source === 'live' ? liveBackgroundColor : backgroundColor
+  const borderColorValue = (source === 'live' ? liveBorderColor : borderColor) || 'secondary.main'
+  const backgroundColorValue = source === 'live' ? liveBackgroundColor : backgroundColor
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(vendor)
+    }
+  }
 
   return vendor !== 'base' ? (
     <Chip
@@ -29,6 +34,7 @@ export const VendorChip: FC<{
       label={vendor}
       size="small"
       variant="outlined"
+      onClick={handleClick}
       sx={{
         borderWidth: '2px',
         borderColor: borderColorValue,

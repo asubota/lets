@@ -9,7 +9,16 @@ const swFile = 'sw-custom.ts'
 async function compileServiceWorker() {
   const inputOptions: InputOptions = {
     input: `src/${swFile}`,
-    plugins: [rollupPluginTypescript({}), nodeResolve(), terser()],
+    plugins: [
+      rollupPluginTypescript({
+        compilerOptions: {
+          allowImportingTsExtensions: true,
+          noEmit: true,
+        },
+      }),
+      nodeResolve(),
+      terser(),
+    ],
   }
 
   const outputOptions: OutputOptions = {

@@ -47,30 +47,22 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       ...sonarjs.configs.recommended.rules,
 
+      '@typescript-eslint/no-explicit-any': 'error',
       'react/jsx-no-useless-fragment': 'warn',
       'react-compiler/react-compiler': 'error',
       'react/react-in-jsx-scope': 'off',
+      'curly': ['warn', 'all'],
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
           argsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/consistent-type-imports': [
-        'warn',
-        { fixStyle: 'inline-type-imports' },
-      ],
+      '@typescript-eslint/consistent-type-imports': ['warn', { fixStyle: 'inline-type-imports' }],
       'import/order': [
         'error',
         {
-          'groups': [
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'object',
-            'type',
-          ],
+          'groups': ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'object', 'type'],
           'pathGroups': [
             {
               pattern: 'react',

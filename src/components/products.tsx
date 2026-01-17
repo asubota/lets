@@ -16,6 +16,7 @@ import { type Product } from '../types.ts'
 import { RangeSearch2 } from './range-search2.tsx'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
+import { useAppliedFilters } from '../store/appliedFilters'
 
 const TableView = lazy(() => import('./table-view.tsx'))
 const TilesView = lazy(() => import('./tiles-view.tsx'))
@@ -39,6 +40,7 @@ const Products: FC<ProductsProps> = ({
   const uniqueVendors = getUniqueVendors(products)
   const searchVendors = useSearchVendors()
   const { show, show2, priceMin, priceMax } = useSearchOptions()
+  const appliedFilters = useAppliedFilters()
 
   if (products.length === 0 && search.length === 0) {
     return <Welcome />
@@ -51,10 +53,15 @@ const Products: FC<ProductsProps> = ({
   const filteredList =
     searchVendors.length === 0 ? products : products.filter((product) => searchVendors.includes(product.vendor))
 
-  const [min, max] = getPriceMinMax(filteredList)
+  const filteredByVendor =
+    !isFavoritePage && appliedFilters.length > 0
+      ? filteredList.filter((product) => appliedFilters.includes(product.vendor))
+      : filteredList
+
+  const [min, max] = getPriceMinMax(filteredByVendor)
 
   const filteredByPrice =
-    show || show2 ? filteredList.filter((p) => p.price >= priceMin && p.price <= priceMax) : filteredList
+    show || show2 ? filteredByVendor.filter((p) => p.price >= priceMin && p.price <= priceMax) : filteredByVendor
 
   return (
     <>

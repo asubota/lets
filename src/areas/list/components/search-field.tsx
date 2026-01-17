@@ -3,9 +3,11 @@ import { type FC, type KeyboardEventHandler } from 'react'
 import { Cancel, Search } from '@mui/icons-material'
 import LoopIcon from '@mui/icons-material/Loop'
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
+import { yellow } from '@mui/material/colors'
 import { clsx } from 'clsx'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { useAppliedFilters } from '../../../store/appliedFilters'
 import { type SearchForm } from '../../../types.ts'
 import { useIsLoading } from '../../../use-data.ts'
 
@@ -15,6 +17,8 @@ export const SearchField: FC<{
 }> = ({ onSubmit, onFocus }) => {
   const loading = useIsLoading()
   const { control, reset } = useFormContext<SearchForm>()
+  const appliedFilters = useAppliedFilters()
+  const hasApplied = appliedFilters.length > 0
 
   const handleFormReset = () => {
     reset()
@@ -34,7 +38,10 @@ export const SearchField: FC<{
       render={({ field }) => {
         return (
           <TextField
-            sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
+            sx={{
+              '& .MuiInputBase-root': { overflow: 'hidden' },
+              '& .MuiInputLabel-root': { color: hasApplied ? yellow[500] : undefined },
+            }}
             label="Search"
             variant="outlined"
             fullWidth

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { CACHE_COLORS_KEY } from './constants.ts'
-import { getAllColors, removeColor, setColor } from './google-api-colors.ts'
-import { type Color, type VendorAndColors } from './types.ts'
+import { CACHE_COLORS_KEY } from './constants'
+import { getAllColors, removeColor, setColor } from './google-api-colors'
+import { type Color, type VendorAndColors } from './types'
 
 const getQueryKey = (): [string] => {
   return [CACHE_COLORS_KEY]
@@ -76,11 +76,7 @@ function findDiff(newData: VendorData, oldData: VendorData): DiffResult {
 export const useSetColors = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<
-    void,
-    unknown,
-    { currentColors: VendorData; colors: VendorData }
-  >({
+  return useMutation<void, unknown, { currentColors: VendorData; colors: VendorData }>({
     async onSettled() {
       return await queryClient.invalidateQueries({
         queryKey: getQueryKey(),

@@ -1,5 +1,5 @@
-import { parseData } from './data-tools.ts'
-import { type AppMessage, type NotificationData } from './types.ts'
+import { parseData } from './data-tools'
+import { type AppMessage, type NotificationData } from './types'
 
 const CACHE_NAME = 'lets-bike-api'
 
@@ -18,9 +18,7 @@ function isStale(cachedDate: Date, currentDate: Date) {
   const currentHour = currentDate.getHours()
   const cachedHour = cachedDate.getHours()
 
-  return (
-    currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour
-  )
+  return currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour
 }
 
 function notifyApp(message: AppMessage) {
@@ -38,27 +36,23 @@ sw.addEventListener('notificationclick', (event) => {
   const data: NotificationData = event.notification.data
 
   const doNavigation = async () => {
-    return sw.clients
-      .matchAll({ type: 'window', includeUncontrolled: true })
-      .then((windowClients) => {
-        const focusedClient = windowClients.find(
-          (client) => 'focus' in client && client.focused,
-        )
+    return sw.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      const focusedClient = windowClients.find((client) => 'focus' in client && client.focused)
 
-        if (focusedClient) {
-          const message: AppMessage = {
-            type: 'navigate',
-            payload: {
-              sku: data.sku,
-              to: data.to,
-            },
-          }
-
-          focusedClient.postMessage(message)
-        } else {
-          sw.clients.openWindow('/lets/')
+      if (focusedClient) {
+        const message: AppMessage = {
+          type: 'navigate',
+          payload: {
+            sku: data.sku,
+            to: data.to,
+          },
         }
-      })
+
+        focusedClient.postMessage(message)
+      } else {
+        sw.clients.openWindow('/lets/')
+      }
+    })
   }
 
   event.waitUntil(doNavigation().then(() => event.notification.close()))
@@ -82,10 +76,7 @@ sw.addEventListener('message', async (event) => {
   }
 
   if (message.type === 'push-me') {
-    await sw.registration.showNotification(
-      message.payload.title,
-      message.payload.options,
-    )
+    await sw.registration.showNotification(message.payload.title, message.payload.options)
   }
 })
 

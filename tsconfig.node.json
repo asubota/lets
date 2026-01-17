@@ -5,7 +5,10 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "strict": true,
+    "noImplicitAny": true
   },
   "include": ["vite.config.ts", "compile-service-workers-ts.plugin.ts"]
 }
