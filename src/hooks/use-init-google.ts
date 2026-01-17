@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 
-import { showError } from '../alerts.tsx'
-import { loadGoogleApi, initGoogleAuth } from '../google-auth.ts'
-import { removeGoogleAuthTokenAndExpiry } from '../secrets.ts'
-import { getMinutesLeft } from '../tools.tsx'
+import { showError } from '../alerts'
+import { initGoogleAuth } from '../google-auth'
+import { loadGoogleApi } from '../google-auth'
+import { removeGoogleAuthTokenAndExpiry } from '../secrets'
+import { getMinutesLeft } from '../tools'
 
 export const useInitGoogle = () => {
   useEffect(() => {

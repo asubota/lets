@@ -1,3 +1,3 @@
-export * from './table.ts'
-export * from './history.ts'
-export * from './app.ts'
+export * from './table'
+export * from './history'
+export * from './app'

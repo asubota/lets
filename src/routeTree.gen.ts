@@ -103,17 +103,17 @@ const LayoutListIdDetailsLazyRoute = LayoutListIdDetailsLazyRouteImport.update({
 )
 const LayoutFavoritesIdDetailsLazyRoute =
   LayoutFavoritesIdDetailsLazyRouteImport.update({
-    id: '/$id/details',
-    path: '/$id/details',
-    getParentRoute: () => LayoutFavoritesLazyRoute,
+    id: '/favorites/$id/details',
+    path: '/favorites/$id/details',
+    getParentRoute: () => LayoutRoute,
   } as any).lazy(() =>
     import('./routes/_layout/favorites.$id.details.lazy').then((d) => d.Route),
   )
 const LayoutFavoritesFavoriteIdNotesLazyRoute =
   LayoutFavoritesFavoriteIdNotesLazyRouteImport.update({
-    id: '/$favoriteId/notes',
-    path: '/$favoriteId/notes',
-    getParentRoute: () => LayoutFavoritesLazyRoute,
+    id: '/favorites/$favoriteId/notes',
+    path: '/favorites/$favoriteId/notes',
+    getParentRoute: () => LayoutRoute,
   } as any).lazy(() =>
     import('./routes/_layout/favorites.$favoriteId.notes.lazy').then(
       (d) => d.Route,
@@ -128,7 +128,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
-  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/favorites': typeof LayoutFavoritesLazyRoute
   '/cart/service': typeof CartServiceLazyRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
@@ -143,7 +143,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
-  '/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/favorites': typeof LayoutFavoritesLazyRoute
   '/cart/service': typeof CartServiceLazyRoute
   '/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   '/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
@@ -160,7 +160,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/_layout/list': typeof LayoutListRouteWithChildren
-  '/_layout/favorites': typeof LayoutFavoritesLazyRouteWithChildren
+  '/_layout/favorites': typeof LayoutFavoritesLazyRoute
   '/cart/service': typeof CartServiceLazyRoute
   '/_layout/favorites/$favoriteId/notes': typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   '/_layout/favorites/$id/details': typeof LayoutFavoritesIdDetailsLazyRoute
@@ -266,7 +266,7 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -314,17 +314,17 @@ declare module '@tanstack/react-router' {
     }
     '/_layout/favorites/$id/details': {
       id: '/_layout/favorites/$id/details'
-      path: '/$id/details'
+      path: '/favorites/$id/details'
       fullPath: '/favorites/$id/details'
       preLoaderRoute: typeof LayoutFavoritesIdDetailsLazyRouteImport
-      parentRoute: typeof LayoutFavoritesLazyRoute
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/favorites/$favoriteId/notes': {
       id: '/_layout/favorites/$favoriteId/notes'
-      path: '/$favoriteId/notes'
+      path: '/favorites/$favoriteId/notes'
       fullPath: '/favorites/$favoriteId/notes'
       preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesLazyRouteImport
-      parentRoute: typeof LayoutFavoritesLazyRoute
+      parentRoute: typeof LayoutRoute
     }
   }
 }
@@ -343,28 +343,19 @@ const LayoutListRouteWithChildren = LayoutListRoute._addFileChildren(
   LayoutListRouteChildren,
 )
 
-interface LayoutFavoritesLazyRouteChildren {
+interface LayoutRouteChildren {
+  LayoutListRoute: typeof LayoutListRouteWithChildren
+  LayoutFavoritesLazyRoute: typeof LayoutFavoritesLazyRoute
   LayoutFavoritesFavoriteIdNotesLazyRoute: typeof LayoutFavoritesFavoriteIdNotesLazyRoute
   LayoutFavoritesIdDetailsLazyRoute: typeof LayoutFavoritesIdDetailsLazyRoute
 }
 
-const LayoutFavoritesLazyRouteChildren: LayoutFavoritesLazyRouteChildren = {
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutListRoute: LayoutListRouteWithChildren,
+  LayoutFavoritesLazyRoute: LayoutFavoritesLazyRoute,
   LayoutFavoritesFavoriteIdNotesLazyRoute:
     LayoutFavoritesFavoriteIdNotesLazyRoute,
   LayoutFavoritesIdDetailsLazyRoute: LayoutFavoritesIdDetailsLazyRoute,
-}
-
-const LayoutFavoritesLazyRouteWithChildren =
-  LayoutFavoritesLazyRoute._addFileChildren(LayoutFavoritesLazyRouteChildren)
-
-interface LayoutRouteChildren {
-  LayoutListRoute: typeof LayoutListRouteWithChildren
-  LayoutFavoritesLazyRoute: typeof LayoutFavoritesLazyRouteWithChildren
-}
-
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutListRoute: LayoutListRouteWithChildren,
-  LayoutFavoritesLazyRoute: LayoutFavoritesLazyRouteWithChildren,
 }
 
 const LayoutRouteWithChildren =

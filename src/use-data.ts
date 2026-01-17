@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants.ts'
-import { parseData } from './data-tools.ts'
-import { buildItemTokens } from './search-tools.ts'
-import { getGoogleFileId } from './secrets.ts'
+import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants'
+import { parseData } from './data-tools'
+import { buildItemTokens } from './search-tools'
+import { getGoogleFileId } from './secrets'
 import { type Meta, useAppActions } from './store'
 import { getUniqueVendors } from './tools.tsx'
-import { type IndexedProduct, type Product } from './types.ts'
+import { type IndexedProduct, type Product } from './types'
 
 const isMeta = (p: Product) => p.sku === '__meta__'
 const isNotMeta = (p: Product) => p.sku !== '__meta__'

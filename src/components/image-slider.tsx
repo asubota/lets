@@ -6,11 +6,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import type { Swiper as SwiperClass } from 'swiper/types'
 
-
-import 'swiper/scss'
-import 'swiper/scss/pagination'
-import 'swiper/scss/navigation'
-import 'swiper/scss/thumbs'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import 'swiper/css/thumbs'
 
 const getSlides = (pics: string[], title: string) => {
   return pics.map((src) => (

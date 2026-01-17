@@ -1,6 +1,6 @@
-import { getAccessToken } from './google-auth.ts'
-import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets.ts'
-import { type FavoriteItem } from './types.ts'
+import { getAccessToken } from './google-auth'
+import { getGoogleApiKey, getGoogleSpreadSheetId } from './secrets'
+import { type FavoriteItem } from './types'
 
 const SPREADSHEET_ID = getGoogleSpreadSheetId()
 const API_KEY = getGoogleApiKey()
@@ -17,9 +17,7 @@ const mapping: Record<keyof FavoriteItem, string> = {
   read: 'F',
 }
 
-export const getAllFavorites = async (
-  signal?: AbortSignal,
-): Promise<FavoriteItem[]> => {
+export const getAllFavorites = async (signal?: AbortSignal): Promise<FavoriteItem[]> => {
   if (!SPREADSHEET_ID || !API_KEY) {
     return []
   }
@@ -71,11 +69,7 @@ export const addFavorite = async (favoriteId: string) => {
   await send(url, { body: JSON.stringify(body), method: 'POST' })
 }
 
-export const setProp = async (
-  favoriteId: string,
-  propName: keyof FavoriteItem,
-  propValue: string,
-) => {
+export const setProp = async (favoriteId: string, propName: keyof FavoriteItem, propValue: string) => {
   const favorites = await getAllFavorites()
   const rowIndex = favorites.findIndex((f) => f.favoriteId === favoriteId)
 
