@@ -21,20 +21,12 @@ interface StoreState {
   theme: 'dark' | 'light'
   sort: 'date' | 'note'
   meta: Meta
-  searchOptions: {
-    show: boolean
-    show2: boolean
-    rangeMin: number
-    rangeMax: number
-    priceMin: number
-    priceMax: number
-  }
+
   actions: {
     setView(this: void, view: StoreState['view']): void
     setTheme(this: void, theme: StoreState['theme']): void
     setSort(this: void, sort: StoreState['sort']): void
     setMeta(this: void, meta: StoreState['meta']): void
-    setSearchOptions(this: void, searchOptions: Partial<StoreState['searchOptions']>): void
   }
 }
 
@@ -52,13 +44,6 @@ const useStore = create<StoreState>()(
           setView: (view) => set(() => ({ view })),
           setTheme: (theme) => set({ theme }),
           setMeta: (meta) => set({ meta }, undefined, 'setMeta'),
-          setSearchOptions: (searchOptions) => {
-            return set(
-              (state) => ({ searchOptions: { ...state.searchOptions, ...searchOptions } }),
-              undefined,
-              'setSearchOptions',
-            )
-          },
         },
       }),
       {
@@ -80,7 +65,6 @@ export const useAppActions = () => useStore((state) => state.actions)
 export const useAppView = () => useStore((state) => state.view)
 export const useAppTheme = () => useStore((state) => state.theme)
 export const useAppSort = () => useStore((state) => state.sort)
-export const useSearchOptions = () => useStore((state) => state.searchOptions)
 export const useMeta = () => useStore((state) => state.meta)
 export const useStaleVendors = (): MetaVendor[] => {
   const { vendors } = useMeta()
