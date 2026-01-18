@@ -3,8 +3,6 @@ import { Box, ButtonGroup, Stack } from '@mui/material'
 import { Sorting } from '../sorting.tsx'
 import { ExportButton } from './components/export-button.tsx'
 import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
-import { SearchOptions } from './components/search-options.tsx'
-import { SearchOptions2 } from './components/search-options2.tsx'
 import { SwitchToInfoView } from './components/switch-to-info-view.tsx'
 import { SwitchToTableView } from './components/switch-to-table-view.tsx'
 import { SwitchToTileView } from './components/switch-to-tile-view.tsx'
@@ -24,16 +22,12 @@ interface ToolbarProps extends SharedToolbarProps {
   total: number
   uniqueVendors: string[]
   filteredSearch: boolean
-  min: number
-  max: number
 }
 
 export const Toolbar = ({
   total,
   uniqueVendors,
   filteredSearch,
-  min,
-  max,
   hasFavoritesSorting = false,
   hasPasteIn = false,
   hasGoogle = false,
@@ -55,8 +49,6 @@ export const Toolbar = ({
 
       <Box sx={{ ml: 'auto', display: 'flex' }}>
         <Stack direction="row" gap={1}>
-          <SearchOptions2 min={min} max={max} />
-          <SearchOptions min={min} max={max} />
           {hasFavoritesSorting && <Sorting />}
           {hasPasteIn && <PasteInSearchButton size="small" />}
           {hasGoogle && <GoogleButton />}
