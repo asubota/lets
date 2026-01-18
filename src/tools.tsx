@@ -22,7 +22,9 @@ export function getHighlightedText(
     noMatch: {},
   },
 ) {
-  if (text === null) return text
+  if (text === null) {
+    return null
+  }
 
   const tokens = Array.isArray(highlight) ? highlight.filter(Boolean) : highlight.trim().split(/\s+/)
 
@@ -237,25 +239,4 @@ export const filterBySearch = (item: Product, search: string): boolean => {
 export const findProduct = (itemId: string, list: Product[]): Product | undefined => {
   const [sku, vendor] = itemId.split(':')
   return list.find((p) => p.sku === sku && p.vendor === vendor)
-}
-
-export const getPriceMinMax = (items: Product[]): [number, number] => {
-  if (items.length === 0) {
-    return [0, 0]
-  }
-
-  let min = items[0].price
-  let max = items[0].price
-
-  for (const product of items) {
-    if (product.price < min) {
-      min = product.price
-    }
-
-    if (product.price > max) {
-      max = product.price
-    }
-  }
-
-  return [min, max]
 }

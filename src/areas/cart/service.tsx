@@ -21,10 +21,14 @@ import { type Product } from '../../types.ts'
 import { usePopularServices } from '../../use-data.ts'
 
 function isSameSet(setA: Set<string>, setB: Set<string>) {
-  if (setA.size !== setB.size) return false
+  if (setA.size !== setB.size) {
+    return false
+  }
 
   for (const val of setA) {
-    if (!setB.has(val)) return false
+    if (!setB.has(val)) {
+      return false
+    }
   }
 
   return true
@@ -40,9 +44,7 @@ export const Service = () => {
   const navigate = useNavigate()
 
   const handleToggle = (sku: string) => () => {
-    const newValue = !checked.includes(sku)
-      ? [...checked, sku]
-      : checked.filter((v) => v !== sku)
+    const newValue = !checked.includes(sku) ? [...checked, sku] : checked.filter((v) => v !== sku)
 
     setChecked(newValue)
   }
@@ -64,8 +66,7 @@ export const Service = () => {
             return {
               pt: 0,
               pb: 0,
-              backgroundColor:
-                theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+              backgroundColor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
             }
           }}
         >
@@ -75,19 +76,10 @@ export const Service = () => {
             return (
               <ListItem
                 key={product.sku}
-                secondaryAction={
-                  <ConstructionIcon
-                    fontSize="small"
-                    sx={{ color: 'secondary.light' }}
-                  />
-                }
+                secondaryAction={<ConstructionIcon fontSize="small" sx={{ color: 'secondary.light' }} />}
                 disablePadding
               >
-                <ListItemButton
-                  role={undefined}
-                  onClick={handleToggle(getFavoriteId(product))}
-                  dense
-                >
+                <ListItemButton role={undefined} onClick={handleToggle(getFavoriteId(product))} dense>
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
