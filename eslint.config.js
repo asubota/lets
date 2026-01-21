@@ -52,6 +52,26 @@ export default [
       'react-compiler/react-compiler': 'error',
       'react/react-in-jsx-scope': 'off',
       'curly': ['warn', 'all'],
+      '@typescript-eslint/no-restricted-types': [
+        'error',
+        {
+          types: {
+            'React.FC': {
+              message: 'Useless and has some drawbacks, see https://github.com/facebook/create-react-app/pull/8177',
+            },
+            'FC': {
+              message: 'Useless and has some drawbacks, see https://github.com/facebook/create-react-app/pull/8177',
+            },
+            'React.FunctionComponent': {
+              message: 'Useless and has some drawbacks, see https://github.com/facebook/create-react-app/pull/8177',
+            },
+            'React.FunctionalComponent': {
+              message:
+                'Preact specific, useless and has some drawbacks, see https://github.com/facebook/create-react-app/pull/8177',
+            },
+          },
+        },
+      ],
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
