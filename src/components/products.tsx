@@ -79,20 +79,24 @@ const Products: FC<ProductsProps> = ({
         </Box>
       )}
 
-      {view === 'tile' && (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <TilesView list={filteredByVendor} search={search} isFavoritePage={isFavoritePage} />
-        </Suspense>
-      )}
-      {view === 'table' && (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <TableView list={filteredByVendor} search={search} />
-        </Suspense>
-      )}
-      {view === 'info' && (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <InfoView list={filteredByVendor} />
-        </Suspense>
+      {filteredByVendor.length > 0 && (
+        <>
+          {view === 'tile' && (
+            <Suspense fallback={<ProductsSkeleton />}>
+              <TilesView list={filteredByVendor} search={search} isFavoritePage={isFavoritePage} />
+            </Suspense>
+          )}
+          {view === 'table' && (
+            <Suspense fallback={<ProductsSkeleton />}>
+              <TableView list={filteredByVendor} search={search} />
+            </Suspense>
+          )}
+          {view === 'info' && (
+            <Suspense fallback={<ProductsSkeleton />}>
+              <InfoView list={filteredByVendor} />
+            </Suspense>
+          )}
+        </>
       )}
 
       <ScrollToTop />
