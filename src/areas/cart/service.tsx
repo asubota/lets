@@ -54,7 +54,7 @@ export const Service = () => {
       mutate({ itemIds: checked })
     }
 
-    navigate({ to: '/cart' })
+    void navigate({ to: '/cart' })
   }
 
   return (

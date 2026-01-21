@@ -79,7 +79,8 @@ export const LimitSearchModal: FC<{ list: Product[] }> = ({ list }) => {
     }
   }
 
-  const selectedVendors = getTrueValues(watch())
+  const watchedValues = watch()
+  const selectedVendors = getTrueValues(watchedValues)
 
   return (
     <Modal
