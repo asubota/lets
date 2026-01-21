@@ -21,7 +21,6 @@ export interface SharedToolbarProps {
 
 interface ToolbarProps extends SharedToolbarProps {
   total: number
-  uniqueVendors: string[]
   filteredSearch: boolean
 }
 

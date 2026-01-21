@@ -8,7 +8,6 @@ import { ProductsSkeleton } from './products-skeleton.tsx'
 import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { useAppView } from '../store'
-import { getUniqueVendors } from '../tools.tsx'
 import { type Product } from '../types.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
@@ -34,7 +33,6 @@ const Products = ({
   isFavoritePage,
 }: ProductsProps) => {
   const view = useAppView()
-  const uniqueVendors = getUniqueVendors(products)
   const appliedFilters = useAppliedFilters()
 
   if (products.length === 0 && search.length === 0) {
@@ -59,7 +57,6 @@ const Products = ({
         hasColumnsConfig={hasColumnsConfig}
         hasAppliedFilters={!isFavoritePage}
         total={filteredByVendor.length}
-        uniqueVendors={uniqueVendors}
         filteredSearch={false}
       />
 
