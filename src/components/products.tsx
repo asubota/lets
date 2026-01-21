@@ -8,7 +8,6 @@ import { ProductsSkeleton } from './products-skeleton.tsx'
 import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { useAppView } from '../store'
-import { useSearchVendors } from '../store/search.ts'
 import { getUniqueVendors } from '../tools.tsx'
 import { type Product } from '../types.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
@@ -36,7 +35,6 @@ const Products = ({
 }: ProductsProps) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(products)
-  const searchVendors = useSearchVendors()
   const appliedFilters = useAppliedFilters()
 
   if (products.length === 0 && search.length === 0) {
@@ -47,13 +45,10 @@ const Products = ({
     return <NoResults />
   }
 
-  const filteredList =
-    searchVendors.length === 0 ? products : products.filter((product) => searchVendors.includes(product.vendor))
-
   const filteredByVendor =
     !isFavoritePage && appliedFilters.length > 0
-      ? filteredList.filter((product) => appliedFilters.includes(product.vendor))
-      : filteredList
+      ? products.filter((product) => appliedFilters.includes(product.vendor))
+      : products
 
   return (
     <>
@@ -65,7 +60,7 @@ const Products = ({
         hasAppliedFilters={!isFavoritePage}
         total={filteredByVendor.length}
         uniqueVendors={uniqueVendors}
-        filteredSearch={searchVendors.length > 0 && searchVendors.length < uniqueVendors.length}
+        filteredSearch={false}
       />
 
       {filteredByVendor.length === 0 && (

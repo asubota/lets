@@ -11,7 +11,6 @@ import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 import { useSearch } from '../../search-tools.ts'
 import { useHistoryActions } from '../../store'
-import { useSearchActions } from '../../store/search.ts'
 import { type SearchForm } from '../../types.ts'
 import { useIsLoading } from '../../use-data.ts'
 
@@ -22,14 +21,12 @@ export const List = () => {
   const [search, setSearch] = useState('')
   const products = useSearch(search)
   const { addHistoryItem } = useHistoryActions()
-  const { resetSearchVendors } = useSearchActions()
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
   const isLoading = useIsLoading()
 
   const onSubmit: SubmitHandler<SearchForm> = ({ input }) => {
     const term = input.trim()
-    resetSearchVendors()
     setSearch(term)
     addHistoryItem(term)
     hideHints()
