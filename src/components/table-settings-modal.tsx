@@ -1,14 +1,8 @@
-import { type FC } from 'react'
-
 import { Box, FormControlLabel, FormGroup, Paper, Switch } from '@mui/material'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 
 import { Modal } from './modal.tsx'
-import {
-  useShowTableSettings,
-  useTableActions,
-  useTableColumns,
-} from '../store'
+import { useShowTableSettings, useTableActions, useTableColumns } from '../store'
 import { type Product } from '../types.ts'
 
 type FormData = {
@@ -27,7 +21,7 @@ function getTrueValues(obj: FormData) {
   return (Object.keys(obj) as (keyof FormData)[]).filter((key) => obj[key])
 }
 
-export const TableSettingsModal: FC = () => {
+export const TableSettingsModal = () => {
   const showTableSettings = useShowTableSettings()
   const { setColumns } = useTableActions()
   const { toggleSettings } = useTableActions()
@@ -44,12 +38,7 @@ export const TableSettingsModal: FC = () => {
   }
 
   return (
-    <Modal
-      open={showTableSettings}
-      onClose={toggleSettings}
-      title=""
-      onSave={() => handleSubmit(onSubmit)()}
-    >
+    <Modal open={showTableSettings} onClose={toggleSettings} title="" onSave={() => handleSubmit(onSubmit)()}>
       <Paper elevation={2} sx={{ p: 3, m: 3 }}>
         <Box
           component="form"
@@ -64,10 +53,7 @@ export const TableSettingsModal: FC = () => {
               name="sku"
               control={control}
               render={({ field: { value, onChange } }) => (
-                <FormControlLabel
-                  control={<Switch checked={value} onChange={onChange} />}
-                  label="Артикул"
-                />
+                <FormControlLabel control={<Switch checked={value} onChange={onChange} />} label="Артикул" />
               )}
             />
 
@@ -75,10 +61,7 @@ export const TableSettingsModal: FC = () => {
               name="stock"
               control={control}
               render={({ field: { value, onChange } }) => (
-                <FormControlLabel
-                  control={<Switch checked={value} onChange={onChange} />}
-                  label="Кількість"
-                />
+                <FormControlLabel control={<Switch checked={value} onChange={onChange} />} label="Кількість" />
               )}
             />
 
@@ -86,10 +69,7 @@ export const TableSettingsModal: FC = () => {
               name="name"
               control={control}
               render={({ field: { value, onChange } }) => (
-                <FormControlLabel
-                  control={<Switch checked={value} onChange={onChange} />}
-                  label="Назва"
-                />
+                <FormControlLabel control={<Switch checked={value} onChange={onChange} />} label="Назва" />
               )}
             />
 
@@ -97,10 +77,7 @@ export const TableSettingsModal: FC = () => {
               name="vendor"
               control={control}
               render={({ field: { value, onChange } }) => (
-                <FormControlLabel
-                  control={<Switch checked={value} onChange={onChange} />}
-                  label="Продавець"
-                />
+                <FormControlLabel control={<Switch checked={value} onChange={onChange} />} label="Продавець" />
               )}
             />
 
@@ -108,10 +85,7 @@ export const TableSettingsModal: FC = () => {
               name="price"
               control={control}
               render={({ field: { value, onChange } }) => (
-                <FormControlLabel
-                  control={<Switch checked={value} onChange={onChange} />}
-                  label="Ціна"
-                />
+                <FormControlLabel control={<Switch checked={value} onChange={onChange} />} label="Ціна" />
               )}
             />
           </FormGroup>
