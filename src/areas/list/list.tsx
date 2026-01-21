@@ -1,35 +1,32 @@
-import { type FC, lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 
 import { ClickAwayListener, Portal } from '@mui/material'
 import { Outlet } from '@tanstack/react-router'
 import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hook-form'
 
 import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
-import { LimitSearchModal, TableSettingsModal } from '../../components'
+import { AppliedFiltersModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 import { useSearch } from '../../search-tools.ts'
 import { useHistoryActions } from '../../store'
-import { useSearchActions } from '../../store/search.ts'
 import { type SearchForm } from '../../types.ts'
 import { useIsLoading } from '../../use-data.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
-export const List: FC = () => {
+export const List = () => {
   const methods = useForm<SearchForm>({ defaultValues: { input: '' } })
   const [search, setSearch] = useState('')
   const products = useSearch(search)
   const { addHistoryItem } = useHistoryActions()
-  const { resetSearchVendors } = useSearchActions()
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
   const isLoading = useIsLoading()
 
   const onSubmit: SubmitHandler<SearchForm> = ({ input }) => {
     const term = input.trim()
-    resetSearchVendors()
     setSearch(term)
     addHistoryItem(term)
     hideHints()
@@ -96,7 +93,7 @@ export const List: FC = () => {
         </Suspense>
       )}
 
-      <LimitSearchModal list={products} />
+      <AppliedFiltersModal />
       <TableSettingsModal />
 
       <Outlet />

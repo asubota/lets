@@ -1,5 +1,3 @@
-import { type FC, useState } from 'react'
-
 import {
   Box,
   Paper,
@@ -13,6 +11,7 @@ import {
 } from '@mui/material'
 
 import { useTableColumns } from '../store'
+import { useAppliedFiltersActions, useSortConfig } from '../store/appliedFilters.ts'
 import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
 import { type Product } from '../types.ts'
 import { AllColumnsAreDisabled } from './all-columns-are-disabled.tsx'
@@ -21,45 +20,12 @@ import { Stock } from './stock'
 import { VendorChip } from './vendor-chip.tsx'
 import { useInfiniteScroll } from '../hooks/use-infinite-scroll.ts'
 
-type Order = 'asc' | 'desc' | undefined
-
-function descendingComparator(a: Product, b: Product) {
-  if (b.price < a.price) {
-    return -1
-  }
-  if (b.price > a.price) {
-    return 1
-  }
-  return 0
-}
-
-function getComparator(order: Order): (a: Product, b: Product) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b)
-    : (a, b) => -descendingComparator(a, b)
-}
-
-const TableView: FC<{ list: Product[]; search: string }> = ({ list, search }) => {
-  const [order, setOrder] = useState<Order>(undefined)
+const TableView = ({ list, search }: { list: Product[]; search: string }) => {
+  const { field, order } = useSortConfig()
+  const { toggleSort } = useAppliedFiltersActions()
   const columns = useTableColumns()
 
-  const handleOrderChange = () => {
-    setOrder((o) => {
-      if (!o) {
-        return 'asc'
-      }
-
-      if (o === 'asc') {
-        return 'desc'
-      }
-
-      return undefined
-    })
-  }
-
-  const sortedList = order ? list.slice().sort(getComparator(order)) : list
-
-  const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(sortedList)
+  const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(list)
 
   if (!columns.length) {
     return <AllColumnsAreDisabled />
@@ -86,7 +52,22 @@ const TableView: FC<{ list: Product[]; search: string }> = ({ list, search }) =>
                 К-ть
               </TableCell>
             )}
-            {columns.includes('name') && <TableCell sx={{ pl: 1 }}>Назва</TableCell>}
+            {columns.includes('name') && (
+              <TableCell sx={{ pl: 1 }}>
+                <TableSortLabel
+                  active={field === 'name'}
+                  direction={field === 'name' ? order : 'asc'}
+                  onClick={() => toggleSort('name')}
+                  sx={{
+                    '&.Mui-active .MuiTableSortLabel-icon': {
+                      color: 'primary.main',
+                    },
+                  }}
+                >
+                  Назва
+                </TableSortLabel>
+              </TableCell>
+            )}
             {columns.includes('vendor') && (
               <TableCell sx={{ pr: 1 }} align="right">
                 Продавець
@@ -95,9 +76,9 @@ const TableView: FC<{ list: Product[]; search: string }> = ({ list, search }) =>
             {columns.includes('price') && (
               <TableCell sx={{ pr: 1 }} align="right">
                 <TableSortLabel
-                  active={!!order}
-                  direction={order}
-                  onClick={handleOrderChange}
+                  active={field === 'price'}
+                  direction={field === 'price' ? order : 'asc'}
+                  onClick={() => toggleSort('price')}
                   sx={{
                     '&.Mui-active .MuiTableSortLabel-icon': {
                       color: 'primary.main',

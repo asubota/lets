@@ -38,7 +38,6 @@ const useStore = create<StoreState>()(
         theme: 'light',
         sort: 'date',
         meta: { vendors: [], created: '' },
-        searchOptions: { show: false, show2: false, rangeMin: 0, rangeMax: 0, priceMin: 0, priceMax: 0 },
         actions: {
           setSort: (sort) => set(() => ({ sort })),
           setView: (view) => set(() => ({ view })),

@@ -1,4 +1,4 @@
-import { type FC, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'
 import { Box } from '@mui/material'
@@ -8,12 +8,10 @@ import { ProductsSkeleton } from './products-skeleton.tsx'
 import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { useAppView } from '../store'
-import { useSearchVendors } from '../store/search.ts'
-import { getUniqueVendors } from '../tools.tsx'
+import { useAppliedFilters } from '../store/appliedFilters.ts'
 import { type Product } from '../types.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
-import { useAppliedFilters } from '../store/appliedFilters'
 
 const TableView = lazy(() => import('./table-view.tsx'))
 const TilesView = lazy(() => import('./tiles-view.tsx'))
@@ -22,9 +20,10 @@ const InfoView = lazy(() => import('./info-view.tsx'))
 interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   products: Product[]
   search: string
+  isFavoritePage?: boolean
 }
 
-const Products: FC<ProductsProps> = ({
+const Products = ({
   products,
   search,
   hasFavoritesSorting,
@@ -32,27 +31,17 @@ const Products: FC<ProductsProps> = ({
   hasGoogle,
   hasColumnsConfig,
   isFavoritePage,
-}) => {
+}: ProductsProps) => {
   const view = useAppView()
-  const uniqueVendors = getUniqueVendors(products)
-  const searchVendors = useSearchVendors()
   const appliedFilters = useAppliedFilters()
 
-  if (products.length === 0 && search.length === 0) {
+  if (products.length === 0 && search.length === 0 && appliedFilters.length === 0) {
     return <Welcome />
   }
 
-  if (products.length === 0 && search.length > 0) {
+  if (products.length === 0 && (search.length > 0 || appliedFilters.length > 0)) {
     return <NoResults />
   }
-
-  const filteredList =
-    searchVendors.length === 0 ? products : products.filter((product) => searchVendors.includes(product.vendor))
-
-  const filteredByVendor =
-    !isFavoritePage && appliedFilters.length > 0
-      ? filteredList.filter((product) => appliedFilters.includes(product.vendor))
-      : filteredList
 
   return (
     <>
@@ -61,12 +50,12 @@ const Products: FC<ProductsProps> = ({
         hasFavoritesSorting={hasFavoritesSorting}
         hasGoogle={hasGoogle}
         hasColumnsConfig={hasColumnsConfig}
-        total={filteredByVendor.length}
-        uniqueVendors={uniqueVendors}
-        filteredSearch={searchVendors.length > 0 && searchVendors.length < uniqueVendors.length}
+        hasAppliedFilters={!isFavoritePage}
+        total={products.length}
+        filteredSearch={false}
       />
 
-      {filteredByVendor.length === 0 && (
+      {products.length === 0 && (
         <Box
           sx={{
             color: 'text.secondary',
@@ -79,20 +68,24 @@ const Products: FC<ProductsProps> = ({
         </Box>
       )}
 
-      {view === 'tile' && (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <TilesView list={filteredByVendor} search={search} isFavoritePage={isFavoritePage} />
-        </Suspense>
-      )}
-      {view === 'table' && (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <TableView list={filteredByVendor} search={search} />
-        </Suspense>
-      )}
-      {view === 'info' && (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <InfoView list={filteredByVendor} />
-        </Suspense>
+      {products.length > 0 && (
+        <>
+          {view === 'tile' && (
+            <Suspense fallback={<ProductsSkeleton />}>
+              <TilesView list={products} search={search} isFavoritePage={isFavoritePage} />
+            </Suspense>
+          )}
+          {view === 'table' && (
+            <Suspense fallback={<ProductsSkeleton />}>
+              <TableView list={products} search={search} />
+            </Suspense>
+          )}
+          {view === 'info' && (
+            <Suspense fallback={<ProductsSkeleton />}>
+              <InfoView list={products} />
+            </Suspense>
+          )}
+        </>
       )}
 
       <ScrollToTop />

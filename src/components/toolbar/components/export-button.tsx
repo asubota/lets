@@ -1,12 +1,10 @@
-import { type FC } from 'react'
-
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { IconButton } from '@mui/material'
 
 import { useAppView } from '../../../store'
 import { handleTakeScreenshot } from '../../../tools.tsx'
 
-export const ExportButton: FC = () => {
+export const ExportButton = () => {
   const view = useAppView()
 
   if (view !== 'tile') {
@@ -14,11 +12,7 @@ export const ExportButton: FC = () => {
   }
 
   return (
-    <IconButton
-      sx={{ ml: '16px', color: 'text.secondary' }}
-      size="small"
-      onClick={handleTakeScreenshot}
-    >
+    <IconButton sx={{ color: 'text.secondary' }} size="small" onClick={handleTakeScreenshot}>
       <IosShareIcon />
     </IconButton>
   )

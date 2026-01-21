@@ -1,8 +1,8 @@
 import { Box, ButtonGroup, Stack } from '@mui/material'
 
 import { Sorting } from '../sorting.tsx'
+import { AppliedFiltersButton } from './components/applied-filters-button.tsx'
 import { ExportButton } from './components/export-button.tsx'
-import { ResultCounterAndFilter } from './components/result-counter-and-filter.tsx'
 import { SwitchToInfoView } from './components/switch-to-info-view.tsx'
 import { SwitchToTableView } from './components/switch-to-table-view.tsx'
 import { SwitchToTileView } from './components/switch-to-tile-view.tsx'
@@ -16,22 +16,20 @@ export interface SharedToolbarProps {
   hasPasteIn?: boolean
   hasGoogle?: boolean
   hasColumnsConfig?: boolean
+  hasAppliedFilters?: boolean
 }
 
 interface ToolbarProps extends SharedToolbarProps {
   total: number
-  uniqueVendors: string[]
   filteredSearch: boolean
 }
 
 export const Toolbar = ({
-  total,
-  uniqueVendors,
-  filteredSearch,
   hasFavoritesSorting = false,
   hasPasteIn = false,
   hasGoogle = false,
   hasColumnsConfig = false,
+  hasAppliedFilters = false,
 }: ToolbarProps) => {
   return (
     <Box
@@ -41,9 +39,8 @@ export const Toolbar = ({
         height: '40px',
       }}
     >
-      <Box sx={{ mr: 'auto', display: 'flex' }}>
-        <ResultCounterAndFilter filteredSearch={filteredSearch} total={total} uniqueVendors={uniqueVendors} />
-
+      <Box sx={{ mr: 'auto', display: 'flex', columnGap: 1 }}>
+        {hasAppliedFilters && <AppliedFiltersButton />}
         <ExportButton />
       </Box>
 

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { type SortField, type SortOrder, useAppliedFilters, useSortConfig } from './store/appliedFilters.ts'
 import { type Product } from './types.ts'
 import { useData } from './use-data.ts'
 
@@ -34,15 +35,51 @@ function tokensMatch(itemTokens: string[], queryTokens: string[]): boolean {
   return true
 }
 
+function descendingComparator(a: Product, b: Product, orderBy: SortField) {
+  if (!orderBy) {
+    return 0
+  }
+
+  if (b[orderBy] < a[orderBy]) {
+    return -1
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1
+  }
+  return 0
+}
+
+function getComparator(order: SortOrder, orderBy: SortField): (a: Product, b: Product) => number {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy)
+}
+
 export const useSearch = (search: string): Product[] => {
   const { data = [] } = useData()
+  const appliedFilters = useAppliedFilters()
+  const { field, order } = useSortConfig()
   const queryTokens = useMemo(() => tokenize(search), [search])
 
   return useMemo(() => {
-    if (queryTokens.length === 0) {
+    if (appliedFilters.length === 0 && queryTokens.length === 0) {
       return []
     }
 
-    return data.filter((p) => tokensMatch(p.__tokens, queryTokens))
-  }, [data, queryTokens])
+    let filteredData = data
+
+    if (appliedFilters.length > 0) {
+      filteredData = filteredData.filter((p) => appliedFilters.includes(p.vendor))
+    }
+
+    if (queryTokens.length > 0) {
+      filteredData = filteredData.filter((p) => tokensMatch(p.__tokens, queryTokens))
+    }
+
+    if (field && order) {
+      filteredData = [...filteredData].sort(getComparator(order, field))
+    }
+
+    return filteredData
+  }, [data, queryTokens, appliedFilters, field, order])
 }

@@ -1,2 +1,2 @@
-export * from './limit-search-modal.tsx'
+export * from './applied-filters-modal.tsx'
 export * from './table-settings-modal.tsx'
