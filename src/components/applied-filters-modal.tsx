@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { Box, Divider, Grid } from '@mui/material'
 import { yellow } from '@mui/material/colors'
@@ -12,7 +14,7 @@ import { useAllData, useAllVendors } from '../use-data.ts'
 export const AppliedFiltersModal = () => {
   const vendors = useAllVendors()
   const allData = useAllData()
-  const countByVendor = groupByVendor(allData)
+  const countByVendor = useMemo(() => groupByVendor(allData), [allData])
 
   const { toggleAppliedFiltersModal } = useSearchActions()
   const open = useShowAppliedFiltersModal()
@@ -20,10 +22,12 @@ export const AppliedFiltersModal = () => {
   const appliedFilters = useAppliedFilters()
   const { toggleVendor } = useAppliedFiltersActions()
 
+  const sortedVendors = useMemo(() => [...vendors].sort(), [vendors])
+
   return (
     <Modal open={open} onClose={toggleAppliedFiltersModal} title="" onSave={toggleAppliedFiltersModal}>
       <Grid container columnSpacing={2} rowSpacing={1.5} sx={{ pl: 3, pr: 3, pt: 2 }}>
-        {vendors.sort().map((vendor) => {
+        {sortedVendors.map((vendor) => {
           const isSelected = appliedFilters.includes(vendor)
 
           return (
