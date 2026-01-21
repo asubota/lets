@@ -1,11 +1,11 @@
-import { type FC, lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 
 import { ClickAwayListener, Portal } from '@mui/material'
 import { Outlet } from '@tanstack/react-router'
 import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hook-form'
 
 import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
-import { LimitSearchModal, TableSettingsModal } from '../../components'
+import { AppliedFiltersModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
@@ -17,7 +17,7 @@ import { useIsLoading } from '../../use-data.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
-export const List: FC = () => {
+export const List = () => {
   const methods = useForm<SearchForm>({ defaultValues: { input: '' } })
   const [search, setSearch] = useState('')
   const products = useSearch(search)
@@ -96,7 +96,7 @@ export const List: FC = () => {
         </Suspense>
       )}
 
-      <LimitSearchModal list={products} />
+      <AppliedFiltersModal list={products} />
       <TableSettingsModal />
 
       <Outlet />

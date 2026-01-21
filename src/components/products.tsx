@@ -1,4 +1,4 @@
-import { type FC, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'
 import { Box } from '@mui/material'
@@ -22,9 +22,10 @@ const InfoView = lazy(() => import('./info-view.tsx'))
 interface ProductsProps extends SharedToolbarProps, SharedTilesViewProps {
   products: Product[]
   search: string
+  isFavoritePage?: boolean
 }
 
-const Products: FC<ProductsProps> = ({
+const Products = ({
   products,
   search,
   hasFavoritesSorting,
@@ -32,7 +33,7 @@ const Products: FC<ProductsProps> = ({
   hasGoogle,
   hasColumnsConfig,
   isFavoritePage,
-}) => {
+}: ProductsProps) => {
   const view = useAppView()
   const uniqueVendors = getUniqueVendors(products)
   const searchVendors = useSearchVendors()
@@ -61,6 +62,7 @@ const Products: FC<ProductsProps> = ({
         hasFavoritesSorting={hasFavoritesSorting}
         hasGoogle={hasGoogle}
         hasColumnsConfig={hasColumnsConfig}
+        hasAppliedFilters={!isFavoritePage}
         total={filteredByVendor.length}
         uniqueVendors={uniqueVendors}
         filteredSearch={searchVendors.length > 0 && searchVendors.length < uniqueVendors.length}
