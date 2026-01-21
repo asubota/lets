@@ -8,10 +8,10 @@ import { ProductsSkeleton } from './products-skeleton.tsx'
 import { type SharedTilesViewProps } from './tiles-view.tsx'
 import { Welcome } from './welcome.tsx'
 import { useAppView } from '../store'
+import { useAppliedFilters } from '../store/appliedFilters.ts'
 import { type Product } from '../types.ts'
 import { ScrollToTop } from './scroll-to-top.tsx'
 import { type SharedToolbarProps, Toolbar } from './toolbar/toolbar.tsx'
-import { useAppliedFilters } from '../store/appliedFilters'
 
 const TableView = lazy(() => import('./table-view.tsx'))
 const TilesView = lazy(() => import('./tiles-view.tsx'))
@@ -35,18 +35,13 @@ const Products = ({
   const view = useAppView()
   const appliedFilters = useAppliedFilters()
 
-  if (products.length === 0 && search.length === 0) {
+  if (products.length === 0 && search.length === 0 && appliedFilters.length === 0) {
     return <Welcome />
   }
 
-  if (products.length === 0 && search.length > 0) {
+  if (products.length === 0 && (search.length > 0 || appliedFilters.length > 0)) {
     return <NoResults />
   }
-
-  const filteredByVendor =
-    !isFavoritePage && appliedFilters.length > 0
-      ? products.filter((product) => appliedFilters.includes(product.vendor))
-      : products
 
   return (
     <>
@@ -56,11 +51,11 @@ const Products = ({
         hasGoogle={hasGoogle}
         hasColumnsConfig={hasColumnsConfig}
         hasAppliedFilters={!isFavoritePage}
-        total={filteredByVendor.length}
+        total={products.length}
         filteredSearch={false}
       />
 
-      {filteredByVendor.length === 0 && (
+      {products.length === 0 && (
         <Box
           sx={{
             color: 'text.secondary',
@@ -73,21 +68,21 @@ const Products = ({
         </Box>
       )}
 
-      {filteredByVendor.length > 0 && (
+      {products.length > 0 && (
         <>
           {view === 'tile' && (
             <Suspense fallback={<ProductsSkeleton />}>
-              <TilesView list={filteredByVendor} search={search} isFavoritePage={isFavoritePage} />
+              <TilesView list={products} search={search} isFavoritePage={isFavoritePage} />
             </Suspense>
           )}
           {view === 'table' && (
             <Suspense fallback={<ProductsSkeleton />}>
-              <TableView list={filteredByVendor} search={search} />
+              <TableView list={products} search={search} />
             </Suspense>
           )}
           {view === 'info' && (
             <Suspense fallback={<ProductsSkeleton />}>
-              <InfoView list={filteredByVendor} />
+              <InfoView list={products} />
             </Suspense>
           )}
         </>

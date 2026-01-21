@@ -93,7 +93,7 @@ export const List = () => {
         </Suspense>
       )}
 
-      <AppliedFiltersModal list={products} />
+      <AppliedFiltersModal />
       <TableSettingsModal />
 
       <Outlet />

@@ -7,12 +7,12 @@ import { VendorChip } from './vendor-chip.tsx'
 import { useAppliedFilters, useAppliedFiltersActions } from '../store/appliedFilters.ts'
 import { useSearchActions, useShowAppliedFiltersModal } from '../store/search.ts'
 import { groupByVendor } from '../tools.tsx'
-import { type Product } from '../types.ts'
-import { useAllVendors } from '../use-data.ts'
+import { useAllData, useAllVendors } from '../use-data.ts'
 
-export const AppliedFiltersModal = ({ list }: { list: Product[] }) => {
+export const AppliedFiltersModal = () => {
   const vendors = useAllVendors()
-  const countByVendor = groupByVendor(list)
+  const allData = useAllData()
+  const countByVendor = groupByVendor(allData)
 
   const { toggleAppliedFiltersModal } = useSearchActions()
   const open = useShowAppliedFiltersModal()
@@ -21,12 +21,7 @@ export const AppliedFiltersModal = ({ list }: { list: Product[] }) => {
   const { toggleVendor } = useAppliedFiltersActions()
 
   return (
-    <Modal
-      open={open}
-      onClose={toggleAppliedFiltersModal}
-      title="Applied Filters"
-      onSave={toggleAppliedFiltersModal}
-    >
+    <Modal open={open} onClose={toggleAppliedFiltersModal} title="" onSave={toggleAppliedFiltersModal}>
       <Grid container columnSpacing={2} rowSpacing={1.5} sx={{ pl: 3, pr: 3, pt: 2 }}>
         {vendors.sort().map((vendor) => {
           const isSelected = appliedFilters.includes(vendor)

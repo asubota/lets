@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { useAppliedFilters } from './store/appliedFilters.ts'
 import { type Product } from './types.ts'
 import { useData } from './use-data.ts'
 
@@ -36,13 +37,24 @@ function tokensMatch(itemTokens: string[], queryTokens: string[]): boolean {
 
 export const useSearch = (search: string): Product[] => {
   const { data = [] } = useData()
+  const appliedFilters = useAppliedFilters()
   const queryTokens = useMemo(() => tokenize(search), [search])
 
   return useMemo(() => {
-    if (queryTokens.length === 0) {
+    if (appliedFilters.length === 0 && queryTokens.length === 0) {
       return []
     }
 
-    return data.filter((p) => tokensMatch(p.__tokens, queryTokens))
-  }, [data, queryTokens])
+    let filteredData = data
+
+    if (appliedFilters.length > 0) {
+      filteredData = filteredData.filter((p) => appliedFilters.includes(p.vendor))
+    }
+
+    if (queryTokens.length === 0) {
+      return filteredData
+    }
+
+    return filteredData.filter((p) => tokensMatch(p.__tokens, queryTokens))
+  }, [data, queryTokens, appliedFilters])
 }
