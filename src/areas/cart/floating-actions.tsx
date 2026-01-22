@@ -67,11 +67,11 @@ export function FloatingActions({
         >
           <SpeedDialAction
             icon={<ClearIcon color="primary" />}
-            slotProps={{ tooltip: { title: 'Видалити корзину' } }}
+            slotProps={{ tooltip: { title: 'Знести корзину' } }}
           />
           <SpeedDialAction
             icon={<DownloadIcon color="primary" />}
-            slotProps={{ tooltip: { title: 'Ескорт ;)' } }}
+            slotProps={{ tooltip: { title: 'Експорт' } }}
             onClick={handleTakeCartScreenshot}
           />
           <SpeedDialAction
@@ -80,7 +80,7 @@ export function FloatingActions({
           />
           <SpeedDialAction
             icon={<PersonIcon color="primary" />}
-            slotProps={{ tooltip: { title: 'Деталі клієнта' } }}
+            slotProps={{ tooltip: { title: 'Про клієнта' } }}
           />
         </SpeedDial>
 

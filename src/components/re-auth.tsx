@@ -8,7 +8,7 @@ export const ReAuth = () => {
   const authInstance = gapi.auth2.getAuthInstance()
 
   if (!authInstance) {
-    return <Alert severity="info">Налаштування відсутні</Alert>
+    return <Alert severity="info">Налаштувань нема, братан</Alert>
   }
 
   if (getMinutesLeft() <= 1 && !authInstance.isSignedIn.get()) {
@@ -26,7 +26,7 @@ export const ReAuth = () => {
         }}
         onClick={initGoogleAuth}
       >
-        Треба авторизуватись!
+        Заходь, не бійся!
       </Alert>
     )
   }

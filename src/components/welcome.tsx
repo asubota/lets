@@ -20,14 +20,14 @@ export const Welcome = () => {
         variant="h4"
         sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}
       >
-        <span onClick={handleThing}>Вітаю!</span>
+        <span onClick={handleThing}>Здорова, братан!</span>
       </Typography>
       <Typography
         variant="h5"
         sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}
       >
-        <Box sx={{ mb: 1 }}>Вам щось підказати?</Box>
-        <Box>Проконсультувати?</Box>
+        <Box sx={{ mb: 1 }}>Шо, може підсобити?</Box>
+        <Box>Чисто по-братськи?</Box>
       </Typography>
 
       <ReAuth />

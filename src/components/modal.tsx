@@ -62,7 +62,7 @@ export const Modal: FC<ModalProps> = ({
 
           {hasSave && (
             <Button autoFocus color="inherit" onClick={onSave}>
-              Save
+              Зберегти
             </Button>
           )}
         </Toolbar>

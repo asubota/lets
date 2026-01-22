@@ -64,7 +64,7 @@ export const FavoriteInput: FC = () => {
           return (
             <TextField
               sx={{ '& .MuiInputBase-root': { overflow: 'hidden' } }}
-              label="Add new Favorite"
+              label="Додати в обране"
               size="small"
               fullWidth
               {...field}

@@ -39,7 +39,7 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
             sx={{
               '& .MuiInputBase-root': { overflow: 'hidden' },
             }}
-            label="Search"
+            label="Шукати тут"
             variant="outlined"
             fullWidth
             size="small"
