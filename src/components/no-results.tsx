@@ -11,13 +11,13 @@ export const NoResults = () => {
         variant="h4"
         sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}
       >
-        <Box>Наразі,</Box>
+        <Box>Короче,</Box>
       </Typography>
       <Typography
         variant="h5"
         sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}
       >
-        <Box>всі механіки зайняті</Box>
+        <Box>пацани зайняті, нічо нема</Box>
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>

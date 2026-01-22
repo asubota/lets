@@ -36,7 +36,7 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
       <Table size="small">
         <TableHead>
           <TableRow>
-            {columns.includes('sku') && <TableCell sx={{ pl: 1 }}>Артикул</TableCell>}
+            {columns.includes('sku') && <TableCell sx={{ pl: 1 }}>Код</TableCell>}
             {columns.includes('stock') && (
               <TableCell
                 sx={{
@@ -49,7 +49,7 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
                 }}
                 align="center"
               >
-                К-ть
+                Є?
               </TableCell>
             )}
             {columns.includes('name') && (
@@ -64,13 +64,13 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
                     },
                   }}
                 >
-                  Назва
+                  Шо за річ
                 </TableSortLabel>
               </TableCell>
             )}
             {columns.includes('vendor') && (
               <TableCell sx={{ pr: 1 }} align="right">
-                Продавець
+                Барига
               </TableCell>
             )}
             {columns.includes('price') && (
@@ -85,7 +85,7 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
                     },
                   }}
                 >
-                  Ціна
+                  Лаве
                 </TableSortLabel>
               </TableCell>
             )}

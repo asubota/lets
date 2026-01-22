@@ -6,13 +6,11 @@ import InsightsIcon from '@mui/icons-material/Insights'
 import PaletteIcon from '@mui/icons-material/Palette'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { Box, IconButton, Stack, useTheme } from '@mui/material'
-import { yellow } from '@mui/material/colors'
 import { createLink } from '@tanstack/react-router'
 
 import { useCartItemsCount } from '../hooks/use-cart-items-count.ts'
 import { ColorModeContext } from '../theme-mode-provider.tsx'
 import { PasteInSearchButton } from './toolbar/paste-in-search-button.tsx'
-import { useAppliedFilters } from '../store/appliedFilters'
 
 const LinkedIconButton = createLink(IconButton)
 
@@ -20,8 +18,6 @@ export const ExtraViewOptions = () => {
   const count = useCartItemsCount()
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
-  const appliedFilters = useAppliedFilters()
-  const hasApplied = appliedFilters.length > 0
 
   return (
     <>
@@ -41,7 +37,7 @@ export const ExtraViewOptions = () => {
           <PaletteIcon />
         </LinkedIconButton>
 
-        <LinkedIconButton sx={{ color: hasApplied ? yellow[500] : 'text.secondary' }} to="/stats">
+        <LinkedIconButton sx={{ color: 'text.secondary' }} to="/stats">
           <InsightsIcon />
         </LinkedIconButton>
       </Stack>

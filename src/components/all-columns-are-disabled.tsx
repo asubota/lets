@@ -20,7 +20,7 @@ export const AllColumnsAreDisabled: FC = () => {
         sx={{ color: 'primary.main', cursor: 'pointer' }}
         onClick={toggleSettings}
       >
-        All columns are disabled!
+        Ти шо, все вирубив? Вмикай назад!
       </Typography>
     </Box>
   )
