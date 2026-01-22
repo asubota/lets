@@ -1,22 +1,11 @@
-import { type MouseEvent, startTransition, useMemo } from 'react'
+import { startTransition, useMemo } from 'react'
 
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha'
-import {
-  alpha,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  useTheme,
-} from '@mui/material'
+import { alpha, Box, Button, Chip, Grid, Paper, Stack, Typography, useTheme } from '@mui/material'
 
 import { Modal } from './modal.tsx'
 import { VendorChip } from './vendor-chip.tsx'
@@ -45,22 +34,22 @@ export const AppliedFiltersModal = () => {
     toggleAppliedFiltersModal()
   }
 
-  const handlePriceSort = (_: MouseEvent<HTMLElement>, newOrder: SortOrder) => {
+  const handlePriceSort = (newOrder: SortOrder) => {
     startTransition(() => {
-      if (newOrder) {
-        setSort('price', newOrder)
-      } else {
+      if (field === 'price' && order === newOrder) {
         setSort(undefined, undefined)
+      } else {
+        setSort('price', newOrder)
       }
     })
   }
 
-  const handleNameSort = (_: MouseEvent<HTMLElement>, newOrder: SortOrder) => {
+  const handleNameSort = (newOrder: SortOrder) => {
     startTransition(() => {
-      if (newOrder) {
-        setSort('name', newOrder)
-      } else {
+      if (field === 'name' && order === newOrder) {
         setSort(undefined, undefined)
+      } else {
+        setSort('name', newOrder)
       }
     })
   }
@@ -95,7 +84,7 @@ export const AppliedFiltersModal = () => {
           variant="outlined"
           sx={{
             p: 2,
-            mb: 3,
+            mb: 4,
             borderRadius: 3,
             borderColor: theme.palette.divider,
           }}
@@ -127,7 +116,7 @@ export const AppliedFiltersModal = () => {
                   onClick={() => toggleVendor(vendor)}
                 >
                   <Box sx={{ position: 'relative', display: 'inline-flex', mr: 1.5 }}>
-                    <VendorChip source="live" vendor={vendor} onClick={() => {}} />
+                    <VendorChip source="live" vendor={vendor} />
                     {isSelected && (
                       <CheckCircleIcon
                         sx={{
@@ -150,7 +139,7 @@ export const AppliedFiltersModal = () => {
                       color: isSelected ? 'text.primary' : 'text.secondary',
                     }}
                   >
-                    {countByVendor[vendor]}
+                    {countByVendor[vendor] ?? 0}
                   </Typography>
                 </Grid>
               )
@@ -175,53 +164,57 @@ export const AppliedFiltersModal = () => {
             {/* Price Sorting */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <Stack direction="row" alignItems="center" gap={1} mb={1.5} justifyContent="center">
-                <AttachMoneyIcon color="primary" />
-                <Typography variant="subtitle1" fontWeight="bold">
+                <AttachMoneyIcon color="primary" fontSize="small" />
+                <Typography variant="subtitle2" fontWeight="bold">
                   Ціна питання
                 </Typography>
               </Stack>
-              <ToggleButtonGroup
-                value={field === 'price' ? order : null}
-                exclusive
-                onChange={handlePriceSort}
-                aria-label="price sort"
-                fullWidth
-                color="primary"
-              >
-                <ToggleButton value="asc" sx={{ py: 1.5 }}>
-                  <ArrowUpwardIcon sx={{ mr: 1 }} />
-                  Від дешевих
-                </ToggleButton>
-                <ToggleButton value="desc" sx={{ py: 1.5 }}>
-                  <ArrowDownwardIcon sx={{ mr: 1 }} />
-                  Від дорогих
-                </ToggleButton>
-              </ToggleButtonGroup>
+              <Stack direction="row" spacing={1} justifyContent="center">
+                <Chip
+                  icon={<ArrowUpwardIcon fontSize="small" />}
+                  label="Від дешевих"
+                  onClick={() => handlePriceSort('asc')}
+                  color={field === 'price' && order === 'asc' ? 'primary' : 'default'}
+                  variant={field === 'price' && order === 'asc' ? 'filled' : 'outlined'}
+                  clickable
+                />
+                <Chip
+                  icon={<ArrowDownwardIcon fontSize="small" />}
+                  label="Від дорогих"
+                  onClick={() => handlePriceSort('desc')}
+                  color={field === 'price' && order === 'desc' ? 'primary' : 'default'}
+                  variant={field === 'price' && order === 'desc' ? 'filled' : 'outlined'}
+                  clickable
+                />
+              </Stack>
             </Grid>
 
             {/* Name Sorting */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <Stack direction="row" alignItems="center" gap={1} mb={1.5} justifyContent="center">
-                <SortByAlphaIcon color="primary" />
-                <Typography variant="subtitle1" fontWeight="bold">
+                <SortByAlphaIcon color="primary" fontSize="small" />
+                <Typography variant="subtitle2" fontWeight="bold">
                   По назві
                 </Typography>
               </Stack>
-              <ToggleButtonGroup
-                value={field === 'name' ? order : null}
-                exclusive
-                onChange={handleNameSort}
-                aria-label="name sort"
-                fullWidth
-                color="primary"
-              >
-                <ToggleButton value="asc" sx={{ py: 1.5 }}>
-                  <ArrowDownwardIcon sx={{ mr: 1 }} />A - Я
-                </ToggleButton>
-                <ToggleButton value="desc" sx={{ py: 1.5 }}>
-                  <ArrowUpwardIcon sx={{ mr: 1 }} />Я - А
-                </ToggleButton>
-              </ToggleButtonGroup>
+              <Stack direction="row" spacing={1} justifyContent="center">
+                <Chip
+                  icon={<ArrowUpwardIcon fontSize="small" />}
+                  label="А - Я"
+                  onClick={() => handleNameSort('asc')}
+                  color={field === 'name' && order === 'asc' ? 'primary' : 'default'}
+                  variant={field === 'name' && order === 'asc' ? 'filled' : 'outlined'}
+                  clickable
+                />
+                <Chip
+                  icon={<ArrowDownwardIcon fontSize="small" />}
+                  label="Я - А"
+                  onClick={() => handleNameSort('desc')}
+                  color={field === 'name' && order === 'desc' ? 'primary' : 'default'}
+                  variant={field === 'name' && order === 'desc' ? 'filled' : 'outlined'}
+                  clickable
+                />
+              </Stack>
             </Grid>
           </Grid>
         </Paper>
