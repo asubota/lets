@@ -147,7 +147,7 @@ export const AppliedFiltersModal = () => {
                       color: isSelected ? 'text.primary' : 'text.secondary',
                     }}
                   >
-                    {countByVendor[vendor] ?? 0}
+                    {countByVendor[vendor]}
                   </Typography>
                 </Grid>
               )
