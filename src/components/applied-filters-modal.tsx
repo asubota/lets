@@ -60,18 +60,26 @@ export const AppliedFiltersModal = () => {
       onClose={toggleAppliedFiltersModal}
       title="Фільтри та Сортування"
       onSave={toggleAppliedFiltersModal}
+      hasSave={false}
       actions={
-        <Box sx={{ p: 2, width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <Stack direction="row" spacing={2} sx={{ p: 2, width: '100%', justifyContent: 'center' }}>
           <Button
             variant="outlined"
             color="error"
             onClick={handleReset}
-            fullWidth
-            sx={{ maxWidth: '300px', borderRadius: '20px' }}
+            sx={{ borderRadius: '20px', flex: 1, maxWidth: '200px' }}
           >
-            Знести всі налаштування
+            Знести все
           </Button>
-        </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleAppliedFiltersModal}
+            sx={{ borderRadius: '20px', flex: 1, maxWidth: '200px' }}
+          >
+            Закрити
+          </Button>
+        </Stack>
       }
     >
       <Box sx={{ p: 2 }}>
