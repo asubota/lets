@@ -18,13 +18,29 @@ export const AppBar: FC = () => {
   const unread = useGetNotifications('unread')
 
   return (
-    <Box className="app-bar" sx={{ pt: 1 }}>
+    <Box
+      className="app-bar glass-panel"
+      sx={{
+        px: 1,
+        py: 0.5,
+        mx: 1,
+        mt: 1,
+        borderRadius: '16px',
+        position: 'sticky',
+        top: 8,
+        zIndex: 1100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}
+    >
       <Box className="app-bar-left">
         <LinkedButton
           to={isFavouritesRoute ? '/list' : '/favorites'}
           disabled={loading}
           sx={{
-            color: isFavouritesRoute ? 'warning.light' : 'text.secondary',
+            color: isFavouritesRoute ? 'warning.main' : 'text.secondary',
+            p: 1,
           }}
         >
           <StarIcon />
@@ -32,10 +48,10 @@ export const AppBar: FC = () => {
         </LinkedButton>
       </Box>
 
-      <Box className="app-bar-center" id="app-bar-center" />
+      <Box className="app-bar-center" id="app-bar-center" sx={{ flex: 1, mx: 1 }} />
 
       <Box className="app-bar-right">
-        <LinkedButton to="/notifications" sx={{ color: 'text.secondary' }}>
+        <LinkedButton to="/notifications" sx={{ color: 'text.secondary', p: 1 }}>
           <NotificationsIcon />
           {unread.length > 0 && <RedDot />}
         </LinkedButton>

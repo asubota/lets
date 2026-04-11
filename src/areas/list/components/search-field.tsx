@@ -37,9 +37,36 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
         return (
           <TextField
             sx={{
-              '& .MuiInputBase-root': { overflow: 'hidden' },
+              '& .MuiInputBase-root': {
+                'borderRadius': '12px',
+                'backgroundColor': (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(255,255,255,0.05)'
+                    : 'rgba(0,0,0,0.03)',
+                '& fieldset': { border: 'none' },
+                '&:hover': {
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? 'rgba(255,255,255,0.08)'
+                      : 'rgba(0,0,0,0.05)',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? 'rgba(255,255,255,0.1)'
+                      : 'rgba(0,0,0,0.07)',
+                },
+              },
+              '& .MuiInputLabel-root': {
+                fontFamily: '"Outfit", sans-serif',
+                fontSize: '14px',
+              },
+              '& input': {
+                fontFamily: '"Outfit", sans-serif',
+                fontSize: '14px',
+              },
             }}
-            label="Шукати тут"
+            placeholder="Шукати запчастини..."
             variant="outlined"
             fullWidth
             size="small"
@@ -49,27 +76,53 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
             onKeyUp={handleKeyUp}
             slotProps={{
               input: {
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ marginRight: -2 }}>
-                    <IconButton
-                      onClick={handleFormReset}
-                      size="small"
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search
                       sx={{
-                        'color': 'text.secondary',
-                        'visibility': field.value ? 'visible' : 'hidden',
-                        '& svg': { width: '26px', height: '26px' },
+                        color: 'text.secondary',
+                        fontSize: '20px',
+                        ml: 0.5,
+                      }}
+                    />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ marginRight: -1 }}>
+                    {field.value && (
+                      <IconButton
+                        onClick={handleFormReset}
+                        size="small"
+                        sx={{
+                          'color': 'text.secondary',
+                          '& svg': { width: '20px', height: '20px' },
+                        }}
+                      >
+                        <Cancel />
+                      </IconButton>
+                    )}
+                    <Box
+                      sx={{
+                        ml: 1,
+                        borderRadius: '10px',
+                        overflow: 'hidden',
+                        bgcolor: 'primary.main',
                       }}
                     >
-                      <Cancel />
-                    </IconButton>
-
-                    <Box sx={{ backgroundColor: 'primary.main' }}>
                       <IconButton
                         type={loading ? 'button' : 'submit'}
-                        sx={{ color: 'primary.contrastText' }}
+                        sx={{
+                          color: 'primary.contrastText',
+                          p: 1,
+                          borderRadius: 0,
+                        }}
                         className={clsx({ rotate: loading })}
                       >
-                        {loading ? <LoopIcon /> : <Search />}
+                        {loading ? (
+                          <LoopIcon sx={{ fontSize: '20px' }} />
+                        ) : (
+                          <Search sx={{ fontSize: '20px' }} />
+                        )}
                       </IconButton>
                     </Box>
                   </InputAdornment>

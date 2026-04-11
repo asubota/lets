@@ -1,6 +1,7 @@
 import { type FC } from 'react'
+import { motion } from 'framer-motion'
 
-import { Box, Stack } from '@mui/material'
+import { Box } from '@mui/material'
 
 import { type Product } from '../types.ts'
 import { Tile } from './tile.tsx'
@@ -18,6 +19,21 @@ interface TilesViewProps extends SharedTilesViewProps {
   search: string
 }
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+}
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+}
+
 const TilesView: FC<TilesViewProps> = ({ list, search, isFavoritePage = false }) => {
   const favoriteIds = useFavoriteIds()
   const changedProducts = useGetChangedProducts()
@@ -25,25 +41,37 @@ const TilesView: FC<TilesViewProps> = ({ list, search, isFavoritePage = false })
   const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(list)
 
   return (
-    <Stack direction="column" spacing={1} id="tiles-view">
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      id="tiles-view"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        padding: '0px 0px 12px 0px',
+      }}
+    >
       {visibleList.map((p) => {
         const favoriteId = getFavoriteId(p)
         const key = `${favoriteId}:${p.price}`
 
         return (
-          <Tile
-            key={key}
-            p={p}
-            search={search}
-            isFavorite={favoriteIds.includes(favoriteId)}
-            isChanged={skus.includes(p.sku)}
-            isFavoritePage={isFavoritePage}
-          />
+          <motion.div key={key} variants={item}>
+            <Tile
+              p={p}
+              search={search}
+              isFavorite={favoriteIds.includes(favoriteId)}
+              isChanged={skus.includes(p.sku)}
+              isFavoritePage={isFavoritePage}
+            />
+          </motion.div>
         )
       })}
 
       {hasMore && <Box ref={loadMoreRef} sx={{ p: 1 }} />}
-    </Stack>
+    </motion.div>
   )
 }
 

@@ -83,27 +83,36 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
       }}
       label={getLabel(key)}
       size="small"
-      variant="outlined"
       sx={{
-        borderWidth: '2px',
-        borderColor: 'secondary.main',
+        'fontFamily': '"Outfit", sans-serif',
+        'fontWeight': 700,
+        'fontSize': '14px',
+        'height': '28px',
+        'backgroundColor': (theme) =>
+          hasSale
+            ? 'rgba(234, 43, 6, 0.1)'
+            : theme.palette.mode === 'dark'
+              ? 'rgba(255, 255, 255, 0.05)'
+              : 'rgba(0,0,0,0.04)',
+        'color': hasSale ? 'primary.main' : 'text.primary',
+        'border': hasSale ? '1px solid' : 'none',
+        'borderColor': 'primary.main',
+        'borderRadius': '10px',
+        '& .MuiChip-label': { px: 1.5 },
 
         ...(key === '-' && {
-          color: 'success.main',
-          fontWeight: 'bold',
+          color: (theme) => (theme.palette.mode === 'dark' ? '#66bb6a' : 'success.dark'),
+          backgroundColor: 'rgba(102, 187, 106, 0.1)',
         }),
 
         ...(key === 'p2' && {
           color: 'info.main',
-          fontStyle: 'italic',
+          backgroundColor: 'rgba(3, 169, 244, 0.1)',
         }),
 
         ...(key === 'price_old' && {
-          color: 'secondary.light',
-        }),
-
-        ...(hasSale && {
-          borderColor: 'primary.main',
+          color: 'text.secondary',
+          fontSize: '12px',
         }),
       }}
       {...props}

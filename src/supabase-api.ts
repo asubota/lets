@@ -66,18 +66,22 @@ export const fetchProductsFromSupabase = async (
   return allData.map((item) => {
     let pics: string[] | null = null
     if (item.pics) {
-      try {
-        if (typeof item.pics === 'string') {
-          if (item.pics.startsWith('[')) {
-            pics = JSON.parse(item.pics)
-          } else {
-            pics = item.pics.split(',').map((s: string) => s.trim())
+      if (Array.isArray(item.pics)) {
+        pics = item.pics
+      } else if (typeof item.pics === 'string') {
+        const trimmed = item.pics.trim()
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+          try {
+            pics = JSON.parse(trimmed)
+          } catch {
+            pics = trimmed
+              .slice(1, -1)
+              .split(',')
+              .map((s: string) => s.trim().replace(/^['"]|['"]$/g, ''))
           }
-        } else if (Array.isArray(item.pics)) {
-          pics = item.pics
+        } else if (trimmed) {
+          pics = trimmed.split(',').map((s: string) => s.trim())
         }
-      } catch {
-        pics = [String(item.pics)]
       }
     }
 
