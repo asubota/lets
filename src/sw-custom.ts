@@ -85,7 +85,7 @@ sw.addEventListener('fetch', (event) => {
     request: { url, method },
   } = event
 
-  if (method === 'GET' && url.includes('docs.google.com')) {
+  if (method === 'GET' && (url.includes('docs.google.com') || url.includes('supabase.co'))) {
     const response = sw.caches.open(CACHE_NAME).then(async (cache) => {
       const cachedResponse = await cache.match(event.request)
 
@@ -99,13 +99,23 @@ sw.addEventListener('fetch', (event) => {
           if (isStale(cachedDate, now)) {
             console.log('Cache is stale, fetching new data...')
 
-            fetchAndCache(event.request, cache).then((response) => {
-              response.text().then((text) => {
-                const items = parseData(text)
+            fetchAndCache(event.request, cache).then(async (response) => {
+              const text = await response.clone().text()
+              let count = 0
 
-                console.log('Cache updated, app notified.')
-                notifyAppAboutCacheReset(items.length)
-              })
+              if (url.includes('docs.google.com')) {
+                count = parseData(text).length
+              } else if (url.includes('supabase.co')) {
+                try {
+                  const data = JSON.parse(text)
+                  count = Array.isArray(data) ? data.length : 0
+                } catch {
+                  //
+                }
+              }
+
+              console.log('Cache updated, app notified.')
+              notifyAppAboutCacheReset(count)
             })
           } else {
             console.log('Cache is still valid, returning cached data.')

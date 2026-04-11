@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { devtools } from 'zustand/middleware'
+import { DataSource } from '../constants'
 
 type MetaVendor = {
   load: number
@@ -27,7 +28,9 @@ interface StoreState {
     setTheme(this: void, theme: StoreState['theme']): void
     setSort(this: void, sort: StoreState['sort']): void
     setMeta(this: void, meta: StoreState['meta']): void
+    setDataSource(this: void, dataSource: DataSource): void
   }
+  dataSource: DataSource
 }
 
 const useStore = create<StoreState>()(
@@ -38,11 +41,13 @@ const useStore = create<StoreState>()(
         theme: 'light',
         sort: 'date',
         meta: { vendors: [], created: '' },
+        dataSource: 'google-drive',
         actions: {
           setSort: (sort) => set(() => ({ sort })),
           setView: (view) => set(() => ({ view })),
           setTheme: (theme) => set({ theme }),
           setMeta: (meta) => set({ meta }, undefined, 'setMeta'),
+          setDataSource: (dataSource) => set({ dataSource }),
         },
       }),
       {
@@ -51,6 +56,7 @@ const useStore = create<StoreState>()(
           view: state.view,
           theme: state.theme,
           sort: state.sort,
+          dataSource: state.dataSource,
         }),
       },
     ),
@@ -65,6 +71,7 @@ export const useAppView = () => useStore((state) => state.view)
 export const useAppTheme = () => useStore((state) => state.theme)
 export const useAppSort = () => useStore((state) => state.sort)
 export const useMeta = () => useStore((state) => state.meta)
+export const useDataSource = () => useStore((state) => state.dataSource)
 export const useStaleVendors = (): MetaVendor[] => {
   const { vendors } = useMeta()
   return vendors.filter((v) => v.stale)

@@ -2,6 +2,8 @@ import { useContext } from 'react'
 
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
+import CloudIcon from '@mui/icons-material/Cloud'
+import FolderIcon from '@mui/icons-material/Folder'
 import InsightsIcon from '@mui/icons-material/Insights'
 import PaletteIcon from '@mui/icons-material/Palette'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
@@ -10,7 +12,9 @@ import { createLink } from '@tanstack/react-router'
 
 import { useCartItemsCount } from '../hooks/use-cart-items-count.ts'
 import { ColorModeContext } from '../theme-mode-provider.tsx'
+import { useAppActions, useDataSource } from '../store'
 import { PasteInSearchButton } from './toolbar/paste-in-search-button.tsx'
+import { toast } from 'react-toastify'
 
 const LinkedIconButton = createLink(IconButton)
 
@@ -18,6 +22,20 @@ export const ExtraViewOptions = () => {
   const count = useCartItemsCount()
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
+  const dataSource = useDataSource()
+  const { setDataSource } = useAppActions()
+
+  const toggleSource = () => {
+    const nextSource = dataSource === 'google-drive' ? 'supabase' : 'google-drive'
+    setDataSource(nextSource)
+
+    // Clear Service Worker cache
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'cache-reset-request' })
+    }
+
+    toast.info(`Source changed to: ${nextSource === 'supabase' ? 'Supabase' : 'Google Drive'}`)
+  }
 
   return (
     <>
@@ -31,6 +49,10 @@ export const ExtraViewOptions = () => {
       >
         <IconButton onClick={colorMode.toggleColorMode} sx={{ color: 'text.secondary' }}>
           {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+
+        <IconButton onClick={toggleSource} sx={{ color: 'text.secondary' }}>
+          {dataSource === 'supabase' ? <CloudIcon /> : <FolderIcon />}
         </IconButton>
 
         <LinkedIconButton sx={{ color: 'text.secondary' }} to="/colors">

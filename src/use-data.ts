@@ -4,22 +4,33 @@ import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants'
 import { parseData } from './data-tools'
 import { buildItemTokens } from './search-tools'
 import { getGoogleFileId } from './secrets'
-import { type Meta, useAppActions } from './store'
+import { fetchProductsFromSupabase } from './supabase-api'
+import { type Meta, useAppActions, useDataSource } from './store'
 import { getUniqueVendors } from './tools.tsx'
 import { type IndexedProduct, type Product } from './types'
 
 const isMeta = (p: Product) => p.sku === '__meta__'
 const isNotMeta = (p: Product) => p.sku !== '__meta__'
 
-const getData = async (id: string, setMeta: (data: Meta) => void): Promise<IndexedProduct[]> => {
-  if (id.length === 0) {
-    return []
+const getData = async (
+  dataSource: string,
+  setMeta: (data: Meta) => void,
+): Promise<IndexedProduct[]> => {
+  let products: Product[] = []
+
+  if (dataSource === 'supabase') {
+    products = await fetchProductsFromSupabase()
+  } else {
+    const id = getGoogleFileId()
+    if (id.length === 0) {
+      return []
+    }
+    const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=0`
+    const response = await fetch(url)
+    const text = await response.text()
+    products = parseData(text)
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&tq&gid=0`
-  const response = await fetch(url)
-  const text = await response.text()
-  const products = parseData(text)
   const meta = products.find(isMeta)
 
   if (meta) {
@@ -36,12 +47,12 @@ const getData = async (id: string, setMeta: (data: Meta) => void): Promise<Index
 }
 
 export const useData = () => {
-  const id = getGoogleFileId()
+  const dataSource = useDataSource()
   const { setMeta } = useAppActions()
   return useQuery<IndexedProduct[]>({
     staleTime: 1000 * 60 * 10, // 10 minutes
-    queryKey: [CACHE_BASE_KEY, id],
-    queryFn: () => getData(id, setMeta),
+    queryKey: [CACHE_BASE_KEY, dataSource],
+    queryFn: () => getData(dataSource, setMeta),
   })
 }
 
