@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { alpha, Box, CircularProgress, Divider, Grid, Paper, Typography, useTheme } from '@mui/material'
+import { alpha, Box, Divider, Grid, Paper, Typography, useTheme } from '@mui/material'
 
 import { ResetCacheButton } from '../../components/reset-cache-button.tsx'
 import { TopBottomHome } from '../../components/top-botton-home.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
+import { Loader } from '../../components/loader.tsx'
 import { useMeta } from '../../store'
 import { useAppliedFilters, useAppliedFiltersActions } from '../../store/appliedFilters'
 import { groupByVendor } from '../../tools.tsx'
@@ -26,19 +27,8 @@ export const Stats = () => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          pt: 6,
-          gap: 6,
-          flexDirection: 'column',
-        }}
-      >
-        <CircularProgress color="primary" size={70} />
-        <CircularProgress color="secondary" size={20} />
-        <CircularProgress color="primary" size={50} />
+      <Box sx={{ pt: 6 }}>
+        <Loader />
       </Box>
     )
   }

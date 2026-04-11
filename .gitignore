@@ -25,3 +25,6 @@ dist-ssr
 
 dev-dist
 /public/sw-custom.js
+
+# Brainstorming artifacts
+.superpowers/
