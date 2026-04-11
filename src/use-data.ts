@@ -15,11 +15,15 @@ const isNotMeta = (p: Product) => p.sku !== '__meta__'
 const getData = async (
   dataSource: string,
   setMeta: (data: Meta) => void,
+  setLoadingProgress: (progress: any) => void,
 ): Promise<IndexedProduct[]> => {
   let products: Product[] = []
-
+ 
   if (dataSource === 'supabase') {
-    products = await fetchProductsFromSupabase()
+    products = await fetchProductsFromSupabase((progress) => {
+      setLoadingProgress(progress)
+    })
+    setLoadingProgress(null) // Скидаємо після завершення
   } else {
     const id = getGoogleFileId()
     if (id.length === 0) {
@@ -48,11 +52,11 @@ const getData = async (
 
 export const useData = () => {
   const dataSource = useDataSource()
-  const { setMeta } = useAppActions()
+  const { setMeta, setLoadingProgress } = useAppActions()
   return useQuery<IndexedProduct[]>({
     staleTime: 1000 * 60 * 10, // 10 minutes
     queryKey: [CACHE_BASE_KEY, dataSource],
-    queryFn: () => getData(dataSource, setMeta),
+    queryFn: () => getData(dataSource, setMeta, setLoadingProgress),
   })
 }
 

@@ -28,21 +28,27 @@ export const VendorChip: FC<{
     }
   }
 
-  return vendor !== 'base' ? (
+  return (
     <Chip
       data-no-export
       label={vendor}
       size="small"
-      variant="outlined"
       onClick={handleClick}
       sx={{
-        borderWidth: '2px',
-        borderColor: borderColorValue,
-        color: colorValue,
-        backgroundColor: backgroundColorValue,
+        'fontFamily': '"Outfit", sans-serif',
+        'fontWeight': 700,
+        'fontSize': '10px',
+        'height': '24px',
+        'textTransform': 'uppercase',
+        'letterSpacing': '0.5px',
+        'borderColor': vendor === 'base' ? 'primary.main' : borderColorValue,
+        'color': vendor === 'base' ? 'primary.main' : colorValue,
+        'backgroundColor':
+          vendor === 'base' ? 'rgba(234, 43, 6, 0.1)' : backgroundColorValue,
+        'border': '1px solid',
+        'borderRadius': '8px',
+        '& .MuiChip-label': { px: 1 },
       }}
     />
-  ) : (
-    <Chip data-no-export label={vendor} color="primary" size="small" />
   )
 }
