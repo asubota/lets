@@ -7,12 +7,10 @@ import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hoo
 import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
 import { AppliedFiltersModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
-import { Loader } from '../../components/loader.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 import { useSearch } from '../../search-tools.ts'
 import { useHistoryActions } from '../../store'
 import { type SearchForm } from '../../types.ts'
-import { useIsLoading } from '../../use-data.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
 
@@ -23,7 +21,6 @@ export const List = () => {
   const { addHistoryItem } = useHistoryActions()
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
-  const isLoading = useIsLoading()
 
   const onSubmit: SubmitHandler<SearchForm> = ({ input }) => {
     const term = input.trim()
@@ -85,13 +82,9 @@ export const List = () => {
         </FormProvider>
       </Portal>
 
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Suspense fallback={<ProductsSkeleton />}>
-          <Products products={products} search={search} hasPasteIn hasGoogle hasColumnsConfig />
-        </Suspense>
-      )}
+      <Suspense fallback={<ProductsSkeleton />}>
+        <Products products={products} search={search} hasPasteIn hasGoogle hasColumnsConfig />
+      </Suspense>
 
       <AppliedFiltersModal />
       <TableSettingsModal />

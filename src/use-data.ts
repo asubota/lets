@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
 
 import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants'
 import { parseData } from './data-tools'
@@ -16,23 +15,11 @@ const isNotMeta = (p: Product) => p.sku !== '__meta__'
 const getData = async (
   dataSource: string,
   setMeta: (data: Meta) => void,
-  setLoadingProgress: (progress: any) => void,
 ): Promise<IndexedProduct[]> => {
   let products: Product[] = []
  
   if (dataSource === 'supabase') {
-    products = await fetchProductsFromSupabase((progress) => {
-      setLoadingProgress(progress)
-    })
-    setLoadingProgress(null) // Скидаємо після завершення
-    toast.info(`Мущіна, дані оновленно! [${products.length}]`, {
-      icon: false,
-      autoClose: 3000,
-      theme: 'colored',
-      closeButton: false,
-      hideProgressBar: true,
-      position: 'bottom-left',
-    })
+    products = await fetchProductsFromSupabase()
   } else {
     const id = getGoogleFileId()
     if (id.length === 0) {
@@ -61,11 +48,11 @@ const getData = async (
 
 export const useData = () => {
   const dataSource = useDataSource()
-  const { setMeta, setLoadingProgress } = useAppActions()
+  const { setMeta } = useAppActions()
   return useQuery<IndexedProduct[]>({
     staleTime: 1000 * 60 * 10, // 10 minutes
     queryKey: [CACHE_BASE_KEY, dataSource],
-    queryFn: () => getData(dataSource, setMeta, setLoadingProgress),
+    queryFn: () => getData(dataSource, setMeta),
   })
 }
 
