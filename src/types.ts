@@ -63,6 +63,24 @@ export type AppMessage =
   | {
       type: 'xxx'
     }
+  | {
+      type: 'SYNC_START'
+    }
+  | {
+      type: 'SYNC_PROGRESS'
+      payload: { loaded: number; total: number; percent: number }
+    }
+  | {
+      type: 'SYNC_END'
+      payload: { count: number }
+    }
+  | {
+      type: 'SYNC_ERROR'
+      payload: { message: string }
+    }
+  | {
+      type: 'GET_SYNC_STATUS'
+    }
 
 export type FavoriteItem = {
   favoriteId: string

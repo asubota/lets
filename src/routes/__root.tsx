@@ -5,6 +5,7 @@ import { createRootRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ToastContainer } from 'react-toastify'
 
+import { Loader } from '../components/loader'
 import { useInitGoogle } from '../hooks/use-init-google.ts'
 import { useListenToCacheUpdate } from '../hooks/use-listen-to-cache-update.ts'
 import { useNotifyAboutChange } from '../hooks/use-notify-about-change.tsx'
@@ -34,6 +35,7 @@ const Component = () => {
         />
 
         <CssBaseline />
+        <Loader />
         <Outlet />
         <Hooks />
       </QueryClientProvider>

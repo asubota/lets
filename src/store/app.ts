@@ -82,8 +82,7 @@ export const useAppTheme = () => useStore((state) => state.theme)
 export const useAppSort = () => useStore((state) => state.sort)
 export const useMeta = () => useStore((state) => state.meta)
 export const useDataSource = () => useStore((state) => state.dataSource)
-export const useLoadingProgress = () =>
-  useStore((state) => state.loadingProgress)
+export const useLoadingProgress = () => useStore((state) => state.loadingProgress)
 export const useStaleVendors = (): MetaVendor[] => {
   const { vendors } = useMeta()
   return vendors.filter((v) => v.stale)

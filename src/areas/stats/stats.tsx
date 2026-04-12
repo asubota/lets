@@ -6,17 +6,15 @@ import { alpha, Box, Divider, Grid, Paper, Typography, useTheme } from '@mui/mat
 import { ResetCacheButton } from '../../components/reset-cache-button.tsx'
 import { TopBottomHome } from '../../components/top-botton-home.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
-import { Loader } from '../../components/loader.tsx'
 import { useMeta } from '../../store'
 import { useAppliedFilters, useAppliedFiltersActions } from '../../store/appliedFilters'
 import { groupByVendor } from '../../tools.tsx'
-import { useAllData, useAllVendors, useIsLoading } from '../../use-data.ts'
+import { useAllData, useAllVendors } from '../../use-data.ts'
 
 export const Stats = () => {
   const theme = useTheme()
   const allData = useAllData()
   const vendors = useAllVendors()
-  const loading = useIsLoading()
   const { created } = useMeta()
 
   const appliedFilters = useAppliedFilters()
@@ -24,14 +22,6 @@ export const Stats = () => {
 
   const countByVendor = useMemo(() => groupByVendor(allData), [allData])
   const sortedVendors = useMemo(() => [...vendors].sort(), [vendors])
-
-  if (loading) {
-    return (
-      <Box sx={{ pt: 6 }}>
-        <Loader />
-      </Box>
-    )
-  }
 
   return (
     <TopBottomHome>
