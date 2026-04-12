@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants'
 import { parseData } from './data-tools'
@@ -24,6 +25,14 @@ const getData = async (
       setLoadingProgress(progress)
     })
     setLoadingProgress(null) // Скидаємо після завершення
+    toast.info(`Мущіна, дані оновленно! [${products.length}]`, {
+      icon: false,
+      autoClose: 3000,
+      theme: 'colored',
+      closeButton: false,
+      hideProgressBar: true,
+      position: 'bottom-left',
+    })
   } else {
     const id = getGoogleFileId()
     if (id.length === 0) {

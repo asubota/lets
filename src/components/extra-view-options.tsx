@@ -34,7 +34,22 @@ export const ExtraViewOptions = () => {
       navigator.serviceWorker.controller.postMessage({ type: 'cache-reset-request' })
     }
 
-    toast.info(`Source changed to: ${nextSource === 'supabase' ? 'Supabase' : 'Google Drive'}`)
+    toast.info(
+      `🚀 База змінена на: ${nextSource === 'supabase' ? 'Supabase' : 'Google Drive'}`,
+      {
+        icon: false,
+        autoClose: 2000,
+        theme: 'colored',
+        closeButton: false,
+        hideProgressBar: true,
+        position: 'bottom-left',
+        style: {
+          borderRadius: '16px',
+          fontFamily: '"Outfit", sans-serif',
+          fontWeight: 600,
+        },
+      },
+    )
   }
 
   return (

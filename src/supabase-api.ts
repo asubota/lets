@@ -27,6 +27,8 @@ export const fetchProductsFromSupabase = async (
   let from = 0
   const PAGE_SIZE = 1000
 
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
   // 2. Завантажуємо дані пачками
   while (true) {
     const { data, error } = await supabase
@@ -60,6 +62,9 @@ export const fetchProductsFromSupabase = async (
     }
 
     from += PAGE_SIZE
+
+    // Додаємо затримку між запитами
+    await delay(200)
   }
 
   // 3. Мапимо дані в об'єкти Product
