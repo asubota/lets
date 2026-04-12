@@ -1,9 +1,9 @@
-import { Product } from './types'
+import { type Product } from './types'
 
 const DB_NAME = 'ShopDB'
 const PRODUCTS_STORE = 'products'
 const META_STORE = 'metadata'
-const DB_VERSION = 2
+const DB_VERSION = 3
 
 export interface SyncMetadata {
   key: 'last-sync'
@@ -23,9 +23,11 @@ export class ShopDB {
       request.onupgradeneeded = (event) => {
         console.log('[DB] Upgrade needed')
         const db = (event.target as IDBOpenDBRequest).result
-        if (!db.objectStoreNames.contains(PRODUCTS_STORE)) {
-          db.createObjectStore(PRODUCTS_STORE, { keyPath: 'sku' })
+        // Recreate PRODUCTS_STORE with compound key (sku + vendor)
+        if (db.objectStoreNames.contains(PRODUCTS_STORE)) {
+          db.deleteObjectStore(PRODUCTS_STORE)
         }
+        db.createObjectStore(PRODUCTS_STORE, { keyPath: 'id' })
         if (!db.objectStoreNames.contains(META_STORE)) {
           db.createObjectStore(META_STORE, { keyPath: 'key' })
         }
@@ -60,8 +62,9 @@ export class ShopDB {
     return new Promise((resolve, reject) => {
       const tx = this.db!.transaction([PRODUCTS_STORE], 'readwrite')
       const store = tx.objectStore(PRODUCTS_STORE)
-      
-      products.forEach(p => store.put(p))
+
+      // Compound key: sku + vendor to support same article from different vendors
+      products.forEach((p) => store.put({ ...p, id: `${p.sku}-${p.vendor}` }))
 
       tx.oncomplete = () => resolve()
       tx.onerror = () => reject(tx.error)

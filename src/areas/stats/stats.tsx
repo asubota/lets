@@ -25,14 +25,14 @@ export const Stats = () => {
 
   return (
     <TopBottomHome>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ px: 3 }}>
         <Paper
           elevation={0}
           variant="outlined"
           sx={{
             p: 2,
             mb: 4,
-            borderRadius: 3,
+            borderRadius: '12px',
             borderColor: theme.palette.divider,
           }}
         >
