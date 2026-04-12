@@ -115,7 +115,9 @@ sw.addEventListener('fetch', (event) => {
               }
 
               console.log('Cache updated, app notified.')
-              notifyAppAboutCacheReset(count)
+              if (!url.includes('supabase.co')) {
+                notifyAppAboutCacheReset(count)
+              }
             })
           } else {
             console.log('Cache is still valid, returning cached data.')

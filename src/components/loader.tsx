@@ -1,4 +1,5 @@
 import { Box, Card, CircularProgress, Typography } from '@mui/material'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import { Bike } from './bike.tsx'
 import { Logo } from './logo.tsx'
@@ -8,22 +9,37 @@ export const Loader = () => {
   const progress = useLoadingProgress()
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: '40px', mb: '20px' }}>
-        {progress ? (
-          <Card
-            sx={{
-              p: 3,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 3,
-              borderRadius: 3,
-              boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
-              border: '1px solid',
-              borderColor: 'divider',
-              minWidth: 300,
-            }}
+    <AnimatePresence>
+      <motion.div
+        key="loader-container"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.5 } }}
+        style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+      >
+        <Box sx={{ width: '100%', maxWidth: 'fit-content' }}>
+          <Box
+            sx={{ display: 'flex', justifyContent: 'center', mt: '40px', mb: '20px' }}
           >
+            {progress ? (
+              <Card
+                sx={{
+                  'p': 3,
+                  'display': 'flex',
+                  'alignItems': 'center',
+                  'gap': 3,
+                  'borderRadius': 5,
+                  'boxShadow': '0 20px 40px rgba(0,0,0,0.1)',
+                  'border': '1px solid',
+                  'borderColor': 'divider',
+                  'minWidth': 320,
+                  'background': (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? 'rgba(40,40,40,0.9)'
+                      : 'rgba(255,255,255,0.9)',
+                  'backdropFilter': 'blur(10px)',
+                }}
+              >
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>
               <CircularProgress
                 variant="determinate"
@@ -82,14 +98,16 @@ export const Loader = () => {
                 />
               </Box>
             </Box>
-          </Card>
-        ) : (
-          <CircularProgress size={80} thickness={3} color="secondary" />
-        )}
-      </Box>
+              </Card>
+            ) : (
+              <CircularProgress size={80} thickness={3} color="secondary" />
+            )}
+          </Box>
 
-      <Bike type="safe" />
-      <Logo />
-    </Box>
+          <Bike type="safe" />
+          <Logo />
+        </Box>
+      </motion.div>
+    </AnimatePresence>
   )
 }
