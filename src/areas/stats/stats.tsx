@@ -114,7 +114,7 @@ export const Stats = () => {
               {created}
             </Typography>
           )}
-          <ResetCacheButton />
+          {allData.length > 0 && <ResetCacheButton />}
         </Box>
       </Box>
     </TopBottomHome>
