@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 import { CACHE_COLORS_KEY } from './constants'
 import { getAllColors, removeColor, setColor } from './supabase-api-colors.ts'
@@ -80,6 +81,11 @@ export const useSetColors = () => {
     async onSettled() {
       return await queryClient.invalidateQueries({
         queryKey: getQueryKey(),
+      })
+    },
+    onError: () => {
+      toast.error('Помилка при збереженні кольорів.', {
+        position: 'bottom-left',
       })
     },
     mutationFn: async ({ currentColors, colors }) => {

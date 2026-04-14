@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 import { CACHE_CART_KEY, POPULAR_SERViCE_PREFIX } from './constants'
 import {
@@ -57,6 +58,9 @@ export const useSetPropOnCart = () => {
     },
     onError: (_, __, context) => {
       queryClient.setQueryData(getQueryKey(), context?.list)
+      toast.error('Помилка при оновленні кошика. Зміни скасовано.', {
+        position: 'bottom-left',
+      })
     },
     mutationFn: async ({ discount, quantity, itemId }) => {
       const updates: Partial<Omit<CartItem, 'itemId'>> = {}
@@ -89,7 +93,9 @@ export const useSetPopularServicesForCart = () => {
       const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
 
       queryClient.setQueryData<CartItem[]>(getQueryKey(), (old = []) => {
-        const noPopularServiceItems = old.filter((item) => !item.itemId.startsWith(POPULAR_SERViCE_PREFIX))
+        const noPopularServiceItems = old.filter(
+          (item) => !item.itemId.startsWith(POPULAR_SERViCE_PREFIX),
+        )
         const popularServiceItems = itemIds.map((id) => ({
           itemId: id,
           quantity: '1',
@@ -104,6 +110,9 @@ export const useSetPopularServicesForCart = () => {
     },
     onError: (_, __, context) => {
       queryClient.setQueryData(getQueryKey(), context?.list)
+      toast.error('Помилка при оновленні популярних послуг. Зміни скасовано.', {
+        position: 'bottom-left',
+      })
     },
     mutationFn: ({ itemIds }) => {
       return setCartPopularServices(itemIds)
@@ -145,6 +154,9 @@ export const useToggleInCart = () => {
     },
     onError: (_, __, context) => {
       queryClient.setQueryData(getQueryKey(), context?.list)
+      toast.error('Помилка при зміні кошика. Зміни скасовано.', {
+        position: 'bottom-left',
+      })
     },
     mutationFn: ({ itemId, action }) => {
       if (action === 'add') {

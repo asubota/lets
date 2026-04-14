@@ -31,7 +31,7 @@ const getData = async (setMeta: (data: Meta) => void): Promise<IndexedProduct[]>
 export const useData = () => {
   const { setMeta } = useAppActions()
   return useQuery<IndexedProduct[]>({
-    staleTime: 1000 * 60 * 10, // 10 minutes
+    staleTime: Infinity, // Invalidated manually via SW SYNC_END message
     queryKey: [CACHE_BASE_KEY],
     queryFn: () => getData(setMeta),
   })

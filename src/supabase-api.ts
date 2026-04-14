@@ -1,41 +1,36 @@
 import { db } from './db'
 import { type Product } from './types'
 
+const SYNC_STALE_MS = 1000 * 60 * 60 // 1 hour
+
 function isSyncStale(lastSyncTime: number) {
-  const oneHour = 1000 * 60 * 60
-  return Date.now() - lastSyncTime > oneHour
+  return Date.now() - lastSyncTime > SYNC_STALE_MS
+}
+
+function postToServiceWorker(type: string) {
+  const worker = navigator.serviceWorker.controller
+  if (worker) {
+    worker.postMessage({ type })
+  } else {
+    navigator.serviceWorker.ready.then((reg) => {
+      const sw = reg.active || reg.waiting || reg.installing
+      sw?.postMessage({ type })
+    })
+  }
 }
 
 export const fetchProductsFromSupabase = async (): Promise<Product[]> => {
   const metadata = await db.getSyncMetadata()
-  console.log('[Supabase API] Metadata:', metadata)
 
-  const triggerWorkerSync = (type: string) => {
-    const worker = navigator.serviceWorker.controller
-    if (worker) {
-      worker.postMessage({ type })
-    } else {
-      navigator.serviceWorker.ready.then((reg) => {
-        const sw = reg.active || reg.waiting || reg.installing
-        if (sw) {
-          sw.postMessage({ type })
-        }
-      })
-    }
-  }
-
-  // Notify SW to start sync if needed
   if (!metadata || isSyncStale(metadata.time)) {
-    console.log('[Supabase API] Triggering sync...')
-    triggerWorkerSync('SYNC_START')
+    // Sync is stale — ask SW to start sync.
+    // SW will also send back SYNC_PROGRESS if already running.
+    postToServiceWorker('SYNC_START')
+  } else {
+    // Data is fresh, but check if a sync is already in progress
+    // (e.g., page was refreshed mid-sync)
+    postToServiceWorker('GET_SYNC_STATUS')
   }
 
-  // Request current status in case a sync is already running
-  triggerWorkerSync('GET_SYNC_STATUS')
-
-  // Return what we have in DB for now
-  console.log('[Supabase API] Fetching products from DB...')
-  const products = await db.getAllProducts()
-  console.log(`[Supabase API] Loaded ${products.length} products from DB`)
-  return products
+  return db.getAllProducts()
 }

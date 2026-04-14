@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 import { CACHE_FAVORITE_KEY } from './constants.ts'
 import {
@@ -46,6 +47,9 @@ export const useToggleFavorite = () => {
     },
     onError: (_, __, context) => {
       queryClient.setQueryData(getQueryKey(), context?.list)
+      toast.error('Помилка при зміні обраного. Зміни скасовано.', {
+        position: 'bottom-left',
+      })
     },
     mutationFn: ({ isFavorite, favoriteId }) => {
       return isFavorite ? addFavorite(favoriteId) : removeFavorite(favoriteId)
@@ -94,6 +98,9 @@ export const useSetPropOnFavorite = () => {
     },
     onError: (_, __, context) => {
       queryClient.setQueryData(getQueryKey(), context?.list)
+      toast.error('Помилка при оновленні обраного. Зміни скасовано.', {
+        position: 'bottom-left',
+      })
     },
     mutationFn: async ({ min, max, favoriteId, note, read }) => {
       const updates: Partial<FavoriteItem> = {}

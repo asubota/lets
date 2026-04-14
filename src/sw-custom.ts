@@ -3,7 +3,6 @@ import { mapToProduct } from './data-mapping'
 import { db } from './db'
 import { type AppMessage, type NotificationData } from './types'
 
-const CACHE_NAME = 'lets-bike-api'
 const PAGE_SIZE = 500
 
 const sw = self as unknown as ServiceWorkerGlobalScope
@@ -24,23 +23,8 @@ let syncProgress: { loaded: number; total: number; percent: number } | null = nu
 let isSyncing = false
 let syncAbortController: AbortController | null = null
 
-async function fetchAndCache(request: FetchEvent['request'], cache: Cache) {
-  const networkResponse = await fetch(request)
-
-  await cache.put(request, networkResponse.clone())
-  await cache.put(`${request.url}-time`, new Response(Date.now().toString()))
-
-  return networkResponse
-}
-
-function isStale(cachedDate: Date, currentDate: Date) {
-  const ONE_HOUR = 1000 * 60 * 60
-  return currentDate.getTime() - cachedDate.getTime() > ONE_HOUR
-}
-
 function notifyApp(message: AppMessage) {
   sw.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
-    // console.log(`[SW] Notifying ${clients.length} clients:`, message.type)
     clients.forEach((client) => client.postMessage(message))
   })
 }
@@ -51,14 +35,21 @@ async function runSupabaseSync() {
     return
   }
 
-  const supabaseUrl = await db.getConfig(SUPABASE_URL_KEY)
-  const supabaseKey = await db.getConfig(SUPABASE_ANON_KEY_KEY)
+  console.log('[SW] runSupabaseSync started. Loading config from DB...')
+  
+  const [supabaseUrl, supabaseKey] = await Promise.all([
+    db.getConfig(SUPABASE_URL_KEY),
+    db.getConfig(SUPABASE_ANON_KEY_KEY),
+  ]).then(res => res.map(v => v?.trim()))
+
+  console.log(`[SW] Config loaded: URL=${Boolean(supabaseUrl)}, KEY=${Boolean(supabaseKey)}`)
 
   if (!supabaseUrl || !supabaseKey) {
-    console.error('[SW] Supabase credentials not found in IndexedDB. Sync aborted.')
+    const missing = !supabaseUrl ? 'URL' : 'KEY'
+    console.error(`[SW] Supabase ${missing} not found in IndexedDB. Sync aborted.`)
     notifyApp({
       type: 'SYNC_ERROR',
-      payload: { message: 'Supabase credentials missing. Please set them in Stats settings.' },
+      payload: { message: `Supabase ${missing} missing. Please set it in Stats settings.` },
     })
     return
   }
@@ -202,90 +193,16 @@ sw.addEventListener('message', async (event) => {
   if (message.type === 'cache-reset-request') {
     event.waitUntil(
       (async () => {
-        console.log('[SW] Resetting cache and IndexedDB...')
-        if (syncAbortController) {
-          syncAbortController.abort()
-        }
+        console.log('[SW] Resetting IndexedDB...')
+        syncAbortController?.abort()
         await db.clearAll()
-        await caches.delete(CACHE_NAME)
-
-        console.log('[SW] Cache and DB cleared, notifying app...')
         notifyApp({ type: 'cache-reset-done' })
-        // Re-trigger sync immediately to fill the gap
-        console.log('[SW] Re-triggering sync after reset...')
+        console.log('[SW] DB cleared, re-triggering sync...')
         await runSupabaseSync()
       })(),
     )
   }
-
   if (message.type === 'push-me') {
     await sw.registration.showNotification(message.payload.title, message.payload.options)
   }
-})
-
-sw.addEventListener('fetch', (event) => {
-  const {
-    request: { url, method },
-  } = event
-
-  const response = (async () => {
-    const supabaseUrl = await db.getConfig(SUPABASE_URL_KEY)
-
-    if (method === 'GET' && supabaseUrl && url.includes(supabaseUrl)) {
-      // For Supabase REST API calls, we might want to skip caching if they are part of the sync
-      // but the app might still make individual calls.
-
-      if (url.includes('/rest/v1/')) {
-        // Individual Supabase REST calls can still be cached if not part of sync
-      }
-
-      const cache = await sw.caches.open(CACHE_NAME)
-      const cachedResponse = await cache.match(event.request)
-
-      if (cachedResponse) {
-        const cachedTime = await cache.match(`${event.request.url}-time`)
-
-        if (cachedTime) {
-          const cachedDate = new Date(Number(await cachedTime.text()))
-          const now = new Date()
-
-          if (isStale(cachedDate, now)) {
-            console.log('Cache is stale, fetching new data...')
-
-            fetchAndCache(event.request, cache)
-              .then(async (response) => {
-                try {
-                  const text = await response.clone().text()
-
-                  if (url.includes(supabaseUrl)) {
-                    try {
-                      JSON.parse(text)
-                    } catch {
-                      //
-                    }
-                  }
-
-                  console.log('Cache updated, app notified.')
-                } catch (e) {
-                  console.error('[SW] Error parsing background refreshed data:', e)
-                }
-              })
-              .catch((err) => console.error('[SW] Background cache update failed:', err))
-          } else {
-            console.log('Cache is still valid, returning cached data.')
-          }
-
-          return cachedResponse
-        }
-      }
-
-      console.log('No cache found, fetching new data...')
-      return fetchAndCache(event.request, cache)
-    }
-
-    // Default fetch for non-supabase or missing config
-    return fetch(event.request)
-  })()
-
-  event.respondWith(response)
 })

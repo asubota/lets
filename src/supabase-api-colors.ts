@@ -2,57 +2,41 @@ import { getSupabaseClient } from './supabase-client.ts'
 import { type VendorAndColors } from './types.ts'
 
 export const getAllColors = async (signal?: AbortSignal): Promise<VendorAndColors[]> => {
-  try {
-    const supabase = getSupabaseClient()
-    const { data, error } = await supabase
-      .from('vendor_colors')
-      .select('*')
-      .abortSignal(signal || new AbortController().signal)
+  const supabase = getSupabaseClient()
+  const query = supabase.from('vendor_colors').select('*')
 
-    if (error) {
-      if (error.message?.includes('AbortError') || error.name === 'AbortError') {
-        throw error
-      }
-      throw new Error(`Supabase Error: ${error.message}`)
-    }
-
-    return (data || []) as VendorAndColors[]
-  } catch (e: any) {
-    if (e?.message?.includes('AbortError') || e?.name === 'AbortError') {
-      throw e
-    }
-    console.error('Supabase fetch error:', e)
-    throw e // Перекидаємо помилку далі
+  if (signal) {
+    query.abortSignal(signal)
   }
+
+  const { data, error } = await query
+
+  if (error) {
+    throw new Error(`Supabase Error: ${error.message}`)
+  }
+
+  return (data || []) as VendorAndColors[]
 }
 
 export const removeColor = async ({ vendor }: VendorAndColors) => {
-  try {
-    const supabase = getSupabaseClient()
-    const { error } = await supabase.from('vendor_colors').delete().eq('vendor', vendor)
+  const supabase = getSupabaseClient()
+  const { error } = await supabase.from('vendor_colors').delete().eq('vendor', vendor)
 
-    if (error) {
-      console.error('Error removing color:', error)
-    }
-  } catch (e) {
-    console.error('Supabase client error:', e)
+  if (error) {
+    throw new Error(`Supabase Error removing color: ${error.message}`)
   }
 }
 
 export const setColor = async ({ vendor, color, borderColor, backgroundColor }: VendorAndColors) => {
-  try {
-    const supabase = getSupabaseClient()
-    const { error } = await supabase.from('vendor_colors').upsert({
-      vendor,
-      color: color || null,
-      backgroundColor: backgroundColor || null,
-      borderColor: borderColor || null,
-    })
+  const supabase = getSupabaseClient()
+  const { error } = await supabase.from('vendor_colors').upsert({
+    vendor,
+    color: color || null,
+    backgroundColor: backgroundColor || null,
+    borderColor: borderColor || null,
+  })
 
-    if (error) {
-      console.error('Error setting color:', error)
-    }
-  } catch (e) {
-    console.error('Supabase client error:', e)
+  if (error) {
+    throw new Error(`Supabase Error setting color: ${error.message}`)
   }
 }
