@@ -2,12 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { CACHE_FAVORITE_KEY } from './constants.ts'
-import {
-  addFavorite,
-  getAllFavorites,
-  removeFavorite,
-  updateFavorite,
-} from './supabase-api-favorites.ts'
+import { addFavorite, getAllFavorites, removeFavorite, updateFavorite } from './supabase-api-favorites.ts'
 import { type FavoriteItem } from './types.ts'
 
 const getQueryKey = (): [string] => {
@@ -17,12 +12,7 @@ const getQueryKey = (): [string] => {
 export const useToggleFavorite = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<
-    void,
-    unknown,
-    { favoriteId: string; isFavorite: boolean },
-    { list: FavoriteItem[] }
-  >({
+  return useMutation<void, unknown, { favoriteId: string; isFavorite: boolean }, { list: FavoriteItem[] }>({
     async onSettled() {
       return await queryClient.invalidateQueries({
         queryKey: [CACHE_FAVORITE_KEY],
@@ -132,7 +122,8 @@ export const useSetPropOnFavorite = () => {
 
 export const useGetFavorites = () => {
   return useQuery({
-    staleTime: 1000 * 60 * 35, // 35 minutes
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     queryKey: getQueryKey(),
     queryFn: ({ signal }) =>
       getAllFavorites(signal).then((items) => {

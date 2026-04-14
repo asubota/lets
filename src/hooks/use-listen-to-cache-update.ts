@@ -59,11 +59,6 @@ export const useListenToCacheUpdate = () => {
 
     navigator.serviceWorker.addEventListener('message', fn)
 
-    // Request current status on mount (in case we refreshed during sync)
-    navigator.serviceWorker.ready.then((reg) => {
-      reg.active?.postMessage({ type: 'GET_SYNC_STATUS' })
-    })
-
     return () => {
       navigator.serviceWorker.removeEventListener('message', fn)
     }

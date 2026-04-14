@@ -51,10 +51,6 @@ export type AppMessage =
       payload: NotificationData
     }
   | {
-      type: 'cache-updated'
-      payload: { count: number }
-    }
-  | {
       type: 'cache-reset-request'
     }
   | {
