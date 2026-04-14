@@ -4,7 +4,7 @@ import { db } from './db'
 import { type AppMessage, type NotificationData } from './types'
 
 const CACHE_NAME = 'lets-bike-api'
-const PAGE_SIZE = 1000
+const PAGE_SIZE = 500
 
 const sw = self as unknown as ServiceWorkerGlobalScope
 

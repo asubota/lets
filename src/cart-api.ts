@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { CACHE_CART_KEY, POPULAR_SERViCE_PREFIX } from './constants'
-import { addToCart, getCart, removeFromCart, setCartProp, setCartPopularServices } from './google-api-cart'
+import {
+  addToCart,
+  getCart,
+  removeFromCart,
+  setCartPopularServices,
+  updateCartItem,
+} from './supabase-api-cart.ts'
 import { type CartItem } from './types'
 
 const getQueryKey = (): [string] => {
@@ -22,7 +28,12 @@ export const useGetCart = () => {
 export const useSetPropOnCart = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<void, unknown, { itemId: string } & Partial<CartItem>, { list: CartItem[] }>({
+  return useMutation<
+    void,
+    unknown,
+    { itemId: string } & Partial<CartItem>,
+    { list: CartItem[] }
+  >({
     async onSettled() {
       return await queryClient.invalidateQueries({ queryKey: getQueryKey() })
     },
@@ -45,15 +56,20 @@ export const useSetPropOnCart = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()], context?.list)
+      queryClient.setQueryData(getQueryKey(), context?.list)
     },
     mutationFn: async ({ discount, quantity, itemId }) => {
+      const updates: Partial<Omit<CartItem, 'itemId'>> = {}
       if (discount !== undefined) {
-        await setCartProp(itemId, 'discount', discount)
+        updates.discount = discount
       }
 
       if (quantity !== undefined) {
-        await setCartProp(itemId, 'quantity', quantity)
+        updates.quantity = quantity
+      }
+
+      if (Object.keys(updates).length > 0) {
+        await updateCartItem(itemId, updates)
       }
     },
   })
@@ -87,7 +103,7 @@ export const useSetPopularServicesForCart = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()], context?.list)
+      queryClient.setQueryData(getQueryKey(), context?.list)
     },
     mutationFn: ({ itemIds }) => {
       return setCartPopularServices(itemIds)
@@ -128,7 +144,7 @@ export const useToggleInCart = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()], context?.list)
+      queryClient.setQueryData(getQueryKey(), context?.list)
     },
     mutationFn: ({ itemId, action }) => {
       if (action === 'add') {

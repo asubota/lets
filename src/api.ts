@@ -5,8 +5,8 @@ import {
   addFavorite,
   getAllFavorites,
   removeFavorite,
-  setProp,
-} from './google-api.ts'
+  updateFavorite,
+} from './supabase-api-favorites.ts'
 import { type FavoriteItem } from './types.ts'
 
 const getQueryKey = (): [string] => {
@@ -45,7 +45,7 @@ export const useToggleFavorite = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()], context?.list)
+      queryClient.setQueryData(getQueryKey(), context?.list)
     },
     mutationFn: ({ isFavorite, favoriteId }) => {
       return isFavorite ? addFavorite(favoriteId) : removeFavorite(favoriteId)
@@ -93,25 +93,31 @@ export const useSetPropOnFavorite = () => {
       return { list }
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData([getQueryKey()], context?.list)
+      queryClient.setQueryData(getQueryKey(), context?.list)
     },
     mutationFn: async ({ min, max, favoriteId, note, read }) => {
+      const updates: Partial<FavoriteItem> = {}
+
       if (read !== undefined) {
-        await setProp(favoriteId, 'read', read ? 'yes' : '')
+        updates.read = read
       }
 
       if (min !== undefined) {
-        await setProp(favoriteId, 'min', min)
-        await setProp(favoriteId, 'read', '')
+        updates.min = parseInt(min, 10)
+        updates.read = false
       }
 
       if (max !== undefined) {
-        await setProp(favoriteId, 'max', max)
-        await setProp(favoriteId, 'read', '')
+        updates.max = parseInt(max, 10)
+        updates.read = false
       }
 
       if (note !== undefined) {
-        await setProp(favoriteId, 'note', note)
+        updates.note = note
+      }
+
+      if (Object.keys(updates).length > 0) {
+        await updateFavorite(favoriteId, updates)
       }
     },
   })

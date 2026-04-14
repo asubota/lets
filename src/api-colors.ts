@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { CACHE_COLORS_KEY } from './constants'
-import { getAllColors, removeColor, setColor } from './google-api-colors'
+import { getAllColors, removeColor, setColor } from './supabase-api-colors.ts'
 import { type Color, type VendorAndColors } from './types'
 
 const getQueryKey = (): [string] => {

@@ -2,7 +2,6 @@ import { Typography } from '@mui/material'
 import html2canvas from 'html2canvas'
 
 import { type MinMax } from './hooks/use-get-min-max-by-sku.ts'
-import { getGoogleAuthTokenExpiration } from './secrets.ts'
 import { type FavNotification, type Product } from './types.ts'
 
 const escapeRegExp = (value = ''): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -223,13 +222,6 @@ export function compareByNoteAndTime(a: { note?: string; time: number }, b: { no
   }
 
   return 0
-}
-
-export const getMinutesLeft = (): number => {
-  const expiresAt = getGoogleAuthTokenExpiration()
-  const minutesLeft = (parseInt(expiresAt, 10) - +new Date()) / 1000 / 60
-
-  return Number(minutesLeft.toFixed(2))
 }
 
 export const filterBySearch = (item: Product, search: string): boolean => {
