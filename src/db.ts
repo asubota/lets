@@ -6,16 +6,17 @@ const META_STORE = 'metadata'
 const DB_VERSION = 3
 
 export interface SyncMetadata {
-  key: 'last-sync'
-  time: number
-  total: number
+  key: string
+  [key: string]: any
 }
 
 export class ShopDB {
   private db: IDBDatabase | null = null
 
   async init(): Promise<void> {
-    if (this.db) return
+    if (this.db) {
+      return
+    }
 
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION)
@@ -57,7 +58,9 @@ export class ShopDB {
 
   async saveProducts(products: Product[]): Promise<void> {
     await this.init()
-    if (!this.db) throw new Error('DB not initialized')
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
 
     return new Promise((resolve, reject) => {
       const tx = this.db!.transaction([PRODUCTS_STORE], 'readwrite')
@@ -73,7 +76,9 @@ export class ShopDB {
 
   async getAllProducts(): Promise<Product[]> {
     await this.init()
-    if (!this.db) throw new Error('DB not initialized')
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
 
     return new Promise((resolve, reject) => {
       const tx = this.db!.transaction([PRODUCTS_STORE], 'readonly')
@@ -87,7 +92,9 @@ export class ShopDB {
 
   async setSyncMetadata(metadata: Omit<SyncMetadata, 'key'>): Promise<void> {
     await this.init()
-    if (!this.db) throw new Error('DB not initialized')
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
 
     return new Promise((resolve, reject) => {
       const tx = this.db!.transaction([META_STORE], 'readwrite')
@@ -99,9 +106,11 @@ export class ShopDB {
     })
   }
 
-  async getSyncMetadata(): Promise<SyncMetadata | null> {
+  async getSyncMetadata(): Promise<{ key: 'last-sync'; time: number; total: number } | null> {
     await this.init()
-    if (!this.db) throw new Error('DB not initialized')
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
 
     return new Promise((resolve, reject) => {
       const tx = this.db!.transaction([META_STORE], 'readonly')
@@ -113,9 +122,43 @@ export class ShopDB {
     })
   }
 
+  async setConfig(key: string, value: string): Promise<void> {
+    await this.init()
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
+
+    return new Promise((resolve, reject) => {
+      const tx = this.db!.transaction([META_STORE], 'readwrite')
+      const store = tx.objectStore(META_STORE)
+      store.put({ key, value })
+
+      tx.oncomplete = () => resolve()
+      tx.onerror = () => reject(tx.error)
+    })
+  }
+
+  async getConfig(key: string): Promise<string | null> {
+    await this.init()
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
+
+    return new Promise((resolve, reject) => {
+      const tx = this.db!.transaction([META_STORE], 'readonly')
+      const store = tx.objectStore(META_STORE)
+      const request = store.get(key)
+
+      request.onsuccess = () => resolve(request.result?.value || null)
+      request.onerror = () => reject(request.error)
+    })
+  }
+
   async clearAll(): Promise<void> {
     await this.init()
-    if (!this.db) throw new Error('DB not initialized')
+    if (!this.db) {
+      throw new Error('DB not initialized')
+    }
 
     return new Promise((resolve, reject) => {
       const tx = this.db!.transaction([PRODUCTS_STORE, META_STORE], 'readwrite')

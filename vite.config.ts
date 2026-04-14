@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import react from '@vitejs/plugin-react'
@@ -146,5 +148,9 @@ export default defineConfig({
   },
   server: {
     port: 8000,
+    // https: {
+    //   key: fs.readFileSync('localhost+2-key.pem'),
+    //   cert: fs.readFileSync('localhost+2.pem'),
+    // },
   },
 })
