@@ -1,4 +1,4 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from './constants'
+import { SUPABASE_ANON_KEY_KEY, SUPABASE_URL_KEY } from './constants'
 import { mapToProduct } from './data-mapping'
 import { db } from './db'
 import { type AppMessage, type NotificationData } from './types'
@@ -50,6 +50,19 @@ async function runSupabaseSync() {
   if (isSyncing) {
     return
   }
+
+  const supabaseUrl = await db.getConfig(SUPABASE_URL_KEY)
+  const supabaseKey = await db.getConfig(SUPABASE_ANON_KEY_KEY)
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('[SW] Supabase credentials not found in IndexedDB. Sync aborted.')
+    notifyApp({
+      type: 'SYNC_ERROR',
+      payload: { message: 'Supabase credentials missing. Please set them in Stats settings.' },
+    })
+    return
+  }
+
   isSyncing = true
   syncAbortController = new AbortController()
   const signal = syncAbortController.signal
@@ -62,11 +75,11 @@ async function runSupabaseSync() {
 
     // 1. Get total count using standard PostgREST HEAD request
     console.log('[SW] Fetching total count...')
-    const countRes = await fetch(`${SUPABASE_URL}/rest/v1/active_products_snapshot?select=sku`, {
+    const countRes = await fetch(`${supabaseUrl}/rest/v1/active_products_snapshot?select=sku`, {
       method: 'HEAD',
       headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
         Prefer: 'count=exact',
       },
     })
@@ -78,12 +91,12 @@ async function runSupabaseSync() {
 
     let from = 0
     while (true) {
-      const url = `${SUPABASE_URL}/rest/v1/active_products_snapshot?select=sku,name,vendor,price,price_old,p2,stock,pics&order=sku.asc&offset=${from}&limit=${PAGE_SIZE}`
+      const url = `${supabaseUrl}/rest/v1/active_products_snapshot?select=sku,name,vendor,price,price_old,p2,stock,pics&order=sku.asc&offset=${from}&limit=${PAGE_SIZE}`
       const res = await fetch(url, {
         signal,
         headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
         },
       })
 
@@ -215,15 +228,18 @@ sw.addEventListener('fetch', (event) => {
     request: { url, method },
   } = event
 
-  if (method === 'GET' && url.includes('supabase.co')) {
-    // For Supabase REST API calls, we might want to skip caching if they are part of the sync
-    // but the app might still make individual calls.
+  const response = (async () => {
+    const supabaseUrl = await db.getConfig(SUPABASE_URL_KEY)
 
-    if (url.includes('/rest/v1/')) {
-      // Individual Supabase REST calls can still be cached if not part of sync
-    }
+    if (method === 'GET' && supabaseUrl && url.includes(supabaseUrl)) {
+      // For Supabase REST API calls, we might want to skip caching if they are part of the sync
+      // but the app might still make individual calls.
 
-    const response = sw.caches.open(CACHE_NAME).then(async (cache) => {
+      if (url.includes('/rest/v1/')) {
+        // Individual Supabase REST calls can still be cached if not part of sync
+      }
+
+      const cache = await sw.caches.open(CACHE_NAME)
       const cachedResponse = await cache.match(event.request)
 
       if (cachedResponse) {
@@ -241,7 +257,7 @@ sw.addEventListener('fetch', (event) => {
                 try {
                   const text = await response.clone().text()
 
-                  if (url.includes('supabase.co')) {
+                  if (url.includes(supabaseUrl)) {
                     try {
                       JSON.parse(text)
                     } catch {
@@ -265,8 +281,11 @@ sw.addEventListener('fetch', (event) => {
 
       console.log('No cache found, fetching new data...')
       return fetchAndCache(event.request, cache)
-    })
+    }
 
-    event.respondWith(response)
-  }
+    // Default fetch for non-supabase or missing config
+    return fetch(event.request)
+  })()
+
+  event.respondWith(response)
 })

@@ -15,6 +15,5 @@ export const GOOGLE_PRODUCTS_FILE_ID = 'lets-bike-google-file-id'
 export const POPULAR_SERViCE_PREFIX = '$$__'
 export const REGULAR_SERViCE_PREFIX = '$__'
 
-export const SUPABASE_URL = 'https://knpbfmrhdohhqrrgdedz.supabase.co'
-export const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtucGJmbXJoZG9oaHFycmdkZWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4ODk5NTMsImV4cCI6MjA5MTQ2NTk1M30.dQF3mGpJzckIgfK_hUJn9RmxadUM-WmbVd1TacIKsrA'
+export const SUPABASE_URL_KEY = 'lets-bike-supabase-url'
+export const SUPABASE_ANON_KEY_KEY = 'lets-bike-supabase-anon-key'

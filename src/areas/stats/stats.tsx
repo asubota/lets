@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { alpha, Box, Divider, Grid, Paper, Typography, useTheme } from '@mui/material'
+import { alpha, Box, Divider, Grid, Paper, Stack, TextField, Typography, useTheme } from '@mui/material'
 
 import { ResetCacheButton } from '../../components/reset-cache-button.tsx'
 import { TopBottomHome } from '../../components/top-botton-home.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
+import { getSupabaseAnonKey, getSupabaseUrl, setSupabaseConfig } from '../../secrets.ts'
 import { useMeta } from '../../store'
 import { useAppliedFilters, useAppliedFiltersActions } from '../../store/appliedFilters'
 import { groupByVendor } from '../../tools.tsx'
@@ -116,6 +117,52 @@ export const Stats = () => {
           )}
           {allData.length > 0 && <ResetCacheButton />}
         </Box>
+
+        <Paper
+          elevation={0}
+          variant="outlined"
+          sx={{
+            p: 3,
+            mt: 4,
+            borderRadius: '16px',
+            borderColor: theme.palette.divider,
+            background: alpha(theme.palette.background.paper, 0.5),
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
+            Supabase Configuration
+          </Typography>
+          <Stack spacing={2}>
+            <TextField
+              label="Supabase URL"
+              fullWidth
+              size="small"
+              defaultValue={getSupabaseUrl()}
+              onBlur={(e) => {
+                const url = e.target.value
+                const key = getSupabaseAnonKey()
+                setSupabaseConfig(url, key)
+              }}
+            />
+            <TextField
+              label="Supabase Anon Key"
+              fullWidth
+              size="small"
+              multiline
+              rows={2}
+              defaultValue={getSupabaseAnonKey()}
+              onBlur={(e) => {
+                const url = getSupabaseUrl()
+                const key = e.target.value
+                setSupabaseConfig(url, key)
+              }}
+            />
+            <Typography variant="caption" color="text.secondary">
+              Changes are saved automatically on blur and persisted to LocalStorage and IndexedDB (for Service Worker access).
+            </Typography>
+          </Stack>
+        </Paper>
       </Box>
     </TopBottomHome>
   )
