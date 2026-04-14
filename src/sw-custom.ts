@@ -68,6 +68,7 @@ async function runSupabaseSync() {
     console.log('[SW] Fetching total count...')
     const countRes = await fetch(`${supabaseUrl}/rest/v1/active_products_snapshot?select=sku`, {
       method: 'HEAD',
+      signal,
       headers: {
         apikey: supabaseKey,
         Authorization: `Bearer ${supabaseKey}`,

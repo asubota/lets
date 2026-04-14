@@ -2,13 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { CACHE_CART_KEY, POPULAR_SERViCE_PREFIX } from './constants'
-import {
-  addToCart,
-  getCart,
-  removeFromCart,
-  setCartPopularServices,
-  updateCartItem,
-} from './supabase-api-cart.ts'
+import { addToCart, getCart, removeFromCart, setCartPopularServices, updateCartItem } from './supabase-api-cart.ts'
 import { type CartItem } from './types'
 
 const getQueryKey = (): [string] => {
@@ -17,7 +11,8 @@ const getQueryKey = (): [string] => {
 
 export const useGetCart = () => {
   return useQuery({
-    staleTime: 1000 * 60 * 35, // 35 minutes
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     queryKey: getQueryKey(),
     queryFn: ({ signal }) =>
       getCart(signal).then((items) => {
@@ -29,12 +24,7 @@ export const useGetCart = () => {
 export const useSetPropOnCart = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<
-    void,
-    unknown,
-    { itemId: string } & Partial<CartItem>,
-    { list: CartItem[] }
-  >({
+  return useMutation<void, unknown, { itemId: string } & Partial<CartItem>, { list: CartItem[] }>({
     async onSettled() {
       return await queryClient.invalidateQueries({ queryKey: getQueryKey() })
     },
@@ -93,9 +83,7 @@ export const useSetPopularServicesForCart = () => {
       const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
 
       queryClient.setQueryData<CartItem[]>(getQueryKey(), (old = []) => {
-        const noPopularServiceItems = old.filter(
-          (item) => !item.itemId.startsWith(POPULAR_SERViCE_PREFIX),
-        )
+        const noPopularServiceItems = old.filter((item) => !item.itemId.startsWith(POPULAR_SERViCE_PREFIX))
         const popularServiceItems = itemIds.map((id) => ({
           itemId: id,
           quantity: '1',
@@ -141,12 +129,14 @@ export const useToggleInCart = () => {
 
       if (action === 'add') {
         queryClient.setQueryData<CartItem[]>(getQueryKey(), (old) => {
-          const exisingItem = old?.find((item) => item.itemId === itemId)
-          if (!exisingItem) {
-            return [...(old || []), { itemId, quantity: '1', discount: '0', cartId: '1' }]
+          const existingItem = old?.find((item) => item.itemId === itemId)
+          if (existingItem) {
+            return old?.map((item) =>
+              item.itemId === itemId ? { ...item, quantity: String(parseInt(item.quantity, 10) + 1) } : item,
+            )
           }
 
-          return old
+          return [...(old || []), { itemId, quantity: '1', discount: '0', cartId: '1' }]
         })
       }
 

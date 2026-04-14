@@ -33,31 +33,10 @@ export const removeFromCart = async (itemId: string) => {
 
 export const addToCart = async (itemId: string) => {
   const supabase = getSupabaseClient()
+  const { error } = await supabase.rpc('add_to_cart', { p_item_id: itemId })
 
-  const { data } = await supabase
-    .from('cart')
-    .select('*')
-    .eq('itemId', itemId)
-    .maybeSingle()
-
-  if (data) {
-    const quantity = String(parseInt(data.quantity, 10) + 1)
-    const { error: updateError } = await supabase
-      .from('cart')
-      .update({ quantity })
-      .eq('itemId', itemId)
-
-    if (updateError) {
-      throw new Error(`Supabase Error: ${updateError.message}`)
-    }
-  } else {
-    const { error: insertError } = await supabase
-      .from('cart')
-      .insert({ itemId, quantity: '1', discount: '0', cartId: '1' })
-
-    if (insertError) {
-      throw new Error(`Supabase Error: ${insertError.message}`)
-    }
+  if (error) {
+    throw new Error(`Supabase Error: ${error.message}`)
   }
 }
 

@@ -108,7 +108,8 @@ export const useSetColors = () => {
 
 export const useGetColors = () => {
   const { data = {}, isLoading } = useQuery({
-    staleTime: Infinity,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     queryKey: getQueryKey(),
     queryFn: ({ signal }) => getAllColors(signal),
     select(colors) {

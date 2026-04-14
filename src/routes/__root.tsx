@@ -8,7 +8,6 @@ import { ToastContainer } from 'react-toastify'
 import { Loader } from '../components/loader'
 import { useListenToCacheUpdate } from '../hooks/use-listen-to-cache-update.ts'
 import { useNotifyAboutChange } from '../hooks/use-notify-about-change.tsx'
-import { useVisibilityChangeReset } from '../hooks/use-visibility-change-reset.ts'
 import { ThemeModeProvider } from '../theme-mode-provider.tsx'
 
 const queryClient = new QueryClient()
@@ -16,7 +15,6 @@ const queryClient = new QueryClient()
 const Hooks = () => {
   useNotifyAboutChange()
   useListenToCacheUpdate()
-  useVisibilityChangeReset()
 
   return null
 }
