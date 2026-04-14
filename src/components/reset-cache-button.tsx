@@ -24,11 +24,9 @@ export const ResetCacheButton = () => {
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
       if (event.data && event.data.type === 'cache-reset-done') {
-        queryClient
-          .invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
-          .then(() => {
-            setRotating(false)
-          })
+        queryClient.invalidateQueries({ queryKey: [CACHE_BASE_KEY] }).then(() => {
+          setRotating(false)
+        })
       }
     }
 
@@ -40,11 +38,7 @@ export const ResetCacheButton = () => {
   }, [queryClient])
 
   return (
-    <IconButton
-      onClick={handleClick}
-      sx={{ color: 'text.secondary' }}
-      disabled={rotating}
-    >
+    <IconButton onClick={handleClick} sx={{ color: 'text.secondary' }} disabled={rotating}>
       <CachedIcon className={rotating ? 'rotate' : ''} />
     </IconButton>
   )

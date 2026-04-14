@@ -44,14 +44,6 @@ export const useListenToCacheUpdate = () => {
           })
           break
 
-        case 'cache-updated':
-          await queryClient.invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
-          toast.info(`Дані оновленно! [${event.data.payload.count}]`, {
-            autoClose: 2500,
-            position: 'bottom-left',
-          })
-          break
-
         case 'cache-reset-done':
           queryClient.clear()
           toast.success('Кеш та базу даних очищено. Починаємо нову синхронізацію...', {

@@ -47,7 +47,7 @@ export const useNotifyAboutChange = () => {
 
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
-      if (event.data && event.data.type === 'cache-updated') {
+      if (event.data && event.data.type === 'SYNC_END') {
         notifications.forEach(showAlert)
 
         if (notifications.length > 0) {

@@ -1,6 +1,5 @@
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from './constants'
 import { mapToProduct } from './data-mapping'
-import { parseData } from './data-tools'
 import { db } from './db'
 import { type AppMessage, type NotificationData } from './types'
 
@@ -23,6 +22,7 @@ sw.addEventListener('activate', (event) => {
 
 let syncProgress: { loaded: number; total: number; percent: number } | null = null
 let isSyncing = false
+let syncAbortController: AbortController | null = null
 
 async function fetchAndCache(request: FetchEvent['request'], cache: Cache) {
   const networkResponse = await fetch(request)
@@ -34,10 +34,8 @@ async function fetchAndCache(request: FetchEvent['request'], cache: Cache) {
 }
 
 function isStale(cachedDate: Date, currentDate: Date) {
-  const currentHour = currentDate.getHours()
-  const cachedHour = cachedDate.getHours()
-
-  return currentDate.getDate() !== cachedDate.getDate() || currentHour !== cachedHour
+  const ONE_HOUR = 1000 * 60 * 60
+  return currentDate.getTime() - cachedDate.getTime() > ONE_HOUR
 }
 
 function notifyApp(message: AppMessage) {
@@ -47,15 +45,15 @@ function notifyApp(message: AppMessage) {
   })
 }
 
-function notifyAppAboutCacheReset(count: number) {
-  const message = { type: 'cache-updated', payload: { count } } as const
-  notifyApp(message)
-}
-
 async function runSupabaseSync() {
   console.log('[SW] runSupabaseSync started. isSyncing:', isSyncing)
-  if (isSyncing) return
+  if (isSyncing) {
+    return
+  }
   isSyncing = true
+  syncAbortController = new AbortController()
+  const signal = syncAbortController.signal
+
   syncProgress = { loaded: 0, total: 0, percent: 0 }
 
   try {
@@ -82,6 +80,7 @@ async function runSupabaseSync() {
     while (true) {
       const url = `${SUPABASE_URL}/rest/v1/active_products_snapshot?select=sku,name,vendor,price,price_old,p2,stock,pics&order=sku.asc&offset=${from}&limit=${PAGE_SIZE}`
       const res = await fetch(url, {
+        signal,
         headers: {
           apikey: SUPABASE_ANON_KEY,
           Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
@@ -89,9 +88,15 @@ async function runSupabaseSync() {
       })
 
       const data = await res.json()
-      if (!data || data.length === 0) break
+      if (!data || data.length === 0) {
+        break
+      }
 
       const products = data.map(mapToProduct)
+      if (signal.aborted) {
+        throw new Error('Sync aborted')
+      }
+
       await db.saveProducts(products)
 
       syncProgress.loaded += data.length
@@ -102,7 +107,9 @@ async function runSupabaseSync() {
         payload: syncProgress,
       })
 
-      if (data.length < PAGE_SIZE) break
+      if (data.length < PAGE_SIZE) {
+        break
+      }
       from += PAGE_SIZE
 
       // Small delay to prevent rate limiting
@@ -119,6 +126,10 @@ async function runSupabaseSync() {
       payload: { count: syncProgress.loaded },
     })
   } catch (error: any) {
+    if (error.name === 'AbortError' || error.message === 'Sync aborted') {
+      console.log('[SW] Sync was aborted.')
+      return
+    }
     console.error('[SW] Sync error:', error)
     notifyApp({
       type: 'SYNC_ERROR',
@@ -127,6 +138,7 @@ async function runSupabaseSync() {
   } finally {
     isSyncing = false
     syncProgress = null
+    syncAbortController = null
   }
 }
 
@@ -175,16 +187,22 @@ sw.addEventListener('message', async (event) => {
   }
 
   if (message.type === 'cache-reset-request') {
-    console.log('[SW] Resetting cache and IndexedDB...')
-    await db.clearAll()
-    const success = await caches.delete(CACHE_NAME)
-    if (success) {
-      console.log('[SW] Cache and DB cleared, notifying app...')
-      notifyApp({ type: 'cache-reset-done' })
-      // Re-trigger sync immediately to fill the gap
-      console.log('[SW] Re-triggering sync after reset...')
-      event.waitUntil(runSupabaseSync())
-    }
+    event.waitUntil(
+      (async () => {
+        console.log('[SW] Resetting cache and IndexedDB...')
+        if (syncAbortController) {
+          syncAbortController.abort()
+        }
+        await db.clearAll()
+        await caches.delete(CACHE_NAME)
+
+        console.log('[SW] Cache and DB cleared, notifying app...')
+        notifyApp({ type: 'cache-reset-done' })
+        // Re-trigger sync immediately to fill the gap
+        console.log('[SW] Re-triggering sync after reset...')
+        await runSupabaseSync()
+      })(),
+    )
   }
 
   if (message.type === 'push-me') {
@@ -197,12 +215,11 @@ sw.addEventListener('fetch', (event) => {
     request: { url, method },
   } = event
 
-  if (method === 'GET' && (url.includes('docs.google.com') || url.includes('supabase.co'))) {
-    // For Google Docs we still use Cache API as before
+  if (method === 'GET' && url.includes('supabase.co')) {
     // For Supabase REST API calls, we might want to skip caching if they are part of the sync
     // but the app might still make individual calls.
 
-    if (url.includes('supabase.co') && url.includes('/rest/v1/')) {
+    if (url.includes('/rest/v1/')) {
       // Individual Supabase REST calls can still be cached if not part of sync
     }
 
@@ -219,28 +236,25 @@ sw.addEventListener('fetch', (event) => {
           if (isStale(cachedDate, now)) {
             console.log('Cache is stale, fetching new data...')
 
-            fetchAndCache(event.request, cache).then(async (response) => {
-              const text = await response.clone().text()
-              let count = 0
-
-              if (url.includes('docs.google.com')) {
-                count = parseData(text).length
-              } else if (url.includes('supabase.co')) {
-                // If it's a supabase call that became stale, we might want to trigger a sync instead
-                // for structural consistency, but for now we just handle it as a regular fetch
+            fetchAndCache(event.request, cache)
+              .then(async (response) => {
                 try {
-                  const data = JSON.parse(text)
-                  count = Array.isArray(data) ? data.length : 0
-                } catch {
-                  //
-                }
-              }
+                  const text = await response.clone().text()
 
-              console.log('Cache updated, app notified.')
-              if (!url.includes('supabase.co')) {
-                notifyAppAboutCacheReset(count)
-              }
-            })
+                  if (url.includes('supabase.co')) {
+                    try {
+                      JSON.parse(text)
+                    } catch {
+                      //
+                    }
+                  }
+
+                  console.log('Cache updated, app notified.')
+                } catch (e) {
+                  console.error('[SW] Error parsing background refreshed data:', e)
+                }
+              })
+              .catch((err) => console.error('[SW] Background cache update failed:', err))
           } else {
             console.log('Cache is still valid, returning cached data.')
           }
