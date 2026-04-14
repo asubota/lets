@@ -61,9 +61,6 @@ export type AppMessage =
       type: 'cache-reset-done'
     }
   | {
-      type: 'xxx'
-    }
-  | {
       type: 'SYNC_START'
     }
   | {
@@ -104,4 +101,5 @@ export type CartItem = {
   discount: string
   quantity: string
   cartId: string
+  created_at?: string
 }
