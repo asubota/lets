@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+
 import { CACHE_BASE_KEY } from '../constants'
-import { type AppMessage } from '../types'
 import { useAppActions } from '../store'
+import { type AppMessage } from '../types'
 
 export const useListenToCacheUpdate = () => {
   const queryClient = useQueryClient()
@@ -12,7 +14,9 @@ export const useListenToCacheUpdate = () => {
   useEffect(() => {
     const fn = async (event: MessageEvent<AppMessage>) => {
       console.log('[UI] Received SW message:', event.data?.type)
-      if (!event.data) return
+      if (!event.data) {
+        return
+      }
 
       switch (event.data.type) {
         case 'SYNC_START':

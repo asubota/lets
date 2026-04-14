@@ -1,4 +1,4 @@
-import { Product } from './types'
+import { type Product } from './types'
 
 export const mapToProduct = (item: any): Product => {
   let pics: string[] | null = null

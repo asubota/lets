@@ -6,7 +6,6 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ToastContainer } from 'react-toastify'
 
 import { Loader } from '../components/loader'
-import { useInitGoogle } from '../hooks/use-init-google.ts'
 import { useListenToCacheUpdate } from '../hooks/use-listen-to-cache-update.ts'
 import { useNotifyAboutChange } from '../hooks/use-notify-about-change.tsx'
 import { useVisibilityChangeReset } from '../hooks/use-visibility-change-reset.ts'
@@ -18,7 +17,6 @@ const Hooks = () => {
   useNotifyAboutChange()
   useListenToCacheUpdate()
   useVisibilityChangeReset()
-  useInitGoogle()
 
   return null
 }

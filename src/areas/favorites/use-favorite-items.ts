@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 
 import { useGetFavorites } from '../../api.ts'
 import { DUMMY_VENDOR } from '../../constants.ts'
-import { setProp } from '../../google-api.ts'
 import { useAppSort } from '../../store'
+import { updateFavoriteId } from '../../supabase-api-favorites.ts'
 import {
   compareByNoteAndTime,
   compareByTime,
@@ -69,11 +69,7 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
 
           if (product) {
             missedProduct.vendor = product.vendor
-            setProp(
-              favoriteItem.favoriteId,
-              'favoriteId',
-              getFavoriteId(product),
-            )
+            updateFavoriteId(favoriteItem.favoriteId, getFavoriteId(product))
           }
         }
 
