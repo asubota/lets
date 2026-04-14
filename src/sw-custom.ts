@@ -7,7 +7,7 @@ const PAGE_SIZE = 500
 
 const sw = self as unknown as ServiceWorkerGlobalScope
 
-console.log('[SW] Service Worker script loaded. Version: 1.0.1')
+console.log('[SW] Service Worker script loaded. Version: 1.0.2')
 
 sw.addEventListener('install', () => {
   console.log('[SW] Install event')
@@ -36,11 +36,11 @@ async function runSupabaseSync() {
   }
 
   console.log('[SW] runSupabaseSync started. Loading config from DB...')
-  
+
   const [supabaseUrl, supabaseKey] = await Promise.all([
     db.getConfig(SUPABASE_URL_KEY),
     db.getConfig(SUPABASE_ANON_KEY_KEY),
-  ]).then(res => res.map(v => v?.trim()))
+  ]).then((res) => res.map((v) => v?.trim()))
 
   console.log(`[SW] Config loaded: URL=${Boolean(supabaseUrl)}, KEY=${Boolean(supabaseKey)}`)
 
@@ -118,7 +118,7 @@ async function runSupabaseSync() {
       from += PAGE_SIZE
 
       // Small delay to prevent rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 100))
+      await new Promise((resolve) => setTimeout(resolve, 50))
     }
 
     await db.setSyncMetadata({
@@ -177,6 +177,8 @@ sw.addEventListener('message', async (event) => {
   console.log('[SW] Received message:', event.data?.type)
   const message: AppMessage = event.data
 
+  console.log('### isSyncing', isSyncing)
+
   if (message.type === 'SYNC_START') {
     console.log('[SW] Handling SYNC_START')
     event.waitUntil(runSupabaseSync())
@@ -194,9 +196,16 @@ sw.addEventListener('message', async (event) => {
   if (message.type === 'cache-reset-request') {
     event.waitUntil(
       (async () => {
-        console.log('[SW] Resetting IndexedDB...')
+        // Abort any in-flight sync and immediately reset state so isSyncing is
+        // false before we call runSupabaseSync() — without this there is a race
+        // where the finally-block of the aborted sync hasn't run yet.
         syncAbortController?.abort()
-        await db.clearAll()
+        isSyncing = false
+        syncProgress = null
+        syncAbortController = null
+
+        console.log('[SW] Resetting products cache...')
+        await db.clearProductsAndSyncMeta()
         notifyApp({ type: 'cache-reset-done' })
         console.log('[SW] DB cleared, re-triggering sync...')
         await runSupabaseSync()

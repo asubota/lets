@@ -49,7 +49,10 @@ export const useListenToCacheUpdate = () => {
           break
 
         case 'cache-reset-done':
-          queryClient.clear()
+          setLoadingProgress(null)
+          // Remove only the products query — SW will send SYNC_START right after
+          // this, so the component will refetch when SYNC_END arrives.
+          queryClient.removeQueries({ queryKey: [CACHE_BASE_KEY] })
           toast.success('Кеш та базу даних очищено. Починаємо нову синхронізацію...', {
             position: 'bottom-left',
           })

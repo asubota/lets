@@ -46,7 +46,11 @@ function openDB(): Promise<IDBDatabase> {
   return dbPromise
 }
 
-function tx(db: IDBDatabase, stores: string | string[], mode: 'readonly' | 'readwrite' | 'versionchange'): IDBTransaction {
+function tx(
+  db: IDBDatabase,
+  stores: string | string[],
+  mode: 'readonly' | 'readwrite' | 'versionchange',
+): IDBTransaction {
   return db.transaction(stores, mode)
 }
 
@@ -105,11 +109,12 @@ export const db = {
     return record?.value ?? null
   },
 
-  async clearAll(): Promise<void> {
+  /** Cache reset: clears products + last-sync timestamp, but keeps config (Supabase URL/key). */
+  async clearProductsAndSyncMeta(): Promise<void> {
     const idb = await openDB()
     const transaction = tx(idb, [PRODUCTS_STORE, META_STORE], 'readwrite')
     transaction.objectStore(PRODUCTS_STORE).clear()
-    transaction.objectStore(META_STORE).clear()
+    transaction.objectStore(META_STORE).delete('last-sync')
     return runTx(transaction)
   },
 }
