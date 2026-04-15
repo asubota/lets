@@ -49,8 +49,8 @@ const TilesView: FC<TilesViewProps> = ({ list, search, isFavoritePage = false })
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
-        padding: '0px 0px 12px 0px',
+        gap: '16px',
+        padding: '0px 0px 16px 0px',
       }}
     >
       {visibleList.map((p) => {

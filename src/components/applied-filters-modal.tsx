@@ -5,7 +5,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha'
-import { alpha, Box, Button, Chip, Grid, Paper, Stack, Typography, useTheme } from '@mui/material'
+import { alpha, Box, Button, Chip, Grid, Stack, Typography, useTheme } from '@mui/material'
 
 import { Modal } from './modal.tsx'
 import { VendorChip } from './vendor-chip.tsx'
@@ -82,22 +82,25 @@ export const AppliedFiltersModal = () => {
         </Stack>
       }
     >
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2.5 }}>
         {/* Vendors Section */}
-        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5, ml: 1, fontWeight: 'bold' }}>
+        <Typography 
+          variant="subtitle1" 
+          color="text.primary" 
+          sx={{ mb: 2, ml: 1, fontWeight: 800, fontFamily: '"Outfit", sans-serif' }}
+        >
           Хто барижить:
         </Typography>
-        <Paper
-          elevation={0}
-          variant="outlined"
+        <Box
+          className="glass-panel"
           sx={{
-            p: 2,
+            p: 2.5,
             mb: 4,
-            borderRadius: 3,
-            borderColor: theme.palette.divider,
+            borderRadius: '24px',
+            backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
           }}
         >
-          <Grid container columnSpacing={1.5} rowSpacing={1.5}>
+          <Grid container columnSpacing={2} rowSpacing={2}>
             {sortedVendors.map((vendor) => {
               const isSelected = appliedFilters.includes(vendor)
 
@@ -109,33 +112,35 @@ export const AppliedFiltersModal = () => {
                     'display': 'flex',
                     'alignItems': 'center',
                     'cursor': 'pointer',
-                    'p': 1,
-                    'borderRadius': 2,
+                    'p': 1.25,
+                    'borderRadius': '16px',
                     'border': '1px solid',
                     'borderColor': isSelected ? theme.palette.primary.main : 'transparent',
                     'backgroundColor': isSelected ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                    'transition': 'all 0.2s ease-in-out',
+                    'transition': 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
                       backgroundColor: isSelected
                         ? alpha(theme.palette.primary.main, 0.12)
                         : theme.palette.action.hover,
+                      transform: 'translateY(-2px)',
                     },
                   }}
                   onClick={() => toggleVendor(vendor)}
                 >
-                  <Box sx={{ position: 'relative', display: 'inline-flex', mr: 1.5 }}>
+                  <Box sx={{ position: 'relative', display: 'inline-flex', mr: 2 }}>
                     <VendorChip source="live" vendor={vendor} />
                     {isSelected && (
                       <CheckCircleIcon
                         sx={{
-                          fontSize: 18,
+                          fontSize: 20,
                           color: theme.palette.primary.main,
                           position: 'absolute',
-                          top: -6,
-                          right: -6,
+                          top: -8,
+                          right: -8,
                           backgroundColor: theme.palette.background.paper,
                           borderRadius: '50%',
                           zIndex: 1,
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
                         }}
                       />
                     )}
@@ -143,8 +148,10 @@ export const AppliedFiltersModal = () => {
                   <Typography
                     variant="body2"
                     sx={{
-                      fontWeight: isSelected ? 'bold' : 'normal',
+                      fontWeight: isSelected ? 800 : 600,
+                      fontFamily: '"Outfit", sans-serif',
                       color: isSelected ? 'text.primary' : 'text.secondary',
+                      fontSize: '14px',
                     }}
                   >
                     {countByVendor[vendor]}
@@ -153,45 +160,60 @@ export const AppliedFiltersModal = () => {
               )
             })}
           </Grid>
-        </Paper>
+        </Box>
 
         {/* Sorting Section */}
-        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5, ml: 1, fontWeight: 'bold' }}>
+        <Typography 
+          variant="subtitle1" 
+          color="text.primary" 
+          sx={{ mb: 2, ml: 1, fontWeight: 800, fontFamily: '"Outfit", sans-serif' }}
+        >
           Як сортувати:
         </Typography>
-        <Paper
-          elevation={0}
-          variant="outlined"
+        <Box
+          className="glass-panel"
           sx={{
-            p: 2,
-            borderRadius: 3,
-            borderColor: theme.palette.divider,
+            p: 3,
+            borderRadius: '24px',
+            backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
           }}
         >
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             {/* Price Sorting */}
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Stack direction="row" alignItems="center" gap={1} mb={1.5} justifyContent="center">
-                <AttachMoneyIcon color="primary" fontSize="small" />
-                <Typography variant="subtitle2" fontWeight="bold">
+              <Stack direction="row" alignItems="center" gap={1.5} mb={2} justifyContent="center">
+                <AttachMoneyIcon color="primary" sx={{ fontSize: '24px' }} />
+                <Typography variant="subtitle1" fontWeight={800} sx={{ fontFamily: '"Outfit", sans-serif' }}>
                   Ціна питання
                 </Typography>
               </Stack>
-              <Stack direction="row" spacing={1} justifyContent="center">
+              <Stack direction="row" spacing={1.5} justifyContent="center">
                 <Chip
-                  icon={<ArrowUpwardIcon fontSize="small" />}
-                  label="Від дешевих"
+                  icon={<ArrowUpwardIcon />}
+                  label="Дешевші"
                   onClick={() => handlePriceSort('asc')}
                   color={field === 'price' && order === 'asc' ? 'primary' : 'default'}
                   variant={field === 'price' && order === 'asc' ? 'filled' : 'outlined'}
+                  sx={{ 
+                    borderRadius: '12px', 
+                    fontWeight: 700,
+                    height: '36px',
+                    px: 1
+                  }}
                   clickable
                 />
                 <Chip
-                  icon={<ArrowDownwardIcon fontSize="small" />}
-                  label="Від дорогих"
+                  icon={<ArrowDownwardIcon />}
+                  label="Дорожчі"
                   onClick={() => handlePriceSort('desc')}
                   color={field === 'price' && order === 'desc' ? 'primary' : 'default'}
                   variant={field === 'price' && order === 'desc' ? 'filled' : 'outlined'}
+                  sx={{ 
+                    borderRadius: '12px', 
+                    fontWeight: 700,
+                    height: '36px',
+                    px: 1
+                  }}
                   clickable
                 />
               </Stack>
@@ -199,33 +221,45 @@ export const AppliedFiltersModal = () => {
 
             {/* Name Sorting */}
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Stack direction="row" alignItems="center" gap={1} mb={1.5} justifyContent="center">
-                <SortByAlphaIcon color="primary" fontSize="small" />
-                <Typography variant="subtitle2" fontWeight="bold">
+              <Stack direction="row" alignItems="center" gap={1.5} mb={2} justifyContent="center">
+                <SortByAlphaIcon color="primary" sx={{ fontSize: '24px' }} />
+                <Typography variant="subtitle1" fontWeight={800} sx={{ fontFamily: '"Outfit", sans-serif' }}>
                   По назві
                 </Typography>
               </Stack>
-              <Stack direction="row" spacing={1} justifyContent="center">
+              <Stack direction="row" spacing={1.5} justifyContent="center">
                 <Chip
-                  icon={<ArrowUpwardIcon fontSize="small" />}
+                  icon={<ArrowUpwardIcon />}
                   label="А - Я"
                   onClick={() => handleNameSort('asc')}
                   color={field === 'name' && order === 'asc' ? 'primary' : 'default'}
                   variant={field === 'name' && order === 'asc' ? 'filled' : 'outlined'}
+                  sx={{ 
+                    borderRadius: '12px', 
+                    fontWeight: 700,
+                    height: '36px',
+                    px: 1
+                  }}
                   clickable
                 />
                 <Chip
-                  icon={<ArrowDownwardIcon fontSize="small" />}
+                  icon={<ArrowDownwardIcon />}
                   label="Я - А"
                   onClick={() => handleNameSort('desc')}
                   color={field === 'name' && order === 'desc' ? 'primary' : 'default'}
                   variant={field === 'name' && order === 'desc' ? 'filled' : 'outlined'}
+                  sx={{ 
+                    borderRadius: '12px', 
+                    fontWeight: 700,
+                    height: '36px',
+                    px: 1
+                  }}
                   clickable
                 />
               </Stack>
             </Grid>
           </Grid>
-        </Paper>
+        </Box>
       </Box>
     </Modal>
   )

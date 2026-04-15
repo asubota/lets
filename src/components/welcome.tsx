@@ -14,24 +14,42 @@ export const Welcome = () => {
   }
 
   return (
-    <Box sx={{ userSelect: 'none' }}>
+    <Box sx={{ userSelect: 'none', py: 8 }}>
       <Typography
-        variant="h4"
-        sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}
+        variant="h3"
+        sx={{ 
+          textAlign: 'center', 
+          color: 'text.primary', 
+          fontFamily: '"Outfit", sans-serif',
+          fontWeight: 800,
+          mb: 2,
+          letterSpacing: '-0.5px'
+        }}
       >
-        <span onClick={handleThing}>Здорова, братан!</span>
+        <span onClick={handleThing} style={{ cursor: 'pointer' }}>Здорова, братан!</span>
       </Typography>
       <Typography
         variant="h5"
-        sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}
+        sx={{ 
+          textAlign: 'center', 
+          color: 'text.secondary', 
+          fontFamily: '"Outfit", sans-serif',
+          fontWeight: 600,
+          opacity: 0.8,
+          lineHeight: 1.5
+        }}
       >
-        <Box sx={{ mb: 1 }}>Шо, може підсобити?</Box>
+        <Box>Шо, може підсобити?</Box>
         <Box>Чисто по-братськи?</Box>
       </Typography>
 
-      <Bike type="safe" />
+      <Box sx={{ mt: 6, opacity: 0.9 }}>
+        <Bike type="safe" />
+      </Box>
       <StaleVendorsWarning />
-      <Logo />
+      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+        <Logo />
+      </Box>
     </Box>
   )
 }

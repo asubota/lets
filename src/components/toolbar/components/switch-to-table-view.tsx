@@ -13,11 +13,16 @@ export const SwitchToTableView: FC = () => {
     <IconButton
       size="small"
       sx={{
-        color: view === 'table' ? 'primary.main' : 'text.secondary',
+        'color': view === 'table' ? 'primary.main' : 'text.secondary',
+        'backgroundColor': view === 'table' ? 'rgba(234, 43, 6, 0.08)' : 'transparent',
+        'borderRadius': '10px',
+        '&:hover': {
+          backgroundColor: view === 'table' ? 'rgba(234, 43, 6, 0.12)' : 'rgba(0,0,0,0.04)',
+        },
       }}
       onClick={() => setView('table')}
     >
-      <ReorderIcon />
+      <ReorderIcon sx={{ fontSize: '20px' }} />
     </IconButton>
   )
 }
