@@ -78,8 +78,8 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
         {product.name}
       </DialogTitle>
 
-      <DialogContent>
-        <Box sx={{ p: 3, pb: 0 }}>
+      <DialogContent sx={{ p: '0 !important' }}>
+        <Box sx={{ p: 2, pb: 2 }}>
           <Box
             sx={{
               display: 'flex',
@@ -89,7 +89,7 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
               },
               alignItems: 'center',
               justifyContent: 'space-between',
-              mb: 5,
+              mb: 3,
             }}
           >
             <Block label="Повна ціна" value={product.price} />
@@ -127,13 +127,14 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
               alignItems: 'center',
             }}
           >
-            <ButtonGroup variant="contained" size="small">
+            <ButtonGroup variant="contained" size="small" fullWidth>
               {discounts.map((value) => {
                 return (
                   <Button
                     key={value}
                     onClick={() => setDiscount(value)}
                     color={value === discount ? 'primary' : 'secondary'}
+                    sx={{ px: 1, minWidth: 0 }}
                   >
                     {value}%
                   </Button>

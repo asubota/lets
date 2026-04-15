@@ -41,11 +41,11 @@ export const Tile: FC<{
       className="product-tile"
       sx={(theme) => ({
         ...('missed' in p && p.missed && { backgroundColor: theme.palette.mode === 'dark' ? 'rgba(234, 43, 6, 0.08)' : 'rgba(234, 43, 6, 0.04)' }),
-        'p': 2.5,
+        'p': 1.5,
         'position': 'relative',
         'display': 'flex',
         'flexDirection': 'column',
-        'gap': '16px',
+        'gap': '12px',
         'cursor': 'default',
         'height': '100%',
         '&:hover': {

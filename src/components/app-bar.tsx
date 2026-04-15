@@ -21,13 +21,13 @@ export const AppBar: FC = () => {
     <Box
       className="app-bar glass-panel"
       sx={{
-        px: 1.5,
+        px: 1,
         py: 0.75,
-        mx: 1.5,
+        mx: 1,
         mt: 1.5,
         borderRadius: '20px',
         position: 'sticky',
-        top: 12,
+        top: 10,
         zIndex: 1100,
         display: 'flex',
         alignItems: 'center',
@@ -41,7 +41,7 @@ export const AppBar: FC = () => {
           disabled={loading}
           sx={{
             'color': isFavouritesRoute ? 'primary.main' : 'text.secondary',
-            'p': 1.25,
+            'p': 0.75,
             'backgroundColor': (theme) =>
               theme.palette.mode === 'dark'
                 ? 'rgba(255,255,255,0.03)'
@@ -59,14 +59,14 @@ export const AppBar: FC = () => {
         </LinkedButton>
       </Box>
 
-      <Box className="app-bar-center" id="app-bar-center" sx={{ flex: 1, mx: 2 }} />
+      <Box className="app-bar-center" id="app-bar-center" sx={{ flex: 1, mx: 0.75 }} />
 
       <Box className="app-bar-right">
         <LinkedButton 
           to="/notifications" 
           sx={{ 
             'color': 'text.secondary', 
-            'p': 1.25,
+            'p': 0.75,
             'backgroundColor': (theme) =>
               theme.palette.mode === 'dark'
                 ? 'rgba(255,255,255,0.03)'

@@ -94,11 +94,12 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: 16,
-                padding: '10px 24px',
+                borderRadius: 12,
                 fontFamily: '"Outfit", sans-serif',
                 fontWeight: 700,
                 boxShadow: 'none',
+                textTransform: 'none',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
                   boxShadow: '0 8px 16px rgba(15, 23, 42, 0.1)',
                   transform: 'translateY(-1px)',
@@ -106,6 +107,18 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
                 '&:active': {
                   transform: 'translateY(0)',
                 },
+              },
+              sizeSmall: {
+                padding: '6px 16px',
+                fontSize: '13px',
+              },
+              sizeMedium: {
+                padding: '10px 24px',
+                fontSize: '14px',
+              },
+              sizeLarge: {
+                padding: '12px 32px',
+                fontSize: '16px',
               },
             },
           },

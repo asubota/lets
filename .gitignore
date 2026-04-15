@@ -28,3 +28,6 @@ dev-dist
 
 # Brainstorming artifacts
 .superpowers/
+
+# Local certificates
+*.pem
