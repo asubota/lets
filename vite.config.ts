@@ -43,7 +43,6 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom'],
           swiper: ['swiper'],
-          reactColor: ['react-color'],
           html2canvas: ['html2canvas'],
           popper: ['@popperjs/core'],
           tanstack: ['@tanstack/react-router', '@tanstack/react-query'],

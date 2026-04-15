@@ -152,7 +152,7 @@ export const getNotifications = (products: Product[], minmax: MinMax): FavNotifi
       if (min !== undefined && stock <= min) {
         const notification: FavNotification = {
           title: p.name,
-          body: `${p.sku} є ${stock}, менше ніж ${min}`,
+          body: `${p.sku} є ${stock}, менше ніж ${min ?? 0}`,
           min,
           max,
           read,
@@ -166,7 +166,7 @@ export const getNotifications = (products: Product[], minmax: MinMax): FavNotifi
       if (max !== undefined && stock >= max) {
         const notification: FavNotification = {
           title: p.name,
-          body: `${p.sku} є ${stock}, більше ніж ${max}`,
+          body: `${p.sku} є ${stock}, більше ніж ${max ?? 0}`,
           min,
           max,
           read,

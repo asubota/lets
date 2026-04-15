@@ -41,11 +41,19 @@ export const VendorChip: FC<{
         'height': '24px',
         'textTransform': 'uppercase',
         'letterSpacing': '0.5px',
+        'border': '1px solid',
         'borderColor': vendor === 'base' ? 'primary.main' : borderColorValue,
         'color': vendor === 'base' ? 'primary.main' : colorValue,
+        'background':
+          vendor === 'base'
+            ? 'rgba(234, 43, 6, 0.1)'
+            : backgroundColorValue?.includes('gradient')
+              ? backgroundColorValue
+              : undefined,
         'backgroundColor':
-          vendor === 'base' ? 'rgba(234, 43, 6, 0.1)' : backgroundColorValue,
-        'border': '1px solid',
+          vendor === 'base' || backgroundColorValue?.includes('gradient')
+            ? undefined
+            : backgroundColorValue,
         'borderRadius': '8px',
         '& .MuiChip-label': { px: 1 },
       }}

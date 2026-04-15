@@ -11,11 +11,16 @@ export const SwitchToInfoView = () => {
     <IconButton
       size="small"
       sx={{
-        color: view === 'info' ? 'primary.main' : 'text.secondary',
+        'color': view === 'info' ? 'primary.main' : 'text.secondary',
+        'backgroundColor': view === 'info' ? 'rgba(234, 43, 6, 0.08)' : 'transparent',
+        'borderRadius': '10px',
+        '&:hover': {
+          backgroundColor: view === 'info' ? 'rgba(234, 43, 6, 0.12)' : 'rgba(0,0,0,0.04)',
+        },
       }}
       onClick={() => setView('info')}
     >
-      <InfoOutlineIcon />
+      <InfoOutlineIcon sx={{ fontSize: '20px' }} />
     </IconButton>
   )
 }

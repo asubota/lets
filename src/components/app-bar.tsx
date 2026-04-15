@@ -21,17 +21,18 @@ export const AppBar: FC = () => {
     <Box
       className="app-bar glass-panel"
       sx={{
-        px: 1,
-        py: 0.5,
-        mx: 1,
-        mt: 1,
-        borderRadius: '16px',
+        px: 1.5,
+        py: 0.75,
+        mx: 1.5,
+        mt: 1.5,
+        borderRadius: '20px',
         position: 'sticky',
-        top: 8,
+        top: 12,
         zIndex: 1100,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
       <Box className="app-bar-left">
@@ -39,20 +40,46 @@ export const AppBar: FC = () => {
           to={isFavouritesRoute ? '/list' : '/favorites'}
           disabled={loading}
           sx={{
-            color: isFavouritesRoute ? 'warning.main' : 'text.secondary',
-            p: 1,
+            'color': isFavouritesRoute ? 'primary.main' : 'text.secondary',
+            'p': 1.25,
+            'backgroundColor': (theme) =>
+              theme.palette.mode === 'dark'
+                ? 'rgba(255,255,255,0.03)'
+                : 'rgba(0,0,0,0.02)',
+            '&:hover': {
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'dark'
+                  ? 'rgba(255,255,255,0.08)'
+                  : 'rgba(0,0,0,0.05)',
+            },
           }}
         >
-          <StarIcon />
+          <StarIcon sx={{ fontSize: '22px' }} />
           {unread.length > 0 && <RedDot />}
         </LinkedButton>
       </Box>
 
-      <Box className="app-bar-center" id="app-bar-center" sx={{ flex: 1, mx: 1 }} />
+      <Box className="app-bar-center" id="app-bar-center" sx={{ flex: 1, mx: 2 }} />
 
       <Box className="app-bar-right">
-        <LinkedButton to="/notifications" sx={{ color: 'text.secondary', p: 1 }}>
-          <NotificationsIcon />
+        <LinkedButton 
+          to="/notifications" 
+          sx={{ 
+            'color': 'text.secondary', 
+            'p': 1.25,
+            'backgroundColor': (theme) =>
+              theme.palette.mode === 'dark'
+                ? 'rgba(255,255,255,0.03)'
+                : 'rgba(0,0,0,0.02)',
+            '&:hover': {
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'dark'
+                  ? 'rgba(255,255,255,0.08)'
+                  : 'rgba(0,0,0,0.05)',
+            },
+          }}
+        >
+          <NotificationsIcon sx={{ fontSize: '22px' }} />
           {unread.length > 0 && <RedDot />}
         </LinkedButton>
       </Box>

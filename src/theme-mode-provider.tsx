@@ -46,32 +46,31 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
             main: '#ea2b06',
           },
           secondary: {
-            main: '#434343',
+            main: '#64748b', // Slate 500
           },
           background: {
-            default: theme === 'dark' ? '#1e1e1e' : '#f8f9fa',
+            default: theme === 'dark' ? '#0f172a' : '#f8fafc', // Slate 900 vs Slate 50
             paper:
               theme === 'dark'
-                ? 'rgba(30,30,30,0.98)'
-                : 'rgba(255, 255, 255, 0.98)',
+                ? '#1e293b' // Slate 800
+                : '#ffffff',
           },
           divider:
-            theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0, 0, 0, 0.05)',
+            theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0, 0, 0, 0.04)',
         },
         shape: {
           borderRadius: 20,
         },
         typography: {
-          fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-          h1: { fontFamily: '"Outfit", sans-serif', fontWeight: 700 },
-          h2: { fontFamily: '"Outfit", sans-serif', fontWeight: 700 },
-          h3: { fontFamily: '"Outfit", sans-serif', fontWeight: 600 },
-          h4: { fontFamily: '"Outfit", sans-serif', fontWeight: 600 },
-          h5: { fontFamily: '"Outfit", sans-serif', fontWeight: 600 },
-          h6: { fontFamily: '"Outfit", sans-serif', fontWeight: 600 },
-          subtitle1: { fontFamily: '"Outfit", sans-serif', fontWeight: 600 },
+          fontFamily: '"Outfit", "Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+          h1: { fontWeight: 700 },
+          h2: { fontWeight: 700 },
+          h3: { fontWeight: 600 },
+          h4: { fontWeight: 600 },
+          h5: { fontWeight: 600 },
+          h6: { fontWeight: 600 },
+          subtitle1: { fontWeight: 600 },
           button: {
-            fontFamily: '"Outfit", sans-serif',
             fontWeight: 700,
             textTransform: 'none',
           },
@@ -82,22 +81,31 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
               root: {
                 boxShadow:
                   theme === 'dark'
-                    ? '0 12px 48px rgba(0,0,0,0.5)'
-                    : '0 8px 32px rgba(0,0,0,0.04)',
-                border:
-                  theme === 'dark'
-                    ? '1px solid rgba(255,255,255,0.08)'
-                    : '1px solid rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(16px)',
+                    ? '0 12px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)'
+                    : '0 8px 32px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.3)',
+                border: 'none',
+                backdropFilter: 'blur(24px) saturate(180%)',
                 backgroundImage: 'none',
+                borderRadius: '24px',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               },
             },
           },
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: 14,
-                padding: '10px 20px',
+                borderRadius: 16,
+                padding: '10px 24px',
+                fontFamily: '"Outfit", sans-serif',
+                fontWeight: 700,
+                boxShadow: 'none',
+                '&:hover': {
+                  boxShadow: '0 8px 16px rgba(15, 23, 42, 0.1)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
+                },
               },
             },
           },
@@ -105,7 +113,8 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
             styleOverrides: {
               root: {
                 borderRadius: 10,
-                fontWeight: 600,
+                fontWeight: 700,
+                fontFamily: '"Outfit", sans-serif',
               },
             },
           },

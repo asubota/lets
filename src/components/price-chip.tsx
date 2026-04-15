@@ -85,34 +85,45 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
       size="small"
       sx={{
         'fontFamily': '"Outfit", sans-serif',
-        'fontWeight': 700,
+        'fontWeight': 800,
         'fontSize': '14px',
-        'height': '28px',
+        'height': '32px',
+        'transition': 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         'backgroundColor': (theme) =>
           hasSale
-            ? 'rgba(234, 43, 6, 0.1)'
+            ? 'rgba(234, 43, 6, 0.12)'
             : theme.palette.mode === 'dark'
               ? 'rgba(255, 255, 255, 0.05)'
               : 'rgba(0,0,0,0.04)',
         'color': hasSale ? 'primary.main' : 'text.primary',
-        'border': hasSale ? '1px solid' : 'none',
-        'borderColor': 'primary.main',
-        'borderRadius': '10px',
+        'border': '1px solid',
+        'borderColor': hasSale ? 'primary.main' : 'transparent',
+        'borderRadius': '12px',
         '& .MuiChip-label': { px: 1.5 },
+        '&:hover': {
+          backgroundColor: hasSale ? 'rgba(234, 43, 6, 0.18)' : undefined,
+          transform: 'translateY(-1px)',
+        },
+        '&:active': {
+          transform: 'translateY(0)',
+        },
 
         ...(key === '-' && {
-          color: (theme) => (theme.palette.mode === 'dark' ? '#66bb6a' : 'success.dark'),
-          backgroundColor: 'rgba(102, 187, 106, 0.1)',
+          color: (theme) => (theme.palette.mode === 'dark' ? '#4ade80' : '#16a34a'),
+          backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(74, 222, 128, 0.12)' : 'rgba(22, 163, 74, 0.1)',
+          borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(74, 222, 128, 0.3)' : 'rgba(22, 163, 74, 0.2)',
         }),
 
         ...(key === 'p2' && {
-          color: 'info.main',
-          backgroundColor: 'rgba(3, 169, 244, 0.1)',
+          color: (theme) => theme.palette.mode === 'dark' ? '#38bdf8' : '#0284c7',
+          backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.1)',
+          borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(56, 189, 248, 0.3)' : 'rgba(2, 132, 199, 0.2)',
         }),
 
         ...(key === 'price_old' && {
           color: 'text.secondary',
-          fontSize: '12px',
+          fontSize: '13px',
+          fontWeight: 600,
         }),
       }}
       {...props}

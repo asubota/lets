@@ -39,29 +39,21 @@ export const Tile: FC<{
   return (
     <Card
       className="product-tile"
-      variant="outlined"
-      sx={{
-        ...('missed' in p && p.missed && { backgroundColor: '#ea2b060f' }),
-        'p': 2,
-        'borderRadius': '24px',
+      sx={(theme) => ({
+        ...('missed' in p && p.missed && { backgroundColor: theme.palette.mode === 'dark' ? 'rgba(234, 43, 6, 0.08)' : 'rgba(234, 43, 6, 0.04)' }),
+        'p': 2.5,
         'position': 'relative',
         'display': 'flex',
         'flexDirection': 'column',
-        'gap': '12px',
-        'transition': 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-        '&:active': {
-          transform: 'scale(0.98)',
+        'gap': '16px',
+        'cursor': 'default',
+        'height': '100%',
+        '&:hover': {
+          boxShadow: theme.palette.mode === 'dark' 
+            ? '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)' 
+            : '0 12px 32px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5)',
         },
-        'boxShadow': (theme) =>
-          theme.palette.mode === 'dark'
-            ? '0 4px 20px rgba(0,0,0,0.4)'
-            : '0 4px 20px rgba(0,0,0,0.03)',
-        'border': '1px solid',
-        'borderColor': (theme) =>
-          theme.palette.mode === 'dark'
-            ? 'rgba(255,255,255,0.05)'
-            : 'rgba(0,0,0,0.05)',
-      }}
+      })}
     >
       {isFavorite && (
         <IconButton
@@ -69,8 +61,8 @@ export const Tile: FC<{
           sx={{
             'color': 'secondary.main',
             'position': 'absolute',
-            'top': '8px',
-            'right': '8px',
+            'top': '12px',
+            'right': '12px',
             'zIndex': 10,
             'backgroundColor': (theme) =>
               theme.palette.mode === 'dark'
@@ -79,7 +71,7 @@ export const Tile: FC<{
             '&:hover': {
               backgroundColor: (theme) =>
                 theme.palette.mode === 'dark'
-                  ? 'rgba(255,255,255,0.1)'
+                  ? 'rgba(255,255,255,0.12)'
                   : 'rgba(0,0,0,0.06)',
             },
           }}
@@ -107,10 +99,11 @@ export const Tile: FC<{
           variant="subtitle1"
           sx={{
             fontFamily: '"Outfit", sans-serif',
-            fontSize: '15px',
-            lineHeight: 1.3,
+            fontSize: '16px',
+            lineHeight: 1.4,
             color: 'text.primary',
-            fontWeight: 600,
+            fontWeight: 700,
+            letterSpacing: '-0.2px',
           }}
         >
           <RippleText text={getHighlightedText(p['name'], search)} />
@@ -123,6 +116,7 @@ export const Tile: FC<{
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
+          mt: 'auto',
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -131,15 +125,16 @@ export const Tile: FC<{
             size="small"
             onClick={() => copyContent(p.sku)}
             sx={{
-              'fontFamily': '"Inter", sans-serif',
-              'fontSize': '10px',
-              'fontWeight': 700,
+              'fontFamily': '"Outfit", sans-serif',
+              'fontSize': '11px',
+              'fontWeight': 800,
               'backgroundColor': (theme) =>
                 theme.palette.mode === 'dark'
-                  ? 'rgba(255,255,255,0.05)'
-                  : 'rgba(0,0,0,0.04)',
+                  ? 'rgba(255,255,255,0.06)'
+                  : 'rgba(0,0,0,0.05)',
+              'color': 'text.secondary',
               'borderRadius': '8px',
-              '& .MuiChip-label': { px: 1 },
+              '& .MuiChip-label': { px: 1.2 },
             }}
           />
           {!isFavoritePage && (
@@ -151,16 +146,17 @@ export const Tile: FC<{
                 'color': 'text.secondary',
                 'backgroundColor': (theme) =>
                   theme.palette.mode === 'dark'
-                    ? 'rgba(255,255,255,0.05)'
-                    : 'rgba(0,0,0,0.04)',
+                    ? 'rgba(255,255,255,0.06)'
+                    : 'rgba(0,0,0,0.05)',
                 '&:hover': {
                   backgroundColor: 'rgba(0,0,0,0.08)',
+                  color: 'primary.main',
                 },
-                'p': 0.5,
+                'p': 0.75,
               }}
               data-no-export
             >
-              <PercentIcon sx={{ fontSize: '16px' }} />
+              <PercentIcon sx={{ fontSize: '18px' }} />
             </LinkedButton>
           )}
         </Box>
@@ -178,10 +174,11 @@ export const Tile: FC<{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            mt: 0.5,
+            pt: 1,
+            borderTop: (theme) => `1px solid ${theme.palette.divider}`,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <PriceChip product={p} />
             <VendorChip vendor={p.vendor} />
             {p.pics && (
@@ -194,11 +191,15 @@ export const Tile: FC<{
                 params={{ id: getFavoriteId(p) }}
                 sx={{
                   'color': 'text.secondary',
-                  'fontSize': '20px',
+                  'fontSize': '22px',
                   'cursor': 'pointer',
-                  'ml': 0.5,
-                  'opacity': 0.7,
-                  '&:hover': { opacity: 1 },
+                  'opacity': 0.6,
+                  'transition': 'all 0.2s',
+                  '&:hover': { 
+                    opacity: 1,
+                    color: 'primary.main',
+                    transform: 'scale(1.1)',
+                  },
                 }}
                 data-no-export
               />
@@ -209,7 +210,7 @@ export const Tile: FC<{
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 0.5,
+              gap: 1,
             }}
           >
             {isFavorite && 'time' in p && <FavoriteTime time={p.time} />}
