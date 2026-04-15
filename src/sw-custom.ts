@@ -177,8 +177,6 @@ sw.addEventListener('message', async (event) => {
   console.log('[SW] Received message:', event.data?.type)
   const message: AppMessage = event.data
 
-  console.log('### isSyncing', isSyncing)
-
   if (message.type === 'SYNC_START') {
     console.log('[SW] Handling SYNC_START')
     event.waitUntil(runSupabaseSync())

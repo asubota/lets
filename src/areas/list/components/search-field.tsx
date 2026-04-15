@@ -82,20 +82,20 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
                       sx={{
                         color: 'text.secondary',
                         fontSize: '20px',
-                        ml: 0.5,
+                        ml: 0,
                       }}
                     />
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <InputAdornment position="end" sx={{ marginRight: -1 }}>
+                  <InputAdornment position="end" sx={{ marginRight: -0.75 }}>
                     {field.value && (
                       <IconButton
                         onClick={handleFormReset}
                         size="small"
                         sx={{
                           'color': 'text.secondary',
-                          '& svg': { width: '20px', height: '20px' },
+                          '& svg': { width: '18px', height: '18px' },
                         }}
                       >
                         <Cancel />
@@ -103,7 +103,7 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
                     )}
                     <Box
                       sx={{
-                        ml: 1,
+                        ml: 0.5,
                         borderRadius: '10px',
                         overflow: 'hidden',
                         bgcolor: 'primary.main',

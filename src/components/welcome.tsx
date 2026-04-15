@@ -47,9 +47,15 @@ export const Welcome = () => {
         <Bike type="safe" />
       </Box>
       <StaleVendorsWarning />
-      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-        <Logo />
-      </Box>
+      <Logo 
+        sx={{ 
+          position: 'fixed', 
+          left: '25px', 
+          bottom: '25px',
+          zIndex: 10,
+          opacity: 0.8
+        }} 
+      />
     </Box>
   )
 }
