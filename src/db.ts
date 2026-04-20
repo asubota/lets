@@ -1,7 +1,7 @@
 import { type Product } from './types'
 
 const DB_NAME = 'ShopDB'
-const DB_VERSION = 3
+const DB_VERSION = 4
 const PRODUCTS_STORE = 'products'
 const META_STORE = 'metadata'
 
@@ -18,12 +18,17 @@ function openDB(): Promise<IDBDatabase> {
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result
+      const tx = (event.target as IDBOpenDBRequest).transaction
+
       if (db.objectStoreNames.contains(PRODUCTS_STORE)) {
         db.deleteObjectStore(PRODUCTS_STORE)
       }
       db.createObjectStore(PRODUCTS_STORE, { keyPath: 'id' })
+      
       if (!db.objectStoreNames.contains(META_STORE)) {
         db.createObjectStore(META_STORE, { keyPath: 'key' })
+      } else if (tx) {
+        tx.objectStore(META_STORE).delete('last-sync')
       }
     }
 
@@ -73,7 +78,10 @@ export const db = {
     const idb = await openDB()
     const transaction = tx(idb, PRODUCTS_STORE, 'readwrite')
     const store = transaction.objectStore(PRODUCTS_STORE)
-    products.forEach((p) => store.put({ ...p, id: `${p.sku}-${p.vendor}` }))
+    products.forEach((p) => {
+      const vendorPrefix = p.vendor === 'base' ? '0' : '1'
+      store.put({ ...p, id: `${vendorPrefix}-${p.sku}-${p.vendor}` })
+    })
     return runTx(transaction)
   },
 
