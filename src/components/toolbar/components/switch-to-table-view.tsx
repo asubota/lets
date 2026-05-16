@@ -14,10 +14,11 @@ export const SwitchToTableView: FC = () => {
       size="small"
       sx={{
         'color': view === 'table' ? 'primary.main' : 'text.secondary',
-        'backgroundColor': view === 'table' ? 'rgba(234, 43, 6, 0.08)' : 'transparent',
+        'backgroundColor': view === 'table' ? 'rgba(234, 43, 6, 0.1)' : 'transparent',
+        'border': view === 'table' ? '1px solid rgba(234, 43, 6, 0.2)' : '1px solid transparent',
         'borderRadius': '10px',
         '&:hover': {
-          backgroundColor: view === 'table' ? 'rgba(234, 43, 6, 0.12)' : 'rgba(0,0,0,0.04)',
+          backgroundColor: view === 'table' ? 'rgba(234, 43, 6, 0.15)' : 'rgba(0,0,0,0.04)',
         },
       }}
       onClick={() => setView('table')}

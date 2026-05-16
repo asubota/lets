@@ -14,10 +14,11 @@ export const SwitchToTileView: FC = () => {
       size="small"
       sx={{
         'color': view === 'tile' ? 'primary.main' : 'text.secondary',
-        'backgroundColor': view === 'tile' ? 'rgba(234, 43, 6, 0.08)' : 'transparent',
+        'backgroundColor': view === 'tile' ? 'rgba(234, 43, 6, 0.1)' : 'transparent',
+        'border': view === 'tile' ? '1px solid rgba(234, 43, 6, 0.2)' : '1px solid transparent',
         'borderRadius': '10px',
         '&:hover': {
-          backgroundColor: view === 'tile' ? 'rgba(234, 43, 6, 0.12)' : 'rgba(0,0,0,0.04)',
+          backgroundColor: view === 'tile' ? 'rgba(234, 43, 6, 0.15)' : 'rgba(0,0,0,0.04)',
         },
       }}
       onClick={() => setView('tile')}
