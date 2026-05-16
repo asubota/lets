@@ -12,10 +12,11 @@ export const SwitchToInfoView = () => {
       size="small"
       sx={{
         'color': view === 'info' ? 'primary.main' : 'text.secondary',
-        'backgroundColor': view === 'info' ? 'rgba(234, 43, 6, 0.08)' : 'transparent',
+        'backgroundColor': view === 'info' ? 'rgba(234, 43, 6, 0.1)' : 'transparent',
+        'border': view === 'info' ? '1px solid rgba(234, 43, 6, 0.2)' : '1px solid transparent',
         'borderRadius': '10px',
         '&:hover': {
-          backgroundColor: view === 'info' ? 'rgba(234, 43, 6, 0.12)' : 'rgba(0,0,0,0.04)',
+          backgroundColor: view === 'info' ? 'rgba(234, 43, 6, 0.15)' : 'rgba(0,0,0,0.04)',
         },
       }}
       onClick={() => setView('info')}

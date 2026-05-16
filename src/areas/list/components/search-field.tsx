@@ -106,7 +106,8 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
                         ml: 0.5,
                         borderRadius: '10px',
                         overflow: 'hidden',
-                        bgcolor: 'primary.main',
+                        background: 'linear-gradient(135deg, #ea2b06 0%, #c42005 100%)',
+                        boxShadow: '0 4px 12px rgba(234, 43, 6, 0.4)',
                       }}
                     >
                       <IconButton

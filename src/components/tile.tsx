@@ -143,13 +143,18 @@ export const Tile: FC<{
               params={{ id: getFavoriteId(p) }}
               size="small"
               sx={{
-                'color': 'text.secondary',
+                'color': (theme) =>
+                  theme.palette.mode === 'dark' ? '#f87171' : 'primary.main',
                 'backgroundColor': (theme) =>
                   theme.palette.mode === 'dark'
-                    ? 'rgba(255,255,255,0.06)'
-                    : 'rgba(0,0,0,0.05)',
+                    ? 'rgba(234,43,6,0.1)'
+                    : 'rgba(234,43,6,0.07)',
+                'border': (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? '1px solid rgba(234,43,6,0.2)'
+                    : '1px solid rgba(234,43,6,0.15)',
                 '&:hover': {
-                  backgroundColor: 'rgba(0,0,0,0.08)',
+                  backgroundColor: 'rgba(234,43,6,0.18)',
                   color: 'primary.main',
                 },
                 'p': 0.75,

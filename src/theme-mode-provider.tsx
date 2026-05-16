@@ -49,10 +49,10 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
             main: '#64748b', // Slate 500
           },
           background: {
-            default: theme === 'dark' ? '#0f172a' : '#f8fafc', // Slate 900 vs Slate 50
+            default: theme === 'dark' ? '#080d18' : '#f1f5f9',
             paper:
               theme === 'dark'
-                ? '#1e293b' // Slate 800
+                ? '#1e293b'
                 : '#ffffff',
           },
           divider:
@@ -81,12 +81,18 @@ export const ThemeModeProvider: FC<{ children: ReactNode }> = ({
               root: {
                 boxShadow:
                   theme === 'dark'
-                    ? '0 12px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)'
-                    : '0 8px 32px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.3)',
-                border: 'none',
+                    ? '0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)'
+                    : '0 2px 16px rgba(15, 23, 42, 0.06), 0 1px 4px rgba(15, 23, 42, 0.04)',
+                border:
+                  theme === 'dark'
+                    ? '1px solid rgba(255,255,255,0.08)'
+                    : '1px solid rgba(0,0,0,0.06)',
                 backdropFilter: 'blur(24px) saturate(180%)',
-                backgroundImage: 'none',
-                borderRadius: '24px',
+                backgroundImage:
+                  theme === 'dark'
+                    ? 'linear-gradient(145deg, rgba(30, 41, 60, 0.9) 0%, rgba(22, 30, 46, 0.95) 100%)'
+                    : 'none',
+                borderRadius: '20px',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               },
             },

@@ -15,12 +15,21 @@ export const Stock: FC<{ stock: string | null; bordered?: boolean }> = ({
     return (
       <Chip
         label={stock}
-        color="primary"
         size="small"
-        variant="outlined"
         sx={{
-          borderRadius: 0,
-          borderWidth: '2px',
+          fontFamily: '"Outfit", sans-serif',
+          fontWeight: 800,
+          fontSize: '11px',
+          height: '22px',
+          borderRadius: '8px',
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark'
+              ? 'rgba(234, 43, 6, 0.15)'
+              : 'rgba(234, 43, 6, 0.09)',
+          color: (theme) =>
+            theme.palette.mode === 'dark' ? '#fb923c' : '#ea2b06',
+          border: 'none',
+          '& .MuiChip-label': { px: 1 },
         }}
       />
     )
