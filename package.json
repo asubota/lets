@@ -42,6 +42,7 @@
     "@tanstack/react-query-devtools": "5.100.10",
     "@tanstack/react-router-devtools": "1.167.0",
     "@tanstack/router-plugin": "1.168.2",
+    "@types/node": "^25.8.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "8.59.3",
