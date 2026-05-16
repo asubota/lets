@@ -1,6 +1,6 @@
-import { useMatchRoute } from '@tanstack/react-router'
+import { useRouterState } from '@tanstack/react-router'
 
 export const useIsRoute = (to: string) => {
-  const matchRoute = useMatchRoute()
-  return !!matchRoute({ to })
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  return pathname.includes(to)
 }
