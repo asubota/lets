@@ -1,35 +1,36 @@
 import { type Product } from './types'
 
-export const mapToProduct = (item: any): Product => {
+export const mapToProduct = (item: Record<string, unknown>): Product => {
   let pics: string[] | null = null
-  if (item.pics) {
-    if (Array.isArray(item.pics)) {
-      pics = item.pics
-    } else if (typeof item.pics === 'string') {
-      const trimmed = item.pics.trim()
+  const rawPics = item.pics
+  if (rawPics) {
+    if (Array.isArray(rawPics)) {
+      pics = rawPics as string[]
+    } else if (typeof rawPics === 'string') {
+      const trimmed = rawPics.trim()
       if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
         try {
-          pics = JSON.parse(trimmed)
+          pics = JSON.parse(trimmed) as string[]
         } catch {
           pics = trimmed
             .slice(1, -1)
             .split(',')
-            .map((s: string) => s.trim().replace(/^['"]|['"]$/g, ''))
+            .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
         }
       } else if (trimmed) {
-        pics = trimmed.split(',').map((s: string) => s.trim())
+        pics = trimmed.split(',').map((s) => s.trim())
       }
     }
   }
 
   return {
-    sku: item.sku || '',
-    name: item.name || '',
-    vendor: item.vendor || '',
+    sku: typeof item.sku === 'string' ? item.sku : '',
+    name: typeof item.name === 'string' ? item.name : '',
+    vendor: typeof item.vendor === 'string' ? item.vendor : '',
     price: Number(item.price) || 0,
-    price_old: item.price_old ? Number(item.price_old) : null,
-    p2: item.p2 ? Number(item.p2) : null,
-    stock: item.stock || null,
+    price_old: item.price_old != null ? Number(item.price_old) : null,
+    p2: item.p2 != null ? Number(item.p2) : null,
+    stock: typeof item.stock === 'string' ? item.stock : null,
     pics: pics,
   }
 }

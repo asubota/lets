@@ -66,6 +66,7 @@ const useStore = create<StoreState>()(
     ),
     {
       name: 'lets-bike-app',
+      enabled: import.meta.env.DEV,
     },
   ),
 )

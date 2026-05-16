@@ -32,7 +32,7 @@ export const useData = () => {
   const { setMeta } = useAppActions()
   return useQuery<IndexedProduct[]>({
     // staleTime: 0,
-    staleTime: 1000 * 60 * 15, // 1 minute
+    staleTime: 1000 * 60 * 15, // 15 minutes
     refetchOnWindowFocus: 'always',
     queryKey: [CACHE_BASE_KEY],
     queryFn: () => getData(setMeta),

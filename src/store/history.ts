@@ -17,13 +17,13 @@ const useStore = create<StoreState>()(
       actions: {
         addHistoryItem: (item) => {
           set((state) => {
-            const set = new Set(state.items)
+            const itemSet = new Set(state.items)
 
             if (item.length > 2) {
-              set.add(item)
+              itemSet.add(item)
             }
 
-            return { items: Array.from(set) }
+            return { items: Array.from(itemSet) }
           })
         },
         removeHistoryItem: (toRemove) =>
