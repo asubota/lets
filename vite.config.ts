@@ -1,6 +1,7 @@
-import fs from 'node:fs'
+// import fs from 'node:fs'
 
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -59,6 +60,7 @@ export default defineConfig({
       },
     }),
     svgr(),
+    basicSsl(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
@@ -146,9 +148,9 @@ export default defineConfig({
   },
   server: {
     port: 8000,
-    https: {
-      key: fs.readFileSync('localhost+2-key.pem'),
-      cert: fs.readFileSync('localhost+2.pem'),
-    },
+    // https: {
+    //   key: fs.readFileSync('localhost+2-key.pem'),
+    //   cert: fs.readFileSync('localhost+2.pem'),
+    // },
   },
 })
