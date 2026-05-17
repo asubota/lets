@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 
 import { ClickAwayListener, Portal } from '@mui/material'
+import Hyperspeed from '../../components/Hyperspeed/Hyperspeed.tsx'
 import { Outlet } from '@tanstack/react-router'
 import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,7 +10,7 @@ import { AppliedFiltersModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 import { useSearch } from '../../search-tools.ts'
-import { useHistoryActions } from '../../store'
+import { useHistoryActions, useAppTheme } from '../../store'
 import { type SearchForm } from '../../types.ts'
 
 const Products = lazy(() => import('../../components/products.tsx'))
@@ -19,6 +20,7 @@ export const List = () => {
   const [search, setSearch] = useState('')
   const products = useSearch(search)
   const { addHistoryItem } = useHistoryActions()
+  const theme = useAppTheme()
   const [showHistory, setShowHistory] = useState(false)
   const [showAhead, setShowAhead] = useState(false)
 
@@ -36,6 +38,10 @@ export const List = () => {
 
   return (
     <>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', background: theme === 'dark' ? '#050101' : 'transparent' }}>
+        <Hyperspeed />
+      </div>
+
       <Redirecto setValue={methods.setValue} setSearch={setSearch} />
 
       <Portal container={() => document.getElementById('app-bar-center')}>
