@@ -1,13 +1,13 @@
 import { lazy, Suspense, useState } from 'react'
 
 import { ClickAwayListener, Portal } from '@mui/material'
-import Hyperspeed from '../../components/Hyperspeed/Hyperspeed.tsx'
 import { Outlet } from '@tanstack/react-router'
 import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hook-form'
 
 import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
 import { AppliedFiltersModal, TableSettingsModal } from '../../components'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
+import Hyperspeed from '../../components/Hyperspeed/Hyperspeed.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 import { useSearch } from '../../search-tools.ts'
 import { useHistoryActions, useAppTheme } from '../../store'
@@ -38,9 +38,19 @@ export const List = () => {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', background: theme === 'dark' ? '#050101' : 'transparent' }}>
-        <Hyperspeed />
-      </div>
+      {!search && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: 'none',
+            background: theme === 'dark' ? '#050101' : 'transparent',
+          }}
+        >
+          <Hyperspeed />
+        </div>
+      )}
 
       <Redirecto setValue={methods.setValue} setSearch={setSearch} />
 
