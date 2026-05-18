@@ -23,7 +23,7 @@ const useStore = create<StoreState>()(
               itemSet.add(item)
             }
 
-            return { items: Array.from(itemSet) }
+            return { items: Array.from(itemSet).slice(-100) }
           })
         },
         removeHistoryItem: (toRemove) =>
