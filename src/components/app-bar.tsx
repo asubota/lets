@@ -1,5 +1,3 @@
-import { type FC } from 'react'
-
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import StarIcon from '@mui/icons-material/Star'
 import { Box, IconButton } from '@mui/material'
@@ -12,7 +10,7 @@ import { useIsRoute } from '../hooks/use-is-route.hook.ts'
 
 const LinkedButton = createLink(IconButton)
 
-export const AppBar: FC = () => {
+export const AppBar = () => {
   const loading = useIsLoading()
   const isFavouritesRoute = useIsRoute('/favorites')
   const unread = useGetNotifications('unread')
@@ -43,19 +41,13 @@ export const AppBar: FC = () => {
             'color': isFavouritesRoute ? 'primary.main' : 'text.secondary',
             'p': 0.75,
             'backgroundColor': (theme) =>
-              theme.palette.mode === 'dark'
-                ? 'rgba(255,255,255,0.06)'
-                : 'rgba(0,0,0,0.05)',
+              theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
             'border': (theme) =>
-              theme.palette.mode === 'dark'
-                ? '1px solid rgba(255,255,255,0.08)'
-                : '1px solid rgba(0,0,0,0.07)',
+              theme.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.07)',
             'borderRadius': '12px',
             '&:hover': {
               backgroundColor: (theme) =>
-                theme.palette.mode === 'dark'
-                  ? 'rgba(255,255,255,0.1)'
-                  : 'rgba(0,0,0,0.08)',
+                theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
             },
           }}
         >
@@ -67,25 +59,19 @@ export const AppBar: FC = () => {
       <Box className="app-bar-center" id="app-bar-center" sx={{ flex: 1, mx: 0.75 }} />
 
       <Box className="app-bar-right">
-        <LinkedButton 
-          to="/notifications" 
-          sx={{ 
+        <LinkedButton
+          to="/notifications"
+          sx={{
             'color': 'text.secondary',
             'p': 0.75,
             'backgroundColor': (theme) =>
-              theme.palette.mode === 'dark'
-                ? 'rgba(255,255,255,0.06)'
-                : 'rgba(0,0,0,0.05)',
+              theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
             'border': (theme) =>
-              theme.palette.mode === 'dark'
-                ? '1px solid rgba(255,255,255,0.08)'
-                : '1px solid rgba(0,0,0,0.07)',
+              theme.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.07)',
             'borderRadius': '12px',
             '&:hover': {
               backgroundColor: (theme) =>
-                theme.palette.mode === 'dark'
-                  ? 'rgba(255,255,255,0.1)'
-                  : 'rgba(0,0,0,0.08)',
+                theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
             },
           }}
         >

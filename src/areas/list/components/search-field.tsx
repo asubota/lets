@@ -38,6 +38,7 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
           <TextField
             sx={{
               '& .MuiInputBase-root': {
+                'height': '40px',
                 'borderRadius': '12px',
                 'backgroundColor': (theme) =>
                   theme.palette.mode === 'dark'
