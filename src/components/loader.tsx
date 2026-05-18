@@ -2,15 +2,17 @@ import { Box, Card, CircularProgress, Typography, useTheme } from '@mui/material
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { Logo } from './logo.tsx'
-import { useLoadingProgress } from '../store'
+import { useAppActions, useLoaderCollapsed, useLoadingProgress } from '../store'
 
 export const Loader = () => {
   const progress = useLoadingProgress()
+  const collapsed = useLoaderCollapsed()
+  const { toggleLoaderCollapsed } = useAppActions()
   const theme = useTheme()
 
   return (
     <AnimatePresence>
-      {progress && (
+      {progress && !collapsed && (
         <motion.div
           key="global-loader"
           initial={{ opacity: 0, y: -20 }}
@@ -30,15 +32,16 @@ export const Loader = () => {
         >
           <Box sx={{ width: '100%', maxWidth: 460, pointerEvents: 'auto' }}>
             <Card
+              onClick={toggleLoaderCollapsed}
               sx={{
                 p: 3,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
                 borderRadius: '24px',
-                // Theme will handle main styles, but we add loader-specific elevation
-                boxShadow: theme.palette.mode === 'dark' 
-                  ? '0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)' 
+                cursor: 'pointer',
+                boxShadow: theme.palette.mode === 'dark'
+                  ? '0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)'
                   : '0 16px 40px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5)',
               }}
             >
