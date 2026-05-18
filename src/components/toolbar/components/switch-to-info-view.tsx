@@ -19,6 +19,7 @@ export const SwitchToInfoView = () => {
           backgroundColor: view === 'info' ? 'rgba(234, 43, 6, 0.15)' : 'rgba(0,0,0,0.04)',
         },
       }}
+      title="Інфо"
       onClick={() => setView('info')}
     >
       <InfoOutlineIcon sx={{ fontSize: '20px' }} />

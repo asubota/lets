@@ -21,6 +21,7 @@ export const SwitchToTileView: FC = () => {
           backgroundColor: view === 'tile' ? 'rgba(234, 43, 6, 0.15)' : 'rgba(0,0,0,0.04)',
         },
       }}
+      title="Тайли"
       onClick={() => setView('tile')}
     >
       <GridViewIcon sx={{ fontSize: '20px' }} />

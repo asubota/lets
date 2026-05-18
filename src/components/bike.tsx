@@ -9,10 +9,8 @@ export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
   return (
     <Box
       sx={{
-        position: 'absolute',
-        bottom: '200px',
-        transform: 'translate(-50%)',
-        left: '50%',
+        display: 'flex',
+        justifyContent: 'center',
       }}
     >
       {type === 'safe' && (
