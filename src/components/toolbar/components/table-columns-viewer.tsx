@@ -15,7 +15,8 @@ export const TableColumnsViewer: FC = () => {
 
   return (
     <IconButton
-      sx={{ ml: 'auto', color: 'text.secondary' }}
+      title="Колонки"
+      sx={{ ml: 'auto', color: 'text.secondary', borderRadius: '10px' }}
       onClick={toggleSettings}
       size="small"
     >

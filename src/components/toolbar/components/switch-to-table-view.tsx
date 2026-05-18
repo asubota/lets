@@ -21,6 +21,7 @@ export const SwitchToTableView: FC = () => {
           backgroundColor: view === 'table' ? 'rgba(234, 43, 6, 0.15)' : 'rgba(0,0,0,0.04)',
         },
       }}
+      title="Таблиця"
       onClick={() => setView('table')}
     >
       <ReorderIcon sx={{ fontSize: '20px' }} />
