@@ -19,26 +19,27 @@ export const Welcome = () => {
         variant="h3"
         sx={{
           position: 'relative',
-          zIndex: 1,
           textAlign: 'center',
           color: 'text.primary',
           fontFamily: '"Outfit", sans-serif',
           fontWeight: 800,
           mb: 2,
-          letterSpacing: '-0.5px'
+          letterSpacing: '-0.5px',
         }}
       >
-        <span onClick={handleThing} style={{ cursor: 'pointer' }}>Здорова, братан!</span>
+        <span onClick={handleThing} style={{ cursor: 'pointer' }}>
+          Здорова, братан!
+        </span>
       </Typography>
       <Typography
         variant="h5"
-        sx={{ 
-          textAlign: 'center', 
-          color: 'text.secondary', 
+        sx={{
+          textAlign: 'center',
+          color: 'text.secondary',
           fontFamily: '"Outfit", sans-serif',
           fontWeight: 600,
           opacity: 0.8,
-          lineHeight: 1.5
+          lineHeight: 1.5,
         }}
       >
         <Box>Шо, може підсобити?</Box>
@@ -49,14 +50,14 @@ export const Welcome = () => {
         <Bike type="safe" />
       </Box>
       <StaleVendorsWarning />
-      <Logo 
-        sx={{ 
-          position: 'fixed', 
-          left: '25px', 
+      <Logo
+        sx={{
+          position: 'fixed',
+          left: '25px',
           bottom: '25px',
           zIndex: 10,
-          opacity: 0.8
-        }} 
+          opacity: 0.8,
+        }}
       />
     </Box>
   )
