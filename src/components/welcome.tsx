@@ -17,9 +17,11 @@ export const Welcome = () => {
     <Box sx={{ userSelect: 'none', py: 8 }}>
       <Typography
         variant="h3"
-        sx={{ 
-          textAlign: 'center', 
-          color: 'text.primary', 
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          textAlign: 'center',
+          color: 'text.primary',
           fontFamily: '"Outfit", sans-serif',
           fontWeight: 800,
           mb: 2,
