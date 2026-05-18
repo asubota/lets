@@ -6,6 +6,7 @@ import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hoo
 
 import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
 import { AppliedFiltersModal, TableSettingsModal } from '../../components'
+import { LoaderMini } from '../../components/loader-mini.tsx'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
 import Hyperspeed from '../../components/Hyperspeed/Hyperspeed.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
@@ -38,6 +39,7 @@ export const List = () => {
 
   return (
     <>
+      <LoaderMini />
       {!search && (
         <div
           style={{

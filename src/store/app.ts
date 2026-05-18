@@ -28,6 +28,7 @@ interface StoreState {
   sort: 'date' | 'note'
   meta: Meta
   loadingProgress: LoadingProgress | null
+  loaderCollapsed: boolean
 
   actions: {
     setView(this: void, view: StoreState['view']): void
@@ -35,6 +36,7 @@ interface StoreState {
     setSort(this: void, sort: StoreState['sort']): void
     setMeta(this: void, meta: StoreState['meta']): void
     setLoadingProgress(this: void, progress: LoadingProgress | null): void
+    toggleLoaderCollapsed(this: void): void
   }
 }
 
@@ -47,12 +49,14 @@ const useStore = create<StoreState>()(
         sort: 'date',
         meta: { vendors: [], created: '' },
         loadingProgress: null,
+        loaderCollapsed: false,
         actions: {
           setSort: (sort) => set(() => ({ sort })),
           setView: (view) => set(() => ({ view })),
           setTheme: (theme) => set({ theme }),
           setMeta: (meta) => set({ meta }, undefined, 'setMeta'),
           setLoadingProgress: (loadingProgress) => set({ loadingProgress }),
+          toggleLoaderCollapsed: () => set((s) => ({ loaderCollapsed: !s.loaderCollapsed })),
         },
       }),
       {
@@ -77,6 +81,7 @@ export const useAppTheme = () => useStore((state) => state.theme)
 export const useAppSort = () => useStore((state) => state.sort)
 export const useMeta = () => useStore((state) => state.meta)
 export const useLoadingProgress = () => useStore((state) => state.loadingProgress)
+export const useLoaderCollapsed = () => useStore((state) => state.loaderCollapsed)
 export const useStaleVendors = (): MetaVendor[] => {
   const { vendors } = useMeta()
   return vendors.filter((v) => v.stale)
