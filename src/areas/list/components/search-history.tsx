@@ -31,15 +31,21 @@ export const SearchHistory: FC<{
         }}
       >
         {items.map((term, index) => (
-          <ListItem divider key={index} sx={{ height: '50px' }}>
+          <ListItem
+            divider
+            key={index}
+            sx={{ height: '50px' }}
+            secondaryAction={
+              <IconButton onClick={() => removeHistoryItem(term)}>
+                <DeleteIcon />
+              </IconButton>
+            }
+          >
             <ListItemText
               primary={term}
               onClick={() => setValue(term)}
               sx={{ cursor: 'pointer' }}
             />
-            <IconButton onClick={() => removeHistoryItem(term)}>
-              <DeleteIcon />
-            </IconButton>
           </ListItem>
         ))}
       </List>

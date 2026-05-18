@@ -31,3 +31,4 @@ dev-dist
 
 # Local certificates
 *.pem
+.playwright-mcp
