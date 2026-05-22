@@ -18,6 +18,7 @@ import { Route as LayoutListRouteImport } from './routes/_layout/list'
 
 const StatsLazyRouteImport = createFileRoute('/stats')()
 const NotificationsLazyRouteImport = createFileRoute('/notifications')()
+const GameLazyRouteImport = createFileRoute('/game')()
 const ColorsLazyRouteImport = createFileRoute('/colors')()
 const CheckEngineLazyRouteImport = createFileRoute('/check-engine')()
 const CartServiceLazyRouteImport = createFileRoute('/cart/service')()
@@ -45,6 +46,11 @@ const NotificationsLazyRoute = NotificationsLazyRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
+const GameLazyRoute = GameLazyRouteImport.update({
+  id: '/game',
+  path: '/game',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/game.lazy').then((d) => d.Route))
 const ColorsLazyRoute = ColorsLazyRouteImport.update({
   id: '/colors',
   path: '/colors',
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRouteWithChildren
   '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
+  '/game': typeof GameLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRouteWithChildren
   '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
+  '/game': typeof GameLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/list': typeof LayoutListRouteWithChildren
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRouteWithChildren
   '/check-engine': typeof CheckEngineLazyRoute
   '/colors': typeof ColorsLazyRoute
+  '/game': typeof GameLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/stats': typeof StatsLazyRoute
   '/_layout/list': typeof LayoutListRouteWithChildren
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/check-engine'
     | '/colors'
+    | '/game'
     | '/notifications'
     | '/stats'
     | '/list'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/check-engine'
     | '/colors'
+    | '/game'
     | '/notifications'
     | '/stats'
     | '/list'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/check-engine'
     | '/colors'
+    | '/game'
     | '/notifications'
     | '/stats'
     | '/_layout/list'
@@ -222,6 +234,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRouteWithChildren
   CheckEngineLazyRoute: typeof CheckEngineLazyRoute
   ColorsLazyRoute: typeof ColorsLazyRoute
+  GameLazyRoute: typeof GameLazyRoute
   NotificationsLazyRoute: typeof NotificationsLazyRoute
   StatsLazyRoute: typeof StatsLazyRoute
 }
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/colors': {
@@ -386,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRouteWithChildren,
   CheckEngineLazyRoute: CheckEngineLazyRoute,
   ColorsLazyRoute: ColorsLazyRoute,
+  GameLazyRoute: GameLazyRoute,
   NotificationsLazyRoute: NotificationsLazyRoute,
   StatsLazyRoute: StatsLazyRoute,
 }

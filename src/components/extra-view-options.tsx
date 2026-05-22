@@ -9,7 +9,9 @@ import { Box, IconButton, Stack, useTheme } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
 
 import { useCartItemsCount } from '../hooks/use-cart-items-count.ts'
+import { useGameMode } from '../store/game.ts'
 import { ColorModeContext } from '../theme-mode-provider.tsx'
+import { GameIcon } from './game/game-icon.tsx'
 import { PasteInSearchButton } from './toolbar/paste-in-search-button.tsx'
 
 const LinkedIconButton = createLink(IconButton)
@@ -18,6 +20,7 @@ export const ExtraViewOptions = () => {
   const count = useCartItemsCount()
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
+  const gameMode = useGameMode()
 
   return (
     <>
@@ -39,6 +42,13 @@ export const ExtraViewOptions = () => {
 
         <LinkedIconButton sx={{ color: 'text.secondary' }} to="/stats">
           <InsightsIcon />
+        </LinkedIconButton>
+
+        <LinkedIconButton
+          sx={{ color: gameMode ? 'primary.main' : 'text.secondary' }}
+          to="/game"
+        >
+          <GameIcon active={gameMode} />
         </LinkedIconButton>
       </Stack>
 
