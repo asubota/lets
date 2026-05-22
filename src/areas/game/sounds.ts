@@ -3,8 +3,6 @@ import { type ItemKind, getGameSnapshot } from '../../store/game.ts'
 
 type OscType = 'sine' | 'square' | 'sawtooth' | 'triangle'
 
-const getCtx = getAudioContext
-
 // eslint-disable-next-line sonarjs/pseudo-random
 const rand = () => Math.random()
 
@@ -54,7 +52,8 @@ const gliss = (
 
 const noise = (c: AudioContext, durationMs: number, gain = 0.04, delay = 0) => {
   const start = c.currentTime + delay / 1000
-  const buf = c.createBuffer(1, c.sampleRate * (durationMs / 1000), c.sampleRate)
+  const len = Math.max(1, Math.floor(c.sampleRate * (durationMs / 1000)))
+  const buf = c.createBuffer(1, len, c.sampleRate)
   const data = buf.getChannelData(0)
   for (let i = 0; i < data.length; i++) {
     data[i] = rand() * 2 - 1
@@ -143,7 +142,7 @@ export const playHit = (kind: ItemKind) => {
   if (!getGameSnapshot().settings.soundEnabled) {
     return
   }
-  const c = getCtx()
+  const c = getAudioContext()
   if (!c) {
     return
   }
@@ -162,7 +161,7 @@ export const playComboLevelUp = (level: 2 | 3) => {
   if (!getGameSnapshot().settings.soundEnabled) {
     return
   }
-  const c = getCtx()
+  const c = getAudioContext()
   if (!c) {
     return
   }
@@ -180,7 +179,7 @@ export const playEndSession = () => {
   if (!getGameSnapshot().settings.soundEnabled) {
     return
   }
-  const c = getCtx()
+  const c = getAudioContext()
   if (!c) {
     return
   }
@@ -193,7 +192,7 @@ export const playMiss = () => {
   if (!getGameSnapshot().settings.soundEnabled) {
     return
   }
-  const c = getCtx()
+  const c = getAudioContext()
   if (!c) {
     return
   }

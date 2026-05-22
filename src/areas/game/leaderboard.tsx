@@ -61,7 +61,7 @@ const ScoreCard = ({ entry, isBest }: { entry: ScoreEntry; isBest: boolean }) =>
       elevation={0}
       sx={(t) => ({
         p: 1.5,
-        borderRadius: 3,
+        borderRadius: 1.5,
         border: cardBorder(isBest, t.palette.mode === 'dark'),
         background: cardBackground(isBest, t.palette.mode === 'dark'),
       })}
@@ -138,7 +138,7 @@ export const Leaderboard = () => {
         elevation={0}
         sx={{
           p: 3,
-          borderRadius: 4,
+          borderRadius: 1.5,
           textAlign: 'center',
           border: (t) =>
             t.palette.mode === 'dark'
