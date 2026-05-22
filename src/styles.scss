@@ -79,6 +79,30 @@ body {
   --swiper-navigation-size: 24px;
 }
 
+img,
+svg {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes gameComboFlash {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes gameHeroPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(234, 43, 6, 0.45);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 12px rgba(234, 43, 6, 0);
+  }
+}
+
 html {
   margin: 0;
   padding: 0;
