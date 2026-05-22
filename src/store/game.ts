@@ -41,7 +41,7 @@ interface GameStore {
   actions: {
     toggleGameMode(this: void): void
     setGameMode(this: void, on: boolean): void
-    recordHit(this: void, kind: ItemKind, points: number, isCombo: boolean): void
+    recordHit(this: void, kind: ItemKind, points: number, nextCombo: number): void
     endSession(this: void): void
     resetSession(this: void): void
     clearScores(this: void): void
@@ -88,21 +88,15 @@ const useStore = create<GameStore>()(
               get().actions.endSession()
             }
           },
-          recordHit: (kind, points, isCombo) => {
-            set((state) => {
-              const newCombo = isCombo ? state.currentCombo + 1 : 1
-              const newScore = state.currentScore + points
-              const newHits = { ...state.currentHits, [kind]: state.currentHits[kind] + 1 }
-              const maxCombo = Math.max(state.currentMaxCombo, newCombo)
-              return {
-                currentScore: newScore,
-                currentCombo: newCombo,
-                currentMaxCombo: maxCombo,
-                currentHits: newHits,
-                lastHitAt: Date.now(),
-                sessionStartedAt: state.sessionStartedAt ?? Date.now(),
-              }
-            })
+          recordHit: (kind, points, nextCombo) => {
+            set((state) => ({
+              currentScore: state.currentScore + points,
+              currentCombo: nextCombo,
+              currentMaxCombo: Math.max(state.currentMaxCombo, nextCombo),
+              currentHits: { ...state.currentHits, [kind]: state.currentHits[kind] + 1 },
+              lastHitAt: Date.now(),
+              sessionStartedAt: state.sessionStartedAt ?? Date.now(),
+            }))
           },
           endSession: () => {
             const state = get()

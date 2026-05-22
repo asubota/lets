@@ -128,11 +128,29 @@ const buildSpawn = (id: number, w: number, h: number): SpawnData => {
 let spawnSeq = 1
 let popupSeq = 1
 
+// MUI sets `MuiModal-open` on document.body while any Modal/Dialog is open.
+// Watch the body class once via MutationObserver instead of querying on each spawn.
+let modalOpenCached = false
+let modalObserver: MutationObserver | null = null
+
+const ensureModalWatcher = () => {
+  if (modalObserver !== null || typeof document === 'undefined') {
+    return
+  }
+  const refresh = () => {
+    modalOpenCached = document.body.classList.contains('MuiModal-open')
+  }
+  refresh()
+  modalObserver = new MutationObserver(refresh)
+  modalObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['class'],
+  })
+}
+
 const isModalOpen = (): boolean => {
-  return (
-    document.body.classList.contains('MuiModal-open')
-    || document.querySelector('.MuiModal-root .MuiBackdrop-root') !== null
-  )
+  ensureModalWatcher()
+  return modalOpenCached
 }
 
 type InnerProps = {
@@ -169,12 +187,11 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
     (kind: ItemKind, id: number, x: number, y: number) => {
       const cfg = ITEM_KINDS[kind]
       const snap = getGameSnapshot()
-      const now = Date.now()
-      const isCombo = now - snap.lastHitAt <= COMBO_WINDOW_MS
+      const isCombo = Date.now() - snap.lastHitAt <= COMBO_WINDOW_MS
       const nextCombo = isCombo ? snap.currentCombo + 1 : 1
       const mult = getMultiplier(nextCombo)
       const points = Math.round(cfg.points * mult)
-      recordHit(kind, points, isCombo)
+      recordHit(kind, points, nextCombo)
       playHit(kind)
       let comboLevel: 0 | 2 | 3 = 0
       if (nextCombo >= COMBO_MULT_THRESHOLD_2X) {
@@ -213,7 +230,7 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
     }
 
     const trySpawn = () => {
-      if (isModalOpen()) {
+      if (document.hidden || isModalOpen()) {
         return
       }
       const { w, h } = sizeRef.current
@@ -265,6 +282,21 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
   }, [settings.musicEnabled])
 
   useEffect(() => {
+    const onVisibility = () => {
+      if (document.hidden) {
+        // Drop in-flight items so they don't "teleport" or expire en masse on resume.
+        setItems([])
+        // Pause music so AudioContext doesn't fire a burst of queued notes when it resumes.
+        stopMusic()
+      } else if (settings.musicEnabled) {
+        startMusic()
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [settings.musicEnabled])
+
+  useEffect(() => {
     return () => {
       stopMusic()
     }
@@ -272,9 +304,6 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
 
   return (
     <>
-      <style>
-        {`@keyframes gamePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }`}
-      </style>
       <div
         style={{
           position: 'fixed',

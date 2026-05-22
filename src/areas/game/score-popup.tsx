@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export type ScorePopupData = {
   id: number
@@ -14,15 +14,20 @@ type Props = ScorePopupData & {
 
 export const ScorePopup = ({ id, x, y, text, color, onDone }: Props) => {
   const [mounted, setMounted] = useState(false)
+  const onDoneRef = useRef(onDone)
+
+  useEffect(() => {
+    onDoneRef.current = onDone
+  })
 
   useEffect(() => {
     const r = requestAnimationFrame(() => setMounted(true))
-    const t = setTimeout(() => onDone(id), 700)
+    const t = setTimeout(() => onDoneRef.current(id), 700)
     return () => {
       cancelAnimationFrame(r)
       clearTimeout(t)
     }
-  }, [id, onDone])
+  }, [id])
 
   return (
     <div
