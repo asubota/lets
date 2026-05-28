@@ -62,15 +62,6 @@ File-based via `@tanstack/router-plugin/vite`. Routes live in `src/routes/`; `sr
 - MUI v7 with a custom theme in `src/theme-mode-provider.tsx` (Outfit/Inter font, primary `#ea2b06`, rounded shape, light/dark). Theme is toggled via the `setTheme` action and also toggles a `light`/`dark` class on `#root` for SCSS to hook into.
 - SCSS via `sass-embedded` (`api: 'modern-compiler'`).
 
-### Lint rules worth knowing
-
-`eslint.config.js` enforces several non-default rules — match them before opening PRs:
-
-- `@typescript-eslint/no-explicit-any: error` — no `any`.
-- `React.FC` / `FC` / `React.FunctionComponent` are banned via `no-restricted-types` (write `const X = (props: Props) => …`).
-- `react-compiler/react-compiler: error` — React Compiler is enabled via Babel plugin in `vite.config.ts`; avoid breaking memoization assumptions (mutating refs/objects passed as props, etc.).
-- `import/order` is strict: groups are `builtin / external / internal / parent-sibling-index / object / type`, alphabetized, `newlines-between: always`, and `react` is forced to the top of `external`. Run lint before committing — manual reordering is tedious.
-- `consistent-type-imports` with inline style: write `import { type Foo } from './x'`, not separate `import type` statements.
 
 ### Build output details
 
