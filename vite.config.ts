@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 
+import babel from '@rolldown/plugin-babel'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
@@ -12,7 +13,6 @@ import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin'
 const base = '/lets/'
 const pemFilesExist = fs.existsSync('localhost+2-key.pem') && fs.existsSync('localhost+2.pem')
 const swFile = 'sw-custom.ts'
-const ReactCompilerConfig = {}
 
 const domains = [
   'velogo',
@@ -33,33 +33,36 @@ const imageRegex = new RegExp(imageRegexString, 'i')
 
 export default defineConfig({
   base,
-  css: {
-    preprocessorOptions: {
-      scss: {},
-    },
-  },
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-          swiper: ['swiper'],
-
-          html2canvas: ['html2canvas'],
-          popper: ['@popperjs/core'],
-          tanstack: ['@tanstack/react-router', '@tanstack/react-query'],
-          mui: ['@mui/material'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'react'
+          }
+          if (id.includes('node_modules/swiper/')) {
+            return 'swiper'
+          }
+          if (id.includes('node_modules/html2canvas/')) {
+            return 'html2canvas'
+          }
+          if (id.includes('node_modules/@popperjs/')) {
+            return 'popper'
+          }
+          if (id.includes('node_modules/@tanstack/react-router') || id.includes('node_modules/@tanstack/react-query')) {
+            return 'tanstack'
+          }
+          if (id.includes('node_modules/@mui/material')) {
+            return 'mui'
+          }
         },
       },
     },
   },
   plugins: [
     tanstackRouter({ target: 'react' }),
-    react({
-      babel: {
-        plugins: [['babel-plugin-react-compiler', ReactCompilerConfig]],
-      },
-    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     svgr(),
     ...(pemFilesExist ? [] : [basicSsl()]),
     VitePWA({
