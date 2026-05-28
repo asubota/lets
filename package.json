@@ -10,7 +10,7 @@
     "deploy": "gh-pages -d dist",
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
     "lint": "eslint",
     "preview": "vite preview"
   },

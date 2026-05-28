@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -10,6 +10,7 @@ import svgr from 'vite-plugin-svgr'
 import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin'
 
 const base = '/lets/'
+const pemFilesExist = fs.existsSync('localhost+2-key.pem') && fs.existsSync('localhost+2.pem')
 const swFile = 'sw-custom.ts'
 const ReactCompilerConfig = {}
 
@@ -34,7 +35,7 @@ export default defineConfig({
   base,
   css: {
     preprocessorOptions: {
-      scss: { api: 'modern-compiler' },
+      scss: {},
     },
   },
   build: {
@@ -53,14 +54,14 @@ export default defineConfig({
     },
   },
   plugins: [
-    TanStackRouterVite({ target: 'react' }),
+    tanstackRouter({ target: 'react' }),
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler', ReactCompilerConfig]],
       },
     }),
     svgr(),
-    // basicSsl(),
+    ...(pemFilesExist ? [] : [basicSsl()]),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
@@ -148,9 +149,11 @@ export default defineConfig({
   },
   server: {
     port: 8000,
-    https: {
-      key: fs.readFileSync('localhost+2-key.pem'),
-      cert: fs.readFileSync('localhost+2.pem'),
-    },
+    ...(pemFilesExist && {
+      https: {
+        key: fs.readFileSync('localhost+2-key.pem'),
+        cert: fs.readFileSync('localhost+2.pem'),
+      },
+    }),
   },
 })
