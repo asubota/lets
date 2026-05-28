@@ -1,1 +1,0 @@
-import{k as h}from"./tanstack-DkaK4id_.js";import{a8 as o}from"./mui-C9Y54WGr.js";const a=o(h.jsx("path",{d:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"})),c=o(h.jsx("path",{d:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"}));export{a as A,c as D};
