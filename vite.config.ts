@@ -8,7 +8,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 
-import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin'
+import { CompileTsServiceWorker } from './compile-service-workers-ts.plugin.ts'
 
 const base = '/lets/'
 const pemFilesExist = fs.existsSync('localhost+2-key.pem') && fs.existsSync('localhost+2.pem')
