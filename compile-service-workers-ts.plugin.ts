@@ -12,8 +12,7 @@ async function compileServiceWorker() {
     plugins: [
       rollupPluginTypescript({
         compilerOptions: {
-          allowImportingTsExtensions: true,
-          noEmit: true,
+          rewriteRelativeImportExtensions: true,
         },
       }),
       nodeResolve(),
