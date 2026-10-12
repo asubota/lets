@@ -11,75 +11,70 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CartRouteImport } from './routes/cart'
-import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as LayoutListRouteImport } from './routes/_layout/list'
 
-const StatsLazyRouteImport = createFileRoute('/stats')()
-const NotificationsLazyRouteImport = createFileRoute('/notifications')()
-const GameLazyRouteImport = createFileRoute('/game')()
-const ColorsLazyRouteImport = createFileRoute('/colors')()
 const CheckEngineLazyRouteImport = createFileRoute('/check-engine')()
-const CartServiceLazyRouteImport = createFileRoute('/cart/service')()
+const ColorsLazyRouteImport = createFileRoute('/colors')()
+const GameLazyRouteImport = createFileRoute('/game')()
+const NotificationsLazyRouteImport = createFileRoute('/notifications')()
+const StatsLazyRouteImport = createFileRoute('/stats')()
 const LayoutFavoritesLazyRouteImport = createFileRoute('/_layout/favorites')()
-const LayoutListIdPercentsLazyRouteImport = createFileRoute(
-  '/_layout/list/$id/percents',
-)()
-const LayoutListIdDetailsLazyRouteImport = createFileRoute(
-  '/_layout/list/$id/details',
+const CartServiceLazyRouteImport = createFileRoute('/cart/service')()
+const LayoutFavoritesFavoriteIdNotesLazyRouteImport = createFileRoute(
+  '/_layout/favorites/$favoriteId/notes',
 )()
 const LayoutFavoritesIdDetailsLazyRouteImport = createFileRoute(
   '/_layout/favorites/$id/details',
 )()
-const LayoutFavoritesFavoriteIdNotesLazyRouteImport = createFileRoute(
-  '/_layout/favorites/$favoriteId/notes',
+const LayoutListIdDetailsLazyRouteImport = createFileRoute(
+  '/_layout/list/$id/details',
+)()
+const LayoutListIdPercentsLazyRouteImport = createFileRoute(
+  '/_layout/list/$id/percents',
 )()
 
-const StatsLazyRoute = StatsLazyRouteImport.update({
-  id: '/stats',
-  path: '/stats',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/stats.lazy').then((d) => d.Route))
-const NotificationsLazyRoute = NotificationsLazyRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
-const GameLazyRoute = GameLazyRouteImport.update({
-  id: '/game',
-  path: '/game',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/game.lazy').then((d) => d.Route))
-const ColorsLazyRoute = ColorsLazyRouteImport.update({
-  id: '/colors',
-  path: '/colors',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/colors.lazy').then((d) => d.Route))
-const CheckEngineLazyRoute = CheckEngineLazyRouteImport.update({
-  id: '/check-engine',
-  path: '/check-engine',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/check-engine.lazy').then((d) => d.Route))
-const CartRoute = CartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/cart.lazy').then((d) => d.Route))
-const LayoutRoute = LayoutRouteImport.update({
-  id: '/_layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CartServiceLazyRoute = CartServiceLazyRouteImport.update({
-  id: '/service',
-  path: '/service',
-  getParentRoute: () => CartRoute,
-} as any).lazy(() => import('./routes/cart.service.lazy').then((d) => d.Route))
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/cart.lazy').then((d) => d.Route))
+const CheckEngineLazyRoute = CheckEngineLazyRouteImport.update({
+  id: '/check-engine',
+  path: '/check-engine',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/check-engine.lazy').then((d) => d.Route))
+const ColorsLazyRoute = ColorsLazyRouteImport.update({
+  id: '/colors',
+  path: '/colors',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/colors.lazy').then((d) => d.Route))
+const GameLazyRoute = GameLazyRouteImport.update({
+  id: '/game',
+  path: '/game',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/game.lazy').then((d) => d.Route))
+const NotificationsLazyRoute = NotificationsLazyRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
+const StatsLazyRoute = StatsLazyRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/stats.lazy').then((d) => d.Route))
 const LayoutFavoritesLazyRoute = LayoutFavoritesLazyRouteImport.update({
   id: '/favorites',
   path: '/favorites',
@@ -92,29 +87,11 @@ const LayoutListRoute = LayoutListRouteImport.update({
   path: '/list',
   getParentRoute: () => LayoutRoute,
 } as any).lazy(() => import('./routes/_layout/list.lazy').then((d) => d.Route))
-const LayoutListIdPercentsLazyRoute =
-  LayoutListIdPercentsLazyRouteImport.update({
-    id: '/$id/percents',
-    path: '/$id/percents',
-    getParentRoute: () => LayoutListRoute,
-  } as any).lazy(() =>
-    import('./routes/_layout/list.$id.percents.lazy').then((d) => d.Route),
-  )
-const LayoutListIdDetailsLazyRoute = LayoutListIdDetailsLazyRouteImport.update({
-  id: '/$id/details',
-  path: '/$id/details',
-  getParentRoute: () => LayoutListRoute,
-} as any).lazy(() =>
-  import('./routes/_layout/list.$id.details.lazy').then((d) => d.Route),
-)
-const LayoutFavoritesIdDetailsLazyRoute =
-  LayoutFavoritesIdDetailsLazyRouteImport.update({
-    id: '/$id/details',
-    path: '/$id/details',
-    getParentRoute: () => LayoutFavoritesLazyRoute,
-  } as any).lazy(() =>
-    import('./routes/_layout/favorites.$id.details.lazy').then((d) => d.Route),
-  )
+const CartServiceLazyRoute = CartServiceLazyRouteImport.update({
+  id: '/service',
+  path: '/service',
+  getParentRoute: () => CartRoute,
+} as any).lazy(() => import('./routes/cart.service.lazy').then((d) => d.Route))
 const LayoutFavoritesFavoriteIdNotesLazyRoute =
   LayoutFavoritesFavoriteIdNotesLazyRouteImport.update({
     id: '/$favoriteId/notes',
@@ -124,6 +101,29 @@ const LayoutFavoritesFavoriteIdNotesLazyRoute =
     import('./routes/_layout/favorites.$favoriteId.notes.lazy').then(
       (d) => d.Route,
     ),
+  )
+const LayoutFavoritesIdDetailsLazyRoute =
+  LayoutFavoritesIdDetailsLazyRouteImport.update({
+    id: '/$id/details',
+    path: '/$id/details',
+    getParentRoute: () => LayoutFavoritesLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/favorites.$id.details.lazy').then((d) => d.Route),
+  )
+const LayoutListIdDetailsLazyRoute = LayoutListIdDetailsLazyRouteImport.update({
+  id: '/$id/details',
+  path: '/$id/details',
+  getParentRoute: () => LayoutListRoute,
+} as any).lazy(() =>
+  import('./routes/_layout/list.$id.details.lazy').then((d) => d.Route),
+)
+const LayoutListIdPercentsLazyRoute =
+  LayoutListIdPercentsLazyRouteImport.update({
+    id: '/$id/percents',
+    path: '/$id/percents',
+    getParentRoute: () => LayoutListRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/list.$id.percents.lazy').then((d) => d.Route),
   )
 
 export interface FileRoutesByFullPath {
@@ -241,46 +241,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/stats': {
-      id: '/stats'
-      path: '/stats'
-      fullPath: '/stats'
-      preLoaderRoute: typeof StatsLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/game': {
-      id: '/game'
-      path: '/game'
-      fullPath: '/game'
-      preLoaderRoute: typeof GameLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/colors': {
-      id: '/colors'
-      path: '/colors'
-      fullPath: '/colors'
-      preLoaderRoute: typeof ColorsLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/check-engine': {
-      id: '/check-engine'
-      path: '/check-engine'
-      fullPath: '/check-engine'
-      preLoaderRoute: typeof CheckEngineLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout': {
@@ -290,19 +255,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cart/service': {
-      id: '/cart/service'
-      path: '/service'
-      fullPath: '/cart/service'
-      preLoaderRoute: typeof CartServiceLazyRouteImport
-      parentRoute: typeof CartRoute
+    '/check-engine': {
+      id: '/check-engine'
+      path: '/check-engine'
+      fullPath: '/check-engine'
+      preLoaderRoute: typeof CheckEngineLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/colors': {
+      id: '/colors'
+      path: '/colors'
+      fullPath: '/colors'
+      preLoaderRoute: typeof ColorsLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsLazyRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_layout/favorites': {
       id: '/_layout/favorites'
@@ -318,19 +311,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutListRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/list/$id/percents': {
-      id: '/_layout/list/$id/percents'
-      path: '/$id/percents'
-      fullPath: '/list/$id/percents'
-      preLoaderRoute: typeof LayoutListIdPercentsLazyRouteImport
-      parentRoute: typeof LayoutListRoute
+    '/cart/service': {
+      id: '/cart/service'
+      path: '/service'
+      fullPath: '/cart/service'
+      preLoaderRoute: typeof CartServiceLazyRouteImport
+      parentRoute: typeof CartRoute
     }
-    '/_layout/list/$id/details': {
-      id: '/_layout/list/$id/details'
-      path: '/$id/details'
-      fullPath: '/list/$id/details'
-      preLoaderRoute: typeof LayoutListIdDetailsLazyRouteImport
-      parentRoute: typeof LayoutListRoute
+    '/_layout/favorites/$favoriteId/notes': {
+      id: '/_layout/favorites/$favoriteId/notes'
+      path: '/$favoriteId/notes'
+      fullPath: '/favorites/$favoriteId/notes'
+      preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesLazyRouteImport
+      parentRoute: typeof LayoutFavoritesLazyRoute
     }
     '/_layout/favorites/$id/details': {
       id: '/_layout/favorites/$id/details'
@@ -339,12 +332,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutFavoritesIdDetailsLazyRouteImport
       parentRoute: typeof LayoutFavoritesLazyRoute
     }
-    '/_layout/favorites/$favoriteId/notes': {
-      id: '/_layout/favorites/$favoriteId/notes'
-      path: '/$favoriteId/notes'
-      fullPath: '/favorites/$favoriteId/notes'
-      preLoaderRoute: typeof LayoutFavoritesFavoriteIdNotesLazyRouteImport
-      parentRoute: typeof LayoutFavoritesLazyRoute
+    '/_layout/list/$id/details': {
+      id: '/_layout/list/$id/details'
+      path: '/$id/details'
+      fullPath: '/list/$id/details'
+      preLoaderRoute: typeof LayoutListIdDetailsLazyRouteImport
+      parentRoute: typeof LayoutListRoute
+    }
+    '/_layout/list/$id/percents': {
+      id: '/_layout/list/$id/percents'
+      path: '/$id/percents'
+      fullPath: '/list/$id/percents'
+      preLoaderRoute: typeof LayoutListIdPercentsLazyRouteImport
+      parentRoute: typeof LayoutListRoute
     }
   }
 }

@@ -10,5 +10,5 @@ function RouteComponent() {
   const { id } = Route.useParams()
   const navigate = Route.useNavigate()
 
-  return <Details id={id} onClose={() => navigate({ to: '/favorites' })} />
+  return <Details id={id} onClose={() => navigate({ to: '/favorites', resetScroll: false })} />
 }
