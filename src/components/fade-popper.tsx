@@ -1,4 +1,4 @@
-import { type FC, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 
 import { Fade, Paper, Popper } from '@mui/material'
 
@@ -9,12 +9,7 @@ interface FadePopperProps {
   timeout?: number
 }
 
-export const FadePopper: FC<FadePopperProps> = ({
-  open,
-  anchorEl,
-  children,
-  timeout = 350,
-}) => {
+export const FadePopper = ({ open, anchorEl, children, timeout = 350 }: FadePopperProps) => {
   return (
     <Popper open={open} anchorEl={anchorEl} placement="bottom" transition>
       {({ TransitionProps }) => (

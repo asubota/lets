@@ -1,11 +1,9 @@
-import { type FC } from 'react'
-
 import ReorderIcon from '@mui/icons-material/Reorder'
 import { IconButton } from '@mui/material'
 
 import { useAppActions, useAppView } from '../../../store'
 
-export const SwitchToTableView: FC = () => {
+export const SwitchToTableView = () => {
   const view = useAppView()
   const { setView } = useAppActions()
 
@@ -22,7 +20,9 @@ export const SwitchToTableView: FC = () => {
         },
       }}
       title="Таблиця"
-      onClick={() => setView('table')}
+      onClick={() => {
+        setView('table')
+      }}
     >
       <ReorderIcon sx={{ fontSize: '20px' }} />
     </IconButton>

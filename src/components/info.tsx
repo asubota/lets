@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react'
+import { useState } from 'react'
 
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography'
 import { Box, Card, CircularProgress, Typography } from '@mui/material'
@@ -9,12 +9,9 @@ import { copyContent, getFavoriteId } from '../tools.tsx'
 import { type FavoriteProduct, type Product } from '../types.ts'
 import { RippleText } from './ripple-text.tsx'
 
-
 const LinkedImg = createLink('img')
 
-export const Info: FC<{
-  p: Product | FavoriteProduct
-}> = ({ p }) => {
+export const Info = ({ p }: { p: Product | FavoriteProduct }) => {
   const [imgIndex, setImgIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const pics = p.pics ?? []
@@ -24,13 +21,13 @@ export const Info: FC<{
     trackMouse: true,
     onSwipedLeft: () => {
       if (pics.length > 1) {
-        setImgIndex((prev) => (prev + 1) % pics.length)
+        setImgIndex((previous) => (previous + 1) % pics.length)
         setLoading(true)
       }
     },
     onSwipedRight: () => {
       if (pics.length > 1) {
-        setImgIndex((prev) => (prev - 1 + pics.length) % pics.length)
+        setImgIndex((previous) => (previous - 1 + pics.length) % pics.length)
         setLoading(true)
       }
     },
@@ -63,7 +60,9 @@ export const Info: FC<{
         {...swipeHandlers}
       >
         {loading && !showFallback && <CircularProgress size={20} />}
-        {!showFallback ? (
+        {showFallback ? (
+          <NoPhotographyIcon sx={{ fontSize: 36, color: 'secondary.main' }} />
+        ) : (
           <LinkedImg
             to="/list/$id/details"
             params={{ id: getFavoriteId(p) }}
@@ -75,11 +74,13 @@ export const Info: FC<{
               height: '100%',
               objectFit: 'cover',
             }}
-            onLoad={() => setLoading(false)}
-            onError={() => setLoading(false)}
+            onLoad={() => {
+              setLoading(false)
+            }}
+            onError={() => {
+              setLoading(false)
+            }}
           />
-        ) : (
-          <NoPhotographyIcon sx={{ fontSize: 36, color: 'secondary.main' }} />
         )}
       </Box>
 
@@ -91,8 +92,8 @@ export const Info: FC<{
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
           }}
-          onClick={async (e) => {
-            e.stopPropagation()
+          onClick={async (event) => {
+            event.stopPropagation()
             await copyContent(p.name)
           }}
         >
@@ -107,11 +108,7 @@ export const Info: FC<{
             justifyContent: 'space-between',
           }}
         >
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ fontSize: 12, color: 'text.primary' }}
-          >
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: 12, color: 'text.primary' }}>
             {p.price} грн
           </Typography>
 
@@ -119,8 +116,8 @@ export const Info: FC<{
             variant="caption"
             color="text.secondary"
             sx={{ fontSize: 12 }}
-            onClick={async (e) => {
-              e.stopPropagation()
+            onClick={async (event) => {
+              event.stopPropagation()
               await copyContent(p.sku)
             }}
           >

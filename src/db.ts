@@ -6,70 +6,80 @@ const PRODUCTS_STORE = 'products'
 const META_STORE = 'metadata'
 
 // Singleton promise — prevents multiple concurrent openDB calls
-let dbPromise: Promise<IDBDatabase> | null = null
+let databasePromise: Promise<IDBDatabase> | null = null
 
 function openDB(): Promise<IDBDatabase> {
-  if (dbPromise) {
-    return dbPromise
+  if (databasePromise) {
+    return databasePromise
   }
 
-  dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
+  databasePromise = new Promise<IDBDatabase>((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION)
 
     request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result
+      const database = (event.target as IDBOpenDBRequest).result
       const tx = (event.target as IDBOpenDBRequest).transaction
 
-      if (db.objectStoreNames.contains(PRODUCTS_STORE)) {
-        db.deleteObjectStore(PRODUCTS_STORE)
+      if (database.objectStoreNames.contains(PRODUCTS_STORE)) {
+        database.deleteObjectStore(PRODUCTS_STORE)
       }
-      db.createObjectStore(PRODUCTS_STORE, { keyPath: 'id' })
-      
-      if (!db.objectStoreNames.contains(META_STORE)) {
-        db.createObjectStore(META_STORE, { keyPath: 'key' })
+      database.createObjectStore(PRODUCTS_STORE, { keyPath: 'id' })
+
+      if (!database.objectStoreNames.contains(META_STORE)) {
+        database.createObjectStore(META_STORE, { keyPath: 'key' })
       } else if (tx) {
         tx.objectStore(META_STORE).delete('last-sync')
       }
     }
 
     request.onsuccess = () => {
-      const db = request.result
-      db.onversionchange = () => {
-        db.close()
-        dbPromise = null
+      const database = request.result
+      database.onversionchange = () => {
+        database.close()
+        databasePromise = null
       }
-      resolve(db)
+      resolve(database)
     }
 
-    request.onblocked = () => console.warn('[DB] Blocked by another tab')
-    request.onerror = () => {
-      dbPromise = null
-      reject(request.error)
+    request.onblocked = () => {
+      console.warn('[DB] Blocked by another tab')
     }
+    request.addEventListener('error', () => {
+      databasePromise = null
+      reject(request.error ?? new Error('[DB] Failed to open'))
+    })
   })
 
-  return dbPromise
+  return databasePromise
 }
 
 function tx(
-  db: IDBDatabase,
+  database: IDBDatabase,
   stores: string | string[],
   mode: 'readonly' | 'readwrite' | 'versionchange',
 ): IDBTransaction {
-  return db.transaction(stores, mode)
+  return database.transaction(stores, mode)
 }
 
-function run<T>(req: IDBRequest<T>): Promise<T> {
+function run<T>(req: IDBRequest): Promise<T> {
   return new Promise((resolve, reject) => {
-    req.onsuccess = () => resolve(req.result)
-    req.onerror = () => reject(req.error)
+    req.onsuccess = () => {
+      resolve(req.result as T)
+    }
+    req.addEventListener('error', () => {
+      reject(req.error ?? new Error('[DB] Request failed'))
+    })
   })
 }
 
 function runTx(transaction: IDBTransaction): Promise<void> {
   return new Promise((resolve, reject) => {
-    transaction.oncomplete = () => resolve()
-    transaction.onerror = () => reject(transaction.error)
+    transaction.oncomplete = () => {
+      resolve()
+    }
+    transaction.addEventListener('error', () => {
+      reject(transaction.error ?? new Error('[DB] Transaction failed'))
+    })
   })
 }
 
@@ -78,16 +88,16 @@ export const db = {
     const idb = await openDB()
     const transaction = tx(idb, PRODUCTS_STORE, 'readwrite')
     const store = transaction.objectStore(PRODUCTS_STORE)
-    products.forEach((p) => {
+    for (const p of products) {
       const vendorPrefix = p.vendor === 'base' ? '0' : '1'
       store.put({ ...p, id: `${vendorPrefix}-${p.sku}-${p.vendor}` })
-    })
+    }
     return runTx(transaction)
   },
 
   async getAllProducts(): Promise<Product[]> {
     const idb = await openDB()
-    return run(tx(idb, PRODUCTS_STORE, 'readonly').objectStore(PRODUCTS_STORE).getAll())
+    return run<Product[]>(tx(idb, PRODUCTS_STORE, 'readonly').objectStore(PRODUCTS_STORE).getAll())
   },
 
   async setSyncMetadata(data: { time: number; total: number }): Promise<void> {
@@ -99,7 +109,10 @@ export const db = {
 
   async getSyncMetadata(): Promise<{ key: 'last-sync'; time: number; total: number } | null> {
     const idb = await openDB()
-    return run(tx(idb, META_STORE, 'readonly').objectStore(META_STORE).get('last-sync'))
+    const record = await run<{ key: 'last-sync'; time: number; total: number } | undefined>(
+      tx(idb, META_STORE, 'readonly').objectStore(META_STORE).get('last-sync'),
+    )
+    return record ?? null
   },
 
   async setConfig(key: string, value: string): Promise<void> {

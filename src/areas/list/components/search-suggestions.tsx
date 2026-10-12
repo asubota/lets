@@ -1,5 +1,3 @@
-import { type FC } from 'react'
-
 import { List, ListItem, ListItemText } from '@mui/material'
 
 import { FadePopper } from '../../../components/fade-popper.tsx'
@@ -9,18 +7,18 @@ import { getHighlightedText } from '../../../tools.tsx'
 interface SearchSuggestionsProps {
   open: boolean
   search: string
-  setValue(value: string): void
+  setValue: (value: string) => void
 }
 
-export const SearchSuggestions: FC<SearchSuggestionsProps> = ({ search, setValue, open }) => {
+export const SearchSuggestions = ({ search, setValue, open }: SearchSuggestionsProps) => {
   const list = useSearch(search).slice(0, 12)
-  const anchorEl = document.querySelector('.app-bar')
+  const anchorElement = document.querySelector('.app-bar')
 
   return (
-    <FadePopper anchorEl={anchorEl} open={open}>
+    <FadePopper anchorEl={anchorElement} open={open}>
       <List
         sx={{
-          width: anchorEl?.clientWidth,
+          width: anchorElement?.clientWidth,
           pt: 0,
           pb: 0,
           maxHeight: '380px',
@@ -28,7 +26,14 @@ export const SearchSuggestions: FC<SearchSuggestionsProps> = ({ search, setValue
         }}
       >
         {list.map((p) => (
-          <ListItem divider key={p.sku + p.vendor} sx={{ pt: 0, pb: 0 }} onClick={() => setValue(p.sku)}>
+          <ListItem
+            divider
+            key={p.sku + p.vendor}
+            sx={{ pt: 0, pb: 0 }}
+            onClick={() => {
+              setValue(p.sku)
+            }}
+          >
             <ListItemText
               sx={{
                 display: 'flex',

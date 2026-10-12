@@ -27,8 +27,9 @@ const domains = [
   'sport-device',
 ]
 
-const escapedDomains = domains.map((d) => d.replace(/\./g, '\\.'))
+const escapedDomains = domains.map((d) => d.replaceAll('.', String.raw`\.`))
 const imageRegexString = `https?.+(?:${escapedDomains.join('|')}).+(?:webp|png|jpe?g)$`
+// eslint-disable-next-line security/detect-non-literal-regexp -- built from escaped, hardcoded domains
 const imageRegex = new RegExp(imageRegexString, 'i')
 
 export default defineConfig({
@@ -55,6 +56,7 @@ export default defineConfig({
           if (id.includes('node_modules/@mui/material')) {
             return 'mui'
           }
+          return null
         },
       },
     },

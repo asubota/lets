@@ -1,10 +1,10 @@
-import { type FC, useState } from 'react'
+import { useState } from 'react'
 
 import { Box } from '@mui/material'
 import { Pagination, Thumbs, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-import type { Swiper as SwiperClass } from 'swiper/types'
+import type SwiperClass from 'swiper'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -12,11 +12,11 @@ import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 
 const getSlides = (pics: string[], title: string) => {
-  return pics.map((src) => (
-    <SwiperSlide key={src}>
+  return pics.map((source) => (
+    <SwiperSlide key={source}>
       <Box
         component="img"
-        src={src}
+        src={source}
         alt={title}
         title={title}
         sx={{
@@ -24,8 +24,8 @@ const getSlides = (pics: string[], title: string) => {
           maxHeight: '75vh',
           objectFit: 'contain',
         }}
-        onError={(e) => {
-          const target = e.target as HTMLImageElement
+        onError={(event) => {
+          const target = event.target as HTMLImageElement
           target.src = '/lets/logo.webp'
         }}
       />
@@ -33,11 +33,15 @@ const getSlides = (pics: string[], title: string) => {
   ))
 }
 
-export const ImageSlider: FC<{
+export const ImageSlider = ({
+  pics,
+  title,
+  isFullScreen,
+}: {
   pics: string[]
   title: string
   isFullScreen: boolean
-}> = ({ pics, title, isFullScreen }) => {
+}) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null)
 
   if (!isFullScreen) {
@@ -57,7 +61,7 @@ export const ImageSlider: FC<{
 
   return (
     <>
-      {((thumbsSwiper && !thumbsSwiper.destroyed) || pics.length === 1) && (
+      {((thumbsSwiper !== null && !thumbsSwiper.destroyed) || pics.length === 1) && (
         <Swiper
           className="swiper-main"
           modules={[Thumbs, Navigation]}

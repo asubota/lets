@@ -12,20 +12,20 @@ const getQueryKey = (): [string] => {
 export const useToggleFavorite = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<void, unknown, { favoriteId: string; isFavorite: boolean }, { list: FavoriteItem[] }>({
+  return useMutation<unknown, unknown, { favoriteId: string; isFavorite: boolean }, { list: FavoriteItem[] }>({
     async onSettled() {
-      return await queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [CACHE_FAVORITE_KEY],
       })
     },
     onMutate: async ({ favoriteId, isFavorite }) => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
-      const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) || []
+      const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) ?? []
 
       if (isFavorite) {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) => [
-          ...(old || []),
-          { favoriteId, time: +new Date(), read: false },
+          ...(old ?? []),
+          { favoriteId, time: Date.now(), read: false },
         ])
       } else {
         queryClient.setQueryData<FavoriteItem[]>(getQueryKey(), (old) =>
@@ -47,11 +47,11 @@ export const useToggleFavorite = () => {
   })
 }
 
-export const useSetPropOnFavorite = () => {
+export const useSetPropertyOnFavorite = () => {
   const queryClient = useQueryClient()
 
   return useMutation<
-    void,
+    unknown,
     unknown,
     {
       favoriteId: string
@@ -63,23 +63,23 @@ export const useSetPropOnFavorite = () => {
     { list: FavoriteItem[] }
   >({
     async onSettled() {
-      return await queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [CACHE_FAVORITE_KEY],
       })
     },
     onMutate: async ({ favoriteId, max, min, note, read }) => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
-      const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) || []
+      const list = queryClient.getQueryData<FavoriteItem[]>(getQueryKey()) ?? []
       const updatedList = list.map((item) => {
-        return item.favoriteId !== favoriteId
-          ? item
-          : {
+        return item.favoriteId === favoriteId
+          ? {
               ...item,
-              max: max !== undefined ? max : item.max,
-              min: min !== undefined ? min : item.min,
-              note: note !== undefined ? note : item.note,
-              read: read !== undefined ? read : item.read,
+              max: max ?? item.max,
+              min: min ?? item.min,
+              note: note ?? item.note,
+              read: read ?? item.read,
             }
+          : item
       })
 
       queryClient.setQueryData(getQueryKey(), updatedList)
@@ -100,12 +100,12 @@ export const useSetPropOnFavorite = () => {
       }
 
       if (min !== undefined) {
-        updates.min = parseInt(min, 10)
+        updates.min = Number.parseInt(min, 10)
         updates.read = false
       }
 
       if (max !== undefined) {
-        updates.max = parseInt(max, 10)
+        updates.max = Number.parseInt(max, 10)
         updates.read = false
       }
 
@@ -132,17 +132,13 @@ export const useGetFavorites = () => {
   })
 }
 
-export const useGetPropFromFavorite = <T extends keyof FavoriteItem>(
+export const useGetPropertyFromFavorite = <T extends keyof FavoriteItem>(
   favoriteId: string,
-  prop: T,
+  property: T,
 ): FavoriteItem[T] | undefined => {
   const { data = [] } = useGetFavorites()
 
-  const favoriteItem = data.find((item) => item.favoriteId === favoriteId)
-
-  if (favoriteItem) {
-    return favoriteItem[prop]
-  }
+  return data.find((item) => item.favoriteId === favoriteId)?.[property]
 }
 
 export const useFavoriteIds = (): string[] => {

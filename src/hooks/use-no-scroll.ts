@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 export const useNoScroll = () => {
   useEffect(() => {
-    const root = document.getElementById('root')
+    const root = document.querySelector('#root')
 
     document.body.classList.add('no-scroll')
     root?.classList.add('no-root')

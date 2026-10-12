@@ -10,8 +10,8 @@ import { type SearchForm } from '../../../types.ts'
 import { useIsLoading } from '../../../use-data.ts'
 
 interface SearchFieldProps {
-  onSubmit(): void
-  onFocus(): void
+  onSubmit: () => void
+  onFocus: () => void
 }
 
 export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
@@ -23,8 +23,8 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
     onSubmit()
   }
 
-  const handleKeyUp: KeyboardEventHandler = (e) => {
-    if (e.key === 'Escape') {
+  const handleKeyUp: KeyboardEventHandler = (event) => {
+    if (event.key === 'Escape') {
       reset({ input: '' })
     }
   }
@@ -41,21 +41,15 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
                 'height': '40px',
                 'borderRadius': '12px',
                 'backgroundColor': (theme) =>
-                  theme.palette.mode === 'dark'
-                    ? 'rgba(255,255,255,0.05)'
-                    : 'rgba(0,0,0,0.03)',
+                  theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
                 '& fieldset': { border: 'none' },
                 '&:hover': {
                   backgroundColor: (theme) =>
-                    theme.palette.mode === 'dark'
-                      ? 'rgba(255,255,255,0.08)'
-                      : 'rgba(0,0,0,0.05)',
+                    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)',
                 },
                 '&.Mui-focused': {
                   backgroundColor: (theme) =>
-                    theme.palette.mode === 'dark'
-                      ? 'rgba(255,255,255,0.1)'
-                      : 'rgba(0,0,0,0.07)',
+                    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.07)',
                 },
               },
               '& .MuiInputLabel-root': {
@@ -120,11 +114,7 @@ export const SearchField = ({ onSubmit, onFocus }: SearchFieldProps) => {
                         }}
                         className={clsx({ rotate: loading })}
                       >
-                        {loading ? (
-                          <LoopIcon sx={{ fontSize: '20px' }} />
-                        ) : (
-                          <Search sx={{ fontSize: '20px' }} />
-                        )}
+                        {loading ? <LoopIcon sx={{ fontSize: '20px' }} /> : <Search sx={{ fontSize: '20px' }} />}
                       </IconButton>
                     </Box>
                   </InputAdornment>

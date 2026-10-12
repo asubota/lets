@@ -6,7 +6,7 @@ export type ItemKind = 'common' | 'uncommon' | 'rare' | 'rocket'
 
 export type HitsByKind = Record<ItemKind, number>
 
-export type ScoreEntry = {
+export interface ScoreEntry {
   id: string
   startedAt: number
   endedAt: number
@@ -15,7 +15,7 @@ export type ScoreEntry = {
   bestCombo: number
 }
 
-export type GameSettings = {
+export interface GameSettings {
   soundEnabled: boolean
   hapticEnabled: boolean
   musicEnabled: boolean
@@ -39,13 +39,13 @@ interface GameStore {
   lastHitAt: number
 
   actions: {
-    toggleGameMode(this: void): void
-    setGameMode(this: void, on: boolean): void
-    recordHit(this: void, kind: ItemKind, points: number, nextCombo: number): void
-    endSession(this: void): void
-    resetSession(this: void): void
-    clearScores(this: void): void
-    updateSettings(this: void, patch: Partial<GameSettings>): void
+    toggleGameMode: (this: void) => void
+    setGameMode: (this: void, on: boolean) => void
+    recordHit: (this: void, kind: ItemKind, points: number, nextCombo: number) => void
+    endSession: (this: void) => void
+    resetSession: (this: void) => void
+    clearScores: (this: void) => void
+    updateSettings: (this: void, patch: Partial<GameSettings>) => void
   }
 }
 
@@ -140,8 +140,7 @@ const useStore = create<GameStore>()(
               lastHitAt: 0,
             }),
           clearScores: () => set({ scores: [] }),
-          updateSettings: (patch) =>
-            set((state) => ({ settings: { ...state.settings, ...patch } })),
+          updateSettings: (patch) => set((state) => ({ settings: { ...state.settings, ...patch } })),
         },
       }),
       {
@@ -158,7 +157,7 @@ const useStore = create<GameStore>()(
             ...p,
             settings: {
               ...current.settings,
-              ...(p.settings ?? {}),
+              ...p.settings,
             },
           }
         },

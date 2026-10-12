@@ -25,8 +25,8 @@ function isSameSet(setA: Set<string>, setB: Set<string>) {
     return false
   }
 
-  for (const val of setA) {
-    if (!setB.has(val)) {
+  for (const value of setA) {
+    if (!setB.has(value)) {
       return false
     }
   }
@@ -44,7 +44,7 @@ export const Service = () => {
   const navigate = useNavigate()
 
   const handleToggle = (sku: string) => () => {
-    const newValue = !checked.includes(sku) ? [...checked, sku] : checked.filter((v) => v !== sku)
+    const newValue = checked.includes(sku) ? checked.filter((v) => v !== sku) : [...checked, sku]
 
     setChecked(newValue)
   }
@@ -70,7 +70,7 @@ export const Service = () => {
             }
           }}
         >
-          {allPopularServices.sort(sortByPrice).map((product) => {
+          {allPopularServices.toSorted(sortByPrice).map((product) => {
             const labelId = `checkbox-list-label-${getFavoriteId(product)}`
 
             return (

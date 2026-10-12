@@ -9,19 +9,16 @@ export const useGetChangedProducts = (): Product[] => {
   const minmax = useGetMinMaxBySku()
 
   return useMemo(() => {
-    return data
-      .filter((p) => p.sku in minmax && !!p.stock)
-      .filter((p) => {
-        const stock = parseInt(p.stock || '', 10)
-        const min = minmax[p.sku].min
-        const max = minmax[p.sku].max
+    return data.filter((p) => {
+      const limits = minmax[p.sku]
+      if (!limits || !p.stock) {
+        return false
+      }
 
-        if (
-          (min !== undefined && stock <= min) ||
-          (max !== undefined && stock >= max)
-        ) {
-          return p
-        }
-      })
+      const stock = Number.parseInt(p.stock, 10)
+      const { min, max } = limits
+
+      return (min !== undefined && stock <= min) || (max !== undefined && stock >= max)
+    })
   }, [data, minmax])
 }

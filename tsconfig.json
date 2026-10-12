@@ -20,7 +20,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedSideEffectImports": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

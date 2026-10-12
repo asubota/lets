@@ -6,9 +6,9 @@ import { Controller, FormProvider, type SubmitHandler, useForm } from 'react-hoo
 
 import { Redirecto, SearchField, SearchHistory, SearchSuggestions } from './components'
 import { AppliedFiltersModal, TableSettingsModal } from '../../components'
-import { LoaderMini } from '../../components/loader-mini.tsx'
 import { ExtraViewOptions } from '../../components/extra-view-options.tsx'
-import Hyperspeed from '../../components/Hyperspeed/Hyperspeed.tsx'
+import Hyperspeed from '../../components/hyperspeed/hyperspeed.tsx'
+import { LoaderMini } from '../../components/loader-mini.tsx'
 import { ProductsSkeleton } from '../../components/products-skeleton.tsx'
 import { useSearch } from '../../search-tools.ts'
 import { useHistoryActions, useAppTheme } from '../../store'
@@ -56,7 +56,7 @@ export const List = () => {
 
       <Redirecto setValue={methods.setValue} setSearch={setSearch} />
 
-      <Portal container={() => document.getElementById('app-bar-center')}>
+      <Portal container={() => document.querySelector('#app-bar-center')}>
         <FormProvider {...methods}>
           <ClickAwayListener onClickAway={hideHints}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -78,7 +78,7 @@ export const List = () => {
                         setValue={(v: string) => {
                           hideHints()
                           onChange(v)
-                          methods.handleSubmit(onSubmit)()
+                          void methods.handleSubmit(onSubmit)()
                         }}
                       />
 
@@ -88,7 +88,7 @@ export const List = () => {
                         setValue={(v: string) => {
                           hideHints()
                           onChange(v)
-                          methods.handleSubmit(onSubmit)()
+                          void methods.handleSubmit(onSubmit)()
                         }}
                       />
                     </>

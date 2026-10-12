@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 import { Box } from '@mui/material'
 import { useSwipeable } from 'react-swipeable'
@@ -8,12 +8,16 @@ interface SwipeableItemProps {
   actions: ReactNode
 }
 
-const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+const isTouch = 'ontouchstart' in globalThis || navigator.maxTouchPoints > 0
 
-export const SwipeItem: FC<SwipeableItemProps> = ({ children, actions }) => {
+export const SwipeItem = ({ children, actions }: SwipeableItemProps) => {
   const [swiped, setSwiped] = useState(false)
-  const handleSwipeLeft = () => setSwiped(true)
-  const handleSwipeRight = () => setSwiped(false)
+  const handleSwipeLeft = () => {
+    setSwiped(true)
+  }
+  const handleSwipeRight = () => {
+    setSwiped(false)
+  }
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: handleSwipeLeft,
@@ -35,9 +39,9 @@ export const SwipeItem: FC<SwipeableItemProps> = ({ children, actions }) => {
     }
   }, [])
 
-  const refPassthrough = (el: HTMLLIElement) => {
-    swipeHandlers.ref(el)
-    ref.current = el
+  const refPassthrough = (element: HTMLLIElement) => {
+    swipeHandlers.ref(element)
+    ref.current = element
   }
 
   return (

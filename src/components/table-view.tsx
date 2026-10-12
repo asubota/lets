@@ -1,16 +1,7 @@
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material'
 
 import { useTableColumns } from '../store'
-import { useAppliedFiltersActions, useSortConfig } from '../store/appliedFilters.ts'
+import { useAppliedFiltersActions, useSortConfig } from '../store/applied-filters.ts'
 import { copyContent, getFavoriteId, getHighlightedText } from '../tools.tsx'
 import { type Product } from '../types.ts'
 import { AllColumnsAreDisabled } from './all-columns-are-disabled.tsx'
@@ -31,20 +22,31 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
   }
 
   return (
-    <TableContainer 
+    <TableContainer
       className="glass-panel"
-      sx={{ 
+      sx={{
         borderRadius: '24px',
         border: 'none',
-        backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
-        boxShadow: (theme) => theme.palette.mode === 'dark' ? '0 8px 32px rgba(0,0,0,0.3)' : '0 4px 20px rgba(15, 23, 42, 0.05)',
+        backgroundColor: (theme) =>
+          theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
+        boxShadow: (theme) =>
+          theme.palette.mode === 'dark' ? '0 8px 32px rgba(0,0,0,0.3)' : '0 4px 20px rgba(15, 23, 42, 0.05)',
       }}
     >
       <Table size="small">
         <TableHead>
           <TableRow>
             {columns.includes('sku') && (
-              <TableCell sx={{ pl: 2, py: 2, fontFamily: '"Outfit", sans-serif', fontWeight: 800, fontSize: '13px', color: 'text.secondary' }}>
+              <TableCell
+                sx={{
+                  pl: 2,
+                  py: 2,
+                  fontFamily: '"Outfit", sans-serif',
+                  fontWeight: 800,
+                  fontSize: '13px',
+                  color: 'text.secondary',
+                }}
+              >
                 Код
               </TableCell>
             )}
@@ -70,7 +72,9 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
                 <TableSortLabel
                   active={field === 'name'}
                   direction={field === 'name' ? order : 'asc'}
-                  onClick={() => toggleSort('name')}
+                  onClick={() => {
+                    toggleSort('name')
+                  }}
                   sx={{
                     'fontFamily': '"Outfit", sans-serif',
                     'fontWeight': 800,
@@ -86,7 +90,17 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
               </TableCell>
             )}
             {columns.includes('vendor') && (
-              <TableCell sx={{ pr: 1, py: 2, fontFamily: '"Outfit", sans-serif', fontWeight: 800, fontSize: '13px', color: 'text.secondary' }} align="right">
+              <TableCell
+                sx={{
+                  pr: 1,
+                  py: 2,
+                  fontFamily: '"Outfit", sans-serif',
+                  fontWeight: 800,
+                  fontSize: '13px',
+                  color: 'text.secondary',
+                }}
+                align="right"
+              >
                 Барига
               </TableCell>
             )}
@@ -95,7 +109,9 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
                 <TableSortLabel
                   active={field === 'price'}
                   direction={field === 'price' ? order : 'asc'}
-                  onClick={() => toggleSort('price')}
+                  onClick={() => {
+                    toggleSort('price')
+                  }}
                   sx={{
                     'fontFamily': '"Outfit", sans-serif',
                     'fontWeight': 800,
@@ -119,53 +135,54 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
               key={getFavoriteId(row)}
               sx={{
                 'transition': 'background-color 0.2s',
-                '&:hover': { 
-                  backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)' 
+                '&:hover': {
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
                 },
                 '&:last-child td, &:last-child th': { border: 0 },
               }}
             >
               {columns.includes('sku') && (
                 <TableCell
-                  sx={{ 
-                    whiteSpace: 'nowrap', 
-                    pr: 0, 
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    pr: 0,
                     pl: 2,
                     fontFamily: '"Outfit", sans-serif',
                     fontWeight: 700,
                     fontSize: '11px',
-                    color: 'text.secondary'
+                    color: 'text.secondary',
                   }}
-                  onClick={async (e) => {
-                    e.stopPropagation()
+                  onClick={async (event) => {
+                    event.stopPropagation()
                     await copyContent(row.sku)
                   }}
                 >
-                  <RippleText text={getHighlightedText(row['sku'], search)} />
+                  <RippleText text={getHighlightedText(row.sku, search)} />
                 </TableCell>
               )}
 
               {columns.includes('stock') && (
                 <TableCell sx={{ pl: 1, pr: 1 }} align="center">
-                  <Stock stock={row['stock']} />
+                  <Stock stock={row.stock} />
                 </TableCell>
               )}
 
               {columns.includes('name') && (
                 <TableCell
-                  sx={{ 
+                  sx={{
                     pl: 1,
                     fontFamily: '"Outfit", sans-serif',
                     fontWeight: 600,
                     fontSize: '14px',
-                    lineHeight: 1.4
+                    lineHeight: 1.4,
                   }}
-                  onClick={async (e) => {
-                    e.stopPropagation()
+                  onClick={async (event) => {
+                    event.stopPropagation()
                     await copyContent(row.name)
                   }}
                 >
-                  <RippleText text={getHighlightedText(row['name'], search)} />
+                  <RippleText text={getHighlightedText(row.name, search)} />
                 </TableCell>
               )}
 
@@ -176,17 +193,17 @@ const TableView = ({ list, search }: { list: Product[]; search: string }) => {
               )}
 
               {columns.includes('price') && (
-                <TableCell 
-                  sx={{ 
-                    pl: 0, 
+                <TableCell
+                  sx={{
+                    pl: 0,
                     pr: 2,
                     fontFamily: '"Outfit", sans-serif',
                     fontWeight: 800,
-                    fontSize: '15px'
-                  }} 
+                    fontSize: '15px',
+                  }}
                   align="right"
                 >
-                  {row['price']}
+                  {row.price}
                 </TableCell>
               )}
             </TableRow>

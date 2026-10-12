@@ -1,4 +1,4 @@
-import { type FC, type MouseEventHandler, useState } from 'react'
+import { type MouseEventHandler, useState } from 'react'
 
 import ImageIcon from '@mui/icons-material/Image'
 import PercentIcon from '@mui/icons-material/Percent'
@@ -22,17 +22,23 @@ import { AddToCartButton } from './tile-add-to-cart.tsx'
 const LinkedButton = createLink(IconButton)
 const LinkedIcon = createLink(ImageIcon)
 
-export const Tile: FC<{
+export const Tile = ({
+  p,
+  search,
+  isFavorite,
+  isFavoritePage,
+  isChanged,
+}: {
   p: Product | FavoriteProduct
   search: string
   isFavorite: boolean
   isFavoritePage: boolean
   isChanged: boolean
-}> = ({ p, search, isFavorite, isFavoritePage, isChanged }) => {
+}) => {
   const [showSettings, setShowSettings] = useState(false)
 
-  const handleToggleSettings: MouseEventHandler = (e) => {
-    e.stopPropagation()
+  const handleToggleSettings: MouseEventHandler = (event) => {
+    event.stopPropagation()
     setShowSettings((value) => !value)
   }
 
@@ -40,7 +46,10 @@ export const Tile: FC<{
     <Card
       className="product-tile"
       sx={(theme) => ({
-        ...('missed' in p && p.missed && { backgroundColor: theme.palette.mode === 'dark' ? 'rgba(234, 43, 6, 0.08)' : 'rgba(234, 43, 6, 0.04)' }),
+        ...('missed' in p &&
+          p.missed && {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(234, 43, 6, 0.08)' : 'rgba(234, 43, 6, 0.04)',
+          }),
         'p': 1.5,
         'position': 'relative',
         'display': 'flex',
@@ -49,9 +58,10 @@ export const Tile: FC<{
         'cursor': 'default',
         'height': '100%',
         '&:hover': {
-          boxShadow: theme.palette.mode === 'dark' 
-            ? '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)' 
-            : '0 12px 32px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5)',
+          boxShadow:
+            theme.palette.mode === 'dark'
+              ? '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)'
+              : '0 12px 32px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5)',
         },
       })}
     >
@@ -65,14 +75,10 @@ export const Tile: FC<{
             'right': '12px',
             'zIndex': 10,
             'backgroundColor': (theme) =>
-              theme.palette.mode === 'dark'
-                ? 'rgba(255,255,255,0.05)'
-                : 'rgba(0,0,0,0.03)',
+              theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
             '&:hover': {
               backgroundColor: (theme) =>
-                theme.palette.mode === 'dark'
-                  ? 'rgba(255,255,255,0.12)'
-                  : 'rgba(0,0,0,0.06)',
+                theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)',
             },
           }}
           data-no-export
@@ -106,7 +112,7 @@ export const Tile: FC<{
             letterSpacing: '-0.2px',
           }}
         >
-          <RippleText text={getHighlightedText(p['name'], search)} />
+          <RippleText text={getHighlightedText(p.name, search)} />
         </Typography>
       </Box>
 
@@ -121,7 +127,7 @@ export const Tile: FC<{
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Chip
-            label={getHighlightedText(p['sku'], search)}
+            label={getHighlightedText(p.sku, search)}
             size="small"
             onClick={() => copyContent(p.sku)}
             sx={{
@@ -129,9 +135,7 @@ export const Tile: FC<{
               'fontSize': '11px',
               'fontWeight': 800,
               'backgroundColor': (theme) =>
-                theme.palette.mode === 'dark'
-                  ? 'rgba(255,255,255,0.06)'
-                  : 'rgba(0,0,0,0.05)',
+                theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
               'color': 'text.secondary',
               'borderRadius': '8px',
               '& .MuiChip-label': { px: 1.2 },
@@ -143,16 +147,11 @@ export const Tile: FC<{
               params={{ id: getFavoriteId(p) }}
               size="small"
               sx={{
-                'color': (theme) =>
-                  theme.palette.mode === 'dark' ? '#f87171' : 'primary.main',
+                'color': (theme) => (theme.palette.mode === 'dark' ? '#f87171' : 'primary.main'),
                 'backgroundColor': (theme) =>
-                  theme.palette.mode === 'dark'
-                    ? 'rgba(234,43,6,0.1)'
-                    : 'rgba(234,43,6,0.07)',
+                  theme.palette.mode === 'dark' ? 'rgba(234,43,6,0.1)' : 'rgba(234,43,6,0.07)',
                 'border': (theme) =>
-                  theme.palette.mode === 'dark'
-                    ? '1px solid rgba(234,43,6,0.2)'
-                    : '1px solid rgba(234,43,6,0.15)',
+                  theme.palette.mode === 'dark' ? '1px solid rgba(234,43,6,0.2)' : '1px solid rgba(234,43,6,0.15)',
                 '&:hover': {
                   backgroundColor: 'rgba(234,43,6,0.18)',
                   color: 'primary.main',
@@ -166,9 +165,7 @@ export const Tile: FC<{
           )}
         </Box>
 
-        {!isFavoritePage && (
-          <AddToCartButton itemId={getFavoriteId(p)} name={p.name} />
-        )}
+        {!isFavoritePage && <AddToCartButton itemId={getFavoriteId(p)} name={p.name} />}
       </Box>
 
       {showSettings && <TileSettings favoriteId={getFavoriteId(p)} />}
@@ -188,11 +185,7 @@ export const Tile: FC<{
             <VendorChip vendor={p.vendor} />
             {p.pics && (
               <LinkedIcon
-                to={
-                  isFavoritePage
-                    ? `/favorites/$id/details`
-                    : `/list/$id/details`
-                }
+                to={isFavoritePage ? `/favorites/$id/details` : `/list/$id/details`}
                 params={{ id: getFavoriteId(p) }}
                 sx={{
                   'color': 'text.secondary',
@@ -200,7 +193,7 @@ export const Tile: FC<{
                   'cursor': 'pointer',
                   'opacity': 0.6,
                   'transition': 'all 0.2s',
-                  '&:hover': { 
+                  '&:hover': {
                     opacity: 1,
                     color: 'primary.main',
                     transform: 'scale(1.1)',
@@ -220,10 +213,7 @@ export const Tile: FC<{
           >
             {isFavorite && 'time' in p && <FavoriteTime time={p.time} />}
             {isFavoritePage && <NotesButton favoriteId={getFavoriteId(p)} />}
-            <FavoritesButton
-              isFavorite={isFavorite}
-              favoriteId={getFavoriteId(p)}
-            />
+            <FavoritesButton isFavorite={isFavorite} favoriteId={getFavoriteId(p)} />
             <HiddenInput>
               <Stock stock={p.stock} bordered />
             </HiddenInput>

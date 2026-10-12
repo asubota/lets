@@ -9,5 +9,5 @@ const filterPopular = (item: CartItem): boolean => {
 export const useCartPopularServiceIds = () => {
   const data = useCartItems()
 
-  return data.filter(filterPopular).map((item) => item.itemId)
+  return data.filter((item) => filterPopular(item)).map((item) => item.itemId)
 }

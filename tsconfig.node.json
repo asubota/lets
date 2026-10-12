@@ -8,7 +8,16 @@
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
     "strict": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedSideEffectImports": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["vite.config.ts", "compile-service-workers-ts.plugin.ts"]
 }

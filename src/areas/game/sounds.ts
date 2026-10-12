@@ -6,14 +6,7 @@ type OscType = 'sine' | 'square' | 'sawtooth' | 'triangle'
 // eslint-disable-next-line sonarjs/pseudo-random
 const rand = () => Math.random()
 
-const tone = (
-  c: AudioContext,
-  freq: number,
-  durationMs: number,
-  type: OscType,
-  gain = 0.06,
-  delay = 0,
-) => {
+const tone = (c: AudioContext, freq: number, durationMs: number, type: OscType, gain = 0.06, delay = 0) => {
   const start = c.currentTime + delay / 1000
   const osc = c.createOscillator()
   const g = c.createGain()
@@ -52,24 +45,24 @@ const gliss = (
 
 const noise = (c: AudioContext, durationMs: number, gain = 0.04, delay = 0) => {
   const start = c.currentTime + delay / 1000
-  const len = Math.max(1, Math.floor(c.sampleRate * (durationMs / 1000)))
-  const buf = c.createBuffer(1, len, c.sampleRate)
+  const length_ = Math.max(1, Math.floor(c.sampleRate * (durationMs / 1000)))
+  const buf = c.createBuffer(1, length_, c.sampleRate)
   const data = buf.getChannelData(0)
-  for (let i = 0; i < data.length; i++) {
-    data[i] = rand() * 2 - 1
+  for (let index = 0; index < data.length; index++) {
+    data[index] = rand() * 2 - 1
   }
-  const src = c.createBufferSource()
-  src.buffer = buf
+  const source = c.createBufferSource()
+  source.buffer = buf
   const g = c.createGain()
   g.gain.setValueAtTime(gain, start)
   g.gain.exponentialRampToValueAtTime(0.0001, start + durationMs / 1000)
   const filter = c.createBiquadFilter()
   filter.type = 'lowpass'
   filter.frequency.value = 1200
-  src.connect(filter)
+  source.connect(filter)
   filter.connect(g)
   g.connect(c.destination)
-  src.start(start)
+  source.start(start)
 }
 
 const COMMON_VARIANTS = [
@@ -104,14 +97,18 @@ const RARE_ARPEGGIOS: number[][] = [
   [587, 740, 880, 1175],
 ]
 
-const pickFrom = <T>(arr: T[]): T => {
-  return arr[Math.floor(rand() * arr.length)] ?? arr[0]
+const pickFrom = <T>(array: T[]): T => {
+  const item = array[Math.floor(rand() * array.length)]
+  if (item === undefined) {
+    throw new Error('pickFrom() called with an empty array')
+  }
+  return item
 }
 
 const playCommonHit = (c: AudioContext) => {
   const variant = pickFrom(COMMON_VARIANTS)
   for (const n of variant) {
-    tone(c, n.freq, n.dur, n.type, n.gain, ('delay' in n ? n.delay : 0) as number)
+    tone(c, n.freq, n.dur, n.type, n.gain, 'delay' in n ? n.delay : 0)
   }
 }
 
@@ -124,9 +121,9 @@ const playUncommonHit = (c: AudioContext) => {
 
 const playRareHit = (c: AudioContext) => {
   const notes = pickFrom(RARE_ARPEGGIOS)
-  notes.forEach((f, i) => {
-    tone(c, f, 70 + i * 10, 'triangle', 0.05 - i * 0.005, i * 50)
-  })
+  for (const [index, f] of notes.entries()) {
+    tone(c, f, 70 + index * 10, 'triangle', 0.05 - index * 0.005, index * 50)
+  }
 }
 
 const playRocketHit = (c: AudioContext) => {
@@ -146,14 +143,25 @@ export const playHit = (kind: ItemKind) => {
   if (!c) {
     return
   }
-  if (kind === 'rocket') {
-    playRocketHit(c)
-  } else if (kind === 'rare') {
-    playRareHit(c)
-  } else if (kind === 'uncommon') {
-    playUncommonHit(c)
-  } else {
-    playCommonHit(c)
+  switch (kind) {
+    case 'rocket': {
+      playRocketHit(c)
+
+      break
+    }
+    case 'rare': {
+      playRareHit(c)
+
+      break
+    }
+    case 'uncommon': {
+      playUncommonHit(c)
+
+      break
+    }
+    default: {
+      playCommonHit(c)
+    }
   }
 }
 

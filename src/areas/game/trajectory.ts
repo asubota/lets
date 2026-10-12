@@ -1,15 +1,8 @@
 export type TrajectoryKind = 'sine' | 'zigzag' | 'spiral' | 'loop' | 'chaos' | 'pendulum'
 
-export const ALL_TRAJECTORIES: TrajectoryKind[] = [
-  'sine',
-  'zigzag',
-  'spiral',
-  'loop',
-  'chaos',
-  'pendulum',
-]
+export const ALL_TRAJECTORIES: TrajectoryKind[] = ['sine', 'zigzag', 'spiral', 'loop', 'chaos', 'pendulum']
 
-export type TrajectoryParams = {
+export interface TrajectoryParameters {
   kind: TrajectoryKind
   startX: number
   startY: number
@@ -21,14 +14,17 @@ export type TrajectoryParams = {
   phaseOffset: number
 }
 
-export type Position = { x: number; y: number }
-
-const computePerpendicular = (dx: number, dy: number) => {
-  const len = Math.hypot(dx, dy) || 1
-  return { perpX: -dy / len, perpY: dx / len }
+export interface Position {
+  x: number
+  y: number
 }
 
-export const computePosition = (params: TrajectoryParams, elapsed: number): Position => {
+const computePerpendicular = (dx: number, dy: number) => {
+  const length_ = Math.hypot(dx, dy) || 1
+  return { perpX: -dy / length_, perpY: dx / length_ }
+}
+
+export const computePosition = (params: TrajectoryParameters, elapsed: number): Position => {
   const t = Math.min(1, elapsed / params.duration)
   const baseX = params.startX + (params.endX - params.startX) * t
   const baseY = params.startY + (params.endY - params.startY) * t
@@ -77,6 +73,6 @@ export const computePosition = (params: TrajectoryParams, elapsed: number): Posi
 }
 
 export const pickTrajectory = (rand: () => number): TrajectoryKind => {
-  const i = Math.floor(rand() * ALL_TRAJECTORIES.length)
-  return ALL_TRAJECTORIES[i] ?? 'sine'
+  const index = Math.floor(rand() * ALL_TRAJECTORIES.length)
+  return ALL_TRAJECTORIES[index] ?? 'sine'
 }

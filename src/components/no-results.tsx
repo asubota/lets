@@ -7,23 +7,15 @@ import { Logo } from './logo.tsx'
 export const NoResults = () => {
   return (
     <Box>
-      <Typography
-        variant="h4"
-        sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}
-      >
+      <Typography variant="h4" sx={{ textAlign: 'center', color: 'text.secondary', mt: 3 }}>
         <Box>Короче,</Box>
       </Typography>
-      <Typography
-        variant="h5"
-        sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}
-      >
+      <Typography variant="h5" sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}>
         <Box>пацани зайняті, нічо нема</Box>
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <ConstructionIcon
-          sx={{ mt: 2, fontSize: '90px', color: 'text.secondary' }}
-        />
+        <ConstructionIcon sx={{ mt: 2, fontSize: '90px', color: 'text.secondary' }} />
       </Box>
 
       <Bike type="broken" />

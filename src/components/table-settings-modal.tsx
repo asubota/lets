@@ -9,16 +9,19 @@ type FormData = {
   [key in keyof Product]: boolean
 }
 
-const allFalse = {
+const allFalse: FormData = {
   sku: false,
   name: false,
   vendor: false,
   price: false,
   stock: false,
+  p2: false,
+  price_old: false,
+  pics: false,
 }
 
-function getTrueValues(obj: FormData) {
-  return (Object.keys(obj) as (keyof FormData)[]).filter((key) => obj[key])
+function getTrueValues(object: FormData) {
+  return (Object.keys(object) as (keyof FormData)[]).filter((key) => object[key])
 }
 
 export const TableSettingsModal = () => {
@@ -26,10 +29,10 @@ export const TableSettingsModal = () => {
   const { setColumns } = useTableActions()
   const { toggleSettings } = useTableActions()
   const columns = useTableColumns()
-  const values = columns.reduce((acc, key) => {
-    acc[key] = true
-    return acc
-  }, allFalse as FormData)
+  const values: FormData = { ...allFalse }
+  for (const key of columns) {
+    values[key] = true
+  }
   const { control, handleSubmit } = useForm<FormData>({ values })
 
   const onSubmit: SubmitHandler<FormData> = (data) => {

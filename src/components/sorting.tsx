@@ -1,15 +1,15 @@
-import { type FC } from 'react'
-
 import DateRangeIcon from '@mui/icons-material/DateRange'
 import NotesIcon from '@mui/icons-material/Notes'
 import { IconButton } from '@mui/material'
 
 import { useAppActions, useAppSort } from '../store'
 
-export const Sorting: FC = () => {
+export const Sorting = () => {
   const sort = useAppSort()
   const { setSort } = useAppActions()
-  const handleSortChange = () => setSort(sort === 'note' ? 'date' : 'note')
+  const handleSortChange = () => {
+    setSort(sort === 'note' ? 'date' : 'note')
+  }
 
   return (
     <IconButton size="small" onClick={handleSortChange}>

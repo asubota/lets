@@ -5,13 +5,13 @@ import { DetailsPopup } from '../../components/details-popup.tsx'
 
 interface DetailsProps {
   id: string
-  onClose(): void
+  onClose: () => void
 }
 
 export const Details = ({ id, onClose }: DetailsProps) => {
   const product = useGetById(id)
 
-  if (!product || !product.pics) {
+  if (!product?.pics) {
     return <Navigate to="/list" />
   }
 

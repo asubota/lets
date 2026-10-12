@@ -1,10 +1,8 @@
-import { type FC } from 'react'
-
 import { Box } from '@mui/material'
 
 import { formatDate } from '../tools.tsx'
 
-export const FavoriteTime: FC<{ time: number | undefined }> = ({ time }) => {
+export const FavoriteTime = ({ time }: { time: number | undefined }) => {
   return (
     <Box
       sx={{

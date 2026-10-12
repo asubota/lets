@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export type ScorePopupData = {
+export interface ScorePopupData {
   id: number
   x: number
   y: number
@@ -9,20 +9,24 @@ export type ScorePopupData = {
 }
 
 type Props = ScorePopupData & {
-  onDone(this: void, id: number): void
+  onDone: (this: void, id: number) => void
 }
 
 export const ScorePopup = ({ id, x, y, text, color, onDone }: Props) => {
   const [mounted, setMounted] = useState(false)
-  const onDoneRef = useRef(onDone)
+  const onDoneReference = useRef(onDone)
 
   useEffect(() => {
-    onDoneRef.current = onDone
+    onDoneReference.current = onDone
   })
 
   useEffect(() => {
-    const r = requestAnimationFrame(() => setMounted(true))
-    const t = setTimeout(() => onDoneRef.current(id), 700)
+    const r = requestAnimationFrame(() => {
+      setMounted(true)
+    })
+    const t = setTimeout(() => {
+      onDoneReference.current(id)
+    }, 700)
     return () => {
       cancelAnimationFrame(r)
       clearTimeout(t)

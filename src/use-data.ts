@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { CACHE_BASE_KEY, POPULAR_SERViCE_PREFIX } from './constants'
-import { buildItemTokens } from './search-tools'
+import { buildItemTokens } from './search-tokens.ts'
 import { type Meta, useAppActions } from './store'
 import { fetchProductsFromSupabase } from './supabase-api'
 import { getUniqueVendors } from './tools.tsx'
@@ -13,19 +13,21 @@ const isNotMeta = (p: Product) => p.sku !== '__meta__'
 const getData = async (setMeta: (data: Meta) => void): Promise<IndexedProduct[]> => {
   const products: Product[] = await fetchProductsFromSupabase()
 
-  const meta = products.find(isMeta)
+  const meta = products.find((p) => isMeta(p))
 
   if (meta) {
     try {
-      setMeta(JSON.parse(meta.name))
+      setMeta(JSON.parse(meta.name) as Meta)
     } catch {
       //
     }
   }
 
-  return products.filter(isNotMeta).map((p: Product) => {
-    return { ...p, __tokens: buildItemTokens(p) }
-  })
+  return products
+    .filter((p) => isNotMeta(p))
+    .map((p: Product) => {
+      return { ...p, __tokens: buildItemTokens(p) }
+    })
 }
 
 export const useData = () => {
@@ -52,7 +54,7 @@ const filterPopular = (item: Product): boolean => {
 export const usePopularServices = () => {
   const { data = [] } = useData()
 
-  return data.filter(filterPopular)
+  return data.filter((item) => filterPopular(item))
 }
 
 export const useIsLoading = () => {

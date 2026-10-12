@@ -1,17 +1,22 @@
-import { type FC } from 'react'
-
 import { Chip } from '@mui/material'
 
 import { useVendorColor } from '../hooks/use-vendor-color.ts'
 
-export const VendorChip: FC<{
+export const VendorChip = ({
+  vendor,
+  color,
+  borderColor,
+  backgroundColor,
+  source = 'live',
+  onClick,
+}: {
   vendor: string
   source?: 'live' | 'preview'
-  color?: string
-  borderColor?: string
-  backgroundColor?: string
+  color?: string | undefined
+  borderColor?: string | undefined
+  backgroundColor?: string | undefined
   onClick?: (vendor: string) => void
-}> = ({ vendor, color, borderColor, backgroundColor, source = 'live', onClick }) => {
+}) => {
   const {
     color: liveColor,
     borderColor: liveBorderColor,
@@ -21,6 +26,8 @@ export const VendorChip: FC<{
   const colorValue = (source === 'live' ? liveColor : color) || 'secondary'
   const borderColorValue = (source === 'live' ? liveBorderColor : borderColor) || 'secondary.main'
   const backgroundColorValue = source === 'live' ? liveBackgroundColor : backgroundColor
+  const gradientValue = backgroundColorValue?.includes('gradient') ? backgroundColorValue : undefined
+  const isBase = vendor === 'base'
 
   const handleClick = () => {
     if (onClick) {
@@ -42,18 +49,10 @@ export const VendorChip: FC<{
         'textTransform': 'uppercase',
         'letterSpacing': '0.5px',
         'border': '1px solid',
-        'borderColor': vendor === 'base' ? 'primary.main' : borderColorValue,
-        'color': vendor === 'base' ? 'primary.main' : colorValue,
-        'background':
-          vendor === 'base'
-            ? 'rgba(234, 43, 6, 0.1)'
-            : backgroundColorValue?.includes('gradient')
-              ? backgroundColorValue
-              : undefined,
-        'backgroundColor':
-          vendor === 'base' || backgroundColorValue?.includes('gradient')
-            ? undefined
-            : backgroundColorValue,
+        'borderColor': isBase ? 'primary.main' : borderColorValue,
+        'color': isBase ? 'primary.main' : colorValue,
+        'background': isBase ? 'rgba(234, 43, 6, 0.1)' : gradientValue,
+        'backgroundColor': isBase || gradientValue ? undefined : backgroundColorValue,
         'borderRadius': '8px',
         '& .MuiChip-label': { px: 1 },
       }}

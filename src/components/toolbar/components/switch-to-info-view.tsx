@@ -20,7 +20,9 @@ export const SwitchToInfoView = () => {
         },
       }}
       title="Інфо"
-      onClick={() => setView('info')}
+      onClick={() => {
+        setView('info')
+      }}
     >
       <InfoOutlineIcon sx={{ fontSize: '20px' }} />
     </IconButton>

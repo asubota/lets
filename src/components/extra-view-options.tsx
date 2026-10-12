@@ -44,10 +44,7 @@ export const ExtraViewOptions = () => {
           <InsightsIcon />
         </LinkedIconButton>
 
-        <LinkedIconButton
-          sx={{ color: gameMode ? 'primary.main' : 'text.secondary' }}
-          to="/game"
-        >
+        <LinkedIconButton sx={{ color: gameMode ? 'primary.main' : 'text.secondary' }} to="/game">
           <GameIcon active={gameMode} />
         </LinkedIconButton>
       </Stack>

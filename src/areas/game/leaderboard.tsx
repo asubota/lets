@@ -67,9 +67,7 @@ const ScoreCard = ({ entry, isBest }: { entry: ScoreEntry; isBest: boolean }) =>
       })}
     >
       <Stack direction="row" alignItems="center" spacing={1.5}>
-        {isBest && (
-          <EmojiEventsIcon sx={{ color: '#ffb300', fontSize: 28, flexShrink: 0 }} />
-        )}
+        {isBest && <EmojiEventsIcon sx={{ color: '#ffb300', fontSize: 28, flexShrink: 0 }} />}
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Typography
             sx={{
@@ -91,9 +89,7 @@ const ScoreCard = ({ entry, isBest }: { entry: ScoreEntry; isBest: boolean }) =>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1 }}>
               👑
             </Typography>
-            <Typography sx={{ fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
-              {entry.hits.rocket}
-            </Typography>
+            <Typography sx={{ fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{entry.hits.rocket}</Typography>
           </Box>
           <Box sx={{ textAlign: 'right' }}>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1 }}>
@@ -129,7 +125,7 @@ export const Leaderboard = () => {
     if (scores.length === 0) {
       return null
     }
-    return [...scores].sort((a, b) => b.score - a.score)[0].id
+    return scores.toSorted((a, b) => b.score - a.score)[0]?.id ?? null
   }, [scores])
 
   if (scores.length === 0) {
@@ -141,9 +137,7 @@ export const Leaderboard = () => {
           borderRadius: 1.5,
           textAlign: 'center',
           border: (t) =>
-            t.palette.mode === 'dark'
-              ? '1px dashed rgba(255,255,255,0.1)'
-              : '1px dashed rgba(15,23,42,0.1)',
+            t.palette.mode === 'dark' ? '1px dashed rgba(255,255,255,0.1)' : '1px dashed rgba(15,23,42,0.1)',
         }}
       >
         <Typography variant="body2" color="text.secondary">
@@ -158,12 +152,7 @@ export const Leaderboard = () => {
   return (
     <>
       <Box>
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={1}
-          sx={{ mb: 1.5, px: 0.5 }}
-        >
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1.5, px: 0.5 }}>
           <EmojiEventsIcon sx={{ color: 'primary.main' }} />
           <Typography variant="subtitle1" sx={{ fontWeight: 800, flex: 1 }}>
             Рейтинг
@@ -193,7 +182,9 @@ export const Leaderboard = () => {
             size="small"
             color="inherit"
             sx={{ color: 'text.secondary', minWidth: 0 }}
-            onClick={() => setConfirmOpen(true)}
+            onClick={() => {
+              setConfirmOpen(true)
+            }}
           >
             <DeleteSweepIcon fontSize="small" />
           </Button>
@@ -206,23 +197,30 @@ export const Leaderboard = () => {
         </Stack>
 
         {isMobile && sorted.length > visible.length && (
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ display: 'block', textAlign: 'center', mt: 1 }}
-          >
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center', mt: 1 }}>
             ще {sorted.length - visible.length} результатів
           </Typography>
         )}
       </Box>
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+      <Dialog
+        open={confirmOpen}
+        onClose={() => {
+          setConfirmOpen(false)
+        }}
+      >
         <DialogTitle>Очистити рейтинг?</DialogTitle>
         <DialogContent>
           <Typography>Усі результати буде видалено без можливості відновлення.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)}>Скасувати</Button>
+          <Button
+            onClick={() => {
+              setConfirmOpen(false)
+            }}
+          >
+            Скасувати
+          </Button>
           <Button
             color="error"
             variant="contained"
@@ -243,11 +241,13 @@ export const buildLeaderboardSummary = (scores: ScoreEntry[]) => {
   if (scores.length === 0) {
     return { best: 0, totalTaps: 0, totalRockets: 0, sessions: 0 }
   }
-  const best = scores.reduce((m, s) => Math.max(m, s.score), 0)
-  const totalTaps = scores.reduce(
-    (sum, s) => sum + s.hits.common + s.hits.uncommon + s.hits.rare + s.hits.rocket,
-    0,
-  )
-  const totalRockets = scores.reduce((sum, s) => sum + s.hits.rocket, 0)
+  let best = 0
+  let totalTaps = 0
+  let totalRockets = 0
+  for (const { score, hits } of scores) {
+    best = Math.max(best, score)
+    totalTaps += hits.common + hits.uncommon + hits.rare + hits.rocket
+    totalRockets += hits.rocket
+  }
   return { best, totalTaps, totalRockets, sessions: scores.length }
 }

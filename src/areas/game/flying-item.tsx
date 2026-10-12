@@ -1,11 +1,11 @@
-import { type PointerEvent as ReactPointerEvent, useEffect, useRef } from 'react'
+import { type PointerEvent, useEffect, useRef } from 'react'
 
 import { ITEM_KINDS } from './config.ts'
 import { ItemSvg } from './item-svg.tsx'
 import { type TrajectoryKind, computePosition } from './trajectory.ts'
 import { type ItemKind } from '../../store/game.ts'
 
-export type FlyingItemProps = {
+export interface FlyingItemProps {
   id: number
   kind: ItemKind
   trajectory: TrajectoryKind
@@ -18,8 +18,8 @@ export type FlyingItemProps = {
   amplitude: number
   frequency: number
   phaseOffset: number
-  onHit(this: void, kind: ItemKind, id: number, x: number, y: number): void
-  onExpire(this: void, id: number): void
+  onHit: (this: void, kind: ItemKind, id: number, x: number, y: number) => void
+  onExpire: (this: void, id: number) => void
 }
 
 export const FlyingItem = ({
@@ -39,15 +39,15 @@ export const FlyingItem = ({
   onExpire,
 }: FlyingItemProps) => {
   const ref = useRef<HTMLDivElement>(null)
-  const aliveRef = useRef(true)
+  const aliveReference = useRef(true)
 
   useEffect(() => {
-    aliveRef.current = true
+    aliveReference.current = true
     let raf = 0
     const start = performance.now()
 
     const tick = (now: number) => {
-      if (!aliveRef.current) {
+      if (!aliveReference.current) {
         return
       }
       const elapsed = now - start
@@ -67,13 +67,13 @@ export const FlyingItem = ({
       )
       const r = (elapsed / 1000) * rotateSpeed
       const wobble = trajectory === 'pendulum' ? Math.sin(elapsed / 280) * 8 : 0
-      const el = ref.current
-      if (el) {
-        el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${r + wobble}deg)`
+      const element = ref.current
+      if (element) {
+        element.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${r + wobble}deg)`
       }
 
       if (elapsed >= duration) {
-        aliveRef.current = false
+        aliveReference.current = false
         onExpire(id)
         return
       }
@@ -81,33 +81,20 @@ export const FlyingItem = ({
     }
     raf = requestAnimationFrame(tick)
     return () => {
-      aliveRef.current = false
+      aliveReference.current = false
       cancelAnimationFrame(raf)
     }
-  }, [
-    id,
-    trajectory,
-    startX,
-    startY,
-    endX,
-    endY,
-    duration,
-    rotateSpeed,
-    amplitude,
-    frequency,
-    phaseOffset,
-    onExpire,
-  ])
+  }, [id, trajectory, startX, startY, endX, endY, duration, rotateSpeed, amplitude, frequency, phaseOffset, onExpire])
 
-  const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (!aliveRef.current) {
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (!aliveReference.current) {
       return
     }
-    e.stopPropagation()
-    aliveRef.current = false
+    event.stopPropagation()
+    aliveReference.current = false
     const rect = ref.current?.getBoundingClientRect()
-    const cx = rect ? rect.left + rect.width / 2 : e.clientX
-    const cy = rect ? rect.top + rect.height / 2 : e.clientY
+    const cx = rect ? rect.left + rect.width / 2 : event.clientX
+    const cy = rect ? rect.top + rect.height / 2 : event.clientY
     onHit(kind, id, cx, cy)
   }
 

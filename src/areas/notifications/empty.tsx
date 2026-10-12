@@ -1,9 +1,7 @@
-import { type FC } from 'react'
-
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'
 import { Box, Typography } from '@mui/material'
 
-export const Empty: FC = () => {
+export const Empty = () => {
   return (
     <Box
       sx={{

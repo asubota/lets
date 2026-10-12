@@ -12,23 +12,22 @@ export const useListenToCacheUpdate = () => {
   const { setLoadingProgress } = useAppActions()
 
   useEffect(() => {
-    const fn = async (event: MessageEvent<AppMessage>) => {
-      console.log('[UI] Received SW message:', event.data?.type)
-      if (!event.data) {
-        return
-      }
+    const handleMessage = async (event: MessageEvent<AppMessage>) => {
+      console.log('[UI] Received SW message:', event.data.type)
 
       switch (event.data.type) {
-        case 'SYNC_START':
+        case 'SYNC_START': {
           console.log('[UI] Sync start detected')
           setLoadingProgress({ loaded: 0, total: 0, percent: 0 })
           break
+        }
 
-        case 'SYNC_PROGRESS':
+        case 'SYNC_PROGRESS': {
           setLoadingProgress(event.data.payload)
           break
+        }
 
-        case 'SYNC_END':
+        case 'SYNC_END': {
           setLoadingProgress(null)
           await queryClient.invalidateQueries({ queryKey: [CACHE_BASE_KEY] })
           toast.info(`Мущіна, дані оновленно! [${event.data.payload.count}]`, {
@@ -40,15 +39,17 @@ export const useListenToCacheUpdate = () => {
             position: 'bottom-left',
           })
           break
+        }
 
-        case 'SYNC_ERROR':
+        case 'SYNC_ERROR': {
           setLoadingProgress(null)
           toast.error(`Збій завантаження: ${event.data.payload.message}`, {
             position: 'bottom-left',
           })
           break
+        }
 
-        case 'cache-reset-done':
+        case 'cache-reset-done': {
           setLoadingProgress(null)
           // Remove only the products query — SW will send SYNC_START right after
           // this, so the component will refetch when SYNC_END arrives.
@@ -57,13 +58,16 @@ export const useListenToCacheUpdate = () => {
             position: 'bottom-left',
           })
           break
+        }
       }
     }
 
-    navigator.serviceWorker.addEventListener('message', fn)
+    const listener = (event: MessageEvent<AppMessage>) => void handleMessage(event)
+
+    navigator.serviceWorker.addEventListener('message', listener)
 
     return () => {
-      navigator.serviceWorker.removeEventListener('message', fn)
+      navigator.serviceWorker.removeEventListener('message', listener)
     }
   }, [queryClient, setLoadingProgress])
 }

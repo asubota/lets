@@ -35,7 +35,7 @@ const ARP_BARS: number[][] = [
 // eslint-disable-next-line sonarjs/pseudo-random
 const rnd = () => Math.random()
 
-const getMusicCtx = (): AudioContext | null => {
+const getMusicContext = (): AudioContext | null => {
   const c = getAudioContext()
   if (c === null) {
     return null
@@ -48,13 +48,7 @@ const getMusicCtx = (): AudioContext | null => {
   return c
 }
 
-const env = (
-  c: AudioContext,
-  out: AudioNode,
-  startTime: number,
-  durationS: number,
-  peak: number,
-): GainNode => {
+const env = (c: AudioContext, out: AudioNode, startTime: number, durationS: number, peak: number): GainNode => {
   const g = c.createGain()
   g.gain.setValueAtTime(0.0001, startTime)
   g.gain.exponentialRampToValueAtTime(peak, startTime + 0.005)
@@ -94,21 +88,21 @@ const scheduleNoise = (
   filterHz: number,
 ) => {
   const sampleRate = c.sampleRate
-  const len = Math.max(1, Math.floor(sampleRate * durationS))
-  const buf = c.createBuffer(1, len, sampleRate)
+  const length_ = Math.max(1, Math.floor(sampleRate * durationS))
+  const buf = c.createBuffer(1, length_, sampleRate)
   const data = buf.getChannelData(0)
-  for (let i = 0; i < len; i++) {
-    data[i] = rnd() * 2 - 1
+  for (let index = 0; index < length_; index++) {
+    data[index] = rnd() * 2 - 1
   }
-  const src = c.createBufferSource()
-  src.buffer = buf
+  const source = c.createBufferSource()
+  source.buffer = buf
   const filter = c.createBiquadFilter()
   filter.type = 'lowpass'
   filter.frequency.value = filterHz
   const g = env(c, out, startTime, durationS, peak)
-  src.connect(filter)
+  source.connect(filter)
   filter.connect(g)
-  src.start(startTime)
+  source.start(startTime)
 }
 
 const scheduleLaserZap = (c: AudioContext, out: AudioNode, startTime: number) => {
@@ -127,8 +121,8 @@ const scheduleLaserZap = (c: AudioContext, out: AudioNode, startTime: number) =>
 }
 
 const scheduleHatRoll = (c: AudioContext, out: AudioNode, startTime: number) => {
-  for (let i = 0; i < 4; i++) {
-    scheduleNoise(c, out, startTime + i * 0.06, 0.035, 0.04, 9500)
+  for (let index = 0; index < 4; index++) {
+    scheduleNoise(c, out, startTime + index * 0.06, 0.035, 0.04, 9500)
   }
 }
 
@@ -141,9 +135,9 @@ const scheduleVoxStab = (c: AudioContext, out: AudioNode, startTime: number) => 
 }
 
 const scheduleArpRun = (c: AudioContext, out: AudioNode, startTime: number, barIndex: number) => {
-  const seq = ARP_BARS[barIndex]
-  for (let i = 0; i < 8; i++) {
-    scheduleTone(c, out, seq[i] * 2, startTime + i * (STEP_S / 2), STEP_S / 2, 'triangle', 0.035)
+  const seq = ARP_BARS[barIndex] ?? []
+  for (const [index, freq] of seq.entries()) {
+    scheduleTone(c, out, freq * 2, startTime + index * (STEP_S / 2), STEP_S / 2, 'triangle', 0.035)
   }
 }
 
@@ -178,24 +172,22 @@ const scheduleAccent = (c: AudioContext, out: AudioNode, barStart: number, barIn
   // ~22% chance: no accent (mostly first/quiet bars)
 }
 
-const scheduleBar = (
-  c: AudioContext,
-  out: AudioNode,
-  barStart: number,
-  barIndex: number,
-  patternIndex: number,
-) => {
-  const bassRoot = BASS_ROOTS[barIndex]
-  const lead = LEAD_BARS[barIndex]
-  const arp = ARP_BARS[barIndex]
+const scheduleBar = (c: AudioContext, out: AudioNode, barStart: number, barIndex: number, patternIndex: number) => {
+  const bassRoot = BASS_ROOTS[barIndex] ?? 0
+  const lead = LEAD_BARS[barIndex] ?? []
+  const arp = ARP_BARS[barIndex] ?? []
 
   for (let step = 0; step < STEPS_PER_BAR; step++) {
     const t = barStart + step * STEP_S
     const bassFreq = step % 2 === 0 ? bassRoot : bassRoot * 2
+    const leadFreq = lead[step]
+    const arpFreq = arp[step]
     scheduleTone(c, out, bassFreq, t, STEP_S * 0.9, 'square', 0.16)
-    scheduleTone(c, out, lead[step], t, STEP_S * 0.8, 'square', 0.09)
-    if (step % 4 === 0) {
-      scheduleTone(c, out, arp[step], t, STEP_S * 0.5, 'triangle', 0.05)
+    if (leadFreq !== undefined) {
+      scheduleTone(c, out, leadFreq, t, STEP_S * 0.8, 'square', 0.09)
+    }
+    if (step % 4 === 0 && arpFreq !== undefined) {
+      scheduleTone(c, out, arpFreq, t, STEP_S * 0.5, 'triangle', 0.05)
     }
     if (step === 0 || step === 4) {
       scheduleTone(c, out, 60, t, 0.1, 'sine', 0.3)
@@ -219,7 +211,7 @@ const scheduleLoop = (capturedSessionId: number, gain: GainNode) => {
   if (capturedSessionId !== sessionId) {
     return
   }
-  const c = getMusicCtx()
+  const c = getMusicContext()
   if (!c) {
     return
   }
@@ -232,7 +224,9 @@ const scheduleLoop = (capturedSessionId: number, gain: GainNode) => {
   nextStartTime = startTime + PATTERN_S
 
   const aheadMs = Math.max(50, (PATTERN_S - 0.3) * 1000)
-  loopTimer = window.setTimeout(() => scheduleLoop(capturedSessionId, gain), aheadMs)
+  loopTimer = globalThis.setTimeout(() => {
+    scheduleLoop(capturedSessionId, gain)
+  }, aheadMs)
 }
 
 export const startMusic = () => {
@@ -242,7 +236,7 @@ export const startMusic = () => {
   if (!getGameSnapshot().settings.musicEnabled) {
     return
   }
-  const c = getMusicCtx()
+  const c = getMusicContext()
   if (!c || !masterGain) {
     return
   }
@@ -264,7 +258,7 @@ export const startMusic = () => {
 export const stopMusic = () => {
   sessionId++
   if (loopTimer !== null) {
-    window.clearTimeout(loopTimer)
+    globalThis.clearTimeout(loopTimer)
     loopTimer = null
   }
   const c = getAudioContext()
@@ -275,7 +269,7 @@ export const stopMusic = () => {
     g.gain.cancelScheduledValues(now)
     g.gain.setValueAtTime(g.gain.value, now)
     g.gain.linearRampToValueAtTime(0.0001, now + 0.2)
-    window.setTimeout(() => {
+    globalThis.setTimeout(() => {
       try {
         g.disconnect()
       } catch {

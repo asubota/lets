@@ -15,7 +15,7 @@ export const getAllColors = async (signal?: AbortSignal): Promise<VendorAndColor
     throw new Error(`Supabase Error: ${error.message}`)
   }
 
-  return (data || []) as VendorAndColors[]
+  return data as VendorAndColors[]
 }
 
 export const removeColor = async ({ vendor }: VendorAndColors) => {

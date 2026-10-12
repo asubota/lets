@@ -1,4 +1,4 @@
-import { type FC, type MouseEventHandler } from 'react'
+import { type MouseEventHandler } from 'react'
 
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
@@ -11,14 +11,11 @@ interface FavoritesButtonProps {
   favoriteId: string
 }
 
-export const FavoritesButton: FC<FavoritesButtonProps> = ({
-  isFavorite,
-  favoriteId,
-}) => {
+export const FavoritesButton = ({ isFavorite, favoriteId }: FavoritesButtonProps) => {
   const { mutate } = useToggleFavorite()
 
-  const handleToggle: MouseEventHandler = (e) => {
-    e.stopPropagation()
+  const handleToggle: MouseEventHandler = (event) => {
+    event.stopPropagation()
     mutate({
       favoriteId,
       isFavorite: !isFavorite,

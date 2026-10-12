@@ -1,4 +1,4 @@
-type Props = {
+interface Props {
   active: boolean
   size?: number
 }
@@ -56,12 +56,7 @@ export const GameIcon = ({ active, size = 24 }: Props) => {
 
       {active && (
         <>
-          <path
-            d="M 8.7 9 Q 12 10 15.3 9"
-            stroke="rgba(0,0,0,0.35)"
-            strokeWidth="0.7"
-            fill="none"
-          />
+          <path d="M 8.7 9 Q 12 10 15.3 9" stroke="rgba(0,0,0,0.35)" strokeWidth="0.7" fill="none" />
           <ellipse cx="12" cy="3.4" rx="0.7" ry="1" fill="rgba(0,0,0,0.45)" />
         </>
       )}

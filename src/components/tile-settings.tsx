@@ -1,9 +1,7 @@
-import { type FC } from 'react'
-
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 
-import { useGetPropFromFavorite, useSetPropOnFavorite } from '../api.ts'
+import { useGetPropertyFromFavorite, useSetPropertyOnFavorite } from '../api.ts'
 
 const sx = {
   'maxWidth': '122px',
@@ -36,11 +34,13 @@ const getInputProps = (text: string) => {
   }
 }
 
-export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
-  const min = useGetPropFromFavorite(favoriteId, 'min')
-  const max = useGetPropFromFavorite(favoriteId, 'max')
-  const { mutate } = useSetPropOnFavorite()
-  const handleReset = () => mutate({ favoriteId, min: '', max: '' })
+export const TileSettings = ({ favoriteId }: { favoriteId: string }) => {
+  const min = useGetPropertyFromFavorite(favoriteId, 'min')
+  const max = useGetPropertyFromFavorite(favoriteId, 'max')
+  const { mutate } = useSetPropertyOnFavorite()
+  const handleReset = () => {
+    mutate({ favoriteId, min: '', max: '' })
+  }
 
   const minKey = `${min}-min-key`
   const maxKey = `${max}-max-key`
@@ -56,12 +56,8 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
         mb: '2px',
       }}
     >
-      {(min || max) && (
-        <IconButton
-          size="small"
-          sx={{ pt: '2px', pb: '2px', color: 'text.secondary' }}
-          onClick={handleReset}
-        >
+      {(Boolean(min) || Boolean(max)) && (
+        <IconButton size="small" sx={{ pt: '2px', pb: '2px', color: 'text.secondary' }} onClick={handleReset}>
           <HighlightOffIcon fontSize="small" />
         </IconButton>
       )}
@@ -69,10 +65,10 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
         size="small"
         key={minKey}
         defaultValue={min}
-        onBlur={(e) => {
-          const value = e.target.value.replace(/\D/g, '')
+        onBlur={(event) => {
+          const value = event.target.value.replaceAll(/\D/g, '')
 
-          if (value !== (min || '').toString()) {
+          if (value !== (min ? min.toString() : '')) {
             mutate({
               favoriteId,
               min: value,
@@ -88,13 +84,13 @@ export const TileSettings: FC<{ favoriteId: string }> = ({ favoriteId }) => {
         size="small"
         key={maxKey}
         defaultValue={max}
-        onBlur={(e) => {
-          const value = e.target.value.replace(/\D/g, '')
+        onBlur={(event) => {
+          const value = event.target.value.replaceAll(/\D/g, '')
 
-          if (value !== (max || '')?.toString()) {
+          if (value !== (max ? max.toString() : '')) {
             mutate({
               favoriteId,
-              max: e.target.value.replace(/\D/g, ''),
+              max: event.target.value.replaceAll(/\D/g, ''),
             })
           }
         }}

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 
 import { Outlet } from '@tanstack/react-router'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
 import { FavoriteInput, type FavoriteInputForm } from './favorite-input.tsx'
 import { useFavoriteItems } from './use-favorite-items.ts'
@@ -19,7 +19,7 @@ const getFiltered = (search: string, data: FavoriteProduct[]): FavoriteProduct[]
 
 export const Favorites = () => {
   const methods = useForm<FavoriteInputForm>({ defaultValues: { sku: '' } })
-  const sku = methods.watch('sku')
+  const sku = useWatch({ control: methods.control, name: 'sku' })
   const favoriteItems = useFavoriteItems()
   const filteredItems = getFiltered(sku, favoriteItems)
 

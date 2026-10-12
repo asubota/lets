@@ -28,12 +28,7 @@ export const EmptyCart = () => {
           Час щось закинути, братан
         </Typography>
       </Box>
-      <LinkedButton
-        to="/list"
-        variant="contained"
-        startIcon={<DirectionsBikeIcon />}
-        sx={{ mt: 1 }}
-      >
+      <LinkedButton to="/list" variant="contained" startIcon={<DirectionsBikeIcon />} sx={{ mt: 1 }}>
         До каталогу
       </LinkedButton>
     </Container>

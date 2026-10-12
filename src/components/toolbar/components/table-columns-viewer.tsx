@@ -1,11 +1,9 @@
-import { type FC } from 'react'
-
 import TuneIcon from '@mui/icons-material/Tune'
 import { IconButton } from '@mui/material'
 
 import { useAppView, useTableActions } from '../../../store'
 
-export const TableColumnsViewer: FC = () => {
+export const TableColumnsViewer = () => {
   const view = useAppView()
   const { toggleSettings } = useTableActions()
 

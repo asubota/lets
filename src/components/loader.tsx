@@ -40,18 +40,19 @@ export const Loader = () => {
                 gap: 2,
                 borderRadius: '24px',
                 cursor: 'pointer',
-                boxShadow: theme.palette.mode === 'dark'
-                  ? '0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)'
-                  : '0 16px 40px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5)',
+                boxShadow:
+                  theme.palette.mode === 'dark'
+                    ? '0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)'
+                    : '0 16px 40px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5)',
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
                 <Box sx={{ position: 'relative', display: 'inline-flex', flexShrink: 0 }}>
-                  <CircularProgress 
-                    variant="determinate" 
-                    value={progress.percent || 0} 
-                    size={60} 
-                    thickness={4.5} 
+                  <CircularProgress
+                    variant="determinate"
+                    value={progress.percent || 0}
+                    size={60}
+                    thickness={4.5}
                     sx={{ color: 'primary.main' }}
                   />
                   <Box
@@ -66,13 +67,13 @@ export const Loader = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        fontWeight: 800, 
-                        fontSize: '12px', 
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontWeight: 800,
+                        fontSize: '12px',
                         color: 'text.primary',
-                        fontFamily: '"Outfit", sans-serif'
+                        fontFamily: '"Outfit", sans-serif',
                       }}
                     >
                       {`${progress.percent || 0}%`}
@@ -81,27 +82,27 @@ export const Loader = () => {
                 </Box>
 
                 <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                  <Typography 
-                    variant="h6" 
-                    noWrap 
-                    sx={{ 
-                      fontWeight: 800, 
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    sx={{
+                      fontWeight: 800,
                       fontFamily: '"Outfit", sans-serif',
                       letterSpacing: '-0.3px',
-                      fontSize: '18px'
+                      fontSize: '18px',
                     }}
                   >
                     Синхронізація
                   </Typography>
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary" 
-                    noWrap 
-                    sx={{ 
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    noWrap
+                    sx={{
                       display: 'block',
                       fontFamily: '"Outfit", sans-serif',
                       fontWeight: 500,
-                      opacity: 0.8
+                      opacity: 0.8,
                     }}
                   >
                     {progress.loaded.toLocaleString()} / {progress.total.toLocaleString()} товарів
@@ -114,7 +115,7 @@ export const Loader = () => {
                     gap: 1.5,
                     alignItems: 'center',
                     flexShrink: 0,
-                    opacity: 0.9
+                    opacity: 0.9,
                   }}
                 >
                   <Logo width="80px" />
@@ -125,7 +126,7 @@ export const Loader = () => {
                 sx={{
                   height: 6,
                   width: '100%',
-                  bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                  bgcolor: (theme) => (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                   borderRadius: 3,
                   overflow: 'hidden',
                 }}

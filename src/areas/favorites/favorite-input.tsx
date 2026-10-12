@@ -1,28 +1,21 @@
-import { type FC, type KeyboardEventHandler } from 'react'
+import { type KeyboardEventHandler } from 'react'
 
 import { Cancel } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
-import {
-  Box,
-  IconButton,
-  InputAdornment,
-  Portal,
-  TextField,
-} from '@mui/material'
+import { Box, IconButton, InputAdornment, Portal, TextField } from '@mui/material'
 import { Controller, type SubmitHandler, useFormContext } from 'react-hook-form'
 
 import { useToggleFavorite } from '../../api.ts'
 import { DUMMY_VENDOR } from '../../constants.ts'
 import { useAllData } from '../../use-data.ts'
 
-export type FavoriteInputForm = {
+export interface FavoriteInputForm {
   sku: string
 }
 
-export const FavoriteInput: FC = () => {
+export const FavoriteInput = () => {
   const products = useAllData()
-  const { watch, handleSubmit, reset, control } =
-    useFormContext<FavoriteInputForm>()
+  const { watch, handleSubmit, reset, control } = useFormContext<FavoriteInputForm>()
   const { mutate } = useToggleFavorite()
 
   const onSubmit: SubmitHandler<FavoriteInputForm> = ({ sku }) => {
@@ -33,9 +26,7 @@ export const FavoriteInput: FC = () => {
 
     if (!sku.includes(':')) {
       const lowerSku = sku.toLowerCase()
-      const product = products.find(
-        (p) => p.sku.toLowerCase() === lowerSku && p.vendor !== 'base',
-      )
+      const product = products.find((p) => p.sku.toLowerCase() === lowerSku && p.vendor !== 'base')
 
       if (product) {
         value.push(product.vendor)
@@ -49,14 +40,14 @@ export const FavoriteInput: FC = () => {
   }
 
   const value = watch('sku')
-  const handleKeyUp: KeyboardEventHandler = (e) => {
-    if (e.key === 'Escape') {
+  const handleKeyUp: KeyboardEventHandler = (event) => {
+    if (event.key === 'Escape') {
       reset({ sku: '' })
     }
   }
 
   return (
-    <Portal container={() => document.getElementById('app-bar-center')}>
+    <Portal container={() => document.querySelector('#app-bar-center')}>
       <Controller
         name="sku"
         control={control}
@@ -76,7 +67,9 @@ export const FavoriteInput: FC = () => {
                   endAdornment: (
                     <InputAdornment position="end" sx={{ marginRight: -2 }}>
                       <IconButton
-                        onClick={() => reset()}
+                        onClick={() => {
+                          reset()
+                        }}
                         size="small"
                         sx={{
                           'color': 'text.secondary',
@@ -88,10 +81,7 @@ export const FavoriteInput: FC = () => {
                       </IconButton>
 
                       <Box sx={{ backgroundColor: 'primary.main' }}>
-                        <IconButton
-                          type="submit"
-                          sx={{ color: 'primary.contrastText' }}
-                        >
+                        <IconButton type="submit" sx={{ color: 'primary.contrastText' }}>
                           <AddIcon />
                         </IconButton>
                       </Box>

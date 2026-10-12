@@ -4,11 +4,7 @@ import { useGetFavorites } from '../../api.ts'
 import { DUMMY_VENDOR } from '../../constants.ts'
 import { useAppSort } from '../../store'
 import { updateFavoriteId } from '../../supabase-api-favorites.ts'
-import {
-  compareByNoteAndTime,
-  compareByTime,
-  getFavoriteId,
-} from '../../tools.tsx'
+import { compareByNoteAndTime, compareByTime, getFavoriteId } from '../../tools.tsx'
 import { type FavoriteProduct } from '../../types.ts'
 import { useAllData } from '../../use-data.ts'
 
@@ -17,10 +13,7 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
   const products = useAllData()
   const sort = useAppSort()
 
-  const byId = useMemo(
-    () => new Map(favoriteItems.map((item) => [item.favoriteId, item])),
-    [favoriteItems],
-  )
+  const byId = useMemo(() => new Map(favoriteItems.map((item) => [item.favoriteId, item])), [favoriteItems])
 
   return useMemo(() => {
     const result: FavoriteProduct[] = []
@@ -30,22 +23,22 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
       return result
     }
 
-    products.forEach((item) => {
+    for (const item of products) {
       const favoriteId = getFavoriteId(item)
 
       if (byId.has(favoriteId)) {
         result.push({
           ...item,
-          time: byId.get(favoriteId)?.time || 0,
+          time: byId.get(favoriteId)?.time ?? 0,
           note: byId.get(favoriteId)?.note,
         })
         existingKeys.add(favoriteId)
       }
-    })
+    }
 
-    favoriteItems.forEach((favoriteItem) => {
+    for (const favoriteItem of favoriteItems) {
       if (!existingKeys.has(favoriteItem.favoriteId)) {
-        const [sku, vendor] = favoriteItem.favoriteId.split(':')
+        const [sku = '', vendor = ''] = favoriteItem.favoriteId.split(':')
 
         const missedProduct: FavoriteProduct = {
           sku,
@@ -63,21 +56,19 @@ export const useFavoriteItems = (): FavoriteProduct[] => {
 
         if (vendor === DUMMY_VENDOR) {
           const lowerSku = sku.toLowerCase()
-          const product = products.find(
-            (p) => p.sku.toLowerCase() === lowerSku && p.vendor !== 'base',
-          )
+          const product = products.find((p) => p.sku.toLowerCase() === lowerSku && p.vendor !== 'base')
 
           if (product) {
             missedProduct.vendor = product.vendor
-            updateFavoriteId(favoriteItem.favoriteId, getFavoriteId(product))
+            void updateFavoriteId(favoriteItem.favoriteId, getFavoriteId(product))
           }
         }
 
         result.push(missedProduct)
       }
-    })
+    }
 
-    const sortFn = sort === 'date' ? compareByTime : compareByNoteAndTime
-    return result.sort(sortFn)
+    const sortFunction = sort === 'date' ? compareByTime : compareByNoteAndTime
+    return result.toSorted(sortFunction)
   }, [byId, products, favoriteItems, sort])
 }
