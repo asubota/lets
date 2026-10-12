@@ -187,6 +187,7 @@ export const Tile = ({
               <LinkedIcon
                 to={isFavoritePage ? `/favorites/$id/details` : `/list/$id/details`}
                 params={{ id: getFavoriteId(p) }}
+                resetScroll={false}
                 sx={{
                   'color': 'text.secondary',
                   'fontSize': '22px',
