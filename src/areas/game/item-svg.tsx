@@ -3,12 +3,12 @@ import { useId } from 'react'
 import { ITEM_KINDS } from './config.ts'
 import { type ItemKind } from '../../store/game.ts'
 
-type Props = {
+interface Props {
   kind: ItemKind
   size?: number
 }
 
-type SkinTone = {
+interface SkinTone {
   shaftLight: string
   shaftMid: string
   shaftDark: string
@@ -84,7 +84,7 @@ const SKIN: Record<ItemKind, SkinTone> = {
   },
 }
 
-type ShaftPath = {
+interface ShaftPath {
   d: string
   glansCx: number
   glansCy: number
@@ -112,11 +112,7 @@ const SHAPES: Record<Proportion, ShaftPath> = {
     midRidgeY: 56,
     tipCx: 50,
     tipCy: 32,
-    veinPaths: [
-      'M 39 70 Q 41 85 38 100',
-      'M 60 65 Q 62 80 61 100',
-      'M 50 60 Q 52 80 49 100',
-    ],
+    veinPaths: ['M 39 70 Q 41 85 38 100', 'M 60 65 Q 62 80 61 100', 'M 50 60 Q 52 80 49 100'],
     hiX1: 40,
     hiY1: 70,
     hiX2: 44,
@@ -132,11 +128,7 @@ const SHAPES: Record<Proportion, ShaftPath> = {
     midRidgeY: 38,
     tipCx: 50,
     tipCy: 16,
-    veinPaths: [
-      'M 39 50 Q 42 75 38 100',
-      'M 60 45 Q 63 75 61 100',
-      'M 50 36 Q 53 70 49 100',
-    ],
+    veinPaths: ['M 39 50 Q 42 75 38 100', 'M 60 45 Q 63 75 61 100', 'M 50 36 Q 53 70 49 100'],
     hiX1: 39,
     hiY1: 60,
     hiX2: 44,
@@ -152,11 +144,7 @@ const SHAPES: Record<Proportion, ShaftPath> = {
     midRidgeY: 28,
     tipCx: 50,
     tipCy: 6,
-    veinPaths: [
-      'M 39 36 Q 42 70 38 100',
-      'M 60 32 Q 63 70 61 100',
-      'M 50 22 Q 53 65 49 100',
-    ],
+    veinPaths: ['M 39 36 Q 42 70 38 100', 'M 60 32 Q 63 70 61 100', 'M 50 22 Q 53 65 49 100'],
     hiX1: 39,
     hiY1: 50,
     hiX2: 44,
@@ -203,24 +191,8 @@ const Natural = ({
       <ellipse cx="36" cy="119" rx="18" ry="6" fill={t.shadow} opacity="0.25" />
       <ellipse cx="64" cy="119" rx="18" ry="6" fill={t.shadow} opacity="0.25" />
 
-      <ellipse
-        cx="36"
-        cy="113"
-        rx="16"
-        ry="13"
-        fill={`url(#${id}-ball)`}
-        stroke={t.shadow}
-        strokeWidth="0.5"
-      />
-      <ellipse
-        cx="64"
-        cy="113"
-        rx="16"
-        ry="13"
-        fill={`url(#${id}-ball)`}
-        stroke={t.shadow}
-        strokeWidth="0.5"
-      />
+      <ellipse cx="36" cy="113" rx="16" ry="13" fill={`url(#${id}-ball)`} stroke={t.shadow} strokeWidth="0.5" />
+      <ellipse cx="64" cy="113" rx="16" ry="13" fill={`url(#${id}-ball)`} stroke={t.shadow} strokeWidth="0.5" />
       <path d="M 50 102 Q 53 110 50 120 Q 47 110 50 102 Z" fill={t.shadow} opacity="0.45" />
       <ellipse cx="32" cy="105" rx="3" ry="6" fill={t.highlight} opacity="0.45" />
       <ellipse cx="60" cy="105" rx="3" ry="6" fill={t.highlight} opacity="0.45" />
@@ -241,13 +213,7 @@ const Natural = ({
         opacity="0.45"
       />
 
-      <ellipse
-        cx={s.glansCx}
-        cy={s.glansCy}
-        rx={s.glansRx}
-        ry={s.glansRy}
-        fill={`url(#${id}-glans)`}
-      />
+      <ellipse cx={s.glansCx} cy={s.glansCy} rx={s.glansRx} ry={s.glansRy} fill={`url(#${id}-glans)`} />
 
       <path
         d={`M 33 ${s.coronaY} Q 50 ${s.coronaY + 6} 67 ${s.coronaY}`}
@@ -278,14 +244,7 @@ const Natural = ({
 
       {shiny && (
         <>
-          <ellipse
-            cx={s.hiX2 - 1}
-            cy={s.hiY2 - 1}
-            rx="1.2"
-            ry="1.6"
-            fill="#ffffff"
-            opacity="0.95"
-          />
+          <ellipse cx={s.hiX2 - 1} cy={s.hiY2 - 1} rx="1.2" ry="1.6" fill="#ffffff" opacity="0.95" />
           <path
             d={`M ${s.glansCx + 4} ${s.glansCy - 2} l 1 -2 l 0.5 2 l 2 0.5 l -2 0.5 l -0.5 2 l -1 -2 l -2 -0.5 z`}
             fill="#ffffff"
@@ -296,22 +255,8 @@ const Natural = ({
             fill="#ffffff"
             opacity="0.85"
           />
-          <ellipse
-            cx="36"
-            cy="108"
-            rx="2.5"
-            ry="3.5"
-            fill="#ffffff"
-            opacity="0.55"
-          />
-          <ellipse
-            cx="64"
-            cy="108"
-            rx="2.5"
-            ry="3.5"
-            fill="#ffffff"
-            opacity="0.55"
-          />
+          <ellipse cx="36" cy="108" rx="2.5" ry="3.5" fill="#ffffff" opacity="0.55" />
+          <ellipse cx="64" cy="108" rx="2.5" ry="3.5" fill="#ffffff" opacity="0.55" />
         </>
       )}
     </>
@@ -332,7 +277,7 @@ export const ItemSvg = ({ kind, size }: Props) => {
   const cfg = ITEM_KINDS[kind]
   const finalSize = size ?? cfg.size
   const rawId = useId()
-  const id = `gi${rawId.replace(/[^a-zA-Z0-9]/g, '')}`
+  const id = `gi${rawId.replaceAll(/[^a-zA-Z0-9]/g, '')}`
   const proportion = proportionFor(kind)
   return (
     <svg

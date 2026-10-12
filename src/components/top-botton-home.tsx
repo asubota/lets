@@ -10,12 +10,7 @@ export const TopBottomHome = ({ children }: PropsWithChildren) => {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ p: 3, pb: 2 }}>
-        <LinkedButton
-          to="/list"
-          fullWidth
-          variant="contained"
-          color="secondary"
-        >
+        <LinkedButton to="/list" fullWidth variant="contained" color="secondary">
           <HouseIcon color="primary" />
         </LinkedButton>
       </Box>

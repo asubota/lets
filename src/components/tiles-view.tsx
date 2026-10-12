@@ -1,7 +1,5 @@
-import { type FC } from 'react'
-import { motion } from 'framer-motion'
-
 import { Box } from '@mui/material'
+import { motion } from 'framer-motion'
 
 import { type Product } from '../types.ts'
 import { Tile } from './tile.tsx'
@@ -11,7 +9,7 @@ import { useInfiniteScroll } from '../hooks/use-infinite-scroll.ts'
 import { getFavoriteId } from '../tools.tsx'
 
 export interface SharedTilesViewProps {
-  isFavoritePage?: boolean
+  isFavoritePage?: boolean | undefined
 }
 
 interface TilesViewProps extends SharedTilesViewProps {
@@ -34,10 +32,10 @@ const item = {
   show: { opacity: 1, y: 0 },
 }
 
-const TilesView: FC<TilesViewProps> = ({ list, search, isFavoritePage = false }) => {
+const TilesView = ({ list, search, isFavoritePage = false }: TilesViewProps) => {
   const favoriteIds = useFavoriteIds()
   const changedProducts = useGetChangedProducts()
-  const skus = changedProducts.map((p) => p.sku)
+  const skus = new Set(changedProducts.map((p) => p.sku))
   const { visibleList, hasMore, loadMoreRef } = useInfiniteScroll(list)
 
   return (
@@ -63,7 +61,7 @@ const TilesView: FC<TilesViewProps> = ({ list, search, isFavoritePage = false })
               p={p}
               search={search}
               isFavorite={favoriteIds.includes(favoriteId)}
-              isChanged={skus.includes(p.sku)}
+              isChanged={skus.has(p.sku)}
               isFavoritePage={isFavoritePage}
             />
           </motion.div>

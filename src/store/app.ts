@@ -1,8 +1,7 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { devtools } from 'zustand/middleware'
+import { persist, devtools } from 'zustand/middleware'
 
-type MetaVendor = {
+interface MetaVendor {
   load: number
   load_str: string
   parse: number
@@ -11,12 +10,12 @@ type MetaVendor = {
   vendor: string
 }
 
-export type Meta = {
+export interface Meta {
   created: string
   vendors: MetaVendor[]
 }
 
-export type LoadingProgress = {
+export interface LoadingProgress {
   loaded: number
   total: number
   percent: number
@@ -31,12 +30,12 @@ interface StoreState {
   loaderCollapsed: boolean
 
   actions: {
-    setView(this: void, view: StoreState['view']): void
-    setTheme(this: void, theme: StoreState['theme']): void
-    setSort(this: void, sort: StoreState['sort']): void
-    setMeta(this: void, meta: StoreState['meta']): void
-    setLoadingProgress(this: void, progress: LoadingProgress | null): void
-    toggleLoaderCollapsed(this: void): void
+    setView: (this: void, view: StoreState['view']) => void
+    setTheme: (this: void, theme: StoreState['theme']) => void
+    setSort: (this: void, sort: StoreState['sort']) => void
+    setMeta: (this: void, meta: StoreState['meta']) => void
+    setLoadingProgress: (this: void, progress: LoadingProgress | null) => void
+    toggleLoaderCollapsed: (this: void) => void
   }
 }
 

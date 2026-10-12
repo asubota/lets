@@ -1,9 +1,7 @@
-import { type FC } from 'react'
-
 import { InputAdornment, TextField, Typography } from '@mui/material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 
-import { useSetPropOnCart } from '../../cart-api.ts'
+import { useSetPropertyOnCart } from '../../cart-api.ts'
 
 interface DiscountInputProps {
   discount: number
@@ -14,11 +12,8 @@ interface DiscountForm {
   discount: string
 }
 
-export const DiscountInput: FC<DiscountInputProps> = ({
-  itemId,
-  discount: currentDiscount,
-}) => {
-  const { mutate } = useSetPropOnCart()
+export const DiscountInput = ({ itemId, discount: currentDiscount }: DiscountInputProps) => {
+  const { mutate } = useSetPropertyOnCart()
   const { register, handleSubmit, setValue } = useForm<DiscountForm>({
     defaultValues: {
       discount: String(currentDiscount),
@@ -26,7 +21,7 @@ export const DiscountInput: FC<DiscountInputProps> = ({
   })
 
   const onSubmit: SubmitHandler<DiscountForm> = ({ discount }) => {
-    const value = discount.replace(/\D/g, '')
+    const value = discount.replaceAll(/\D/g, '')
 
     if (value && value !== String(currentDiscount)) {
       mutate({ itemId, discount: value })
@@ -37,8 +32,8 @@ export const DiscountInput: FC<DiscountInputProps> = ({
     <TextField
       {...register('discount')}
       component="form"
-      onBlur={(e) => {
-        const value = e.target.value.replace(/\D/g, '')
+      onBlur={(event) => {
+        const value = event.target.value.replaceAll(/\D/g, '')
 
         if (!value) {
           setValue('discount', '0')
@@ -49,7 +44,7 @@ export const DiscountInput: FC<DiscountInputProps> = ({
           mutate({ itemId, discount: value })
         }
 
-        if (value && value !== e.target.value) {
+        if (value && value !== event.target.value) {
           setValue('discount', value)
         }
       }}

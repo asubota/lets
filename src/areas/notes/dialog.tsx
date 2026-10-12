@@ -1,37 +1,32 @@
-import { type FC } from 'react'
+import { type SyntheticEvent } from 'react'
 
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
 import { createLink, useNavigate, useParams } from '@tanstack/react-router'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 
-import { useGetPropFromFavorite, useSetPropOnFavorite } from '../../api.ts'
+import { useGetPropertyFromFavorite, useSetPropertyOnFavorite } from '../../api.ts'
 
-type NoteForm = {
+interface NoteForm {
   note: string
 }
 
 const LinkedButton = createLink(Button)
 
-export const NotesDialog: FC = () => {
+export const NotesDialog = () => {
   const { favoriteId } = useParams({
     from: '/_layout/favorites/$favoriteId/notes',
   })
   const navigate = useNavigate()
-  const note = useGetPropFromFavorite(favoriteId, 'note')
+  const note = useGetPropertyFromFavorite(favoriteId, 'note')
   const { register, handleSubmit } = useForm<NoteForm>({
-    defaultValues: { note },
+    defaultValues: { note: note ?? '' },
   })
 
-  const { mutate } = useSetPropOnFavorite()
+  const { mutate } = useSetPropertyOnFavorite()
 
-  const handleClose = () => navigate({ to: '/favorites' })
+  const handleClose = () => {
+    void navigate({ to: '/favorites' })
+  }
 
   const onSubmit: SubmitHandler<NoteForm> = ({ note }) => {
     if (favoriteId) {
@@ -64,20 +59,13 @@ export const NotesDialog: FC = () => {
             maxWidth: '600px',
           },
           component: 'form',
-          onSubmit: handleSubmit(onSubmit),
+          onSubmit: (event: SyntheticEvent) => void handleSubmit(onSubmit)(event),
         },
       }}
     >
       <DialogTitle fontSize="medium">Нотатки</DialogTitle>
       <DialogContent>
-        <TextField
-          {...register('note')}
-          autoFocus
-          fullWidth
-          variant="outlined"
-          multiline
-          minRows={3}
-        />
+        <TextField {...register('note')} autoFocus fullWidth variant="outlined" multiline minRows={3} />
       </DialogContent>
 
       <DialogActions>

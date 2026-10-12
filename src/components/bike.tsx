@@ -38,9 +38,7 @@ export const Bike = ({ type }: { type: 'safe' | 'broken' }) => {
         </Box>
       )}
 
-      {type === 'broken' && (
-        <Box component={BrokenBike} sx={{ width: '230px' }} />
-      )}
+      {type === 'broken' && <Box component={BrokenBike} sx={{ width: '230px' }} />}
     </Box>
   )
 }

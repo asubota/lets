@@ -1,5 +1,3 @@
-import { type FC } from 'react'
-
 import GoogleIcon from '@mui/icons-material/Google'
 import { IconButton } from '@mui/material'
 
@@ -8,9 +6,14 @@ const handleGoogle = async () => {
   window.open(`https://www.google.com/search?q=${text}`, '_blank')
 }
 
-export const GoogleButton: FC = () => {
+export const GoogleButton = () => {
   return (
-    <IconButton title="Пошук в Google" size="small" sx={{ color: 'text.secondary', borderRadius: '10px' }} onClick={handleGoogle}>
+    <IconButton
+      title="Пошук в Google"
+      size="small"
+      sx={{ color: 'text.secondary', borderRadius: '10px' }}
+      onClick={handleGoogle}
+    >
       <GoogleIcon />
     </IconButton>
   )

@@ -12,11 +12,11 @@ import { GoogleButton } from './google-button.tsx'
 import { PasteInSearchButton } from './paste-in-search-button.tsx'
 
 export interface SharedToolbarProps {
-  hasFavoritesSorting?: boolean
-  hasPasteIn?: boolean
-  hasGoogle?: boolean
-  hasColumnsConfig?: boolean
-  hasAppliedFilters?: boolean
+  hasFavoritesSorting?: boolean | undefined
+  hasPasteIn?: boolean | undefined
+  hasGoogle?: boolean | undefined
+  hasColumnsConfig?: boolean | undefined
+  hasAppliedFilters?: boolean | undefined
 }
 
 interface ToolbarProps extends SharedToolbarProps {

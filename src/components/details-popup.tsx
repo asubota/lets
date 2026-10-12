@@ -1,23 +1,14 @@
-import { type FC, useState } from 'react'
+import { useState } from 'react'
 
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
 import OpenInFullIcon from '@mui/icons-material/OpenInFull'
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  IconButton,
-} from '@mui/material'
+import { Dialog, DialogContent, DialogTitle, Divider, IconButton } from '@mui/material'
 
 import { type Product } from '../types.ts'
 import { ImageSlider } from './image-slider.tsx'
 import { useNoScroll } from '../hooks/use-no-scroll.ts'
 
-export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
-  details,
-  onClose,
-}) => {
+export const DetailsPopup = ({ details, onClose }: { details: Product; onClose: () => void }) => {
   const [isFullScreen, setIsFullScreen] = useState(false)
   useNoScroll()
 
@@ -48,21 +39,15 @@ export const DetailsPopup: FC<{ details: Product; onClose: () => void }> = ({
           <IconButton
             size="small"
             sx={{ ml: 'auto', color: 'primary.main' }}
-            onClick={() => setIsFullScreen((v) => !v)}
+            onClick={() => {
+              setIsFullScreen((v) => !v)
+            }}
           >
-            {isFullScreen ? (
-              <CloseFullscreenIcon fontSize="small" />
-            ) : (
-              <OpenInFullIcon fontSize="small" />
-            )}
+            {isFullScreen ? <CloseFullscreenIcon fontSize="small" /> : <OpenInFullIcon fontSize="small" />}
           </IconButton>
         )}
       </DialogTitle>
-      {!isFullScreen && (
-        <Divider
-          sx={{ ml: 1, mr: 1, mb: '4px', borderColor: 'primary.main' }}
-        />
-      )}
+      {!isFullScreen && <Divider sx={{ ml: 1, mr: 1, mb: '4px', borderColor: 'primary.main' }} />}
       {details.pics && (
         <DialogContent
           sx={{

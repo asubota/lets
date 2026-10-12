@@ -17,8 +17,8 @@ export const useInfiniteScroll = <T>(list: T[]) => {
     }
 
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setVisibleCount((prev) => prev + BATCH_SIZE)
+      if (entry?.isIntersecting) {
+        setVisibleCount((previous) => previous + BATCH_SIZE)
       }
     }, options)
 
@@ -26,7 +26,9 @@ export const useInfiniteScroll = <T>(list: T[]) => {
       observer.observe(ref.current)
     }
 
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+    }
   }, [hasMore])
 
   return { visibleList, hasMore, loadMoreRef: ref }

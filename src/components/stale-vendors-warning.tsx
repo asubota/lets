@@ -26,11 +26,7 @@ function CheckEngineIcon() {
       viewBox="0 0 1024.000000 1024.000000"
       preserveAspectRatio="xMidYMid meet"
     >
-      <g
-        transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
-        fill="currentColor"
-        stroke="none"
-      >
+      <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none">
         <Box
           component="path"
           sx={{ color: 'primary.main' }}

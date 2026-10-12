@@ -6,16 +6,7 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
 import VibrationIcon from '@mui/icons-material/Vibration'
 import VolumeOffIcon from '@mui/icons-material/VolumeOff'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp'
-import {
-  Box,
-  Paper,
-  Stack,
-  Switch,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  useTheme,
-} from '@mui/material'
+import { Box, Paper, Stack, Switch, ToggleButton, ToggleButtonGroup, Typography, useTheme } from '@mui/material'
 
 import { ITEM_KINDS } from './config.ts'
 import { ItemSvg } from './item-svg.tsx'
@@ -30,7 +21,7 @@ const KIND_LABELS: Record<keyof typeof ITEM_KINDS, string> = {
   rocket: 'золотий',
 }
 
-const AUTO_END_PRESETS: Array<{ value: number; label: string }> = [
+const AUTO_END_PRESETS: { value: number; label: string }[] = [
   { value: 60, label: '1хв' },
   { value: 600, label: '10хв' },
 ]
@@ -72,15 +63,7 @@ const PageTitle = () => (
   </Box>
 )
 
-const KpiPill = ({
-  label,
-  value,
-  accent,
-}: {
-  label: string
-  value: string | number
-  accent?: boolean
-}) => (
+const KpiPill = ({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) => (
   <Box
     sx={(t) => ({
       px: 1,
@@ -88,16 +71,10 @@ const KpiPill = ({
       borderRadius: 0.75,
       textAlign: 'center',
       background: t.palette.mode === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.7)',
-      border:
-        t.palette.mode === 'dark'
-          ? '1px solid rgba(255,255,255,0.06)'
-          : '1px solid rgba(15,23,42,0.04)',
+      border: t.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(15,23,42,0.04)',
     })}
   >
-    <Typography
-      variant="caption"
-      sx={{ color: 'text.secondary', display: 'block', lineHeight: 1, fontSize: '0.7rem' }}
-    >
+    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1, fontSize: '0.7rem' }}>
       {label}
     </Typography>
     <Typography
@@ -122,10 +99,7 @@ const HeroCard = () => {
   const summary = useMemo(() => buildLeaderboardSummary(scores), [scores])
 
   const gradient = pickGradient(gameMode, theme.palette.mode === 'dark')
-  const accuracy =
-    summary.totalTaps > 0
-      ? `${Math.round((summary.totalRockets / summary.totalTaps) * 100)}%`
-      : '—'
+  const accuracy = summary.totalTaps > 0 ? `${Math.round((summary.totalRockets / summary.totalTaps) * 100)}%` : '—'
 
   return (
     <Paper
@@ -137,10 +111,7 @@ const HeroCard = () => {
         background: gradient,
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        border:
-          t.palette.mode === 'dark'
-            ? '1px solid rgba(255,255,255,0.06)'
-            : '1px solid rgba(15,23,42,0.06)',
+        border: t.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(15,23,42,0.06)',
       })}
     >
       <Box sx={{ p: { xs: 1.75, sm: 2 } }}>
@@ -153,9 +124,7 @@ const HeroCard = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: gameMode
-                ? 'linear-gradient(135deg, #ea2b06, #a72aaa)'
-                : 'rgba(125,125,125,0.18)',
+              background: gameMode ? 'linear-gradient(135deg, #ea2b06, #a72aaa)' : 'rgba(125,125,125,0.18)',
               color: '#fff',
               transition: 'background 240ms ease',
               animation: gameMode ? 'gameHeroPulse 2.4s ease-in-out infinite' : undefined,
@@ -169,12 +138,14 @@ const HeroCard = () => {
               Game Mode
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              {gameMode ? 'Лови об\'єкти у польоті' : 'Зараз вимкнено'}
+              {gameMode ? "Лови об'єкти у польоті" : 'Зараз вимкнено'}
             </Typography>
           </Box>
           <Switch
             checked={gameMode}
-            onChange={(e) => setGameMode(e.target.checked)}
+            onChange={(event) => {
+              setGameMode(event.target.checked)
+            }}
             color="primary"
             sx={{ transform: 'scale(1.15)' }}
           />
@@ -205,17 +176,11 @@ const KindsRow = () => {
       sx={(t) => ({
         p: 1.75,
         borderRadius: 1.5,
-        border:
-          t.palette.mode === 'dark'
-            ? '1px solid rgba(255,255,255,0.06)'
-            : '1px solid rgba(15,23,42,0.06)',
+        border: t.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(15,23,42,0.06)',
         background: t.palette.mode === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.5)',
       })}
     >
-      <Typography
-        variant="overline"
-        sx={{ letterSpacing: 1.2, color: 'text.secondary', fontWeight: 700 }}
-      >
+      <Typography variant="overline" sx={{ letterSpacing: 1.2, color: 'text.secondary', fontWeight: 700 }}>
         Види
       </Typography>
       <Box
@@ -226,7 +191,7 @@ const KindsRow = () => {
           gap: 1,
         }}
       >
-        {(Object.keys(ITEM_KINDS) as Array<keyof typeof ITEM_KINDS>).map((k) => (
+        {(Object.keys(ITEM_KINDS) as (keyof typeof ITEM_KINDS)[]).map((k) => (
           <Stack
             key={k}
             alignItems="center"
@@ -248,10 +213,7 @@ const KindsRow = () => {
             >
               <ItemSvg kind={k} size={40} />
             </Box>
-            <Typography
-              variant="caption"
-              sx={{ fontWeight: 700, fontSize: '0.78rem', lineHeight: 1.1 }}
-            >
+            <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '0.78rem', lineHeight: 1.1 }}>
               {ITEM_KINDS[k].points} pts
             </Typography>
             <Typography
@@ -281,7 +243,7 @@ const ToggleRow = ({
   iconOff: ReactNode
   label: string
   checked: boolean
-  onChange(value: boolean): void
+  onChange: (value: boolean) => void
 }) => (
   <Stack direction="row" alignItems="center" spacing={1.5}>
     <Box
@@ -301,7 +263,12 @@ const ToggleRow = ({
     <Typography variant="body2" sx={{ flex: 1, fontWeight: 600 }}>
       {label}
     </Typography>
-    <Switch checked={checked} onChange={(e) => onChange(e.target.checked)} />
+    <Switch
+      checked={checked}
+      onChange={(event) => {
+        onChange(event.target.checked)
+      }}
+    />
   </Stack>
 )
 
@@ -316,17 +283,11 @@ const SettingsCard = () => {
       sx={(t) => ({
         p: 1.75,
         borderRadius: 1.5,
-        border:
-          t.palette.mode === 'dark'
-            ? '1px solid rgba(255,255,255,0.06)'
-            : '1px solid rgba(15,23,42,0.06)',
+        border: t.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(15,23,42,0.06)',
         background: t.palette.mode === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.5)',
       })}
     >
-      <Typography
-        variant="overline"
-        sx={{ letterSpacing: 1.2, color: 'text.secondary', fontWeight: 700 }}
-      >
+      <Typography variant="overline" sx={{ letterSpacing: 1.2, color: 'text.secondary', fontWeight: 700 }}>
         Налаштування
       </Typography>
 
@@ -336,21 +297,27 @@ const SettingsCard = () => {
           iconOff={<VolumeOffIcon fontSize="small" />}
           label="Звук"
           checked={settings.soundEnabled}
-          onChange={(v) => updateSettings({ soundEnabled: v })}
+          onChange={(v) => {
+            updateSettings({ soundEnabled: v })
+          }}
         />
         <ToggleRow
           iconOn={<VibrationIcon fontSize="small" />}
           iconOff={<VibrationIcon fontSize="small" sx={{ opacity: 0.4 }} />}
           label="Вібрація"
           checked={settings.hapticEnabled}
-          onChange={(v) => updateSettings({ hapticEnabled: v })}
+          onChange={(v) => {
+            updateSettings({ hapticEnabled: v })
+          }}
         />
         <ToggleRow
           iconOn={<MusicNoteIcon fontSize="small" />}
           iconOff={<MusicOffIcon fontSize="small" />}
           label="Фонова музика (8-bit)"
           checked={settings.musicEnabled}
-          onChange={(v) => updateSettings({ musicEnabled: v })}
+          onChange={(v) => {
+            updateSettings({ musicEnabled: v })
+          }}
         />
 
         <Box>
@@ -368,8 +335,8 @@ const SettingsCard = () => {
               }}
               size="small"
               sx={{
-                width: '100%',
-                gap: 0.75,
+                'width': '100%',
+                'gap': 0.75,
                 '& .MuiToggleButton-root': {
                   flex: 1,
                   py: 0.75,
@@ -410,8 +377,8 @@ const SettingsCard = () => {
               }}
               size="small"
               sx={{
-                width: '100%',
-                gap: 0.75,
+                'width': '100%',
+                'gap': 0.75,
                 '& .MuiToggleButton-root': {
                   flex: 1,
                   py: 0.75,

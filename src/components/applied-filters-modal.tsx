@@ -9,7 +9,7 @@ import { alpha, Box, Button, Chip, Grid, Stack, Typography, useTheme } from '@mu
 
 import { Modal } from './modal.tsx'
 import { VendorChip } from './vendor-chip.tsx'
-import { type SortOrder, useAppliedFilters, useAppliedFiltersActions, useSortConfig } from '../store/appliedFilters.ts'
+import { type SortOrder, useAppliedFilters, useAppliedFiltersActions, useSortConfig } from '../store/applied-filters.ts'
 import { useSearchActions, useShowAppliedFiltersModal } from '../store/search.ts'
 import { groupByVendor } from '../tools.tsx'
 import { useAllData, useAllVendors } from '../use-data.ts'
@@ -27,29 +27,21 @@ export const AppliedFiltersModal = () => {
   const { field, order } = useSortConfig()
   const { toggleVendor, reset, setSort } = useAppliedFiltersActions()
 
-  const sortedVendors = useMemo(() => [...vendors].sort(), [vendors])
+  const sortedVendors = useMemo(() => vendors.toSorted((a, b) => a.localeCompare(b)), [vendors])
 
   const handleReset = () => {
     reset()
     toggleAppliedFiltersModal()
   }
 
-  const handlePriceSort = (newOrder: SortOrder) => {
-    startTransition(() => {
-      if (field === 'price' && order === newOrder) {
-        setSort(undefined, undefined)
-      } else {
-        setSort('price', newOrder)
-      }
-    })
-  }
+  const isActiveSort = (sortField: 'price' | 'name', sortOrder: SortOrder) => field === sortField && order === sortOrder
 
-  const handleNameSort = (newOrder: SortOrder) => {
+  const handleSort = (newField: 'price' | 'name', newOrder: SortOrder) => {
     startTransition(() => {
-      if (field === 'name' && order === newOrder) {
+      if (isActiveSort(newField, newOrder)) {
         setSort(undefined, undefined)
       } else {
-        setSort('name', newOrder)
+        setSort(newField, newOrder)
       }
     })
   }
@@ -84,9 +76,9 @@ export const AppliedFiltersModal = () => {
     >
       <Box sx={{ p: 2.5 }}>
         {/* Vendors Section */}
-        <Typography 
-          variant="subtitle1" 
-          color="text.primary" 
+        <Typography
+          variant="subtitle1"
+          color="text.primary"
           sx={{ mb: 2, ml: 1, fontWeight: 800, fontFamily: '"Outfit", sans-serif' }}
         >
           Хто барижить:
@@ -97,7 +89,8 @@ export const AppliedFiltersModal = () => {
             p: 2.5,
             mb: 4,
             borderRadius: '24px',
-            backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
           }}
         >
           <Grid container columnSpacing={2} rowSpacing={2}>
@@ -125,7 +118,9 @@ export const AppliedFiltersModal = () => {
                       transform: 'translateY(-2px)',
                     },
                   }}
-                  onClick={() => toggleVendor(vendor)}
+                  onClick={() => {
+                    toggleVendor(vendor)
+                  }}
                 >
                   <Box sx={{ position: 'relative', display: 'inline-flex', mr: 2 }}>
                     <VendorChip source="live" vendor={vendor} />
@@ -163,9 +158,9 @@ export const AppliedFiltersModal = () => {
         </Box>
 
         {/* Sorting Section */}
-        <Typography 
-          variant="subtitle1" 
-          color="text.primary" 
+        <Typography
+          variant="subtitle1"
+          color="text.primary"
           sx={{ mb: 2, ml: 1, fontWeight: 800, fontFamily: '"Outfit", sans-serif' }}
         >
           Як сортувати:
@@ -175,7 +170,8 @@ export const AppliedFiltersModal = () => {
           sx={{
             p: 3,
             borderRadius: '24px',
-            backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.4)' : 'rgba(255, 255, 255, 0.4)',
           }}
         >
           <Grid container spacing={4}>
@@ -191,28 +187,32 @@ export const AppliedFiltersModal = () => {
                 <Chip
                   icon={<ArrowUpwardIcon />}
                   label="Дешевші"
-                  onClick={() => handlePriceSort('asc')}
-                  color={field === 'price' && order === 'asc' ? 'primary' : 'default'}
-                  variant={field === 'price' && order === 'asc' ? 'filled' : 'outlined'}
-                  sx={{ 
-                    borderRadius: '12px', 
+                  onClick={() => {
+                    handleSort('price', 'asc')
+                  }}
+                  color={isActiveSort('price', 'asc') ? 'primary' : 'default'}
+                  variant={isActiveSort('price', 'asc') ? 'filled' : 'outlined'}
+                  sx={{
+                    borderRadius: '12px',
                     fontWeight: 700,
                     height: '36px',
-                    px: 1
+                    px: 1,
                   }}
                   clickable
                 />
                 <Chip
                   icon={<ArrowDownwardIcon />}
                   label="Дорожчі"
-                  onClick={() => handlePriceSort('desc')}
-                  color={field === 'price' && order === 'desc' ? 'primary' : 'default'}
-                  variant={field === 'price' && order === 'desc' ? 'filled' : 'outlined'}
-                  sx={{ 
-                    borderRadius: '12px', 
+                  onClick={() => {
+                    handleSort('price', 'desc')
+                  }}
+                  color={isActiveSort('price', 'desc') ? 'primary' : 'default'}
+                  variant={isActiveSort('price', 'desc') ? 'filled' : 'outlined'}
+                  sx={{
+                    borderRadius: '12px',
                     fontWeight: 700,
                     height: '36px',
-                    px: 1
+                    px: 1,
                   }}
                   clickable
                 />
@@ -231,28 +231,32 @@ export const AppliedFiltersModal = () => {
                 <Chip
                   icon={<ArrowUpwardIcon />}
                   label="А - Я"
-                  onClick={() => handleNameSort('asc')}
-                  color={field === 'name' && order === 'asc' ? 'primary' : 'default'}
-                  variant={field === 'name' && order === 'asc' ? 'filled' : 'outlined'}
-                  sx={{ 
-                    borderRadius: '12px', 
+                  onClick={() => {
+                    handleSort('name', 'asc')
+                  }}
+                  color={isActiveSort('name', 'asc') ? 'primary' : 'default'}
+                  variant={isActiveSort('name', 'asc') ? 'filled' : 'outlined'}
+                  sx={{
+                    borderRadius: '12px',
                     fontWeight: 700,
                     height: '36px',
-                    px: 1
+                    px: 1,
                   }}
                   clickable
                 />
                 <Chip
                   icon={<ArrowDownwardIcon />}
                   label="Я - А"
-                  onClick={() => handleNameSort('desc')}
-                  color={field === 'name' && order === 'desc' ? 'primary' : 'default'}
-                  variant={field === 'name' && order === 'desc' ? 'filled' : 'outlined'}
-                  sx={{ 
-                    borderRadius: '12px', 
+                  onClick={() => {
+                    handleSort('name', 'desc')
+                  }}
+                  color={isActiveSort('name', 'desc') ? 'primary' : 'default'}
+                  variant={isActiveSort('name', 'desc') ? 'filled' : 'outlined'}
+                  sx={{
+                    borderRadius: '12px',
                     fontWeight: 700,
                     height: '36px',
-                    px: 1
+                    px: 1,
                   }}
                   clickable
                 />

@@ -29,7 +29,7 @@ import {
   useSessionStartedAt,
 } from '../../store/game.ts'
 
-type SpawnData = {
+interface SpawnData {
   id: number
   kind: ItemKind
   trajectory: TrajectoryKind
@@ -47,12 +47,12 @@ type SpawnData = {
 // eslint-disable-next-line sonarjs/pseudo-random
 const rand = (min: number, max: number) => min + Math.random() * (max - min)
 // eslint-disable-next-line sonarjs/pseudo-random
-const randFn = () => Math.random()
+const randFunction = () => Math.random()
 
 const buildSpawn = (id: number, w: number, h: number): SpawnData => {
   const kind = pickKind()
   const cfg = ITEM_KINDS[kind]
-  const trajectory = pickTrajectory(randFn)
+  const trajectory = pickTrajectory(randFunction)
   // eslint-disable-next-line sonarjs/pseudo-random
   const edge = Math.floor(Math.random() * 4)
   const margin = 100
@@ -60,26 +60,37 @@ const buildSpawn = (id: number, w: number, h: number): SpawnData => {
   let startY = 0
   let endX = 0
   let endY = 0
-  if (edge === 0) {
-    startX = rand(0, w)
-    startY = -margin
-    endX = rand(0, w)
-    endY = h + margin
-  } else if (edge === 1) {
-    startX = w + margin
-    startY = rand(0, h)
-    endX = -margin
-    endY = rand(0, h)
-  } else if (edge === 2) {
-    startX = rand(0, w)
-    startY = h + margin
-    endX = rand(0, w)
-    endY = -margin
-  } else {
-    startX = -margin
-    startY = rand(0, h)
-    endX = w + margin
-    endY = rand(0, h)
+  switch (edge) {
+    case 0: {
+      startX = rand(0, w)
+      startY = -margin
+      endX = rand(0, w)
+      endY = h + margin
+
+      break
+    }
+    case 1: {
+      startX = w + margin
+      startY = rand(0, h)
+      endX = -margin
+      endY = rand(0, h)
+
+      break
+    }
+    case 2: {
+      startX = rand(0, w)
+      startY = h + margin
+      endX = rand(0, w)
+      endY = -margin
+
+      break
+    }
+    default: {
+      startX = -margin
+      startY = rand(0, h)
+      endX = w + margin
+      endY = rand(0, h)
+    }
   }
   const distance = Math.hypot(endX - startX, endY - startY)
   const baseSpeed = 125
@@ -90,21 +101,38 @@ const buildSpawn = (id: number, w: number, h: number): SpawnData => {
   let amplitudeBase = rand(cfg.amplitudeRange[0], cfg.amplitudeRange[1])
   let frequency = rand(0.4, 1.1)
 
-  if (trajectory === 'zigzag') {
-    frequency = rand(0.8, 1.6)
-    amplitudeBase *= 0.9
-  } else if (trajectory === 'spiral') {
-    amplitudeBase = rand(40, 80)
-    frequency = rand(0.6, 1.4)
-  } else if (trajectory === 'loop') {
-    amplitudeBase = rand(50, 90)
-    frequency = rand(0.8, 1.5)
-  } else if (trajectory === 'chaos') {
-    amplitudeBase = rand(30, 70)
-    frequency = rand(0.5, 1.3)
-  } else if (trajectory === 'pendulum') {
-    amplitudeBase = rand(40, 90)
-    frequency = rand(0.3, 0.7)
+  switch (trajectory) {
+    case 'zigzag': {
+      frequency = rand(0.8, 1.6)
+      amplitudeBase *= 0.9
+
+      break
+    }
+    case 'spiral': {
+      amplitudeBase = rand(40, 80)
+      frequency = rand(0.6, 1.4)
+
+      break
+    }
+    case 'loop': {
+      amplitudeBase = rand(50, 90)
+      frequency = rand(0.8, 1.5)
+
+      break
+    }
+    case 'chaos': {
+      amplitudeBase = rand(30, 70)
+      frequency = rand(0.5, 1.3)
+
+      break
+    }
+    case 'pendulum': {
+      amplitudeBase = rand(40, 90)
+      frequency = rand(0.3, 0.7)
+
+      break
+    }
+    // No default
   }
 
   const phaseOffset = rand(0, Math.PI * 2)
@@ -153,7 +181,7 @@ const isModalOpen = (): boolean => {
   return modalOpenCached
 }
 
-type InnerProps = {
+interface InnerProps {
   settings: GameSettings
 }
 
@@ -163,24 +191,26 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
 
   const [items, setItems] = useState<SpawnData[]>([])
   const [popups, setPopups] = useState<ScorePopupData[]>([])
-  const sizeRef = useRef({ w: 0, h: 0 })
-  const lastComboLevelRef = useRef(0)
+  const sizeReference = useRef({ w: 0, h: 0 })
+  const lastComboLevelReference = useRef(0)
 
   useEffect(() => {
     const update = () => {
-      sizeRef.current = { w: window.innerWidth, h: window.innerHeight }
+      sizeReference.current = { w: window.innerWidth, h: window.innerHeight }
     }
     update()
     window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
+    return () => {
+      window.removeEventListener('resize', update)
+    }
   }, [])
 
   const handleExpire = useCallback((id: number) => {
-    setItems((prev) => prev.filter((it) => it.id !== id))
+    setItems((previous) => previous.filter((it) => it.id !== id))
   }, [])
 
   const handlePopupDone = useCallback((id: number) => {
-    setPopups((prev) => prev.filter((p) => p.id !== id))
+    setPopups((previous) => previous.filter((p) => p.id !== id))
   }, [])
 
   const handleHit = useCallback(
@@ -200,20 +230,20 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
         comboLevel = 2
       }
       const isNewLevel =
-        (nextCombo === COMBO_MULT_THRESHOLD_1_5X || nextCombo === COMBO_MULT_THRESHOLD_2X)
-        && comboLevel !== lastComboLevelRef.current
+        (nextCombo === COMBO_MULT_THRESHOLD_1_5X || nextCombo === COMBO_MULT_THRESHOLD_2X) &&
+        comboLevel !== lastComboLevelReference.current
       if (isNewLevel && comboLevel !== 0) {
-        lastComboLevelRef.current = comboLevel
+        lastComboLevelReference.current = comboLevel
         playComboLevelUp(comboLevel)
       }
       if (!isCombo) {
-        lastComboLevelRef.current = 0
+        lastComboLevelReference.current = 0
       }
       vibrateForHit(kind, comboLevel)
       const popupId = popupSeq++
       const text = mult > 1 ? `+${points} ×${mult}` : `+${points}`
-      setPopups((prev) => [...prev, { id: popupId, x, y, text, color: cfg.color }])
-      setItems((prev) => prev.filter((it) => it.id !== id))
+      setPopups((previous) => [...previous, { id: popupId, x, y, text, color: cfg.color }])
+      setItems((previous) => previous.filter((it) => it.id !== id))
     },
     [recordHit],
   )
@@ -221,19 +251,19 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
   useEffect(() => {
     let timeoutId: number | null = null
 
-    const appendSpawn = (prev: SpawnData[]): SpawnData[] => {
-      if (prev.length >= MAX_CONCURRENT) {
-        return prev
+    const appendSpawn = (previous: SpawnData[]): SpawnData[] => {
+      if (previous.length >= MAX_CONCURRENT) {
+        return previous
       }
-      const { w, h } = sizeRef.current
-      return [...prev, buildSpawn(spawnSeq++, w, h)]
+      const { w, h } = sizeReference.current
+      return [...previous, buildSpawn(spawnSeq++, w, h)]
     }
 
     const trySpawn = () => {
       if (document.hidden || isModalOpen()) {
         return
       }
-      const { w, h } = sizeRef.current
+      const { w, h } = sizeReference.current
       if (w === 0 || h === 0) {
         return
       }
@@ -242,7 +272,7 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
 
     const schedule = () => {
       const interval = SPAWN_BASE_INTERVAL_MS * rand(0.85, 1.2)
-      timeoutId = window.setTimeout(() => {
+      timeoutId = globalThis.setTimeout(() => {
         trySpawn()
         schedule()
       }, interval)
@@ -250,7 +280,7 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
     schedule()
     return () => {
       if (timeoutId !== null) {
-        window.clearTimeout(timeoutId)
+        globalThis.clearTimeout(timeoutId)
       }
     }
   }, [])
@@ -259,7 +289,7 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
     if (!settings.autoEndEnabled || sessionStartedAt === null) {
       return
     }
-    const id = window.setInterval(() => {
+    const id = globalThis.setInterval(() => {
       const snap = getGameSnapshot()
       if (snap.sessionStartedAt === null) {
         return
@@ -270,7 +300,9 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
         endSession()
       }
     }, 1000)
-    return () => window.clearInterval(id)
+    return () => {
+      globalThis.clearInterval(id)
+    }
   }, [settings.autoEndEnabled, settings.autoEndSeconds, sessionStartedAt, endSession])
 
   useEffect(() => {
@@ -293,7 +325,9 @@ const GameOverlayInner = ({ settings }: InnerProps) => {
       }
     }
     document.addEventListener('visibilitychange', onVisibility)
-    return () => document.removeEventListener('visibilitychange', onVisibility)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
   }, [settings.musicEnabled])
 
   useEffect(() => {

@@ -1,25 +1,13 @@
-import { type FC, useState } from 'react'
+import { useState } from 'react'
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Slider,
-} from '@mui/material'
+import { Box, Button, ButtonGroup, Dialog, DialogContent, DialogTitle, Slider } from '@mui/material'
 
 import { useNoScroll } from '../hooks/use-no-scroll.ts'
 import { type Product } from '../types.ts'
 
 const discounts = [3, 5, 7, 10, 12, 15]
 
-const Block: FC<{ label: string; value: number; red?: boolean }> = ({
-  label,
-  value,
-  red,
-}) => {
+const Block = ({ label, value, red }: { label: string; value: number; red?: boolean }) => {
   return (
     <Box>
       {label}{' '}
@@ -51,10 +39,7 @@ const Block: FC<{ label: string; value: number; red?: boolean }> = ({
 
 const valueLabelFormat = (value: number) => `${value}%`
 
-export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
-  product,
-  onClose,
-}) => {
+export const PercentsPopup = ({ product, onClose }: { product: Product; onClose: () => void }) => {
   useNoScroll()
   const [discount, setDiscount] = useState(7)
   const handleChange = (_: Event, newValue: number | number[]) => {
@@ -132,7 +117,9 @@ export const PercentsPopup: FC<{ product: Product; onClose: () => void }> = ({
                 return (
                   <Button
                     key={value}
-                    onClick={() => setDiscount(value)}
+                    onClick={() => {
+                      setDiscount(value)
+                    }}
                     color={value === discount ? 'primary' : 'secondary'}
                     sx={{ px: 1, minWidth: 0 }}
                   >

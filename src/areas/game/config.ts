@@ -1,6 +1,6 @@
 import { type ItemKind } from '../../store/game.ts'
 
-export type KindConfig = {
+export interface KindConfig {
   points: number
   weight: number
   color: string

@@ -12,7 +12,12 @@ export const ExportButton = () => {
   }
 
   return (
-    <IconButton title="Експорт" sx={{ color: 'text.secondary', borderRadius: '10px' }} size="small" onClick={handleTakeScreenshot}>
+    <IconButton
+      title="Експорт"
+      sx={{ color: 'text.secondary', borderRadius: '10px' }}
+      size="small"
+      onClick={handleTakeScreenshot}
+    >
       <IosShareIcon />
     </IconButton>
   )

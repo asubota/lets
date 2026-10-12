@@ -1,20 +1,19 @@
-let ctx: AudioContext | null = null
+let context: AudioContext | null = null
 
 export const getAudioContext = (): AudioContext | null => {
-  if (typeof window === 'undefined') {
-    return null
-  }
-  if (ctx === null) {
+  if (context === null) {
     try {
-      ctx = new AudioContext()
+      context = new AudioContext()
     } catch {
       return null
     }
   }
-  if (ctx.state === 'suspended') {
-    ctx.resume().catch(() => undefined)
+  if (context.state === 'suspended') {
+    context.resume().catch((error: unknown) => {
+      console.warn('[audio] Failed to resume AudioContext', error)
+    })
   }
-  return ctx
+  return context
 }
 
 const detectIosSafari = (): boolean => {

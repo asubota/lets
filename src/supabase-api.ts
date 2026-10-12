@@ -7,15 +7,14 @@ function isSyncStale(lastSyncTime: number) {
   return Date.now() - lastSyncTime > SYNC_STALE_MS
 }
 
-function postToServiceWorker(type: string) {
+async function postToServiceWorker(type: string) {
   const worker = navigator.serviceWorker.controller
   if (worker) {
     worker.postMessage({ type })
   } else {
-    navigator.serviceWorker.ready.then((reg) => {
-      const sw = reg.active || reg.waiting || reg.installing
-      sw?.postMessage({ type })
-    })
+    const registration = await navigator.serviceWorker.ready
+    const sw = registration.active ?? registration.waiting ?? registration.installing
+    sw?.postMessage({ type })
   }
 }
 
@@ -25,11 +24,11 @@ export const fetchProductsFromSupabase = async (): Promise<Product[]> => {
   if (!metadata || isSyncStale(metadata.time)) {
     // Sync is stale — ask SW to start sync.
     // SW will also send back SYNC_PROGRESS if already running.
-    postToServiceWorker('SYNC_START')
+    void postToServiceWorker('SYNC_START')
   } else {
     // Data is fresh, but check if a sync is already in progress
     // (e.g., page was refreshed mid-sync)
-    postToServiceWorker('GET_SYNC_STATUS')
+    void postToServiceWorker('GET_SYNC_STATUS')
   }
 
   return db.getAllProducts()

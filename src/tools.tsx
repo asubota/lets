@@ -1,26 +1,31 @@
+import { type ReactNode } from 'react'
+
 import { Typography } from '@mui/material'
 import html2canvas from 'html2canvas'
 
 import { type MinMax } from './hooks/use-get-min-max-by-sku.ts'
 import { type FavNotification, type Product } from './types.ts'
 
-const escapeRegExp = (value = ''): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+const escapeRegExp = (value = ''): string => value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
 
 interface HighlightOptions {
   match?: Record<string, string | Record<string, string>>
   noMatch?: Record<string, string | Record<string, string>>
 }
 
+const DEFAULT_HIGHLIGHT_OPTIONS: HighlightOptions = {
+  match: {
+    sx: { color: 'primary.main', fontWeight: 'bold' },
+  },
+  noMatch: {},
+}
+
+// eslint-disable-next-line sonarjs/function-return-type -- ReactNode is a union by design
 export function getHighlightedText(
   text: string | null,
   highlight: string | string[],
-  options: HighlightOptions = {
-    match: {
-      sx: { color: 'primary.main', fontWeight: 'bold' },
-    },
-    noMatch: {},
-  },
-) {
+  options: HighlightOptions = DEFAULT_HIGHLIGHT_OPTIONS,
+): ReactNode {
   if (text === null) {
     return null
   }
@@ -31,16 +36,17 @@ export function getHighlightedText(
     return text
   }
 
-  const regex = new RegExp(`(${tokens.map(escapeRegExp).join('|')})`, 'gi')
+  // eslint-disable-next-line security/detect-non-literal-regexp -- every token is escaped
+  const regex = new RegExp(`(${tokens.map((token) => escapeRegExp(token)).join('|')})`, 'gi')
 
   const parts = text.split(regex)
 
   return (
     <>
-      {parts.map((part, i) => {
+      {parts.map((part, index) => {
         const isMatch = tokens.some((t) => part.toLowerCase() === t.toLowerCase())
         return (
-          <Typography component="span" key={i} {...(isMatch ? options.match : options.noMatch)}>
+          <Typography component="span" key={index} {...(isMatch ? options.match : options.noMatch)}>
             {part}
           </Typography>
         )
@@ -51,47 +57,49 @@ export function getHighlightedText(
 
 export function getUniqueVendors(list: Product[]): string[] {
   const vendorsSet = new Set<string>()
-  list.forEach((item) => vendorsSet.add(item.vendor))
-  return Array.from(vendorsSet)
+  for (const item of list) {
+    vendorsSet.add(item.vendor)
+  }
+  return [...vendorsSet]
 }
 
 export const groupByVendor = (list: Product[]): Record<string, number> => {
-  return list.reduce(
-    (acc, item) => {
-      acc[item.vendor] = (acc[item.vendor] || 0) + 1
-      return acc
-    },
-    {} as Record<string, number>,
-  )
+  const counts: Record<string, number> = {}
+  for (const item of list) {
+    counts[item.vendor] = (counts[item.vendor] ?? 0) + 1
+  }
+  return counts
 }
 
 export async function copyContent(text: string) {
   try {
     await navigator.clipboard.writeText(text)
-  } catch (err) {
-    console.error('Failed to copy: ', err)
+  } catch (error) {
+    console.error('Failed to copy:', error)
   }
 }
 
-export const handleTakeCartScreenshot = async () => {
-  const el = document.getElementById('cart')
+const isNoExport = (element: Element) => element instanceof HTMLElement && Object.hasOwn(element.dataset, 'noExport')
 
-  if (!el) {
+export const handleTakeCartScreenshot = async () => {
+  const element = document.querySelector<HTMLElement>('#cart')
+
+  if (!element) {
     return
   }
 
-  const canvas = await html2canvas(el, {
-    ignoreElements(element) {
-      return element.hasAttribute('data-no-export')
-    },
-    onclone(doc: Document, element: HTMLElement) {
-      const root = doc.getElementById('root') as Element
-      element.style.backgroundImage = window.getComputedStyle(root).getPropertyValue('background-image')
+  const canvas = await html2canvas(element, {
+    ignoreElements: isNoExport,
+    onclone(document_: Document, element: HTMLElement) {
+      const root = document_.querySelector('#root')
+      if (root) {
+        element.style.backgroundImage = globalThis.getComputedStyle(root).getPropertyValue('background-image')
+      }
       element.style.width = '400px'
       element.style.padding = '6px'
     },
   })
-  const imgData = canvas.toDataURL('image/png', 1.0)
+  const imgData = canvas.toDataURL('image/png', 1)
   const link = document.createElement('a')
 
   link.href = imgData
@@ -100,35 +108,33 @@ export const handleTakeCartScreenshot = async () => {
 }
 
 export const handleTakeScreenshot = async () => {
-  const el = document.getElementById('tiles-view')
+  const element = document.querySelector<HTMLElement>('#tiles-view')
 
-  if (!el) {
+  if (!element) {
     return
   }
 
-  const canvas = await html2canvas(el, {
-    ignoreElements(element) {
-      return element.hasAttribute('data-no-export')
-    },
+  const canvas = await html2canvas(element, {
+    ignoreElements: isNoExport,
     onclone(_: Document, element: HTMLElement) {
       const checked = element.querySelectorAll('input:checked')
 
       if (checked.length > 0) {
         const selector = '.product-tile:not(:has(input:checked))'
         const unselected = element.querySelectorAll<HTMLDivElement>(selector)
-        unselected.forEach((el) => {
-          el.remove()
-        })
+        for (const element_ of unselected) {
+          element_.remove()
+        }
       }
 
-      element.querySelectorAll<HTMLDivElement>('.product-tile').forEach((el) => {
-        el.style.borderColor = 'rgba(0, 0, 0, 0.12)'
-      })
+      for (const element_ of element.querySelectorAll<HTMLDivElement>('.product-tile')) {
+        element_.style.borderColor = 'rgba(0, 0, 0, 0.12)'
+      }
 
       element.style.padding = '6px'
     },
   })
-  const imgData = canvas.toDataURL('image/png', 1.0)
+  const imgData = canvas.toDataURL('image/png', 1)
   const link = document.createElement('a')
 
   link.href = imgData
@@ -136,23 +142,24 @@ export const handleTakeScreenshot = async () => {
   link.click()
 }
 
-const isNotification = (item: Record<string, unknown> | undefined): item is FavNotification => !!item
-
 export const getNotifications = (products: Product[], minmax: MinMax): FavNotification[] => {
   return products
     .filter((p) => p.vendor !== 'base')
-    .map((p) => {
-      const stock = parseInt(p.stock || '', 10)
-      const min = minmax[p.sku].min
-      const max = minmax[p.sku].max
-      const read = minmax[p.sku].read
+    .flatMap((p) => {
+      const limits = minmax[p.sku]
+      if (!limits) {
+        return []
+      }
+
+      const stock = Number.parseInt(p.stock ?? '', 10)
+      const { min, max, read } = limits
 
       const result: FavNotification[] = []
 
       if (min !== undefined && stock <= min) {
         const notification: FavNotification = {
           title: p.name,
-          body: `${p.sku} є ${stock}, менше ніж ${min ?? 0}`,
+          body: `${p.sku} є ${stock}, менше ніж ${min}`,
           min,
           max,
           read,
@@ -166,7 +173,7 @@ export const getNotifications = (products: Product[], minmax: MinMax): FavNotifi
       if (max !== undefined && stock >= max) {
         const notification: FavNotification = {
           title: p.name,
-          body: `${p.sku} є ${stock}, більше ніж ${max ?? 0}`,
+          body: `${p.sku} є ${stock}, більше ніж ${max}`,
           min,
           max,
           read,
@@ -179,8 +186,6 @@ export const getNotifications = (products: Product[], minmax: MinMax): FavNotifi
 
       return result
     })
-    .flat()
-    .filter(isNotification)
 }
 
 export const getFavoriteId = (p: Product) => `${p.sku}:${p.vendor}`
@@ -204,7 +209,10 @@ export function compareByTime(a: { time: number }, b: { time: number }): number 
   return 0
 }
 
-export function compareByNoteAndTime(a: { note?: string; time: number }, b: { note?: string; time: number }): number {
+export function compareByNoteAndTime(
+  a: { note?: string | undefined; time: number },
+  b: { note?: string | undefined; time: number },
+): number {
   if (a.note === undefined && b.note !== undefined) {
     return 1
   }

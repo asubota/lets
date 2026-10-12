@@ -1,9 +1,7 @@
 import { getSupabaseClient } from './supabase-client.ts'
 import { type FavoriteItem } from './types.ts'
 
-export const getAllFavorites = async (
-  signal?: AbortSignal,
-): Promise<FavoriteItem[]> => {
+export const getAllFavorites = async (signal?: AbortSignal): Promise<FavoriteItem[]> => {
   const supabase = getSupabaseClient()
   const query = supabase.from('favorites').select('*')
 
@@ -17,15 +15,12 @@ export const getAllFavorites = async (
     throw new Error(`Supabase Error: ${error.message}`)
   }
 
-  return (data || []) as FavoriteItem[]
+  return data as FavoriteItem[]
 }
 
 export const removeFavorite = async (favoriteId: string) => {
   const supabase = getSupabaseClient()
-  const { error } = await supabase
-    .from('favorites')
-    .delete()
-    .eq('favoriteId', favoriteId)
+  const { error } = await supabase.from('favorites').delete().eq('favoriteId', favoriteId)
 
   if (error) {
     throw new Error(`Supabase Error: ${error.message}`)
@@ -34,28 +29,20 @@ export const removeFavorite = async (favoriteId: string) => {
 
 export const addFavorite = async (favoriteId: string) => {
   const supabase = getSupabaseClient()
-  const { error } = await supabase
-    .from('favorites')
-    .upsert({
-      favoriteId,
-      time: Date.now(),
-      read: false,
-    })
+  const { error } = await supabase.from('favorites').upsert({
+    favoriteId,
+    time: Date.now(),
+    read: false,
+  })
 
   if (error) {
     throw new Error(`Supabase Error: ${error.message}`)
   }
 }
 
-export const updateFavorite = async (
-  favoriteId: string,
-  updates: Partial<Omit<FavoriteItem, 'favoriteId'>>,
-) => {
+export const updateFavorite = async (favoriteId: string, updates: Partial<Omit<FavoriteItem, 'favoriteId'>>) => {
   const supabase = getSupabaseClient()
-  const { error } = await supabase
-    .from('favorites')
-    .update(updates)
-    .eq('favoriteId', favoriteId)
+  const { error } = await supabase.from('favorites').update(updates).eq('favoriteId', favoriteId)
 
   if (error) {
     throw new Error(`Supabase Error: ${error.message}`)
@@ -70,29 +57,25 @@ export const updateFavoriteId = async (oldId: string, newId: string) => {
     .from('favorites')
     .select('*')
     .eq('favoriteId', oldId)
-    .single()
+    .single<FavoriteItem>()
 
-  if (fetchError || !oldData) {
-    throw new Error(`Could not find favorite to rename: ${fetchError?.message}`)
+  // .single() reports a missing row as an error, so data is set whenever error is null
+  if (fetchError) {
+    throw new Error(`Could not find favorite to rename: ${fetchError.message}`)
   }
 
   // Insert new
-  const { error: insertError } = await supabase
-    .from('favorites')
-    .insert({
-      ...oldData,
-      favoriteId: newId,
-    })
+  const { error: insertError } = await supabase.from('favorites').insert({
+    ...oldData,
+    favoriteId: newId,
+  })
 
   if (insertError) {
     throw new Error(`Could not insert renamed favorite: ${insertError.message}`)
   }
 
   // Delete old
-  const { error: deleteError } = await supabase
-    .from('favorites')
-    .delete()
-    .eq('favoriteId', oldId)
+  const { error: deleteError } = await supabase.from('favorites').delete().eq('favoriteId', oldId)
 
   if (deleteError) {
     console.error('Renamed favorite inserted but old one could not be deleted:', deleteError)

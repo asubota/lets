@@ -1,10 +1,8 @@
-import { type FC } from 'react'
-
 import { Box, Typography } from '@mui/material'
 
 import { useTableActions } from '../store'
 
-export const AllColumnsAreDisabled: FC = () => {
+export const AllColumnsAreDisabled = () => {
   const { toggleSettings } = useTableActions()
 
   return (
@@ -15,11 +13,7 @@ export const AllColumnsAreDisabled: FC = () => {
         justifyContent: 'center',
       }}
     >
-      <Typography
-        variant="subtitle2"
-        sx={{ color: 'primary.main', cursor: 'pointer' }}
-        onClick={toggleSettings}
-      >
+      <Typography variant="subtitle2" sx={{ color: 'primary.main', cursor: 'pointer' }} onClick={toggleSettings}>
         Ти шо, все вирубив? Вмикай назад!
       </Typography>
     </Box>

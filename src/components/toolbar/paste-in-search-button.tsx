@@ -11,7 +11,12 @@ export const PasteInSearchButton = ({ size }: { size: IconButtonOwnProps['size']
   }
 
   return (
-    <IconButton title="Вставити з буфера" size={size} sx={{ color: 'text.secondary', borderRadius: '10px' }} onClick={handleClick}>
+    <IconButton
+      title="Вставити з буфера"
+      size={size}
+      sx={{ color: 'text.secondary', borderRadius: '10px' }}
+      onClick={handleClick}
+    >
       <ContentPasteSearchIcon />
     </IconButton>
   )

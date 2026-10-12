@@ -1,11 +1,9 @@
-import { type FC } from 'react'
-
 import GridViewIcon from '@mui/icons-material/GridView'
 import { IconButton } from '@mui/material'
 
 import { useAppActions, useAppView } from '../../../store'
 
-export const SwitchToTileView: FC = () => {
+export const SwitchToTileView = () => {
   const view = useAppView()
   const { setView } = useAppActions()
 
@@ -22,7 +20,9 @@ export const SwitchToTileView: FC = () => {
         },
       }}
       title="Тайли"
-      onClick={() => setView('tile')}
+      onClick={() => {
+        setView('tile')
+      }}
     >
       <GridViewIcon sx={{ fontSize: '20px' }} />
     </IconButton>

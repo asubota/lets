@@ -7,7 +7,7 @@ import { ResetCacheButton } from '../../components/reset-cache-button.tsx'
 import { TopBottomHome } from '../../components/top-botton-home.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
 import { useMeta } from '../../store'
-import { useAppliedFilters, useAppliedFiltersActions } from '../../store/appliedFilters'
+import { useAppliedFilters, useAppliedFiltersActions } from '../../store/applied-filters'
 import { groupByVendor } from '../../tools.tsx'
 import { useAllData, useAllVendors } from '../../use-data.ts'
 
@@ -21,7 +21,7 @@ export const Stats = () => {
   const { toggleVendor } = useAppliedFiltersActions()
 
   const countByVendor = useMemo(() => groupByVendor(allData), [allData])
-  const sortedVendors = useMemo(() => [...vendors].sort(), [vendors])
+  const sortedVendors = useMemo(() => vendors.toSorted((a, b) => a.localeCompare(b)), [vendors])
 
   return (
     <TopBottomHome>
@@ -60,10 +60,12 @@ export const Stats = () => {
                         : theme.palette.action.hover,
                     },
                   }}
-                  onClick={() => toggleVendor(vendor)}
+                  onClick={() => {
+                    toggleVendor(vendor)
+                  }}
                 >
                   <Box sx={{ position: 'relative', display: 'inline-flex', mr: 1.5 }}>
-                    <VendorChip source="live" vendor={vendor} onClick={() => {}} />
+                    <VendorChip source="live" vendor={vendor} />
                     {isSelected && (
                       <CheckCircleIcon
                         sx={{

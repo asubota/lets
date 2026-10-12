@@ -16,15 +16,12 @@ export const getCart = async (signal?: AbortSignal): Promise<CartItem[]> => {
     throw new Error(`Supabase Error: ${error.message}`)
   }
 
-  return (data || []) as CartItem[]
+  return data as CartItem[]
 }
 
 export const removeFromCart = async (itemId: string) => {
   const supabase = getSupabaseClient()
-  const { error } = await supabase
-    .from('cart')
-    .delete()
-    .eq('itemId', itemId)
+  const { error } = await supabase.from('cart').delete().eq('itemId', itemId)
 
   if (error) {
     throw new Error(`Supabase Error: ${error.message}`)
@@ -40,15 +37,9 @@ export const addToCart = async (itemId: string) => {
   }
 }
 
-export const updateCartItem = async (
-  itemId: string,
-  updates: Partial<Omit<CartItem, 'itemId'>>,
-) => {
+export const updateCartItem = async (itemId: string, updates: Partial<Omit<CartItem, 'itemId'>>) => {
   const supabase = getSupabaseClient()
-  const { error } = await supabase
-    .from('cart')
-    .update(updates)
-    .eq('itemId', itemId)
+  const { error } = await supabase.from('cart').update(updates).eq('itemId', itemId)
 
   if (error) {
     throw new Error(`Supabase Error: ${error.message}`)
@@ -58,10 +49,7 @@ export const updateCartItem = async (
 export const setCartPopularServices = async (itemIds: string[]) => {
   const supabase = getSupabaseClient()
 
-  const { error: deleteError } = await supabase
-    .from('cart')
-    .delete()
-    .like('itemId', `${POPULAR_SERViCE_PREFIX}%`)
+  const { error: deleteError } = await supabase.from('cart').delete().like('itemId', `${POPULAR_SERViCE_PREFIX}%`)
 
   if (deleteError) {
     throw new Error(`Supabase Error deleting old services: ${deleteError.message}`)

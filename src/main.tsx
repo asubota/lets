@@ -1,5 +1,10 @@
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 
 import { App } from './app.tsx'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
+const root = document.querySelector('#root')
+if (!root) {
+  throw new Error('#root element not found')
+}
+
+createRoot(root).render(<App />)

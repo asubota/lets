@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import HouseIcon from '@mui/icons-material/House'
 import RestoreIcon from '@mui/icons-material/Restore'
@@ -22,11 +22,11 @@ import { createLink, useNavigate } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import { HexColorInput, HexColorPicker } from 'react-colorful'
 
-import { generateGradient, parseGradient, type GradientData } from './gradient-utils.ts'
+import { generateGradient, parseGradient, type GradientData } from './gradient-utilities.ts'
 import { useSetColors } from '../../api-colors.ts'
 import { Modal } from '../../components/modal.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
-import { type Color } from '../../types.ts'
+import { type VendorColors } from '../../types.ts'
 
 const LinkedButton = createLink(Button)
 
@@ -49,59 +49,62 @@ const PRESET_COLORS = [
   '#0F172A',
 ]
 
-export const ColorSettingsModal = ({
-  vendors,
-  colors: currentColors,
-}: {
-  vendors: string[]
-  colors: Record<string, Color>
-}) => {
+type Fill = 'color' | 'borderColor' | 'both' | 'bg'
+
+const DEFAULT_GRADIENT: GradientData = {
+  startColor: '#EA2B06',
+  endColor: '#F97316',
+  angle: 90,
+}
+
+const getInitialGradient = (colors: VendorColors, vendor: string | null) =>
+  vendor ? parseGradient(colors[vendor]?.backgroundColor) : null
+
+export const ColorSettingsModal = ({ vendors, colors: currentColors }: { vendors: string[]; colors: VendorColors }) => {
   const navigate = useNavigate()
   const theme = useTheme()
   const { mutate } = useSetColors()
   const [colors, setColors] = useState(currentColors)
-  const [activeVendor, setActiveVendor] = useState<string | null>(vendors[0] || null)
-  const [fill, setFill] = useState<'color' | 'borderColor' | 'both' | 'bg'>('both')
-  const [isGradient, setIsGradient] = useState(false)
-  const [gradientData, setGradientData] = useState<GradientData>({
-    startColor: '#EA2B06',
-    endColor: '#F97316',
-    angle: 90,
-  })
+  const [activeVendor, setActiveVendor] = useState<string | null>(vendors[0] ?? null)
+  const [fill, setFill] = useState<Fill>('both')
+  const [isGradient, setIsGradient] = useState(() => getInitialGradient(currentColors, activeVendor) !== null)
+  const [gradientData, setGradientData] = useState<GradientData>(
+    () => getInitialGradient(currentColors, activeVendor) ?? DEFAULT_GRADIENT,
+  )
 
   const isDark = theme.palette.mode === 'dark'
+  const selectedVendorBackground = isDark ? 'rgba(234, 43, 6, 0.1)' : 'rgba(234, 43, 6, 0.05)'
 
-  // Initialize gradient data when active vendor changes
-  useEffect(() => {
-    if (activeVendor && colors[activeVendor]?.backgroundColor) {
-      const parsed = parseGradient(colors[activeVendor].backgroundColor)
-      if (parsed) {
-        setIsGradient(true)
-        setGradientData(parsed)
-      } else {
-        setIsGradient(false)
-      }
-    } else {
-      setIsGradient(false)
+  const selectVendor = (vendor: string) => {
+    setActiveVendor(vendor)
+    const parsed = parseGradient(colors[vendor]?.backgroundColor)
+    setIsGradient(parsed !== null)
+    if (parsed) {
+      setGradientData(parsed)
     }
-  }, [activeVendor])
+  }
 
   const currentColor = useMemo(() => {
     if (!activeVendor) {
       return '#EA2B06'
     }
-    const data = colors[activeVendor] || {}
+    const data = colors[activeVendor] ?? {}
     switch (fill) {
-      case 'color':
+      case 'color': {
         return data.color || '#EA2B06'
-      case 'borderColor':
+      }
+      case 'borderColor': {
         return data.borderColor || '#EA2B06'
-      case 'bg':
+      }
+      case 'bg': {
         return isGradient ? gradientData.startColor : data.backgroundColor || '#EA2B06'
-      case 'both':
+      }
+      case 'both': {
         return data.color || '#EA2B06'
-      default:
+      }
+      default: {
         return '#EA2B06'
+      }
     }
   }, [activeVendor, colors, fill, isGradient, gradientData])
 
@@ -118,19 +121,23 @@ export const ColorSettingsModal = ({
       data.backgroundColor = generateGradient(newGradient)
     } else {
       switch (fill) {
-        case 'both':
+        case 'both': {
           data.color = hex
           data.borderColor = hex
           break
-        case 'color':
+        }
+        case 'color': {
           data.color = hex
           break
-        case 'bg':
+        }
+        case 'bg': {
           data.backgroundColor = hex
           break
-        case 'borderColor':
+        }
+        case 'borderColor': {
           data.borderColor = hex
           break
+        }
       }
     }
 
@@ -152,16 +159,14 @@ export const ColorSettingsModal = ({
       return
     }
     setIsGradient(checked)
-    const data = { ...colors[activeVendor] }
-    if (checked) {
-      data.backgroundColor = generateGradient(gradientData)
-    } else {
-      data.backgroundColor = gradientData.startColor
+    const data = {
+      ...colors[activeVendor],
+      backgroundColor: checked ? generateGradient(gradientData) : gradientData.startColor,
     }
     setColors((value) => ({ ...value, [activeVendor]: data }))
   }
 
-  const handleAngleChange = (_: any, value: number | number[]) => {
+  const handleAngleChange = (_: Event, value: number | number[]) => {
     if (!activeVendor || !isGradient) {
       return
     }
@@ -246,7 +251,7 @@ export const ColorSettingsModal = ({
               >
                 <VendorChip
                   source="preview"
-                  vendor={activeVendor || '...'}
+                  vendor={activeVendor ?? '...'}
                   color={activeVendor ? colors[activeVendor]?.color : undefined}
                   borderColor={activeVendor ? colors[activeVendor]?.borderColor : undefined}
                   backgroundColor={activeVendor ? colors[activeVendor]?.backgroundColor : undefined}
@@ -302,7 +307,11 @@ export const ColorSettingsModal = ({
                 <ToggleButtonGroup
                   exclusive
                   value={fill}
-                  onChange={(_, v) => v && setFill(v)}
+                  onChange={(_, value: Fill | null) => {
+                    if (value) {
+                      setFill(value)
+                    }
+                  }}
                   fullWidth
                   size="small"
                   sx={{
@@ -398,7 +407,9 @@ export const ColorSettingsModal = ({
                       {PRESET_COLORS.map((c) => (
                         <Box
                           key={c}
-                          onClick={() => handleSetColor(c)}
+                          onClick={() => {
+                            handleSetColor(c)
+                          }}
                           component={motion.div}
                           whileTap={{ scale: 0.9 }}
                           sx={{
@@ -431,7 +442,12 @@ export const ColorSettingsModal = ({
                         Для фону постачальника
                       </Typography>
                     </Box>
-                    <Switch checked={isGradient} onChange={(e) => handleGradientToggle(e.target.checked)} />
+                    <Switch
+                      checked={isGradient}
+                      onChange={(event) => {
+                        handleGradientToggle(event.target.checked)
+                      }}
+                    />
                   </Stack>
 
                   {isGradient && (
@@ -494,7 +510,9 @@ export const ColorSettingsModal = ({
                     key={vendor}
                     component={motion.div}
                     layoutId={`vendor-${vendor}`}
-                    onClick={() => setActiveVendor(vendor)}
+                    onClick={() => {
+                      selectVendor(vendor)
+                    }}
                     sx={{
                       cursor: 'pointer',
                       p: '4px',
@@ -504,11 +522,7 @@ export const ColorSettingsModal = ({
                       alignItems: 'center',
                       gap: 1.5,
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      backgroundColor: isSelected
-                        ? isDark
-                          ? 'rgba(234, 43, 6, 0.1)'
-                          : 'rgba(234, 43, 6, 0.05)'
-                        : 'transparent',
+                      backgroundColor: isSelected ? selectedVendorBackground : 'transparent',
                       border: `1px solid ${isSelected ? 'rgba(234, 43, 6, 0.3)' : 'transparent'}`,
                       position: 'relative',
                     }}

@@ -1,20 +1,9 @@
 import { useMemo } from 'react'
 
-import { type SortField, type SortOrder, useAppliedFilters, useSortConfig } from './store/appliedFilters.ts'
+import { tokenize } from './search-tokens.ts'
+import { type SortField, type SortOrder, useAppliedFilters, useSortConfig } from './store/applied-filters.ts'
 import { type Product } from './types.ts'
 import { useData } from './use-data.ts'
-
-const normalize = (s: string): string =>
-  s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .replace(/[^a-z0-9\u0400-\u04FF]+/giu, ' ')
-    .trim()
-
-const tokenize = (s: string) => normalize(s).split(/\s+/).filter(Boolean)
-
-export const buildItemTokens = (item: Product) => tokenize(`${item.sku} ${item.name} ${item.vendor ?? ''}`)
 
 function tokensMatch(itemTokens: string[], queryTokens: string[]): boolean {
   for (const q of queryTokens) {

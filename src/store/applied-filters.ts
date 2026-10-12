@@ -10,12 +10,12 @@ interface StoreState {
   sortOrder: SortOrder
   sortField: SortField
   actions: {
-    toggleVendor(this: void, vendor: string): void
-    addVendor(this: void, vendor: string): void
-    removeVendor(this: void, vendor: string): void
-    setSort(this: void, field: SortField, order: SortOrder): void
-    toggleSort(this: void, field: 'price' | 'name'): void
-    reset(this: void): void
+    toggleVendor: (this: void, vendor: string) => void
+    addVendor: (this: void, vendor: string) => void
+    removeVendor: (this: void, vendor: string) => void
+    setSort: (this: void, field: SortField, order: SortOrder) => void
+    toggleSort: (this: void, field: 'price' | 'name') => void
+    reset: (this: void) => void
   }
 }
 
@@ -27,7 +27,7 @@ const useStore = create<StoreState>()(
       sortField: undefined,
       actions: {
         toggleVendor: (vendor) => {
-          const list = get().vendors || []
+          const list = get().vendors
           const exists = list.includes(vendor)
           if (exists) {
             set(() => ({ vendors: list.filter((v) => v !== vendor) }))

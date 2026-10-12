@@ -5,8 +5,8 @@ import { useShallow } from 'zustand/shallow'
 interface StoreState {
   items: string[]
   actions: {
-    addHistoryItem(this: void, value: string): void
-    removeHistoryItem(this: void, value: string): void
+    addHistoryItem: (this: void, value: string) => void
+    removeHistoryItem: (this: void, value: string) => void
   }
 }
 
@@ -23,7 +23,7 @@ const useStore = create<StoreState>()(
               itemSet.add(item)
             }
 
-            return { items: Array.from(itemSet).slice(-100) }
+            return { items: [...itemSet].slice(-100) }
           })
         },
         removeHistoryItem: (toRemove) =>
@@ -40,5 +40,4 @@ const useStore = create<StoreState>()(
 )
 
 export const useHistoryActions = () => useStore((state) => state.actions)
-export const useHistoryItems = () =>
-  useStore(useShallow((state) => state.items.slice().reverse()))
+export const useHistoryItems = () => useStore(useShallow((state) => state.items.toReversed()))

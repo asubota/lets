@@ -1,8 +1,8 @@
-import { type FC, type MouseEventHandler, useState } from 'react'
+import { type MouseEventHandler, useState } from 'react'
 
 import { Box, Popover, Slider, Typography } from '@mui/material'
 
-import { useSetPropOnCart } from '../../cart-api.ts'
+import { useSetPropertyOnCart } from '../../cart-api.ts'
 
 interface DiscountProps {
   discount: number
@@ -12,23 +12,19 @@ interface DiscountProps {
 
 const valueLabelFormat = (value: number) => `${value}%`
 
-export const Discount: FC<DiscountProps> = ({
-  discount,
-  fullPrice,
-  itemId,
-}) => {
-  const { mutate } = useSetPropOnCart()
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
-  const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
-    setAnchorEl(e.currentTarget)
+export const Discount = ({ discount, fullPrice, itemId }: DiscountProps) => {
+  const { mutate } = useSetPropertyOnCart()
+  const [anchorElement, setAnchorElement] = useState<HTMLDivElement | null>(null)
+  const handleClick: MouseEventHandler<HTMLDivElement> = (event) => {
+    setAnchorElement(event.currentTarget)
   }
   const handleClose = () => {
     if (d !== discount) {
       mutate({ itemId, discount: String(d) })
     }
-    setAnchorEl(null)
+    setAnchorElement(null)
   }
-  const open = Boolean(anchorEl)
+  const open = Boolean(anchorElement)
 
   const [d, setD] = useState(discount)
   const handleChange = (_: Event, newValue: number | number[]) => {
@@ -47,7 +43,7 @@ export const Discount: FC<DiscountProps> = ({
       <Popover
         closeAfterTransition
         open={open}
-        anchorEl={anchorEl}
+        anchorEl={anchorElement}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'center',

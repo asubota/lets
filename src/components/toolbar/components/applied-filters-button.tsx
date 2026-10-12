@@ -2,7 +2,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import { Box, IconButton } from '@mui/material'
 import { type Theme } from '@mui/material/styles'
 
-import { useAppliedFilters } from '../../../store/appliedFilters.ts'
+import { useAppliedFilters } from '../../../store/applied-filters.ts'
 import { useSearchActions } from '../../../store/search.ts'
 
 export const AppliedFiltersButton = () => {
@@ -29,18 +29,18 @@ export const AppliedFiltersButton = () => {
     >
       <FilterListIcon sx={{ fontSize: '20px' }} />
       {hasAppliedFilters && (
-        <Box 
-          sx={{ 
-            position: 'absolute', 
-            top: 4, 
-            right: 4, 
-            width: 8, 
-            height: 8, 
-            bgcolor: 'primary.main', 
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 4,
+            right: 4,
+            width: 8,
+            height: 8,
+            bgcolor: 'primary.main',
             borderRadius: '50%',
             border: (theme: Theme) => `1.5px solid ${theme.palette.background.paper}`,
-            boxShadow: '0 0 0 1px rgba(234, 43, 6, 0.2)'
-          }} 
+            boxShadow: '0 0 0 1px rgba(234, 43, 6, 0.2)',
+          }}
         />
       )}
     </IconButton>

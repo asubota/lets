@@ -7,8 +7,8 @@ interface StoreState {
   columns: (keyof Product)[]
   showSettings: boolean
   actions: {
-    setColumns(this: void, value: (keyof Product)[]): void
-    toggleSettings(this: void): void
+    setColumns: (this: void, value: (keyof Product)[]) => void
+    toggleSettings: (this: void) => void
   }
 }
 
@@ -19,8 +19,7 @@ const useStore = create<StoreState>()(
       showSettings: false,
       actions: {
         setColumns: (columns) => set(() => ({ columns })),
-        toggleSettings: () =>
-          set((state) => ({ showSettings: !state.showSettings })),
+        toggleSettings: () => set((state) => ({ showSettings: !state.showSettings })),
       },
     }),
     {
@@ -32,5 +31,4 @@ const useStore = create<StoreState>()(
 
 export const useTableActions = () => useStore((state) => state.actions)
 export const useTableColumns = () => useStore((state) => state.columns)
-export const useShowTableSettings = () =>
-  useStore((state) => state.showSettings)
+export const useShowTableSettings = () => useStore((state) => state.showSettings)

@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 import { Chip, Box } from '@mui/material'
 
@@ -9,43 +9,53 @@ type PriceKey = '-' | 'p2' | 'price' | 'price_old'
 const getNextKey = (key: PriceKey, hasSale: boolean): PriceKey => {
   if (hasSale) {
     switch (key) {
-      case 'price':
+      case 'price': {
         return 'price_old'
-      case 'price_old':
+      }
+      case 'price_old': {
         return 'p2'
-      case 'p2':
+      }
+      case 'p2': {
         return '-'
-      case '-':
+      }
+      case '-': {
         return 'price'
+      }
     }
   } else {
     switch (key) {
-      case 'price':
+      case 'price': {
         return 'p2'
-      case 'p2':
+      }
+      case 'p2': {
         return '-'
-      case '-':
+      }
+      case '-': {
         return 'price'
+      }
     }
   }
 
   return 'price'
 }
 
-export const PriceChip: FC<{ product: Product }> = ({ product }) => {
+export const PriceChip = ({ product }: { product: Product }) => {
   const [key, setKey] = useState<PriceKey>('price')
-  const hasSale = !!product.price_old && Number(product.price_old) !== product.price
+  const hasSale = !!product.price_old && product.price_old !== product.price
 
   const discount = product.price_old ? ((1 - product.price / product.price_old) * 100).toFixed(0) : 0
   const diff = product.price_old ? product.price_old - product.price : 0
 
-  const getLabel = (key: PriceKey) => {
+  // eslint-disable-next-line sonarjs/function-return-type -- ReactNode is a union by design
+  const getLabel = (key: PriceKey): ReactNode => {
     switch (key) {
-      case 'price':
+      case 'price': {
         return `${product.price.toLocaleString()} грн`
-      case 'p2':
-        return `${product.p2 || '?'} грн`
-      case 'price_old':
+      }
+      case 'p2': {
+        return product.p2 ? `${product.p2} грн` : '? грн'
+      }
+      case 'price_old': {
         return (
           <>
             {product.price_old} грн
@@ -61,13 +71,15 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
             </Box>
           </>
         )
-      case '-':
+      }
+      case '-': {
         return product.p2 ? `+${product.price - product.p2} грн` : '? грн'
+      }
     }
   }
 
   const rotateDisplayedPrice = () => {
-    setKey((prev) => getNextKey(prev, hasSale))
+    setKey((previous) => getNextKey(previous, hasSale))
   }
 
   const props: Record<string, unknown> = {}
@@ -77,8 +89,8 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
 
   return (
     <Chip
-      onClick={(e) => {
-        e.stopPropagation()
+      onClick={(event) => {
+        event.stopPropagation()
         rotateDisplayedPrice()
       }}
       label={getLabel(key)}
@@ -89,12 +101,12 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
         'fontSize': '14px',
         'height': '32px',
         'transition': 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        'backgroundColor': (theme) =>
-          hasSale
-            ? 'rgba(234, 43, 6, 0.12)'
-            : theme.palette.mode === 'dark'
-              ? 'rgba(255, 255, 255, 0.05)'
-              : 'rgba(0,0,0,0.04)',
+        'backgroundColor': (theme) => {
+          if (hasSale) {
+            return 'rgba(234, 43, 6, 0.12)'
+          }
+          return theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0,0,0,0.04)'
+        },
         'color': hasSale ? 'primary.main' : 'text.primary',
         'border': '1px solid',
         'borderColor': hasSale ? 'primary.main' : 'transparent',
@@ -110,14 +122,18 @@ export const PriceChip: FC<{ product: Product }> = ({ product }) => {
 
         ...(key === '-' && {
           color: (theme) => (theme.palette.mode === 'dark' ? '#4ade80' : '#16a34a'),
-          backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(74, 222, 128, 0.12)' : 'rgba(22, 163, 74, 0.1)',
-          borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(74, 222, 128, 0.3)' : 'rgba(22, 163, 74, 0.2)',
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'rgba(74, 222, 128, 0.12)' : 'rgba(22, 163, 74, 0.1)',
+          borderColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'rgba(74, 222, 128, 0.3)' : 'rgba(22, 163, 74, 0.2)',
         }),
 
         ...(key === 'p2' && {
-          color: (theme) => theme.palette.mode === 'dark' ? '#38bdf8' : '#0284c7',
-          backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.1)',
-          borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(56, 189, 248, 0.3)' : 'rgba(2, 132, 199, 0.2)',
+          color: (theme) => (theme.palette.mode === 'dark' ? '#38bdf8' : '#0284c7'),
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.1)',
+          borderColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'rgba(56, 189, 248, 0.3)' : 'rgba(2, 132, 199, 0.2)',
         }),
 
         ...(key === 'price_old' && {

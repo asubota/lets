@@ -21,25 +21,25 @@ export const useGetCart = () => {
   })
 }
 
-export const useSetPropOnCart = () => {
+export const useSetPropertyOnCart = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<void, unknown, { itemId: string } & Partial<CartItem>, { list: CartItem[] }>({
+  return useMutation<unknown, unknown, { itemId: string } & Partial<CartItem>, { list: CartItem[] }>({
     async onSettled() {
-      return await queryClient.invalidateQueries({ queryKey: getQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getQueryKey() })
     },
     onMutate: async ({ itemId, quantity, discount }) => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
-      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
+      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) ?? []
 
       const updatedList = list.map((item) => {
-        return item.itemId !== itemId
-          ? item
-          : {
+        return item.itemId === itemId
+          ? {
               ...item,
-              quantity: quantity !== undefined ? quantity : item.quantity,
-              discount: discount !== undefined ? discount : item.discount,
+              quantity: quantity ?? item.quantity,
+              discount: discount ?? item.discount,
             }
+          : item
       })
 
       queryClient.setQueryData(getQueryKey(), updatedList)
@@ -72,15 +72,15 @@ export const useSetPropOnCart = () => {
 export const useSetPopularServicesForCart = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<void, unknown, { itemIds: string[] }, { list: CartItem[] }>({
+  return useMutation<unknown, unknown, { itemIds: string[] }, { list: CartItem[] }>({
     async onSettled() {
-      return await queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [CACHE_CART_KEY],
       })
     },
     onMutate: async ({ itemIds }) => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
-      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
+      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) ?? []
 
       queryClient.setQueryData<CartItem[]>(getQueryKey(), (old = []) => {
         const noPopularServiceItems = old.filter((item) => !item.itemId.startsWith(POPULAR_SERViCE_PREFIX))
@@ -111,15 +111,15 @@ export const useSetPopularServicesForCart = () => {
 export const useToggleInCart = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<void, unknown, { itemId: string; action: 'add' | 'remove' }, { list: CartItem[] }>({
+  return useMutation<unknown, unknown, { itemId: string; action: 'add' | 'remove' }, { list: CartItem[] }>({
     async onSettled() {
-      return await queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [CACHE_CART_KEY],
       })
     },
     onMutate: async ({ itemId, action }) => {
       await queryClient.cancelQueries({ queryKey: getQueryKey() })
-      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) || []
+      const list = queryClient.getQueryData<CartItem[]>(getQueryKey()) ?? []
 
       if (action === 'remove') {
         queryClient.setQueryData<CartItem[]>(getQueryKey(), (old) => {
@@ -132,11 +132,11 @@ export const useToggleInCart = () => {
           const existingItem = old?.find((item) => item.itemId === itemId)
           if (existingItem) {
             return old?.map((item) =>
-              item.itemId === itemId ? { ...item, quantity: String(parseInt(item.quantity, 10) + 1) } : item,
+              item.itemId === itemId ? { ...item, quantity: String(Number.parseInt(item.quantity, 10) + 1) } : item,
             )
           }
 
-          return [...(old || []), { itemId, quantity: '1', discount: '0', cartId: '1' }]
+          return [...(old ?? []), { itemId, quantity: '1', discount: '0', cartId: '1' }]
         })
       }
 
@@ -149,15 +149,7 @@ export const useToggleInCart = () => {
       })
     },
     mutationFn: ({ itemId, action }) => {
-      if (action === 'add') {
-        return addToCart(itemId)
-      }
-
-      if (action === 'remove') {
-        return removeFromCart(itemId)
-      }
-
-      return Promise.resolve()
+      return action === 'add' ? addToCart(itemId) : removeFromCart(itemId)
     },
   })
 }

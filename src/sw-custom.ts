@@ -5,13 +5,13 @@ import { type AppMessage, type NotificationData } from './types'
 
 const PAGE_SIZE = 500
 
-const sw = self as unknown as ServiceWorkerGlobalScope
+const sw = globalThis as unknown as ServiceWorkerGlobalScope
 
 console.log('[SW] Service Worker script loaded. Version: 1.0.2')
 
 sw.addEventListener('install', () => {
   console.log('[SW] Install event')
-  sw.skipWaiting()
+  void sw.skipWaiting()
 })
 
 sw.addEventListener('activate', (event) => {
@@ -23,10 +23,91 @@ let syncProgress: { loaded: number; total: number; percent: number } | null = nu
 let isSyncing = false
 let syncAbortController: AbortController | null = null
 
-function notifyApp(message: AppMessage) {
-  sw.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
-    clients.forEach((client) => client.postMessage(message))
+async function notifyApp(message: AppMessage) {
+  const clients = await sw.clients.matchAll({ type: 'window', includeUncontrolled: true })
+  for (const client of clients) {
+    client.postMessage(message)
+  }
+}
+
+async function fetchPage(supabaseUrl: string, supabaseKey: string, from: number, signal: AbortSignal) {
+  const url = `${supabaseUrl}/rest/v1/active_products_snapshot?select=sku,name,vendor,price,price_old,p2,stock,pics&order=sku.asc&offset=${from}&limit=${PAGE_SIZE}`
+  const response = await fetch(url, {
+    signal,
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
   })
+
+  return (await response.json()) as Record<string, unknown>[] | null
+}
+
+// Get total count using standard PostgREST HEAD request
+async function fetchTotalCount(supabaseUrl: string, supabaseKey: string, signal: AbortSignal) {
+  console.log('[SW] Fetching total count...')
+  const countResponse = await fetch(`${supabaseUrl}/rest/v1/active_products_snapshot?select=sku`, {
+    method: 'HEAD',
+    signal,
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      Prefer: 'count=exact',
+    },
+  })
+
+  const contentRange = countResponse.headers.get('content-range')
+  console.log('[SW] Content-Range:', contentRange)
+  return Number.parseInt(contentRange?.split('/', 2)[1] ?? '0')
+}
+
+async function loadConfig() {
+  const [supabaseUrl, supabaseKey] = await Promise.all([
+    db.getConfig(SUPABASE_URL_KEY),
+    db.getConfig(SUPABASE_ANON_KEY_KEY),
+  ])
+  return { supabaseUrl: supabaseUrl?.trim(), supabaseKey: supabaseKey?.trim() }
+}
+
+const isAbortError = (error: unknown) =>
+  error instanceof Error && (error.name === 'AbortError' || error.message === 'Sync aborted')
+
+async function syncPages(
+  supabaseUrl: string,
+  supabaseKey: string,
+  signal: AbortSignal,
+  progress: NonNullable<typeof syncProgress>,
+) {
+  let from = 0
+  for (;;) {
+    const data = await fetchPage(supabaseUrl, supabaseKey, from, signal)
+    if (!data || data.length === 0) {
+      break
+    }
+
+    const products = data.map((item) => mapToProduct(item))
+    if (signal.aborted) {
+      throw new Error('Sync aborted')
+    }
+
+    await db.saveProducts(products)
+
+    progress.loaded += data.length
+    progress.percent = progress.total > 0 ? Math.round((progress.loaded / progress.total) * 100) : 0
+
+    await notifyApp({
+      type: 'SYNC_PROGRESS',
+      payload: progress,
+    })
+
+    if (data.length < PAGE_SIZE) {
+      break
+    }
+    from += PAGE_SIZE
+
+    // Small delay to prevent rate limiting
+    await new Promise((resolve) => setTimeout(resolve, 50))
+  }
 }
 
 async function runSupabaseSync() {
@@ -37,17 +118,14 @@ async function runSupabaseSync() {
 
   console.log('[SW] runSupabaseSync started. Loading config from DB...')
 
-  const [supabaseUrl, supabaseKey] = await Promise.all([
-    db.getConfig(SUPABASE_URL_KEY),
-    db.getConfig(SUPABASE_ANON_KEY_KEY),
-  ]).then((res) => res.map((v) => v?.trim()))
+  const { supabaseUrl, supabaseKey } = await loadConfig()
 
   console.log(`[SW] Config loaded: URL=${Boolean(supabaseUrl)}, KEY=${Boolean(supabaseKey)}`)
 
   if (!supabaseUrl || !supabaseKey) {
-    const missing = !supabaseUrl ? 'URL' : 'KEY'
+    const missing = supabaseUrl ? 'KEY' : 'URL'
     console.error(`[SW] Supabase ${missing} not found in IndexedDB. Sync aborted.`)
-    notifyApp({
+    await notifyApp({
       type: 'SYNC_ERROR',
       payload: { message: `Supabase ${missing} missing. Please set it in Stats settings.` },
     })
@@ -62,83 +140,31 @@ async function runSupabaseSync() {
 
   try {
     console.log('[SW] Notifying app about SYNC_START')
-    notifyApp({ type: 'SYNC_START' })
+    await notifyApp({ type: 'SYNC_START' })
 
-    // 1. Get total count using standard PostgREST HEAD request
-    console.log('[SW] Fetching total count...')
-    const countRes = await fetch(`${supabaseUrl}/rest/v1/active_products_snapshot?select=sku`, {
-      method: 'HEAD',
-      signal,
-      headers: {
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-        Prefer: 'count=exact',
-      },
-    })
-
-    const contentRange = countRes.headers.get('content-range')
-    console.log('[SW] Content-Range:', contentRange)
-    const totalCount = parseInt(contentRange?.split('/')?.[1] || '0')
+    const totalCount = await fetchTotalCount(supabaseUrl, supabaseKey, signal)
     syncProgress.total = totalCount
 
-    let from = 0
-    while (true) {
-      const url = `${supabaseUrl}/rest/v1/active_products_snapshot?select=sku,name,vendor,price,price_old,p2,stock,pics&order=sku.asc&offset=${from}&limit=${PAGE_SIZE}`
-      const res = await fetch(url, {
-        signal,
-        headers: {
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-        },
-      })
-
-      const data = await res.json()
-      if (!data || data.length === 0) {
-        break
-      }
-
-      const products = data.map(mapToProduct)
-      if (signal.aborted) {
-        throw new Error('Sync aborted')
-      }
-
-      await db.saveProducts(products)
-
-      syncProgress.loaded += data.length
-      syncProgress.percent = totalCount > 0 ? Math.round((syncProgress.loaded / totalCount) * 100) : 0
-
-      notifyApp({
-        type: 'SYNC_PROGRESS',
-        payload: syncProgress,
-      })
-
-      if (data.length < PAGE_SIZE) {
-        break
-      }
-      from += PAGE_SIZE
-
-      // Small delay to prevent rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 50))
-    }
+    await syncPages(supabaseUrl, supabaseKey, signal, syncProgress)
 
     await db.setSyncMetadata({
       time: Date.now(),
       total: totalCount,
     })
 
-    notifyApp({
+    await notifyApp({
       type: 'SYNC_END',
       payload: { count: syncProgress.loaded },
     })
-  } catch (error: any) {
-    if (error.name === 'AbortError' || error.message === 'Sync aborted') {
+  } catch (error: unknown) {
+    if (isAbortError(error)) {
       console.log('[SW] Sync was aborted.')
       return
     }
     console.error('[SW] Sync error:', error)
-    notifyApp({
+    await notifyApp({
       type: 'SYNC_ERROR',
-      payload: { message: error.message || 'Unknown error' },
+      payload: { message: (error instanceof Error && error.message) || 'Unknown error' },
     })
   } finally {
     isSyncing = false
@@ -148,47 +174,40 @@ async function runSupabaseSync() {
 }
 
 sw.addEventListener('notificationclick', (event) => {
-  const data: NotificationData = event.notification.data
+  const data = event.notification.data as NotificationData
 
   const doNavigation = async () => {
-    return sw.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      const focusedClient = windowClients.find((client) => 'focus' in client && client.focused)
+    const windowClients = await sw.clients.matchAll({ type: 'window', includeUncontrolled: true })
+    const focusedClient = windowClients.find((client) => client.focused)
 
-      if (focusedClient) {
-        const message: AppMessage = {
-          type: 'navigate',
-          payload: {
-            sku: data.sku,
-            to: data.to,
-          },
-        }
-
-        focusedClient.postMessage(message)
-      } else {
-        sw.clients.openWindow('/lets/')
-      }
-    })
+    if (focusedClient) {
+      const message: AppMessage = { type: 'navigate', payload: data }
+      focusedClient.postMessage(message)
+    } else {
+      await sw.clients.openWindow('/lets/')
+    }
+    event.notification.close()
   }
 
-  event.waitUntil(doNavigation().then(() => event.notification.close()))
+  event.waitUntil(doNavigation())
 })
 
-sw.addEventListener('message', async (event) => {
-  console.log('[SW] Received message:', event.data?.type)
-  const message: AppMessage = event.data
+sw.addEventListener('message', (event) => {
+  const message = event.data as AppMessage
+  console.log('[SW] Received message:', message.type)
 
   if (message.type === 'SYNC_START') {
     console.log('[SW] Handling SYNC_START')
     event.waitUntil(runSupabaseSync())
   }
 
-  if (message.type === 'GET_SYNC_STATUS') {
-    if (isSyncing && syncProgress) {
+  if (message.type === 'GET_SYNC_STATUS' && isSyncing && syncProgress) {
+    event.waitUntil(
       notifyApp({
         type: 'SYNC_PROGRESS',
         payload: syncProgress,
-      })
-    }
+      }),
+    )
   }
 
   if (message.type === 'cache-reset-request') {
@@ -204,13 +223,13 @@ sw.addEventListener('message', async (event) => {
 
         console.log('[SW] Resetting products cache...')
         await db.clearProductsAndSyncMeta()
-        notifyApp({ type: 'cache-reset-done' })
+        await notifyApp({ type: 'cache-reset-done' })
         console.log('[SW] DB cleared, re-triggering sync...')
         await runSupabaseSync()
       })(),
     )
   }
   if (message.type === 'push-me') {
-    await sw.registration.showNotification(message.payload.title, message.payload.options)
+    event.waitUntil(sw.registration.showNotification(message.payload.title, message.payload.options))
   }
 })

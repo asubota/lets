@@ -1,8 +1,6 @@
-import { type FC } from 'react'
-
 import { Box, CircularProgress } from '@mui/material'
 
-export const LoadingCart: FC = () => {
+export const LoadingCart = () => {
   return (
     <Box
       sx={{

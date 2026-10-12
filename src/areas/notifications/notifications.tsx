@@ -3,7 +3,7 @@ import { Alert, Box, Button, DialogActions, Stack, Switch, Typography } from '@m
 import { createLink, useNavigate } from '@tanstack/react-router'
 
 import { Empty } from './empty.tsx'
-import { useSetPropOnFavorite } from '../../api.ts'
+import { useSetPropertyOnFavorite } from '../../api.ts'
 import { Modal } from '../../components/modal.tsx'
 import { Stock } from '../../components/stock.tsx'
 import { VendorChip } from '../../components/vendor-chip.tsx'
@@ -13,7 +13,7 @@ const LinkedButton = createLink(Button)
 
 export const Notifications = () => {
   const notifications = useGetNotifications()
-  const { mutate } = useSetPropOnFavorite()
+  const { mutate } = useSetPropertyOnFavorite()
   const navigate = useNavigate()
   const handleClose = () => navigate({ to: '/list' })
 

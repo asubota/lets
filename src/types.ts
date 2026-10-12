@@ -14,16 +14,16 @@ export interface Product {
 export interface FavoriteProduct extends Product {
   missed?: boolean
   time: number
-  note?: string
+  note?: string | undefined
 }
 
-export type FavNotification = {
+export interface FavNotification {
   title: string
   body: string
   favoriteId: string
-  min?: number
-  max?: number
-  read?: boolean
+  min?: number | undefined
+  max?: number | undefined
+  read?: boolean | undefined
   product: Product
 }
 
@@ -31,12 +31,12 @@ export interface SearchForm {
   input: string
 }
 
-export type NotificationData = {
+export interface NotificationData {
   sku: string
   to?: string
 }
 
-export type AppMessagePush = {
+export interface AppMessagePush {
   type: 'push-me'
   payload: {
     title: string
@@ -75,7 +75,7 @@ export type AppMessage =
       type: 'GET_SYNC_STATUS'
     }
 
-export type FavoriteItem = {
+export interface FavoriteItem {
   favoriteId: string
   note?: string
   min?: number
@@ -84,15 +84,20 @@ export type FavoriteItem = {
   read: boolean
 }
 
-export type Color = {
+export interface Color {
   color: string
   borderColor: string
   backgroundColor: string
 }
 
-export type VendorAndColors = { vendor: string } & Partial<Color>
+// A missing color means "not set" and clears the stored value
+export type ColorPatch = { [K in keyof Color]?: Color[K] | undefined }
 
-export type CartItem = {
+export type VendorColors = Record<string, ColorPatch>
+
+export type VendorAndColors = { vendor: string } & ColorPatch
+
+export interface CartItem {
   itemId: string
   discount: string
   quantity: string

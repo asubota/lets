@@ -1,5 +1,3 @@
-import { type FC } from 'react'
-
 import { Box, Typography } from '@mui/material'
 import { createLink } from '@tanstack/react-router'
 
@@ -7,7 +5,7 @@ import { type FavNotification } from '../types.ts'
 
 const LinkedBox = createLink(Box)
 
-export const NotificationSnackbar: FC<{ n: FavNotification }> = ({ n }) => {
+export const NotificationSnackbar = ({ n }: { n: FavNotification }) => {
   return (
     <LinkedBox
       sx={{

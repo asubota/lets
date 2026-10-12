@@ -4,15 +4,15 @@ import { Bike } from './bike.tsx'
 import { Logo } from './logo.tsx'
 import { StaleVendorsWarning } from './stale-vendors-warning.tsx'
 
-export const Welcome = () => {
-  const handleThing = () => {
-    // navigator.serviceWorker.ready.then(() => {
-    //   if (navigator.serviceWorker.controller) {
-    //     navigator.serviceWorker.controller.postMessage({ type: 'xxx' })
-    //   }
-    // })
-  }
+const handleThing = () => {
+  // navigator.serviceWorker.ready.then(() => {
+  //   if (navigator.serviceWorker.controller) {
+  //     navigator.serviceWorker.controller.postMessage({ type: 'xxx' })
+  //   }
+  // })
+}
 
+export const Welcome = () => {
   return (
     <Box sx={{ userSelect: 'none', py: 8 }}>
       <Typography

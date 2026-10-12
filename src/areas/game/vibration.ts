@@ -35,13 +35,7 @@ const tryNativeVibrate = (pattern: number[]) => {
   }
 }
 
-const scheduleThump = (
-  c: AudioContext,
-  startTime: number,
-  freq: number,
-  durationMs: number,
-  peak: number,
-) => {
+const scheduleThump = (c: AudioContext, startTime: number, freq: number, durationMs: number, peak: number) => {
   const durationS = durationMs / 1000
   const osc = c.createOscillator()
   osc.type = 'sine'
@@ -69,9 +63,8 @@ const playAudioHaptic = (kind: ItemKind, comboLevel: 0 | 2 | 3) => {
   const baseFreq = THUMP_FREQ_BY_KIND[kind]
   const peak = THUMP_PEAK_BY_KIND[kind]
   let elapsedMs = 0
-  for (let i = 0; i < pattern.length; i++) {
-    const durationMs = pattern[i]
-    if (i % 2 === 0 && durationMs > 0) {
+  for (const [index, durationMs] of pattern.entries()) {
+    if (index % 2 === 0 && durationMs > 0) {
       const startTime = c.currentTime + elapsedMs / 1000
       scheduleThump(c, startTime, baseFreq, durationMs, peak)
     }

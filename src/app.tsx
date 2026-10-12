@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { StrictMode, useEffect } from 'react'
 
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 
@@ -15,28 +15,23 @@ declare module '@tanstack/react-router' {
 
 export const App = () => {
   useEffect(() => {
-    const fn = async (event: MessageEvent<AppMessage>) => {
-      if (event.data && event.data.type === 'navigate') {
-        const to = event.data.payload.to
-        if (to) {
-          await router.navigate({ to })
-        } else {
-          const sku = event.data.payload.sku
-          await router.navigate({ to: '/', search: { s: sku } })
-        }
+    const handleMessage = (event: MessageEvent<AppMessage>) => {
+      if (event.data.type === 'navigate') {
+        const { to, sku } = event.data.payload
+        void (to ? router.navigate({ to }) : router.navigate({ to: '/', search: { s: sku } }))
       }
     }
 
-    navigator.serviceWorker.addEventListener('message', fn)
+    navigator.serviceWorker.addEventListener('message', handleMessage)
 
     return () => {
-      navigator.serviceWorker.removeEventListener('message', fn)
+      navigator.serviceWorker.removeEventListener('message', handleMessage)
     }
   }, [])
 
   return (
-    <React.StrictMode>
+    <StrictMode>
       <RouterProvider router={router} basepath="/lets/" />
-    </React.StrictMode>
+    </StrictMode>
   )
 }

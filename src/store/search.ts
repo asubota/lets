@@ -3,17 +3,18 @@ import { create } from 'zustand'
 interface StoreState {
   displayAppliedFiltersModal: boolean
   actions: {
-    toggleAppliedFiltersModal(this: void): void
+    toggleAppliedFiltersModal: (this: void) => void
   }
 }
 
 const useStore = create<StoreState>()((set) => ({
   displayAppliedFiltersModal: false,
   actions: {
-    toggleAppliedFiltersModal: () =>
+    toggleAppliedFiltersModal: () => {
       set((state) => ({
         displayAppliedFiltersModal: !state.displayAppliedFiltersModal,
-      })),
+      }))
+    },
   },
 }))
 

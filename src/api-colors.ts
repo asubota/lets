@@ -3,17 +3,13 @@ import { toast } from 'react-toastify'
 
 import { CACHE_COLORS_KEY } from './constants'
 import { getAllColors, removeColor, setColor } from './supabase-api-colors.ts'
-import { type Color, type VendorAndColors } from './types'
+import { type ColorPatch, type VendorAndColors, type VendorColors } from './types'
 
 const getQueryKey = (): [string] => {
   return [CACHE_COLORS_KEY]
 }
 
-type VendorData = {
-  [vendor: string]: Partial<Color>
-}
-
-type DiffResult = {
+interface DiffResult {
   added: VendorAndColors[]
   removed: VendorAndColors[]
   changed: VendorAndColors[]
@@ -21,8 +17,8 @@ type DiffResult = {
 
 function compareVendorData(
   vendor: string,
-  newVendorData: Partial<Color>,
-  oldVendorData: Partial<Color>,
+  newVendorData: ColorPatch,
+  oldVendorData: ColorPatch,
 ): VendorAndColors | null {
   const diff: VendorAndColors = { vendor }
 
@@ -44,30 +40,29 @@ function compareVendorData(
   return hasChanges ? diff : null
 }
 
-function findDiff(newData: VendorData, oldData: VendorData): DiffResult {
+function findDiff(newData: VendorColors, oldData: VendorColors): DiffResult {
   const result: DiffResult = {
     added: [],
     removed: [],
     changed: [],
   }
 
-  for (const vendor in newData) {
-    const newVendorData = newData[vendor]
+  for (const [vendor, newVendorData] of Object.entries(newData)) {
     const oldVendorData = oldData[vendor]
 
-    if (!oldVendorData) {
-      result.added.push({ vendor, ...newVendorData })
-    } else {
+    if (oldVendorData) {
       const diff = compareVendorData(vendor, newVendorData, oldVendorData)
       if (diff) {
         result.changed.push(diff)
       }
+    } else {
+      result.added.push({ vendor, ...newVendorData })
     }
   }
 
-  for (const vendor in oldData) {
+  for (const [vendor, oldVendorData] of Object.entries(oldData)) {
     if (!newData[vendor]) {
-      result.removed.push({ vendor, ...oldData[vendor] })
+      result.removed.push({ vendor, ...oldVendorData })
     }
   }
 
@@ -77,9 +72,9 @@ function findDiff(newData: VendorData, oldData: VendorData): DiffResult {
 export const useSetColors = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<void, unknown, { currentColors: VendorData; colors: VendorData }>({
+  return useMutation<unknown, unknown, { currentColors: VendorColors; colors: VendorColors }>({
     async onSettled() {
-      return await queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: getQueryKey(),
       })
     },
@@ -113,14 +108,16 @@ export const useGetColors = () => {
     queryKey: getQueryKey(),
     queryFn: ({ signal }) => getAllColors(signal),
     select(colors) {
-      return colors.reduce((acc, { vendor, ...rest }) => {
-        return { ...acc, [vendor]: rest }
-      }, {})
+      const byVendor: VendorColors = {}
+      for (const { vendor, ...rest } of colors) {
+        byVendor[vendor] = rest
+      }
+      return byVendor
     },
   })
 
   return {
-    colors: data as Record<string, Color>,
+    colors: data,
     isLoading,
   }
 }

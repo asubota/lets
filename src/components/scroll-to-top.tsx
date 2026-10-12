@@ -1,10 +1,13 @@
-import { type FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { Fab, Zoom } from '@mui/material'
 
+const handleClick = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
-export const ScrollToTop: FC = () => {
+export const ScrollToTop = () => {
   const [showFab, setShowFab] = useState(false)
 
   useEffect(() => {
@@ -22,10 +25,6 @@ export const ScrollToTop: FC = () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
-
-  const handleClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   return (
     <Zoom in={showFab}>

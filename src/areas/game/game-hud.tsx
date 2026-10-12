@@ -2,12 +2,7 @@ import StopCircleIcon from '@mui/icons-material/StopCircle'
 import { Box, IconButton, Stack, Typography } from '@mui/material'
 
 import { COMBO_MULT_THRESHOLD_1_5X, COMBO_MULT_THRESHOLD_2X, getMultiplier } from './config.ts'
-import {
-  useCurrentCombo,
-  useCurrentScore,
-  useGameActions,
-  useSessionStartedAt,
-} from '../../store/game.ts'
+import { useCurrentCombo, useCurrentScore, useGameActions, useSessionStartedAt } from '../../store/game.ts'
 
 export const GameHud = () => {
   const score = useCurrentScore()

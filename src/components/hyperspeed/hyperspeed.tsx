@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing'
 import * as THREE from 'three'
 
-import './Hyperspeed.css'
+import './hyperspeed.css'
 
 interface Distortion {
   uniforms: Record<string, { value: unknown }>
@@ -12,8 +12,8 @@ interface Distortion {
 }
 
 interface HyperspeedOptions {
-  onSpeedUp?: (ev: MouseEvent | TouchEvent) => void
-  onSlowDown?: (ev: MouseEvent | TouchEvent) => void
+  onSpeedUp?: (event_: MouseEvent | TouchEvent) => void
+  onSlowDown?: (event_: MouseEvent | TouchEvent) => void
   distortion?: string | Distortion
   length: number
   roadWidth: number
@@ -75,14 +75,14 @@ const OPTIONS: HyperspeedOptions = {
   carShiftX: [-0.8, 0.8],
   carFloorSeparation: [0, 5],
   colors: {
-    roadColor: 0x080202,
-    islandColor: 0x040101,
-    background: 0x050101,
-    shoulderLines: 0x220808,
-    brokenLines: 0x150404,
-    leftCars: [0xea2b06, 0xdd1000, 0xff2200], // bright brand red
-    rightCars: [0x3a0000, 0x220000, 0x550000], // deep dark brand red (black-red)
-    sticks: 0xea2b06,
+    roadColor: 0x08_02_02,
+    islandColor: 0x04_01_01,
+    background: 0x05_01_01,
+    shoulderLines: 0x22_08_08,
+    brokenLines: 0x15_04_04,
+    leftCars: [0xea_2b_06, 0xdd_10_00, 0xff_22_00], // bright brand red
+    rightCars: [0x3a_00_00, 0x22_00_00, 0x55_00_00], // deep dark brand red (black-red)
+    sticks: 0xea_2b_06,
   },
 }
 
@@ -96,47 +96,56 @@ const turbulentUniforms = {
   uAmp: { value: new THREE.Vector4(25, 5, 10, 10) },
 }
 
-const DISTORTIONS: Record<string, Distortion> = {
-  turbulentDistortion: {
-    uniforms: turbulentUniforms,
-    getDistortion: `
-      uniform vec4 uFreq; uniform vec4 uAmp;
-      float nsin(float v){ return sin(v)*0.5+0.5; }
-      #define PI 3.14159265358979
-      float dX(float p){ return cos(PI*p*uFreq.r+uTime)*uAmp.r + pow(cos(PI*p*uFreq.g+uTime*(uFreq.g/uFreq.r)),2.)*uAmp.g; }
-      float dY(float p){ return -nsin(PI*p*uFreq.b+uTime)*uAmp.b + -pow(nsin(PI*p*uFreq.a+uTime/(uFreq.b/uFreq.a)),5.)*uAmp.a; }
-      vec3 getDistortion(float p){ return vec3(dX(p)-dX(0.0125), dY(p)-dY(0.0125), 0.); }
-    `,
-    getJS: (p, t) => {
-      const { x: fx, y: fy, z: fz, w: fw } = turbulentUniforms.uFreq.value
-      const { x: ax, y: ay, z: az, w: aw } = turbulentUniforms.uAmp.value
-      const gX = (q: number) =>
-        Math.cos(Math.PI * q * fx + t) * ax + Math.pow(Math.cos(Math.PI * q * fy + t * (fy / fx)), 2) * ay
-      const gY = (q: number) =>
-        -nsin(Math.PI * q * fz + t) * az - Math.pow(nsin(Math.PI * q * fw + t / (fz / fw)), 5) * aw
-      return new THREE.Vector3(gX(p) - gX(p + 0.007), gY(p) - gY(p + 0.007), 0)
-        .multiply(new THREE.Vector3(-2, -5, 0))
-        .add(new THREE.Vector3(0, 0, -10))
-    },
+const turbulentDistortion: Distortion = {
+  uniforms: turbulentUniforms,
+  getDistortion: `
+    uniform vec4 uFreq; uniform vec4 uAmp;
+    float nsin(float v){ return sin(v)*0.5+0.5; }
+    #define PI 3.14159265358979
+    float dX(float p){ return cos(PI*p*uFreq.r+uTime)*uAmp.r + pow(cos(PI*p*uFreq.g+uTime*(uFreq.g/uFreq.r)),2.)*uAmp.g; }
+    float dY(float p){ return -nsin(PI*p*uFreq.b+uTime)*uAmp.b + -pow(nsin(PI*p*uFreq.a+uTime/(uFreq.b/uFreq.a)),5.)*uAmp.a; }
+    vec3 getDistortion(float p){ return vec3(dX(p)-dX(0.0125), dY(p)-dY(0.0125), 0.); }
+  `,
+  getJS: (p, t) => {
+    const { x: fx, y: fy, z: fz, w: fw } = turbulentUniforms.uFreq.value
+    const { x: ax, y: ay, z: az, w: aw } = turbulentUniforms.uAmp.value
+    const gX = (q: number) =>
+      Math.cos(Math.PI * q * fx + t) * ax + Math.pow(Math.cos(Math.PI * q * fy + t * (fy / fx)), 2) * ay
+    const gY = (q: number) =>
+      -nsin(Math.PI * q * fz + t) * az - Math.pow(nsin(Math.PI * q * fw + t / (fz / fw)), 5) * aw
+    return new THREE.Vector3(gX(p) - gX(p + 0.007), gY(p) - gY(p + 0.007), 0)
+      .multiply(new THREE.Vector3(-2, -5, 0))
+      .add(new THREE.Vector3(0, 0, -10))
   },
 }
 
+const DISTORTIONS: Record<string, Distortion | undefined> = { turbulentDistortion }
+
 // ─── helpers ──────────────────────────────────────────────────────────────────
 function rnd(base: number | [number, number]) {
+  // eslint-disable-next-line sonarjs/pseudo-random
   return Array.isArray(base) ? Math.random() * (base[1] - base[0]) + base[0] : Math.random() * base
 }
 function pick<T>(a: T | T[]): T {
-  return Array.isArray(a) ? a[Math.floor(Math.random() * a.length)] : a
+  if (!Array.isArray(a)) {
+    return a
+  }
+  // eslint-disable-next-line sonarjs/pseudo-random
+  const item = a[Math.floor(Math.random() * a.length)]
+  if (item === undefined) {
+    throw new Error('pick() called with an empty array')
+  }
+  return item
 }
-function lerp(cur: number, tgt: number, spd = 0.1, lim = 0.001) {
-  const d = (tgt - cur) * spd
-  return Math.abs(d) < lim ? tgt - cur : d
+function lerp(current: number, tgt: number, spd = 0.1, lim = 0.001) {
+  const d = (tgt - current) * spd
+  return Math.abs(d) < lim ? tgt - current : d
 }
 
 // ─── shaders ─────────────────────────────────────────────────────────────────
 const carLightsFrag = `
 #define USE_FOG
-${THREE.ShaderChunk['fog_pars_fragment']}
+${THREE.ShaderChunk.fog_pars_fragment}
 varying vec3 vColor;
 varying vec2 vUv;
 uniform vec2 uFade;
@@ -144,12 +153,12 @@ void main() {
   float a = smoothstep(uFade.x, uFade.y, vUv.x);
   gl_FragColor = vec4(vColor, a);
   if (gl_FragColor.a < 0.0001) discard;
-  ${THREE.ShaderChunk['fog_fragment']}
+  ${THREE.ShaderChunk.fog_fragment}
 }`
 
 const carLightsVert = `
 #define USE_FOG
-${THREE.ShaderChunk['fog_pars_vertex']}
+${THREE.ShaderChunk.fog_pars_vertex}
 attribute vec3 aOffset;
 attribute vec3 aMetrics;
 attribute vec3 aColor;
@@ -169,21 +178,21 @@ void main() {
   gl_Position = projectionMatrix * mvPosition;
   vUv = uv;
   vColor = aColor;
-  ${THREE.ShaderChunk['fog_vertex']}
+  ${THREE.ShaderChunk.fog_vertex}
 }`
 
 const sideFrag = `
 #define USE_FOG
-${THREE.ShaderChunk['fog_pars_fragment']}
+${THREE.ShaderChunk.fog_pars_fragment}
 varying vec3 vColor;
 void main() {
   gl_FragColor = vec4(vColor, 1.0);
-  ${THREE.ShaderChunk['fog_fragment']}
+  ${THREE.ShaderChunk.fog_fragment}
 }`
 
 const sideVert = `
 #define USE_FOG
-${THREE.ShaderChunk['fog_pars_vertex']}
+${THREE.ShaderChunk.fog_pars_vertex}
 attribute float aOffset;
 attribute vec3 aColor;
 attribute vec2 aMetrics;
@@ -206,10 +215,10 @@ void main() {
   vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.0);
   gl_Position = projectionMatrix * mvPosition;
   vColor = aColor;
-  ${THREE.ShaderChunk['fog_vertex']}
+  ${THREE.ShaderChunk.fog_vertex}
 }`
 
-const roadMarkVars = `
+const roadMarkVariables = `
 uniform float uLanes;
 uniform vec3 uBrokenLinesColor;
 uniform vec3 uShoulderLinesColor;
@@ -228,7 +237,7 @@ const roadMarkFrag = `
 
 const roadBaseFrag = `
 #define USE_FOG
-${THREE.ShaderChunk['fog_pars_fragment']}
+${THREE.ShaderChunk.fog_pars_fragment}
 #include <roadMarkings_vars>
 varying vec2 vUv;
 uniform vec3 uColor;
@@ -238,7 +247,7 @@ void main() {
   vec3 color = vec3(uColor);
   #include <roadMarkings_fragment>
   gl_FragColor = vec4(color, 1.0);
-  ${THREE.ShaderChunk['fog_fragment']}
+  ${THREE.ShaderChunk.fog_fragment}
 }`
 
 const islandFrag = roadBaseFrag
@@ -247,12 +256,12 @@ const islandFrag = roadBaseFrag
 
 const roadFrag = roadBaseFrag
   .replace('#include <roadMarkings_fragment>', roadMarkFrag)
-  .replace('#include <roadMarkings_vars>', roadMarkVars)
+  .replace('#include <roadMarkings_vars>', roadMarkVariables)
 
 const roadVert = `
 #define USE_FOG
 uniform float uTime;
-${THREE.ShaderChunk['fog_pars_vertex']}
+${THREE.ShaderChunk.fog_pars_vertex}
 uniform float uTravelLength;
 varying vec2 vUv;
 #include <getDistortion_vertex>
@@ -265,7 +274,7 @@ void main() {
   vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.0);
   gl_Position = projectionMatrix * mvPosition;
   vUv = uv;
-  ${THREE.ShaderChunk['fog_vertex']}
+  ${THREE.ShaderChunk.fog_vertex}
 }`
 
 // ─── scene classes ────────────────────────────────────────────────────────────
@@ -277,7 +286,7 @@ class HyperspeedApp {
   composer: EffectComposer
   camera: THREE.PerspectiveCamera
   scene: THREE.Scene
-  clock: THREE.Clock
+  timer: THREE.Timer
   fogU: Record<string, { value: unknown }>
   disposed = false
   fovTarget: number
@@ -285,38 +294,38 @@ class HyperspeedApp {
   speedUp = 0
   timeOffset = 0
 
-  constructor(el: HTMLElement, opts: HyperspeedOptions) {
-    this.container = el
-    this.opts = opts
-    this.dist = typeof opts.distortion === 'string' ? DISTORTIONS[opts.distortion] : (opts.distortion as Distortion)
+  constructor(element: HTMLElement, options: HyperspeedOptions) {
+    this.container = element
+    this.opts = options
+    this.dist =
+      (typeof options.distortion === 'string' ? DISTORTIONS[options.distortion] : options.distortion) ??
+      turbulentDistortion
 
-    const w = Math.max(1, el.offsetWidth)
-    const h = Math.max(1, el.offsetHeight)
+    const w = Math.max(1, element.offsetWidth)
+    const h = Math.max(1, element.offsetHeight)
 
     this.renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true })
     this.renderer.setSize(w, h, false)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    el.appendChild(this.renderer.domElement)
+    element.append(this.renderer.domElement)
 
     this.composer = new EffectComposer(this.renderer)
-    this.camera = new THREE.PerspectiveCamera(opts.fov, w / h, 0.1, 10000)
+    this.camera = new THREE.PerspectiveCamera(options.fov, w / h, 0.1, 10_000)
     this.camera.position.set(0, 8, -5)
     this.scene = new THREE.Scene()
     this.scene.background = null
 
-    const fog = new THREE.Fog(opts.colors.background, opts.length * 0.2, opts.length * 500)
+    const fog = new THREE.Fog(options.colors.background, options.length * 0.2, options.length * 500)
     this.scene.fog = fog
     this.fogU = { fogColor: { value: fog.color }, fogNear: { value: fog.near }, fogFar: { value: fog.far } }
 
-    this.clock = new THREE.Clock()
-    this.fovTarget = opts.fov
+    this.timer = new THREE.Timer()
+    this.fovTarget = options.fov
 
-    this.tick = this.tick.bind(this)
-    this.onResize = this.onResize.bind(this)
     window.addEventListener('resize', this.onResize)
   }
 
-  onResize() {
+  onResize = () => {
     const w = this.container.offsetWidth,
       h = this.container.offsetHeight
     if (!w || !h) {
@@ -387,16 +396,16 @@ class HyperspeedApp {
       aMet: number[] = [],
       aCol: number[] = []
     const cols = colors.map((c) => new THREE.Color(c))
-    for (let i = 0; i < o.lightPairsPerRoadWay; i++) {
+    for (let index = 0; index < o.lightPairsPerRoadWay; index++) {
       const r = rnd(o.carLightsRadius),
-        len = rnd(o.carLightsLength),
+        length_ = rnd(o.carLightsLength),
         spd = rnd(speed)
-      let lx = (i % o.lanesPerRoad) * lw - o.roadWidth / 2 + lw / 2 + rnd(o.carShiftX) * lw
+      const lx = (index % o.lanesPerRoad) * lw - o.roadWidth / 2 + lw / 2 + rnd(o.carShiftX) * lw
       const cw = rnd(o.carWidthPercentage) * lw
       const oy = rnd(o.carFloorSeparation) + r * 1.3,
         oz = -rnd(o.length)
       aOff.push(lx - cw / 2, oy, oz, lx + cw / 2, oy, oz)
-      aMet.push(r, len, spd, r, len, spd)
+      aMet.push(r, length_, spd, r, length_, spd)
       const c = pick(cols)
       aCol.push(c.r, c.g, c.b, c.r, c.g, c.b)
     }
@@ -407,7 +416,7 @@ class HyperspeedApp {
       carLightsVert,
       carLightsFrag,
       { uTime: { value: 0 }, uTravelLength: { value: o.length }, uFade: { value: fade } },
-      this.dist.uniforms as Record<string, { value: unknown }>,
+      this.dist.uniforms,
       true,
     )
     const mesh = new THREE.Mesh(geo, mat)
@@ -427,8 +436,9 @@ class HyperspeedApp {
       aCol: number[] = [],
       aMet: number[] = []
     const cols = [new THREE.Color(o.colors.sticks)]
-    for (let i = 0; i < o.totalSideLightSticks; i++) {
-      aOff.push((i - 1) * gap * 2 + gap * Math.random())
+    for (let index = 0; index < o.totalSideLightSticks; index++) {
+      // eslint-disable-next-line sonarjs/pseudo-random
+      aOff.push((index - 1) * gap * 2 + gap * Math.random())
       const c = pick(cols)
       aCol.push(c.r, c.g, c.b)
       aMet.push(rnd(o.lightStickWidth), rnd(o.lightStickHeight))
@@ -440,7 +450,7 @@ class HyperspeedApp {
       sideVert,
       sideFrag,
       { uTravelLength: { value: o.length }, uTime: { value: 0 } },
-      this.dist.uniforms as Record<string, { value: unknown }>,
+      this.dist.uniforms,
     )
     mat.side = THREE.DoubleSide
     const mesh = new THREE.Mesh(geo, mat)
@@ -483,16 +493,17 @@ class HyperspeedApp {
     this.tick()
   }
 
-  tick() {
+  tick = () => {
     if (this.disposed) {
       return
     }
     requestAnimationFrame(this.tick)
-    const delta = this.clock.getDelta()
+    this.timer.update()
+    const delta = this.timer.getDelta()
     const lp = Math.exp(-(-60 * Math.log2(1 - 0.1)) * delta)
     this.speedUp += lerp(this.speedUp, this.speedUpTarget, lp, 0.00001)
     this.timeOffset += this.speedUp * delta
-    const t = this.clock.elapsedTime + this.timeOffset
+    const t = this.timer.getElapsed() + this.timeOffset
 
     // update uniforms
     const setTime = (m: THREE.Mesh) => {
@@ -501,9 +512,9 @@ class HyperspeedApp {
         u.uTime.value = t
       }
     }
-    this.roads.forEach(setTime)
-    this.lights.forEach(setTime)
-    setTime(this.sticksMesh)
+    for (const mesh of [...this.roads, ...this.lights, this.sticksMesh]) {
+      setTime(mesh)
+    }
 
     // camera fov
     const fc = lerp(this.camera.fov, this.fovTarget, lp)
@@ -525,23 +536,22 @@ class HyperspeedApp {
     this.disposed = true
     window.removeEventListener('resize', this.onResize)
     this.scene.traverse((o: THREE.Object3D) => {
-      const m = o as unknown as THREE.Mesh
-      if (!m.isMesh) {
+      if (!(o instanceof THREE.Mesh)) {
         return
       }
-      m.geometry?.dispose()
-      const mat = m.material
-      if (Array.isArray(mat)) {
-        mat.forEach((x: THREE.Material) => x.dispose())
-      } else {
-        ;(mat as THREE.Material)?.dispose()
+      const mesh = o as THREE.Mesh
+      mesh.geometry.dispose()
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+      for (const material of materials) {
+        material.dispose()
       }
     })
     this.scene.clear()
     this.renderer.dispose()
     this.renderer.forceContextLoss()
-    this.renderer.domElement?.parentNode?.removeChild(this.renderer.domElement)
+    this.renderer.domElement.remove()
     this.composer.dispose()
+    this.timer.dispose()
   }
 }
 
@@ -550,13 +560,15 @@ const Hyperspeed = () => {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) {
+    const element = ref.current
+    if (!element) {
       return
     }
-    const app = new HyperspeedApp(el, OPTIONS)
+    const app = new HyperspeedApp(element, OPTIONS)
     app.init()
-    return () => app.dispose()
+    return () => {
+      app.dispose()
+    }
   }, [])
 
   return <div id="hyperspeed-lights" ref={ref} />

@@ -18,9 +18,9 @@ import { useAllData, useIsLoading } from '../../use-data.ts'
 
 const LinkedButton = createLink(Button)
 
-const priceSortFn = (a: CartItem & { product?: Product }, b: CartItem & { product?: Product }) => {
-  const aPrice = (a.product?.price || 0) * Number(a.quantity) * (1 - Number(a.discount) / 100)
-  const bPrice = (b.product?.price || 0) * Number(b.quantity) * (1 - Number(b.discount) / 100)
+const priceSortFunction = (a: CartItem & { product?: Product }, b: CartItem & { product?: Product }) => {
+  const aPrice = (a.product?.price ?? 0) * Number(a.quantity) * (1 - Number(a.discount) / 100)
+  const bPrice = (b.product?.price ?? 0) * Number(b.quantity) * (1 - Number(b.discount) / 100)
 
   return bPrice - aPrice
 }
@@ -28,17 +28,15 @@ const priceSortFn = (a: CartItem & { product?: Product }, b: CartItem & { produc
 const w = '190px'
 
 function splitCart(items: CartItem[]) {
-  return items.reduce(
-    (acc, item) => {
-      const key =
-        item.itemId.startsWith(REGULAR_SERViCE_PREFIX) || item.itemId.startsWith(POPULAR_SERViCE_PREFIX)
-          ? 'services'
-          : 'products'
-      acc[key].push(item)
-      return acc
-    },
-    { services: [] as CartItem[], products: [] as CartItem[] },
-  )
+  const result: { services: CartItem[]; products: CartItem[] } = { services: [], products: [] }
+  for (const item of items) {
+    const key =
+      item.itemId.startsWith(REGULAR_SERViCE_PREFIX) || item.itemId.startsWith(POPULAR_SERViCE_PREFIX)
+        ? 'services'
+        : 'products'
+    result[key].push(item)
+  }
+  return result
 }
 
 export const Cart = () => {
@@ -101,7 +99,7 @@ export const Cart = () => {
                 <DirectionsBikeIcon sx={{ color: 'secondary.dark' }} fontSize="small" />
               </Divider>
 
-              {products.sort(priceSortFn).map((item) => {
+              {products.toSorted(priceSortFunction).map((item) => {
                 return <CartItemRow item={item} key={item.itemId} />
               })}
             </>
@@ -113,7 +111,7 @@ export const Cart = () => {
                 <ConstructionIcon sx={{ color: 'secondary.light' }} fontSize="small" />
               </Divider>
 
-              {services.sort(priceSortFn).map((item) => {
+              {services.toSorted(priceSortFunction).map((item) => {
                 return <CartItemRow item={item} key={item.itemId} />
               })}
             </>

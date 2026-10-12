@@ -26,10 +26,7 @@ const Component = () => {
       <ToastContainer />
       <QueryClientProvider client={queryClient}>
         <TanStackRouterDevtools />
-        <ReactQueryDevtools
-          initialIsOpen={false}
-          buttonPosition="bottom-left"
-        />
+        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
 
         <CssBaseline />
         <Loader />
