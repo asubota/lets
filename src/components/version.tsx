@@ -13,7 +13,7 @@ export const Version = () => {
         transform: 'translate(15px, 11px)',
       }}
     >
-      {import.meta.env.VITE_TEST_VAR}
+      {import.meta.env.VITE_APP_VERSION}
     </Box>
   )
 }
