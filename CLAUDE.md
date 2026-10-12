@@ -1,68 +1,64 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Commands
 
-- `npm run dev` — Vite dev server on `https://localhost:8000` (HTTPS via `localhost+2*.pem`; required because the app is a PWA and a service worker is part of dev). The base path is `/lets/`, so open `https://localhost:8000/lets/`.
-- `npm run build` — `tsc && vite build` (typecheck blocks the build).
-- `npm run typecheck` — `tsc --noEmit` only.
-- `npm run lint` — ESLint (flat config, `eslint.config.js`). There is no test runner configured.
-- `npm run preview` — preview the production build.
-- `npm run deploy` — `gh-pages -d dist`. In practice deploys happen automatically via `.github/workflows/deploy.yml` on push to `master`.
-- Node version is pinned in `.nvmrc` (22.13.1). Use `nvm use` before installing.
+- `npm run dev` — Vite on `https://localhost:8000/lets/`. HTTPS is required (PWA + service worker in dev): uses `localhost+2*.pem` if present, else `@vitejs/plugin-basic-ssl`.
+- `npm run build` — `tsc && vite build` (type errors block the build).
+- `npm run typecheck` — `tsc --noEmit` for app and `tsconfig.node.json`.
+- `npm run lint` — ESLint flat config. No test runner exists.
+- Deploys run via `.github/workflows/deploy.yml` on push to `master` (GitHub Pages).
+- Node is pinned in `.nvmrc`; run `nvm use` before installing.
+
+## Git workflow
+
+- For any change, branch from the latest `origin/master` (`git fetch origin && git switch -c <branch> origin/master`). Main branch is `master` (no `main`); never work on it directly.
+- Never commit without explicit user approval.
+- Never use `--no-verify` (or skip hooks otherwise) without explicit user approval.
 
 ## Architecture
 
-This is a Vite + React 19 + TypeScript PWA for a Ukrainian bike-parts shop ("Lets Bike"). It ships to GitHub Pages under the `/lets/` base path. There is no traditional backend in this repo — data lives in Supabase, and the app talks to it directly from the browser (and from the service worker).
+Vite + React 19 + TypeScript PWA for a bike-parts shop, served from GitHub Pages under `/lets/`. No backend in this repo: the browser and the service worker talk to Supabase directly.
 
-### Two execution contexts: app + service worker
+### Service worker (`src/sw-custom.ts`)
 
-The non-obvious thing about this codebase is that a meaningful amount of logic runs **inside the service worker**, not just in the React app.
-
-- `src/sw-custom.ts` is a real TypeScript service worker. It is **not** bundled by Vite. A custom plugin in `compile-service-workers-ts.plugin.ts` runs Rollup separately to compile it into `public/sw-custom.js` on `buildStart`, `writeBundle`, `watchChange`, and `handleHotUpdate`. `vite.config.ts` then tells VitePWA to `importScripts` that output file. If you edit `sw-custom.ts` and changes don't appear, suspect this pipeline.
-- The SW owns the heavy "load all products from Supabase" job. It paginates `active_products_snapshot` via raw PostgREST `fetch` (page size 500), writes batches to IndexedDB, and posts progress messages back to the app. See `runSupabaseSync` in `sw-custom.ts`.
-- App and SW communicate exclusively via `postMessage` using the `AppMessage` discriminated union in `src/types.ts` (`SYNC_START`, `SYNC_PROGRESS`, `SYNC_END`, `SYNC_ERROR`, `GET_SYNC_STATUS`, `cache-reset-request`, `cache-reset-done`, `navigate`, `push-me`). When adding cross-context behavior, add a variant there.
-- Supabase credentials are duplicated into **both** `localStorage` (for the app via `supabase-js`) **and** IndexedDB metadata store (so the SW can read them — SWs can't see localStorage). `setSupabaseConfig` in `src/secrets.ts` writes both; the SW reads via `db.getConfig`. Keep these two paths in sync.
+- Not bundled by Vite: `compile-service-workers-ts.plugin.ts` compiles it with Rollup to `public/sw-custom.js` (on `buildStart`, `writeBundle`, `watchChange`, `handleHotUpdate`), and VitePWA `importScripts` it. If SW edits don't show up, suspect this pipeline.
+- `runSupabaseSync` pages `active_products_snapshot` via raw PostgREST `fetch` (500/page) into IndexedDB and posts progress to the app.
+- App ↔ SW talk only via `postMessage` with the `AppMessage` union in `src/types.ts`. Add a variant there for new cross-context behavior.
+- Supabase URL/key live in both `localStorage` (app, `supabase-js`) and the IDB `metadata` store (SW can't read localStorage). `setSupabaseConfig` in `src/secrets.ts` writes both; the SW reads via `db.getConfig`. Keep them in sync.
 
 ### Data flow
 
-1. UI calls `useData()` (`src/use-data.ts`) → React Query.
-2. `queryFn` calls `fetchProductsFromSupabase()` (`src/supabase-api.ts`). This **does not actually fetch from Supabase from the app**. It checks IDB sync metadata; if stale (>1h) or no controller, it pings the SW to start a sync, then returns whatever is currently in IDB via `db.getAllProducts()`.
-3. SW does the network work, batches into IDB, and posts `SYNC_PROGRESS`/`SYNC_END` back.
-4. `useListenToCacheUpdate` (mounted at the root) listens for those messages, drives the global `loadingProgress` state, and invalidates the `CACHE_BASE_KEY` query on `SYNC_END` so the UI re-reads from IDB.
-5. A magic `__meta__` SKU row carries JSON in its `name` field — vendor freshness info — extracted in `use-data.ts` and stored in the Zustand `app` store (`useMeta`, `useStaleVendors`).
+1. `useData()` (`src/use-data.ts`) → React Query → `fetchProductsFromSupabase()` (`src/supabase-api.ts`).
+2. That function does **not** hit the network: if sync is stale (>1h) or there's no SW controller, it asks the SW to sync, then returns current IDB contents.
+3. `useListenToCacheUpdate` (mounted in `__root.tsx`) handles `SYNC_PROGRESS`/`SYNC_END`, drives `loadingProgress`, and invalidates `CACHE_BASE_KEY` on `SYNC_END`.
+4. The `__meta__` SKU row holds vendor-freshness JSON in `name`; `use-data.ts` extracts it into the `app` store (`useMeta`, `useStaleVendors`).
 
-Favorites, cart, and color settings, by contrast, are **not** SW-routed — they go through `supabase-js` directly from the app (`src/supabase-api-*.ts`, called by hooks in `src/api.ts` and `src/cart-api.ts`). Those hooks all use React Query with optimistic updates (`onMutate` → `setQueryData`, rollback via `context.list` in `onError`). Follow that pattern for new mutations.
+Favorites, cart, and colors bypass the SW: `supabase-js` calls in `src/supabase-api-*.ts`, wrapped by hooks in `src/api.ts` / `src/cart-api.ts`. New mutations should follow their optimistic pattern (`onMutate` → `setQueryData`, rollback to `context.list` in `onError`).
 
 ### IndexedDB (`src/db.ts`)
 
-Single DB `ShopDB` with two stores: `products` and `metadata`. The `db` object exposes a small typed API — prefer extending it over opening raw transactions elsewhere. Two things to know:
+DB `ShopDB`, stores `products` and `metadata`. Extend the `db` object instead of opening raw transactions elsewhere.
 
-- Product `id` is synthesized as `${vendorPrefix}-${sku}-${vendor}`, where `vendorPrefix` is `'0'` for the `base` vendor and `'1'` for everything else. This is intentional: it makes `base` sort first using IndexedDB's native key ordering (see commit `64e906e`). Don't change `id` without re-thinking that ordering.
-- The `products` object store is **dropped and recreated on every `onupgradeneeded`** (current `DB_VERSION` is 4). Bumping `DB_VERSION` wipes products; `last-sync` is also cleared so a fresh sync runs. Config keys (Supabase URL/key) survive.
+- Product `id` = `${vendorPrefix}-${sku}-${vendor}`, prefix `'0'` for vendor `base`, `'1'` otherwise, so `base` sorts first by native key order. Don't change it lightly.
+- `onupgradeneeded` drops and recreates `products` and clears `last-sync`; config keys survive. Bumping `DB_VERSION` therefore forces a full resync.
 
 ### Routing
 
-File-based via `@tanstack/router-plugin/vite`. Routes live in `src/routes/`; `src/routeTree.gen.ts` is generated — do not hand-edit. Route conventions:
+TanStack file-based routing in `src/routes/`; `src/routeTree.gen.ts` is generated, don't edit.
 
-- `_layout.tsx` wraps child routes with `<AppBar />` + `<Container>`. Anything inside `routes/_layout/` is under that shell.
-- `*.lazy.tsx` files are code-split (e.g. `cart.lazy.tsx`, `stats.lazy.tsx`); heavy areas should follow that pattern.
-- Router is created in `src/app.tsx` with `basepath="/lets/"`; the matching `base` is set in `vite.config.ts`. Keep these aligned.
-- `routes/index.tsx` redirects `/` → `/list`; `__root.tsx` redirects unknown routes to `/list`.
+- `_layout.tsx` wraps `routes/_layout/*` with `<Container>` + `<AppBar />`.
+- Use `*.lazy.tsx` for code-split routes.
+- `basepath="/lets/"` in `src/app.tsx` must match `base` in `vite.config.ts`.
+- `/` and unknown routes redirect to `/list`.
 
 ### State
 
-- **Zustand** for app-level UI state: `src/store/app.ts` (view mode, theme, sort, meta, sync progress), plus `appliedFilters`, `history`, `search`, `table`. The `app` store uses `persist` middleware (`name: 'lets-bike-app'`) and intentionally `partialize`s — only `view`, `theme`, `sort` are persisted. Don't add ephemeral fields to the partialize allowlist.
-- **React Query** for all server state. Cache keys are the `CACHE_*_KEY` constants in `src/constants.ts`. Use them; don't inline strings.
-- Actions are exposed via a single `actions` object on the store and consumed through `useAppActions()` — this pattern keeps action references stable. Match it for new stores.
+- Zustand stores in `src/store/`. Actions live in a single `actions` object consumed via hooks like `useAppActions()` (stable references); follow this for new stores.
+- The `app` store persists (`lets-bike-app`) only `view`, `theme`, `sort` via `partialize`. Don't add ephemeral fields there.
+- React Query for server state; use the `CACHE_*_KEY` constants from `src/constants.ts`, never inline keys.
 
-### Styling
+### Styling and build
 
-- MUI v7 with a custom theme in `src/theme-mode-provider.tsx` (Outfit/Inter font, primary `#ea2b06`, rounded shape, light/dark). Theme is toggled via the `setTheme` action and also toggles a `light`/`dark` class on `#root` for SCSS to hook into.
-- SCSS via `sass-embedded` (`api: 'modern-compiler'`).
-
-
-### Build output details
-
-`vite.config.ts` defines manual chunks (`react`, `swiper`, `html2canvas`, `popper`, `tanstack`, `mui`) — when adding a large dep that should be split, add it there. The PWA `runtimeCaching` includes a hand-maintained list of supplier `domains` (velogo, paul-lange-ukraine, etc.) used to build a regex that aggressively caches product images. New vendors with off-domain images need to be added there.
+- MUI v7 theme in `src/theme-mode-provider.tsx`; it also sets a `light`/`dark` class on `#root` for SCSS (`sass-embedded`).
+- `vite.config.ts` `manualChunks`: add large deps that should be split.
+- `vite.config.ts` `domains`: supplier image hosts cached by the PWA. Add new vendors with off-domain images.
