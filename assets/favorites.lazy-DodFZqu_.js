@@ -1,0 +1,1 @@
+import{D as e}from"./tanstack-BlNNDTMh.js";import{r as t}from"./areas-BIsOEoqr.js";var n=e(`/_layout/favorites`)({component:t});export{n as Route};
