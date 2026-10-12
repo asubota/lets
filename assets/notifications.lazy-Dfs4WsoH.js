@@ -1,0 +1,1 @@
+import{D as e}from"./tanstack-BlNNDTMh.js";import{t}from"./areas-DVm_21Q-.js";var n=e(`/notifications`)({component:t});export{n as Route};
